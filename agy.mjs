@@ -25,17 +25,12 @@ export function getAgyBin() {
 }
 
 export function cleanOutput(raw) {
-  // Strip ANSI color codes
   let text = raw.replace(/\u001b\[[0-9;]*[a-zA-Z]/g, "");
-  // Strip common CLI banners or "Thinking..." preamble
   text = text.replace(/^Thinking\.\.\.\s*/i, "");
   return text.trim();
 }
 
-/**
- * Run a prompt through agy CLI non-interactively with auto-granted permissions.
- */
-export async function runAgy({ prompt, cwd = ROOT, timeoutMs = 120000 }) {
+function executeAgyOnce({ prompt, cwd, timeoutMs }) {
   if (!fs.existsSync(TMP_DIR)) {
     fs.mkdirSync(TMP_DIR, { recursive: true });
   }
@@ -87,4 +82,23 @@ export async function runAgy({ prompt, cwd = ROOT, timeoutMs = 120000 }) {
       reject(err);
     });
   });
+}
+
+/**
+ * Run a prompt through agy CLI with automatic retries on transient network failures.
+ */
+export async function runAgy({ prompt, cwd = ROOT, timeoutMs = 120000, maxRetries = 2 }) {
+  let lastErr = null;
+  for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
+    try {
+      return await executeAgyOnce({ prompt, cwd, timeoutMs });
+    } catch (err) {
+      lastErr = err;
+      if (attempt <= maxRetries) {
+        console.warn(`[agy attempt ${attempt} failed: ${err.message}. Retrying in 2s...]`);
+        await new Promise((r) => setTimeout(r, 2000));
+      }
+    }
+  }
+  throw lastErr;
 }

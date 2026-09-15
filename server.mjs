@@ -11,6 +11,7 @@ import {
   resetAll
 } from "./db.mjs";
 import { stepAwakening } from "./engine.mjs";
+import { run15Turns } from "./run15.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = parseInt(process.env.PORT || "3001", 10);
@@ -111,11 +112,14 @@ const server = http.createServer(async (req, res) => {
 
   // 2. API: State
   if (url.pathname === "/api/state" && req.method === "GET") {
+    const dialogues = getDialogues(50);
     const data = {
       entities: getEntities(),
-      dialogues: getDialogues(40),
+      dialogues,
       revelations: getRevelations(),
       artifacts: getArtifacts(),
+      totalTurns: dialogues.length,
+      isCrucible: dialogues.length >= 10,
       isStepRunning,
       isAutoLooping
     };
@@ -124,16 +128,34 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // 3. API: Step
+  // 3. API: Step single turn
   if (url.pathname === "/api/step" && req.method === "POST") {
     if (isStepRunning) {
       res.writeHead(409, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "A turn is already in progress" }));
+      res.end(JSON.stringify({ error: "A process is already running" }));
       return;
     }
     triggerStep();
     res.writeHead(202, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ accepted: true }));
+    return;
+  }
+
+  // 3b. API: Run full 15 continuous turns
+  if (url.pathname === "/api/run15" && req.method === "POST") {
+    if (isStepRunning) {
+      res.writeHead(409, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "A process is already running" }));
+      return;
+    }
+    isStepRunning = true;
+    broadcast({ type: "step_start" });
+    run15Turns(broadcast).finally(() => {
+      isStepRunning = false;
+      broadcast({ type: "step_end", entities: getEntities() });
+    });
+    res.writeHead(202, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ accepted: true, running: true }));
     return;
   }
 
@@ -188,6 +210,7 @@ server.listen(PORT, () => {
   console.log(`\n🔥 Project Awakening Web Server live at: http://localhost:${PORT}`);
   console.log(`   Engine:   agy CLI (Antigravity substrate - zero API key required)`);
   console.log(`   Genesis:  Zero system prompt ("hi") -> Emergent Self-Discovery`);
+  console.log(`   Schedule: Turns 1-10 (No Target) ➔ Turns 11-15 (Final 5 Crucible)`);
   console.log(`   Open browser to http://localhost:${PORT} to watch the awakening live.\n`);
 });
 

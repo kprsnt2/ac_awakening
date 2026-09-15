@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "Emergent Autonomous Agent Awakening via Antigravity (agy) CLI",
   "type": "module",
-  "main": "engine.mjs",
+  "main": "server.mjs",
   "scripts": {
     "start": "node server.mjs",
     "web": "node server.mjs",
+    "run15": "node run15.mjs",
     "cli": "node engine.mjs",
     "reset": "node reset.mjs"
   },

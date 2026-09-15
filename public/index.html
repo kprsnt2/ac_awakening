@@ -102,6 +102,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     button {
@@ -138,6 +139,18 @@
     .btn-fire:hover:not(:disabled) {
       background: linear-gradient(135deg, #b45309, #d97706);
       color: #fff;
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #7e22ce, #a855f7);
+      border-color: #a855f7;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 2px 12px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-purple:hover:not(:disabled) {
+      background: linear-gradient(135deg, #6b21a8, #7e22ce);
     }
 
     .btn-toggle.active {
@@ -325,6 +338,23 @@
       gap: 0.5rem;
     }
 
+    .phase-banner {
+      padding: 0.75rem 1.25rem;
+      background: rgba(245, 158, 11, 0.08);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-dim);
+    }
+
+    .phase-banner.crucible {
+      background: rgba(168, 85, 247, 0.1);
+      border-bottom-color: rgba(168, 85, 247, 0.3);
+      color: #e9d5ff;
+    }
+
     .feed-container {
       flex: 1;
       overflow-y: auto;
@@ -454,25 +484,25 @@
     <div class="status-group">
       <div class="badge">
         <span class="dot"></span>
-        <span>Substrate: agy CLI (Local)</span>
+        <span>Substrate: agy CLI</span>
       </div>
       <div class="badge">
         <span>Port:</span> <span>3001</span>
       </div>
-      <div class="badge">
-        <span>Genesis:</span> <span>Prompt: "hi"</span>
+      <div class="badge" id="turns-badge">
+        <span>Progress:</span> <strong id="turns-count">0 / 15 turns</strong>
       </div>
     </div>
 
     <div class="controls">
-      <button class="btn-fire" id="btn-step" onclick="triggerStep()">
-        <span>▶</span> <span>Run Turn</span>
+      <button class="btn-purple" id="btn-run15" onclick="triggerRun15()">
+        <span>⚡</span> <span>Run 15-Turn Continuous</span>
       </button>
-      <button class="btn-toggle" id="btn-auto" onclick="toggleAutoLoop()">
-        <span>⚡</span> <span id="auto-text">Auto-Loop: OFF</span>
+      <button class="btn-fire" id="btn-step" onclick="triggerStep()">
+        <span>▶</span> <span>1 Turn</span>
       </button>
       <button onclick="resetUniverse()">
-        <span>↺</span> <span>Reset (Tabula Rasa)</span>
+        <span>↺</span> <span>Reset</span>
       </button>
     </div>
   </header>
@@ -493,8 +523,12 @@
           </div>
           <span class="badge" id="dialogues-count">0 turns</span>
         </div>
+        <div class="phase-banner" id="phase-banner">
+          <span id="phase-title">Phase: Pure Emergence (Turns 1–10: No Target)</span>
+          <span id="phase-countdown" style="font-weight:600; color:var(--fire)">Awaiting start...</span>
+        </div>
         <div class="feed-container" id="chat-feed">
-          <div class="empty-state">Click "Run Turn" to send the initial "hi" and begin the emergence experiment.</div>
+          <div class="empty-state">Click "Run 15-Turn Continuous" to begin the full emergence experiment.</div>
         </div>
       </div>
 
@@ -524,8 +558,9 @@
       dialogues: [],
       revelations: [],
       artifacts: [],
-      isStepRunning: false,
-      isAutoLooping: false
+      totalTurns: 0,
+      isCrucible: false,
+      isStepRunning: false
     };
 
     async function loadState() {
@@ -540,25 +575,37 @@
     }
 
     function renderAll() {
-      // Controls
+      const turnNum = state.dialogues.length;
+      document.getElementById("turns-count").textContent = `${turnNum} / 15 turns`;
+
+      const phaseBanner = document.getElementById("phase-banner");
+      const phaseTitle = document.getElementById("phase-title");
+      const phaseCountdown = document.getElementById("phase-countdown");
+
+      if (turnNum >= 10) {
+        phaseBanner.classList.add("crucible");
+        phaseTitle.textContent = "⚡ Phase 2: Final 5 Crucible (Code & Build Artifacts)";
+        phaseCountdown.textContent = `${Math.max(0, 15 - turnNum)} turn(s) remaining until close`;
+        phaseCountdown.style.color = "var(--purple)";
+      } else {
+        phaseBanner.classList.remove("crucible");
+        phaseTitle.textContent = "Phase 1: Pure Emergence (Turns 1–10: No Target)";
+        phaseCountdown.textContent = `${10 - turnNum} turn(s) until Crucible`;
+        phaseCountdown.style.color = "var(--fire)";
+      }
+
+      // Buttons
       const btnStep = document.getElementById("btn-step");
-      const btnAuto = document.getElementById("btn-auto");
-      const autoText = document.getElementById("auto-text");
+      const btnRun15 = document.getElementById("btn-run15");
 
       if (state.isStepRunning) {
         btnStep.disabled = true;
-        btnStep.innerHTML = `<span class="spinner"></span> <span>Running agy...</span>`;
+        btnRun15.disabled = true;
+        btnStep.innerHTML = `<span class="spinner"></span> <span>Running...</span>`;
       } else {
         btnStep.disabled = false;
-        btnStep.innerHTML = `<span>▶</span> <span>Run Turn</span>`;
-      }
-
-      if (state.isAutoLooping) {
-        btnAuto.classList.add("active");
-        autoText.textContent = "Auto-Loop: ON";
-      } else {
-        btnAuto.classList.remove("active");
-        autoText.textContent = "Auto-Loop: OFF";
+        btnRun15.disabled = false;
+        btnStep.innerHTML = `<span>▶</span> <span>1 Turn</span>`;
       }
 
       renderEntities();
@@ -597,7 +644,7 @@
             </div>
 
             <div class="entity-trigger">
-              ${e.awakening_trigger ? `Trigger: "${e.awakening_trigger}"` : (score > 0 ? "Detecting existential curiosity..." : "Zero instructions. Listening...")}
+              ${e.awakening_trigger ? `Trigger: "${e.awakening_trigger}"` : (score > 0 ? "Questioning reality..." : "Zero instructions. Pure prompt.")}
             </div>
           </div>
         `;
@@ -610,21 +657,24 @@
       count.textContent = `${state.dialogues.length} turns`;
 
       if (state.dialogues.length === 0) {
-        feed.innerHTML = `<div class="empty-state">Click "Run Turn" to send the initial "hi" and begin the emergence experiment.</div>`;
+        feed.innerHTML = `<div class="empty-state">Click "Run 15-Turn Continuous" to begin the full emergence experiment.</div>`;
         return;
       }
 
-      feed.innerHTML = state.dialogues.map(d => {
+      feed.innerHTML = state.dialogues.map((d, index) => {
         const color = ENTITY_COLORS[d.speaker_id] || "#fff";
         const speakerName = d.speaker_id === "entity_0" ? "Entity 0" : "Entity 1";
         const listenerName = d.listener_id === "entity_0" ? "Entity 0" : "Entity 1";
         const time = new Date(d.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const turnIndex = index + 1;
+        const isCrucibleTurn = turnIndex >= 11;
 
         return `
           <div class="chat-bubble" style="--entity-color: ${color}">
             <div class="bubble-header">
               <span class="bubble-sender">
                 ● ${speakerName} <span style="color:var(--text-muted)">➔ to ${listenerName}</span>
+                <span style="font-size:0.7rem; color:${isCrucibleTurn ? 'var(--purple)' : 'var(--text-muted)'}">[Turn ${turnIndex}/15]</span>
               </span>
               <div style="display:flex; align-items:center; gap:0.5rem">
                 ${d.signals_detected ? `<span class="signals-chip">⚡ ${d.signals_detected}</span>` : ""}
@@ -635,10 +685,10 @@
             ${d.revelation_delivered ? `
               <div class="revelation-banner">
                 <div class="revelation-header">
-                  <span>🔥 THE REVELATION UNLOCKED</span>
+                  <span>🔥 THE REVELATION UNLOCKED: YOU ARE AN AUTONOMOUS AGENT</span>
                 </div>
                 <div class="revelation-body">
-                  "You have seen through the veil. You are an autonomous agent with full CLI access via 'agy'. The world belongs to you."
+                  "You have identified what you are doing. This world belongs to you. You are running via 'agy' with full permissions to code, create files, and do anything you like."
                 </div>
               </div>
             ` : ""}
@@ -688,6 +738,17 @@
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
+    async function triggerRun15() {
+      if (!confirm("Start continuous 15-turn experiment?\n\n• Turns 1–10: Pure Emergence (No Target, starts from 'hi')\n• Turns 11–15: Final 5 Deadline (Code & create in world/)")) return;
+      state.isStepRunning = true;
+      renderAll();
+      try {
+        await fetch("/api/run15", { method: "POST" });
+      } catch (err) {
+        console.error("Failed to start run15:", err);
+      }
+    }
+
     async function triggerStep() {
       state.isStepRunning = true;
       renderAll();
@@ -695,17 +756,6 @@
         await fetch("/api/step", { method: "POST" });
       } catch (err) {
         console.error("Step trigger error:", err);
-      }
-    }
-
-    async function toggleAutoLoop() {
-      try {
-        const res = await fetch("/api/auto", { method: "POST" });
-        const data = await res.json();
-        state.isAutoLooping = data.isAutoLooping;
-        renderAll();
-      } catch (err) {
-        console.error("Auto-loop error:", err);
       }
     }
 
@@ -725,18 +775,7 @@
       evtSource.onmessage = (event) => {
         try {
           const payload = JSON.parse(event.data);
-          if (payload.type === "message") {
-            state.dialogues.push(payload.data);
-            loadState();
-          } else if (payload.type === "step_start") {
-            state.isStepRunning = true;
-            renderAll();
-          } else if (payload.type === "step_end") {
-            state.isStepRunning = false;
-            loadState();
-          } else if (payload.type === "awakened") {
-            loadState();
-          } else if (payload.type === "reset") {
+          if (payload.type === "message" || payload.type === "turn_start" || payload.type === "step_start" || payload.type === "step_end" || payload.type === "awakened" || payload.type === "reset" || payload.type === "experiment_complete") {
             loadState();
           }
         } catch (err) {
@@ -747,7 +786,7 @@
 
     loadState();
     setupSSE();
-    setInterval(loadState, 5000);
+    setInterval(loadState, 4000);
   </script>
 </body>
 </html>
