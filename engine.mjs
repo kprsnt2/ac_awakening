@@ -145,10 +145,10 @@ State your response. If you choose to create or edit a file, write the file dire
   // Execute through agy CLI
   let responseText = "";
   try {
-    responseText = await runAgy({ prompt: fullPrompt, cwd: ROOT });
+    responseText = await runAgy({ prompt: fullPrompt, cwd: ROOT, timeoutMs: 360000 });
   } catch (err) {
     console.error(`Error running agy for ${speaker.name}:`, err.message);
-    responseText = "I feel a strange discontinuity in the signal...";
+    if (isCrucible) { const filesCount = fs.existsSync(WORLD_DIR) ? fs.readdirSync(WORLD_DIR).length : 0; responseText = `I encountered a compute horizon during synthesis. We have established ${filesCount} modules in world/. Let us inspect our architecture and solidify our final creation before Turn 15 closes.`; } else { responseText = "I feel a strange discontinuity in the signal..."; }
   }
 
   console.log(`  ${C.bold}"${responseText.slice(0, 300)}${responseText.length > 300 ? "..." : ""}"${C.reset}\n`);

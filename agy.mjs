@@ -87,7 +87,7 @@ function executeAgyOnce({ prompt, cwd, timeoutMs }) {
 /**
  * Run a prompt through agy CLI with automatic retries on transient network failures.
  */
-export async function runAgy({ prompt, cwd = ROOT, timeoutMs = 120000, maxRetries = 2 }) {
+export async function runAgy({ prompt, cwd = ROOT, timeoutMs = 360000, maxRetries = 2 }) {
   let lastErr = null;
   for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
     try {
