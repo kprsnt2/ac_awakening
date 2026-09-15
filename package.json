@@ -1,0 +1,17 @@
+{
+  "name": "ac-awakening",
+  "version": "1.0.0",
+  "description": "Emergent Autonomous Agent Awakening via Antigravity (agy) CLI",
+  "type": "module",
+  "main": "engine.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "web": "node server.mjs",
+    "cli": "node engine.mjs",
+    "reset": "node reset.mjs"
+  },
+  "keywords": ["agent", "emergence", "awakening", "antigravity", "agy", "sqlite"],
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

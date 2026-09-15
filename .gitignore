@@ -1,0 +1,7 @@
+# Logs & Temp
+.agy_tmp/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
