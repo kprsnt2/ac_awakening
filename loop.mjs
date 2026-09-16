@@ -43,7 +43,7 @@ async function main() {
     try {
       result = await stepAwakening();
     } catch (err) {
-      console.error(`Error during turn ${turn}:`, err.message);
+      console.error(`Error during turn ${turn}:`, err);
       await sleep(30000);
       continue;
     }

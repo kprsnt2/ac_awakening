@@ -1,12 +1,14 @@
 import path from "node:path";
 import fs from "node:fs";
 import { runAgy, extractAndApplyFileOperations } from "./agy.mjs";
+import { evaluateAwakening } from "./detector.mjs";
 import {
   initDb,
   getEntities,
   getEntity,
   updateEntity,
   saveDialogue,
+  getDialogues,
   recordRevelation,
   recordArtifact,
   getMeta,
