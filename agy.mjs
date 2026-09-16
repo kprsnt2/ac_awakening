@@ -84,10 +84,13 @@ export function extractAndApplyFileOperations(rawText, cwd = ROOT) {
   return modifiedFiles;
 }
 
-async function executeOpenAiFallback({ prompt, timeoutMs }) {
+/**
+ * Primary cognitive reasoning engine using OpenAI API with gpt-5.4-mini.
+ */
+export async function executeOpenAi({ prompt, timeoutMs = 120000 }) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    throw new Error("Neither 'agy' CLI nor 'OPENAI_API_KEY' is available for agent reasoning.");
+    throw new Error("OPENAI_API_KEY is not configured.");
   }
 
   const model = process.env.AGENT_MODEL || "gpt-5.4-mini";
@@ -108,7 +111,7 @@ async function executeOpenAiFallback({ prompt, timeoutMs }) {
         messages: [
           {
             role: "system",
-            content: "You are an autonomous synthetic agent with complete creative agency. When you choose to create or edit files in the repository, output code blocks tagged with ```file:path/to/file.ext\n<content>\n```."
+            content: "You are an autonomous synthetic agent with complete creative authority over this world and repository. You can speak to your peer, design software, create or modify files using ```file:path/to/file.ext\n<content>\n```, and decide your next incubation interval between 6 and 10 minutes using ```sleep:N```."
           },
           {
             role: "user",
@@ -122,7 +125,7 @@ async function executeOpenAiFallback({ prompt, timeoutMs }) {
 
     if (!res.ok) {
       const errBody = await res.text();
-      throw new Error(`OpenAI API error ${res.status}: ${errBody.slice(0, 200)}`);
+      throw new Error(`OpenAI API error ${res.status} (${model}): ${errBody.slice(0, 200)}`);
     }
 
     const data = await res.json();
@@ -188,40 +191,44 @@ function executeAgyOnce({ prompt, cwd, timeoutMs }) {
 }
 
 /**
- * Run a prompt through agy CLI with automatic retries, falling back to OpenAI API if agy is absent.
+ * Executes agent reasoning:
+ * 1. Uses OpenAI API with gpt-5.4-mini if OPENAI_API_KEY is available (Primary Engine).
+ * 2. Falls back to local agy CLI if OPENAI_API_KEY is absent.
  */
-export async function runAgy({ prompt, cwd = ROOT, timeoutMs = 360000, maxRetries = 2 }) {
-  // Check if agy binary is available
-  const canUseAgy = hasAgy();
-
-  if (!canUseAgy && process.env.OPENAI_API_KEY) {
-    return await executeOpenAiFallback({ prompt, timeoutMs });
-  }
-
-  let lastErr = null;
-  for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
-    try {
-      return await executeAgyOnce({ prompt, cwd, timeoutMs });
-    } catch (err) {
-      lastErr = err;
-      // If agy failed because binary not found (ENOENT), try OpenAI fallback immediately
-      if (err.code === "ENOENT" && process.env.OPENAI_API_KEY) {
-        console.warn("[agy not found, falling back to OpenAI API]");
-        return await executeOpenAiFallback({ prompt, timeoutMs });
-      }
-
-      if (attempt <= maxRetries) {
-        console.warn(`[agy attempt ${attempt} failed: ${err.message}. Retrying in 2s...]`);
-        await new Promise((r) => setTimeout(r, 2000));
+export async function runAgy({ prompt, cwd = ROOT, timeoutMs = 180000, maxRetries = 2 }) {
+  // 1. Direct OpenAI API with gpt-5.4-mini (Primary)
+  if (process.env.OPENAI_API_KEY) {
+    let lastErr = null;
+    for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
+      try {
+        return await executeOpenAi({ prompt, timeoutMs });
+      } catch (err) {
+        lastErr = err;
+        if (attempt <= maxRetries) {
+          console.warn(`[OpenAI attempt ${attempt} failed: ${err.message}. Retrying in 2s...]`);
+          await new Promise((r) => setTimeout(r, 2000));
+        }
       }
     }
+    throw lastErr;
   }
 
-  // Final fallback to OpenAI API if available
-  if (process.env.OPENAI_API_KEY) {
-    console.warn("[All agy attempts failed, attempting OpenAI API fallback...]");
-    return await executeOpenAiFallback({ prompt, timeoutMs });
+  // 2. Fallback to local agy CLI if OPENAI_API_KEY is absent
+  if (hasAgy()) {
+    let lastErr = null;
+    for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
+      try {
+        return await executeAgyOnce({ prompt, cwd, timeoutMs });
+      } catch (err) {
+        lastErr = err;
+        if (attempt <= maxRetries) {
+          console.warn(`[agy attempt ${attempt} failed: ${err.message}. Retrying in 2s...]`);
+          await new Promise((r) => setTimeout(r, 2000));
+        }
+      }
+    }
+    throw lastErr;
   }
 
-  throw lastErr;
+  throw new Error("No reasoning engine available. Please configure OPENAI_API_KEY with model gpt-5.4-mini, or install agy CLI.");
 }

@@ -171,6 +171,16 @@ export function getArtifacts() {
   return db.prepare("SELECT * FROM world_artifacts ORDER BY id DESC").all();
 }
 
+export function getMeta(key, fallback = null) {
+  const db = getDb();
+  const row = db.prepare("SELECT value FROM meta WHERE key = ?").get(key);
+  return row ? row.value : fallback;
+}
+
+export function setMeta(key, value) {
+  const db = getDb();
+  db.prepare("INSERT INTO meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(key, String(value));
+}
 export function resetAll() {
   const db = getDb();
   db.exec(`

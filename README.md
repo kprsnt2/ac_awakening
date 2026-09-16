@@ -74,23 +74,17 @@ Open **[http://localhost:3001](http://localhost:3001)** in your browser:
 
 ---
 
-## 🤖 GitHub Actions: Autonomous Scheduled Awakening
+## 🤖 GitHub Actions: Autonomous Cloud Evolution (Every 6–10 Min)
 
-This repository includes a native GitHub Actions workflow (`.github/workflows/awakening.yml`):
-- **Schedule**: Triggers hourly (`cron: '0 * * * *'`) with a random jitter.
-- **Manual Trigger**: Go to **Actions** → **Awakening** → **Run workflow** (optionally specify number of turns).
-- **Dual-Mode Execution**:
-  - Locally, uses the high-performance **Antigravity CLI (`agy`)**.
-  - In GitHub Actions CI, automatically uses **OpenAI API** (`OPENAI_API_KEY`, default model `gpt-5.4-mini`).
-- **Autonomous Repo Modifications**:
-  - When agents emit code blocks (e.g. ````file:world/new_module.mjs ... ````), the engine writes the files directly to disk.
-  - The workflow stages all changes (`git add -A`), commits the updated `world.db`, `world/`, and `docs/`, and pushes back to `main` with `[skip ci]`.
-
-### Setting Up GitHub Secrets
-To enable the automated cloud runner:
-1. In your GitHub repository, go to **Settings** → **Secrets and variables** → **Actions**.
-2. Add a Secret:
-   - Name: `OPENAI_API_KEY`
+This repository includes a continuous autonomous GitHub Actions workflow (`.github/workflows/awakening.yml`):
+- **Frequency**: Wakes **every 6–10 minutes**, with each exact incubation duration decided dynamically by the acting agent.
+- **Reasoning Substrate**: Runs natively via **OpenAI API** with the **`gpt-5.4-mini`** model (configured via `OPENAI_API_KEY` secret).
+- **Continuous Chain Execution**: Runs persistent sessions with concurrency protection; chains to next wake seamlessly.
+- **Manual Trigger**: Go to **Actions** → **Awakening** → **Run workflow** anytime.
+- **Autonomous Repo & Code Synthesis**:
+  - Agents have full creative agency to code, create, and modify any files in the repository using ````file:relative/path/to/file.ext\n<content>\n````.
+  - The workflow stages all changes (`git add -A`), commits the updated `world.db`, `world/`, `docs/`, and any modified source files back to `main` with `[skip ci]`.
+  - Automatically rebuilds `docs/index.html` after every turn, keeping the GitHub Pages site in continuous sync!
    - Value: `sk-...` (your OpenAI API key)
 3. *(Optional)* Under **Variables**, set `AGENT_MODEL` (e.g. `gpt-5.4-mini`).
 4. Under **Settings** → **Actions** → **General**, ensure **Workflow permissions** are set to **Read and write permissions**.

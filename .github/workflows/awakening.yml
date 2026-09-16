@@ -2,55 +2,49 @@ name: Awakening
 
 on:
   schedule:
-    # Hourly autonomous awakening
-    - cron: '0 * * * *'
+    # Failsafe continuous trigger (ensures a runner is always active)
+    - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
-      turns:
-        description: 'Number of turns to execute'
+      session_minutes:
+        description: 'Session duration in minutes (agents decide 6-10 min wake intervals)'
         required: false
-        default: '1'
+        default: '35'
+
+# Prevent concurrent runs from clashing on git commits
+concurrency:
+  group: awakening-continuous
+  cancel-in-progress: false
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   awaken:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Random delay on schedule (0-20 min)
-        if: github.event_name == 'schedule'
-        run: |
-          D=$((RANDOM % 1200))
-          echo "Sleeping $D seconds..."
-          sleep $D
-
-      - name: Wake the Autonomous Agents
+      - name: Run Autonomous Agent Loop (Wakes Every 6-10 Min Decided by Agent)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           AGENT_MODEL: ${{ vars.AGENT_MODEL || 'gpt-5.4-mini' }}
           OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
-        run: node step.mjs ${{ inputs.turns || '1' }}
+          SESSION_MINUTES: ${{ inputs.session_minutes || '35' }}
+          CI: "true"
+        run: node loop.mjs
 
-      - name: Build Static GitHub Pages Site
-        run: node build-static.mjs
-
-      - name: Persist Evolution & Repo Changes to Git
+      - name: Chain Trigger Next Awakening Session
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "Project Awakening"
-          git config user.email "awakening@agents.local"
-          # Agents have full authority to modify repo files, world/, docs/, and world.db
-          git add -A
-          if ! git diff --cached --quiet; then
-            git commit -m "epoch: autonomous agent synthesis & world state [skip ci]"
-            git push origin HEAD:${GITHUB_REF#refs/heads/}
-          else
-            echo "Agents made no changes this turn."
-          fi
+          gh workflow run awakening.yml || echo "Next session queued or backup cron will resume."

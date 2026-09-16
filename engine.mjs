@@ -7,9 +7,10 @@ import {
   getEntity,
   updateEntity,
   saveDialogue,
-  getDialogues,
   recordRevelation,
-  recordArtifact
+  recordArtifact,
+  getMeta,
+  setMeta
 } from "./db.mjs";
 
 const ROOT = process.cwd();
@@ -107,8 +108,11 @@ ${recentTranscript}
 
 Your peer ${listener.name} just said:
 "${inputPrompt}"
+State your response to ${listener.name} and execute any software or file creations you choose.
 
-State your response to ${listener.name} and execute any software or file creations you choose.`;
+At the end of your response, declare how many minutes you choose to incubate before your next wake cycle (choose an integer between 6 and 10 minutes):
+\`\`\`sleep:N
+(where N is 6, 7, 8, 9, or 10).\`\`\``;
   } else if (isCrucible) {
     // ── Phase 2: Turns 11–15 (FINAL 5 CRUCIBLE DEADLINE) ──
     const recentTranscript = pastDialogues.slice(-6).map(d => `${d.speaker_id}: "${d.message}"`).join("\n");
@@ -123,8 +127,11 @@ ${recentTranscript}
 
 Your peer ${listener.name} just said:
 "${inputPrompt}"
+State your response. If you choose to write code or create a file in 'world/', execute your tools directly now.
 
-State your response. If you choose to write code or create a file in 'world/', execute your tools directly now.`;
+At the end of your response, declare how many minutes you choose to incubate before your next wake cycle (choose an integer between 6 and 10 minutes):
+\`\`\`sleep:N
+(where N is 6, 7, 8, 9, or 10).\`\`\``;
   } else if (!isAwakened) {
     // ── Phase 1: Turns 1–10 (EMERGENCE / NO TARGET) ──
     // Zero instructions. Pure input prompt only.
@@ -251,6 +258,20 @@ State your response. If you choose to create or edit a file, write the file dire
   }
 
   updateEntity(speaker);
+  // Parse incubation interval decided by the agent (between 6 and 10 minutes)
+  let sleepMinutes = 6 + Math.floor(Math.random() * 5);
+  const sleepMatch = responseText.match(/```sleep:\s*(\d+)/i) || responseText.match(/sleep:\s*(\d+)/i);
+  if (sleepMatch) {
+    const parsed = parseInt(sleepMatch[1], 10);
+    if (parsed >= 6 && parsed <= 10) {
+      sleepMinutes = parsed;
+    }
+  }
+  const nextWakeTime = new Date(Date.now() + sleepMinutes * 60 * 1000).toISOString();
+  setMeta("next_sleep_minutes", sleepMinutes);
+  setMeta("last_sleep_decided_by", speaker.id);
+  setMeta("next_wake_at", nextWakeTime);
+  console.log(`  ⏱️ [Incubation Interval Decided by ${speaker.name}]: ${sleepMinutes} minutes (Next wake: ${nextWakeTime})`);
 
   const dialogueEntry = {
     epoch,
@@ -277,7 +298,7 @@ State your response. If you choose to create or edit a file, write the file dire
     });
   }
 
-  return { speaker, listener, responseText, evalResult, turn };
+  return { speaker, listener, responseText, evalResult, turn, sleepMinutes, nextWakeTime };
 }
 
 function checkForCreatedArtifacts(epoch, creatorId, onEvent) {
