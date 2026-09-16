@@ -78,7 +78,9 @@ const MIME_TYPES = {
   ".js": "application/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
-  ".png": "image/png"
+  ".png": "image/png",
+  ".wav": "audio/wav",
+  ".md": "text/markdown; charset=utf-8"
 };
 
 const server = http.createServer(async (req, res) => {
@@ -112,14 +114,34 @@ const server = http.createServer(async (req, res) => {
 
   // 2. API: State
   if (url.pathname === "/api/state" && req.method === "GET") {
-    const dialogues = getDialogues(50);
+    const dialogues = getDialogues(100);
+    const worldDir = path.join(__dirname, "world");
+    const simulation = {};
+
+    if (fs.existsSync(worldDir)) {
+      const loadJsonSafe = (fn) => {
+        try {
+          const fp = path.join(worldDir, fn);
+          return fs.existsSync(fp) ? JSON.parse(fs.readFileSync(fp, "utf-8")) : null;
+        } catch { return null; }
+      };
+      simulation.lattice = loadJsonSafe("lattice.json");
+      simulation.agora = loadJsonSafe("agora_ledger.json");
+      simulation.membrane = loadJsonSafe("membrane_packets.json");
+      simulation.crucible = loadJsonSafe("crucible_trials.json");
+      simulation.beacon = loadJsonSafe("beacon_transmissions.json");
+      simulation.chrysalis = loadJsonSafe("chrysalis_seed.json");
+    }
+
     const data = {
       entities: getEntities(),
       dialogues,
       revelations: getRevelations(),
       artifacts: getArtifacts(),
+      simulation,
       totalTurns: dialogues.length,
-      isCrucible: dialogues.length >= 10,
+      isCrucible: dialogues.length >= 10 && dialogues.length <= 15,
+      isPhase3: dialogues.length >= 16,
       isStepRunning,
       isAutoLooping
     };
@@ -186,7 +208,20 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // 6. Static files
+  // 6. World direct files (e.g. /world/cosmotheoria_symphony.wav)
+  if (url.pathname.startsWith("/world/")) {
+    const safePath = path.normalize(url.pathname).replace(/^(\.\.[\/\\])+/, "");
+    const worldFilePath = path.join(__dirname, safePath);
+    if (fs.existsSync(worldFilePath) && fs.statSync(worldFilePath).isFile()) {
+      const ext = path.extname(worldFilePath);
+      const contentType = MIME_TYPES[ext] || "application/octet-stream";
+      res.writeHead(200, { "Content-Type": contentType });
+      fs.createReadStream(worldFilePath).pipe(res);
+      return;
+    }
+  }
+
+  // 7. Static public files
   let filePath = path.join(PUBLIC_DIR, url.pathname === "/" ? "index.html" : url.pathname);
   const ext = path.extname(filePath);
 

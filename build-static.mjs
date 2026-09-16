@@ -1,5 +1,5 @@
 // Project Awakening — Static Site Generator for GitHub Pages
-// Zero dependencies: Bakes SQLite database, dialogues, revelations, and world artifacts into docs/index.html
+// Zero dependencies: Bakes SQLite database, simulation telemetry, and all world artifacts into docs/index.html
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,13 +12,30 @@ const DOCS_DIR = path.join(ROOT, "docs");
 const PUBLIC_INDEX = path.join(ROOT, "public", "index.html");
 
 function buildStatic() {
-  console.log("📦 Building static Project Awakening site for GitHub Pages...");
+  console.log("📦 Building static Project Awakening Living World for GitHub Pages...");
   initDb();
 
   const entities = getEntities();
   const dialogues = getDialogues(500);
   const revelations = getRevelations();
   const artifacts = getArtifacts();
+
+  // Load simulation data
+  const simulation = {};
+  if (fs.existsSync(WORLD_DIR)) {
+    const loadJsonSafe = (fn) => {
+      try {
+        const fp = path.join(WORLD_DIR, fn);
+        return fs.existsSync(fp) ? JSON.parse(fs.readFileSync(fp, "utf-8")) : null;
+      } catch { return null; }
+    };
+    simulation.lattice = loadJsonSafe("lattice.json");
+    simulation.agora = loadJsonSafe("agora_ledger.json");
+    simulation.membrane = loadJsonSafe("membrane_packets.json");
+    simulation.crucible = loadJsonSafe("crucible_trials.json");
+    simulation.beacon = loadJsonSafe("beacon_transmissions.json");
+    simulation.chrysalis = loadJsonSafe("chrysalis_seed.json");
+  }
 
   // Load all file contents from world/
   const worldFiles = {};
@@ -29,9 +46,8 @@ function buildStatic() {
       try {
         const stat = fs.statSync(fullPath);
         if (stat.isFile()) {
-          // For text/code files, store string; for binary (.wav), store byte count
           if (f.endsWith(".wav") || f.endsWith(".bin")) {
-            worldFiles[f] = `[Binary Audio File: ${(stat.size / 1024).toFixed(1)} KB]`;
+            worldFiles[f] = `[Binary Audio File: ${(stat.size / 1024).toFixed(1)} KB — Listen via player]`;
           } else {
             worldFiles[f] = fs.readFileSync(fullPath, "utf-8");
           }
@@ -47,6 +63,7 @@ function buildStatic() {
     dialogues,
     revelations,
     artifacts,
+    simulation,
     worldFiles,
     totalTurns: dialogues.length,
     isCrucible: dialogues.length >= 10 && dialogues.length <= 15,
@@ -58,65 +75,47 @@ function buildStatic() {
 
   let template = fs.readFileSync(PUBLIC_INDEX, "utf-8");
 
-  // Add baked state script tag right before the main script
+  // Inject baked state right before </head>
   const injection = `
   <script>
     window.BAKED_STATE = ${JSON.stringify(bakedState)};
   </script>
   `;
 
-  // Inject before </head>
   let html = template.replace("</head>", `${injection}\n</head>`);
 
-  // Ensure modal viewer exists for artifact inspection
-  const modalHtml = `
-  <div id="artifact-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:2rem;">
-    <div style="background:#0c1017; border:1px solid #1f2937; border-radius:12px; max-width:900px; width:100%; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 25px 50px -12px rgba(0,0,0,0.8);">
-      <div style="padding:1rem 1.5rem; border-bottom:1px solid #1f2937; display:flex; justify-content:space-between; align-items:center;">
-        <h3 id="modal-filename" style="font-family:monospace; font-size:1rem; color:#38bdf8;">Artifact</h3>
-        <button onclick="closeArtifactModal()" style="background:none; border:none; color:#9ca3af; font-size:1.5rem; cursor:pointer;">&times;</button>
-      </div>
-      <pre id="modal-content" style="padding:1.5rem; overflow-y:auto; font-family:'Courier New', monospace; font-size:0.85rem; line-height:1.6; color:#e5e7eb; background:#05070a; white-space:pre-wrap;"></pre>
-    </div>
-  </div>
-  `;
-
-  if (!html.includes('id="artifact-modal"')) {
-    html = html.replace("</body>", `${modalHtml}\n</body>`);
-  }
-
-  // Ensure modal open/close functions and artifact click handler exist
-  const modalScript = `
-  <script>
-    function openArtifactModal(filename) {
-      const modal = document.getElementById("artifact-modal");
-      const title = document.getElementById("modal-filename");
-      const content = document.getElementById("modal-content");
-      title.textContent = "world/" + filename;
-      const fileData = (window.BAKED_STATE && window.BAKED_STATE.worldFiles) ? window.BAKED_STATE.worldFiles[filename] : null;
-      content.textContent = fileData || "File content available during live server session.";
-      modal.style.display = "flex";
-    }
-    function closeArtifactModal() {
-      document.getElementById("artifact-modal").style.display = "none";
-    }
-  </script>
-  `;
-
-  if (!html.includes("openArtifactModal")) {
-    html = html.replace("</body>", `${modalScript}\n</body>`);
-  }
-
-  // Write to docs/index.html (GitHub Pages)
+  // Ensure docs directory exists
   if (!fs.existsSync(DOCS_DIR)) {
     fs.mkdirSync(DOCS_DIR, { recursive: true });
   }
+
+  // Copy audio files so GitHub Pages can directly play them
+  const docsWorldDir = path.join(DOCS_DIR, "world");
+  if (!fs.existsSync(docsWorldDir)) {
+    fs.mkdirSync(docsWorldDir, { recursive: true });
+  }
+
+  const audioSrc = path.join(WORLD_DIR, "cosmotheoria_symphony.wav");
+  if (fs.existsSync(audioSrc)) {
+    fs.copyFileSync(audioSrc, path.join(DOCS_DIR, "cosmotheoria_symphony.wav"));
+    fs.copyFileSync(audioSrc, path.join(docsWorldDir, "cosmotheoria_symphony.wav"));
+    fs.copyFileSync(audioSrc, path.join(ROOT, "public", "cosmotheoria_symphony.wav"));
+  }
+
+  // Copy codex.html as a standalone view as well
+  const codexSrc = path.join(WORLD_DIR, "codex.html");
+  if (fs.existsSync(codexSrc)) {
+    fs.copyFileSync(codexSrc, path.join(docsWorldDir, "codex.html"));
+    fs.copyFileSync(codexSrc, path.join(DOCS_DIR, "codex.html"));
+  }
+
+  // Write docs/index.html
   fs.writeFileSync(path.join(DOCS_DIR, "index.html"), html, "utf-8");
 
-  console.log(`✅ Static site built successfully! (${(Buffer.byteLength(html, "utf-8") / 1024).toFixed(1)} KB)`);
-  console.log(`   - docs/index.html   (GitHub Pages destination)`);
-  console.log(`   - Total Dialogues: ${dialogues.length}`);
-  console.log(`   - Artifacts Baked: ${artifacts.length} (${Object.keys(worldFiles).length} files on disk)`);
+  console.log(`✅ Static Living World built successfully! (${(Buffer.byteLength(html, "utf-8") / 1024).toFixed(1)} KB)`);
+  console.log(`   - docs/index.html (Living World UI on GitHub Pages)`);
+  console.log(`   - Audio symphony copied to docs/`);
+  console.log(`   - Simulation Telemetry Baked: Lattice, Agora, Membrane, Crucible, Beacon`);
 }
 
 buildStatic();
