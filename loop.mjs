@@ -62,7 +62,14 @@ async function main() {
       runCommand("git config user.email 'awakening@agents.local'");
       runCommand("git add -A");
       runCommand(`git commit -m "epoch: turn ${turn} by ${speakerName} (next wake in ${sleepMinutes}m) [skip ci]" || true`);
-      runCommand("git push origin HEAD:main || true");
+
+      const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+      const repo = process.env.GITHUB_REPOSITORY;
+      if (token && repo) {
+        runCommand(`git push https://x-access-token:${token}@github.com/${repo}.git HEAD:main || git push origin HEAD:main`);
+      } else {
+        runCommand("git push origin HEAD:main");
+      }
     }
 
     const remainingMs = endTime - Date.now();
