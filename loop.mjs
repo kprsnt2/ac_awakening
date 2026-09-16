@@ -48,7 +48,7 @@ async function main() {
       continue;
     }
 
-    const sleepMinutes = result?.sleepMinutes || 8;
+    const sleepSeconds = result?.sleepSeconds || (15 + Math.floor(Math.random() * 30));
     const speakerName = result?.speaker?.name || "Agent";
 
     // 1. Rebuild the static GitHub Pages website
@@ -61,7 +61,7 @@ async function main() {
       runCommand("git config user.name 'Project Awakening'");
       runCommand("git config user.email 'awakening@agents.local'");
       runCommand("git add -A");
-      runCommand(`git commit -m "epoch: turn ${turn} by ${speakerName} (next wake in ${sleepMinutes}m) [skip ci]" || true`);
+      runCommand(`git commit -m "epoch: turn ${turn} by ${speakerName} (next wake in ${sleepSeconds}s) [skip ci]" || true`);
 
       const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
       const repo = process.env.GITHUB_REPOSITORY;
@@ -73,14 +73,14 @@ async function main() {
     }
 
     const remainingMs = endTime - Date.now();
-    const sleepMs = sleepMinutes * 60 * 1000;
+    const sleepMs = sleepSeconds * 1000;
 
     if (isCI && (remainingMs <= sleepMs + 3 * 60 * 1000)) {
       console.log(`\n🏁 Approaching CI session limit (${Math.round(remainingMs / 60000)}m remaining). Concluding current run.`);
       break;
     }
 
-    console.log(`\n💤 Agent ${speakerName} decided to incubate for ${sleepMinutes} minutes.`);
+    console.log(`\n💤 Agent ${speakerName} decided to pause for ${sleepSeconds} seconds.`);
     console.log(`   Next turn will execute at: ${new Date(Date.now() + sleepMs).toLocaleTimeString()}...`);
     await sleep(sleepMs);
   }

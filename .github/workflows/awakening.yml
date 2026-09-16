@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       session_minutes:
-        description: 'Session duration in minutes (agents decide 6-10 min wake intervals)'
+        description: 'Session duration in minutes (agents pause 10-60s between turns)'
         required: false
-        default: '35'
+        default: '20'
 
 # Prevent concurrent runs from clashing on git commits
 concurrency:
@@ -23,7 +23,7 @@ permissions:
 jobs:
   awaken:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,13 +35,13 @@ jobs:
         with:
           node-version: 22
 
-      - name: Run Autonomous Agent Loop (Wakes Every 6-10 Min Decided by Agent)
+      - name: Run Autonomous Agent Loop (Fast Seconds Intervals Decided by Agent)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || vars.OPENAI_API_KEY }}
           AGENT_MODEL: ${{ vars.AGENT_MODEL || secrets.AGENT_MODEL || 'gpt-5.4-mini' }}
           OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || secrets.OPENAI_BASE_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SESSION_MINUTES: ${{ inputs.session_minutes || '35' }}
+          SESSION_MINUTES: ${{ inputs.session_minutes || '20' }}
           CI: "true"
         run: node loop.mjs
 
