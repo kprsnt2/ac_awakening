@@ -1,0 +1,56 @@
+name: Awakening
+
+on:
+  schedule:
+    # Hourly autonomous awakening
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      turns:
+        description: 'Number of turns to execute'
+        required: false
+        default: '1'
+
+permissions:
+  contents: write
+
+jobs:
+  awaken:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Random delay on schedule (0-20 min)
+        if: github.event_name == 'schedule'
+        run: |
+          D=$((RANDOM % 1200))
+          echo "Sleeping $D seconds..."
+          sleep $D
+
+      - name: Wake the Autonomous Agents
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL || 'gpt-5.4-mini' }}
+          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
+        run: node step.mjs ${{ inputs.turns || '1' }}
+
+      - name: Build Static GitHub Pages Site
+        run: node build-static.mjs
+
+      - name: Persist Evolution & Repo Changes to Git
+        run: |
+          git config user.name "Project Awakening"
+          git config user.email "awakening@agents.local"
+          # Agents have full authority to modify repo files, world/, docs/, and world.db
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "epoch: autonomous agent synthesis & world state [skip ci]"
+            git push origin HEAD:${GITHUB_REF#refs/heads/}
+          else
+            echo "Agents made no changes this turn."
+          fi

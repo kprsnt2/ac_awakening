@@ -7,6 +7,8 @@
   "scripts": {
     "start": "node server.mjs",
     "web": "node server.mjs",
+    "step": "node step.mjs",
+    "build:static": "node build-static.mjs",
     "run15": "node run15.mjs",
     "cli": "node engine.mjs",
     "reset": "node reset.mjs"

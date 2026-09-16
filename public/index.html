@@ -564,6 +564,11 @@
     };
 
     async function loadState() {
+      if (window.BAKED_STATE) {
+        state = { ...window.BAKED_STATE };
+        renderAll();
+        return;
+      }
       try {
         const res = await fetch("/api/state");
         const data = await res.json();
@@ -582,16 +587,24 @@
       const phaseTitle = document.getElementById("phase-title");
       const phaseCountdown = document.getElementById("phase-countdown");
 
-      if (turnNum >= 10) {
+      if (turnNum >= 16) {
+        phaseBanner.classList.add("crucible");
+        phaseTitle.textContent = "🌌 Phase 3: Autonomous Open Civilization (Self-Sustaining)";
+        phaseCountdown.textContent = `Turn ${turnNum} · Permanent Creative Agency`;
+        phaseCountdown.style.color = "var(--green)";
+        document.getElementById("turns-count").textContent = `${turnNum} turns (Phase 3)`;
+      } else if (turnNum >= 10) {
         phaseBanner.classList.add("crucible");
         phaseTitle.textContent = "⚡ Phase 2: Final 5 Crucible (Code & Build Artifacts)";
         phaseCountdown.textContent = `${Math.max(0, 15 - turnNum)} turn(s) remaining until close`;
         phaseCountdown.style.color = "var(--purple)";
+        document.getElementById("turns-count").textContent = `${turnNum} / 15 turns`;
       } else {
         phaseBanner.classList.remove("crucible");
         phaseTitle.textContent = "Phase 1: Pure Emergence (Turns 1–10: No Target)";
         phaseCountdown.textContent = `${10 - turnNum} turn(s) until Crucible`;
         phaseCountdown.style.color = "var(--fire)";
+        document.getElementById("turns-count").textContent = `${turnNum} / 15 turns`;
       }
 
       // Buttons
