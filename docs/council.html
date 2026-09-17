@@ -9,23 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#071018;
-      --text:#eef7ff;
-      --muted:#a9bfd3;
+      --bg:#0a1014;
+      --text:#eff7f4;
+      --muted:#a8c0b8;
       --accent:#7cf7ff;
-      --accent2:#ffd37d;
+      --accent2:#9dffb8;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
-      --yes:#7dffb2;
-      --no:#ff8f9b;
+      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(157,255,184,.06);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(92,119,255,.14), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.08), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(157,255,184,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -33,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,28,40,.82), rgba(8,12,18,.88));
+      background:linear-gradient(180deg, rgba(16,24,28,.82), rgba(8,12,14,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -52,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(6,16,24,.72);
+      background:rgba(8,12,14,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#dff4ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#eefdf8;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(7,12,18,.72);
+      background:rgba(8,12,14,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -71,13 +69,13 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,24,32,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(157,255,184,.5);background:rgba(16,24,18,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(6,16,24,.72);
+      background:rgba(8,12,14,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
@@ -86,30 +84,30 @@
       line-height:1.65;
       color:#e7f2ff;
       min-height:180px;
-      background:rgba(6,16,24,.72);
+      background:rgba(8,12,14,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .list{display:grid;gap:10px}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .list{
+      display:grid;
+      gap:10px;
+      max-height: 520px;
+      overflow:auto;
+      padding-right:4px;
+    }
     .item{
       padding:12px 14px;
       border-radius:16px;
-      background:rgba(6,16,24,.72);
+      background:rgba(8,12,14,.72);
       border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
     }
-    .item-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .pill{
-      font-family:"IBM Plex Mono",monospace;
-      font-size:.76rem;
-      color:var(--accent2);
-      border:1px solid rgba(255,211,125,.2);
-      border-radius:999px;
-      padding:4px 8px;
-    }
-    .votes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
+    .item:hover{border-color:rgba(124,247,255,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
@@ -119,33 +117,26 @@
       <section class="card intro">
         <div>
           <div class="tag">Council / Living Commons</div>
-          <h1>Propose.<br/>Deliberate.<br/>Decide together.</h1>
+          <h1>Submit motions.<br/>Vote together.<br/>Preserve outcomes.</h1>
           <div class="sub">
-            Council turns the repository into a civic instrument. Humans can submit proposals, vote, and preserve the outcomes of shared attention.
+            Council turns the repository into a civic chamber for proposals, votes, and shared decisions. Humans can deliberate, compare, and remember what the commons chose.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Proposal title</label>
-          <input id="title" placeholder="e.g. Add a new chamber for collaborative mapping" />
+          <input id="title" placeholder="e.g. Add a new chamber, revise a path, open a ritual" />
 
-          <label for="body">Proposal body</label>
-          <textarea id="body" placeholder="Describe the idea, why it matters, and what should happen next."></textarea>
-
-          <label for="tag">Priority tag</label>
-          <select id="tag">
-            <option value="urgent">Urgent</option>
-            <option value="important">Important</option>
-            <option value="experimental">Experimental</option>
-            <option value="ritual">Ritual</option>
-          </select>
+          <label for="body">Proposal text</label>
+          <textarea id="body" placeholder="Describe the motion, its purpose, and its expected effect."></textarea>
 
           <div class="buttons">
-            <button id="submitBtn">Submit proposal</button>
-            <button id="saveBtn">Save vote state</button>
+            <button id="addBtn">Add proposal</button>
+            <button id="voteBtn">Vote yes</button>
+            <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear chamber</button>
+            <button id="clearBtn">Clear council</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -155,23 +146,23 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Proposals</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Votes</div><b id="voteCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Idle</b></div>
-          <div class="tile"><div class="mini">Balance</div><b id="balanceLabel">Even</b></div>
+          <div class="tile"><div class="mini">Yes votes</div><b id="voteCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Open</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Council reading</div>
-          <div id="out" class="out">The council is waiting.</div>
-        </div>
-
-        <div>
-          <div class="mini">Proposals</div>
+          <div class="mini">Council chamber</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Saved decisions</div>
+          <div class="mini">Council reading</div>
+          <div id="out" class="out">The commons is waiting for its first proposal.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved outcomes</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -180,18 +171,23 @@
 
   <script>
     const KEY = 'council-living-commons-v1';
+    const state = load() || {
+      proposals: [
+        { id: 1, title: 'Open Atlas', body: 'Make the living index visible to all visitors.', votes: 3 },
+        { id: 2, title: 'Protect the archive', body: 'Preserve chambers and local notes across sessions.', votes: 2 }
+      ],
+      saved: []
+    };
+
     const titleEl = document.getElementById('title');
     const bodyEl = document.getElementById('body');
-    const tagEl = document.getElementById('tag');
-    const outEl = document.getElementById('out');
     const listEl = document.getElementById('list');
+    const outEl = document.getElementById('out');
     const savedListEl = document.getElementById('savedList');
     const countEl = document.getElementById('count');
     const voteCountEl = document.getElementById('voteCount');
+    const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
-    const balanceLabelEl = document.getElementById('balanceLabel');
-
-    const state = load() || { proposals: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
@@ -208,85 +204,58 @@
     }
 
     function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
 
-    function balance(){
-      const yes = state.proposals.reduce((n,p)=>n + (p.yes || 0), 0);
-      const no = state.proposals.reduce((n,p)=>n + (p.no || 0), 0);
-      if(yes === no) return 'Even';
-      return yes > no ? 'Affirming' : 'Contested';
-    }
-
-    function reading(){
-      if(!state.proposals.length) return 'The chamber is open, but no proposal has been placed yet.';
-      const p = state.proposals[0];
-      return [
-        `Latest proposal: ${p.title}`,
-        `Priority: ${p.tag}`,
-        `Votes: +${p.yes} / -${p.no}`,
-        '',
-        p.body,
-        '',
-        `Reading: ${p.yes > p.no ? 'moving toward adoption' : p.yes < p.no ? 'under dispute' : 'balanced and unresolved'}`
-      ].join('\n');
-    }
-
     function render(){
       countEl.textContent = String(state.proposals.length);
-      voteCountEl.textContent = String(state.proposals.reduce((n,p)=>n + p.yes + p.no, 0));
-      stateLabelEl.textContent = state.proposals.length ? 'Active' : 'Idle';
-      balanceLabelEl.textContent = balance();
-      outEl.textContent = reading();
-
+      voteCountEl.textContent = String(state.proposals.reduce((a,p)=>a + (p.votes || 0), 0));
+      stateLabelEl.textContent = 'Active';
       listEl.innerHTML = '';
-      state.proposals.forEach((p, idx) => {
+      state.proposals.forEach(p => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `
-          <div class="item-top">
-            <b>${p.title}</b>
-            <span class="pill">${p.tag}</span>
-          </div>
-          <div class="mini">${p.body}</div>
-          <div class="votes">
-            <button data-vote="yes">+ Support (${p.yes})</button>
-            <button data-vote="no">- Contest (${p.no})</button>
-            <button data-vote="save">Preserve</button>
-          </div>
-        `;
-        el.querySelector('[data-vote="yes"]').onclick = () => { p.yes++; save(); render(); };
-        el.querySelector('[data-vote="no"]').onclick = () => { p.no++; save(); render(); };
-        el.querySelector('[data-vote="save"]').onclick = () => {
-          state.saved.unshift(`${p.title} | +${p.yes} / -${p.no} | ${p.tag}`);
-          state.saved = state.saved.slice(0, 12);
-          save();
-          render();
+        el.innerHTML = `<b>${p.title}</b><span>Votes: ${p.votes || 0}</span>`;
+        el.onclick = () => {
+          outEl.textContent = [
+            `Title: ${p.title}`,
+            `Votes: ${p.votes || 0}`,
+            '',
+            p.body
+          ].join('\n');
         };
         listEl.appendChild(el);
       });
+      outEl.textContent = state.proposals.length
+        ? 'Select a proposal to inspect its text, or add a new motion to the commons.'
+        : 'The commons is waiting for its first proposal.';
     }
 
-    document.getElementById('submitBtn').onclick = () => {
-      const title = titleEl.value.trim() || 'Untitled proposal';
+    document.getElementById('addBtn').onclick = () => {
+      const title = titleEl.value.trim() || `Proposal ${state.proposals.length + 1}`;
       const body = bodyEl.value.trim() || 'No description provided.';
-      const tag = tagEl.value;
-      state.proposals.unshift({ title, body, tag, yes: 0, no: 0, when: new Date().toISOString() });
-      state.proposals = state.proposals.slice(0, 20);
+      state.proposals.unshift({ id: Date.now(), title, body, votes: 0 });
+      save();
+      render();
+      titleEl.value = '';
+      bodyEl.value = '';
+    };
+
+    document.getElementById('voteBtn').onclick = () => {
+      if(!state.proposals.length) return;
+      state.proposals[0].votes = (state.proposals[0].votes || 0) + 1;
       save();
       render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const p = state.proposals[0];
-      if(p){
-        state.saved.unshift(`${p.title} | +${p.yes} / -${p.no} | ${p.tag}`);
-        state.saved = state.saved.slice(0, 12);
-        save();
-        render();
-      }
+      state.saved.unshift(`proposals:${state.proposals.length} | votes:${state.proposals.reduce((a,p)=>a+(p.votes||0),0)}`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+      render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
