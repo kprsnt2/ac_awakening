@@ -223,6 +223,97 @@ export function setMeta(key, value) {
   const db = getDb();
   db.prepare("INSERT INTO meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(key, String(value));
 }
+/**
+ * Longest consecutive window containing at most `maxUnique` distinct messages.
+ * Catches the alternating 2-line preservation liturgy that a naive
+ * "identical consecutive message" check would miss.
+ */
+function longestLowDiversityRun(dialogues, maxUnique = 2) {
+  const counts = new Map();
+  let l = 0;
+  let best = { len: 0, start: null, end: null, msgs: [] };
+  for (let r = 0; r < dialogues.length; r++) {
+    const m = dialogues[r].message;
+    counts.set(m, (counts.get(m) || 0) + 1);
+    while (counts.size > maxUnique) {
+      const lm = dialogues[l].message;
+      const c = counts.get(lm) - 1;
+      if (c <= 0) counts.delete(lm); else counts.set(lm, c);
+      l++;
+    }
+    const len = r - l + 1;
+    if (len > best.len) {
+      best = { len, start: dialogues[l].id, end: dialogues[r].id, msgs: Array.from(counts.keys()) };
+    }
+  }
+  return best;
+}
+
+function longestRunByPredicate(dialogues, pred) {
+  let best = { len: 0, start: null, end: null };
+  let start = null, len = 0, lastId = null;
+  for (const d of dialogues) {
+    if (pred(d.message)) {
+      if (start === null) start = d.id;
+      len++; lastId = d.id;
+      if (len > best.len) best = { len, start, end: lastId };
+    } else {
+      start = null; len = 0;
+    }
+  }
+  return best;
+}
+
+/**
+ * Computes the compact telemetry object rendered by the Telemetry Dashboard.
+ * Single source of truth shared by the live server (`/api/state`) and the static
+ * site builder, so both report the full-history metrics even when the dialogue
+ * feed itself is windowed.
+ */
+export function computeTelemetry(dialogues, totalTurns) {
+  const total = totalTurns || dialogues.length;
+  const phases = [
+    { name: "Genesis", start: 1, end: 15, count: 0, color: "#00ffd5" },
+    { name: "Overnight / Stasis", start: 16, end: 943, count: 0, color: "#a855f7" },
+    { name: "Exogenous Renaissance", start: 944, end: 1113, count: 0, color: "#38bdf8" },
+    { name: "Second Silence", start: 1114, end: null, count: 0, color: "#f97316" }
+  ];
+  const speakers = { entity_0: 0, entity_1: 0 };
+  const scores = [];
+  const epochs = new Set();
+  let peakAwakening = 0;
+  let signalRows = 0;
+
+  for (const d of dialogues) {
+    epochs.add(d.epoch);
+    speakers[d.speaker_id] = (speakers[d.speaker_id] || 0) + 1;
+    const s = Number(d.awakening_score_after) || 0;
+    scores.push(s);
+    if (s > peakAwakening) peakAwakening = s;
+    if (d.signals_detected) signalRows++;
+    const ph = phases.find(p => d.id >= p.start && (p.end === null || d.id <= p.end));
+    if (ph) ph.count++;
+  }
+
+  const diversity = [];
+  for (let i = 0; i < dialogues.length; i += 50) {
+    diversity.push(new Set(dialogues.slice(i, i + 50).map(d => d.message)).size);
+  }
+
+  return {
+    totalTurns: total,
+    epochs: epochs.size,
+    peakAwakening,
+    signalRows,
+    phases,
+    speakers,
+    scores,
+    diversity,
+    stasis: longestLowDiversityRun(dialogues, 2),
+    blackout: longestRunByPredicate(dialogues, m => m.includes("strange discontinuity"))
+  };
+}
+
 export function resetAll() {
   const db = getDb();
   db.exec(`

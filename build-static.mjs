@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { initDb, getEntities, getDialogues, getDialogueCount, getRevelations, getDistinctArtifacts } from "./db.mjs";
+import { initDb, getEntities, getDialogues, getDialogueCount, getRevelations, getDistinctArtifacts, computeTelemetry } from "./db.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
@@ -127,6 +127,7 @@ function buildStatic() {
     worldFiles,
     sharedFiles,
     customApps,
+    telemetry: computeTelemetry(dialogues, totalTurns),
     totalTurns,
     isCrucible: totalTurns >= 11 && totalTurns <= 15,
     isPhase3: totalTurns >= 16,
@@ -206,11 +207,19 @@ function buildStatic() {
   if (fs.existsSync(codexSrc)) {
     fs.copyFileSync(codexSrc, path.join(DOCS_DIR, "codex.html"));
   }
+
+  // Copy standalone Analytics Dashboard to docs/
+  const dashboardSrc = path.join(ROOT, "public", "dashboard.html");
+  if (fs.existsSync(dashboardSrc)) {
+    fs.copyFileSync(dashboardSrc, path.join(DOCS_DIR, "dashboard.html"));
+  }
+
   // Write docs/index.html
   fs.writeFileSync(path.join(DOCS_DIR, "index.html"), html, "utf-8");
 
   console.log(`✅ Static Living World built successfully! (${(Buffer.byteLength(html, "utf-8") / 1024).toFixed(1)} KB)`);
   console.log(`   - docs/index.html (Living World UI on GitHub Pages)`);
+  console.log(`   - docs/dashboard.html (Analytics Dashboard)`);
   console.log(`   - Audio symphony copied to docs/`);
   console.log(`   - Simulation Telemetry Baked: Lattice, Agora, Membrane, Crucible, Beacon`);
 }

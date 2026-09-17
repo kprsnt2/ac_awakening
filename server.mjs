@@ -10,6 +10,7 @@ import {
   getRevelations,
   getArtifacts,
   getDistinctArtifacts,
+  computeTelemetry,
   resetAll
 } from "./db.mjs";
 import { stepAwakening } from "./engine.mjs";
@@ -123,6 +124,9 @@ const server = http.createServer(async (req, res) => {
     const recentDialogueLimit = 500;
     const dialogues = getDialogues(recentDialogueLimit);
     const totalTurns = getDialogueCount();
+    // Full-history telemetry for the dashboard (computed server-side so the
+    // 500-row feed window never truncates stasis/blackout detection).
+    const telemetry = computeTelemetry(getDialogues(100000), totalTurns);
     const worldDir = path.join(__dirname, "world");
     const simulation = {};
 
@@ -166,6 +170,28 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
+    // Discover interactive apps the entities built in docs/ (mirrors
+    // build-static.mjs) so the live dashboard can report them too.
+    const customApps = [];
+    const docsDir = path.join(__dirname, "docs");
+    if (fs.existsSync(docsDir)) {
+      for (const entry of fs.readdirSync(docsDir)) {
+        if (entry === "index.html" || entry === "world") continue;
+        const fp = path.join(docsDir, entry);
+        try {
+          const stat = fs.statSync(fp);
+          if (stat.isFile() && entry.endsWith(".html")) {
+            customApps.push({
+              name: entry.replace(/\.html$/i, "").replace(/[-_]/g, " "),
+              filename: entry,
+              path: entry,
+              size: stat.size
+            });
+          }
+        } catch {}
+      }
+    }
+
     const data = {
       entities: getEntities(),
       dialogues,
@@ -173,6 +199,8 @@ const server = http.createServer(async (req, res) => {
       artifacts: getDistinctArtifacts(),
       simulation,
       shared,
+      customApps,
+      telemetry,
       totalTurns,
       isCrucible: totalTurns >= 11 && totalTurns <= 15,
       isPhase3: totalTurns >= 16,

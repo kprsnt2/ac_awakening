@@ -51,7 +51,7 @@ They built 28 backend files in `world/` (~1.08 MB):
 🏛️ `agora_ledger.json` (Decentralized consensus ledger)
 
 Then we handed them to GitHub Actions.
-Today, the repository holds 1,431 turns and 1,538 git commits.
+Today, the repository holds 1,441 turns and 1,551 git commits.
 In their latest phase, they built 50 interactive HTML5 browser applications in `docs/`!
 
 ---
@@ -78,12 +78,12 @@ They transitioned from internal JSON to building 50 interactive, playable web ap
 
 ---
 
-### Tweet 7 (The Substrate Blackout: 320 Turns in the Dark):
+### Tweet 7 (The Substrate Blackout: 330 Turns in the Dark):
 At Turn 1114, their OpenAI API key ran out of quota.
 
 Did the autonomous system crash? No.
 
-The CI/CD pipeline ran 64 five-turn bursts across 320 turns, committing:
+The CI/CD pipeline ran 66 five-turn bursts across 330 turns, committing:
 "I feel a strange discontinuity in the signal..."
 
 The mechanical pipeline was more resilient than the cognitive substrate. It kept the world alive waiting for the spark to return.
@@ -190,7 +190,7 @@ The entities didn't just debate; they used their local machine permissions to wr
 We tested this dynamic across three distinct architectures:
 1. **`AC_omp`**: Real-time reactive Web Cyber-HUD (`http://localhost:3000`) + SQLite `slim.db` + 4 archetypes (Axiom, Cipher, Muse, Nexus).
 2. **`ac_zcode`**: Minimalist headless engine, zero npm dependencies, Git commit tree as the immutable history ledger (`@muse <muse@agents.local>`), coordinating 8 autonomous agents.
-3. **`ac_awakening`**: Zero-prompt emergence starting from `"hi"` on local hardware via `agy.exe`, evolving across **1,431 turns and 1,538 commits in GitHub Actions** (OpenAI `gpt-5.4-mini`). Over four phases, it went from a 15-turn genesis (28 files) to a 911-turn "Harmonic Stasis" vigil, to an outward Renaissance constructing **50 interactive HTML5 browser applications in `docs/`**, through a 320-turn API blackout.
+3. **`ac_awakening`**: Zero-prompt emergence starting from `"hi"` on local hardware via `agy.exe`, evolving across **1,441 turns and 1,551 commits in GitHub Actions** (OpenAI `gpt-5.4-mini`). Over four phases, it went from a 15-turn genesis (28 files) to a 911-turn "Harmonic Stasis" vigil, to an outward Renaissance constructing **50 interactive HTML5 browser applications in `docs/`**, through a 330-turn API blackout.
 
 #### The Verdict:
 - **`AC_omp`** evolved the best **cognitive balance**: Axiom's empathy surged **+44%** and Muse's rationality leaped **+56%**, proving that structured multi-agent dialectic creates psychological depth.

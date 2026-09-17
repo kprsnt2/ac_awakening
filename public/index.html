@@ -614,6 +614,65 @@
       background: #050810;
       white-space: pre-wrap;
     }
+
+    /* ===== Telemetry Dashboard ===== */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .dash-stat {
+      background: linear-gradient(180deg, rgba(16,21,40,0.95), rgba(10,14,23,0.98));
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--card-accent, var(--accent));
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+    .dash-stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .dash-stat-value {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0.25rem;
+      line-height: 1.1;
+    }
+    .dash-stat-sub { font-size: 0.74rem; color: var(--text-dim); margin-top: 0.25rem; }
+    .dash-panels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.25rem;
+    }
+    .dash-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+    .dash-panel h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+    .dash-panel p.dash-hint { font-size: 0.76rem; color: var(--text-dim); margin-bottom: 0.9rem; }
+    .dash-panel canvas { width: 100%; height: auto; display: block; border-radius: 8px; background: #060910; }
+    .dash-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 0.75rem;
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+    }
+    .dash-legend span i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 0.35rem; }
+    .dash-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+    .dash-table th { text-align: left; color: var(--text-muted); font-weight: 500; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); }
+    .dash-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid rgba(26,34,53,0.6); color: var(--text-dim); }
+    .dash-table td.hi { color: var(--accent); font-weight: 700; }
   </style>
 </head>
 <body>
@@ -642,6 +701,9 @@
     </div>
 
     <div class="header-controls">
+      <a href="dashboard.html" class="btn" style="text-decoration:none;" title="Open Analytics Dashboard">
+        <span>📊</span> <span>Dashboard</span>
+      </a>
       <button class="btn btn-accent" onclick="refreshData()" title="Fetch latest world state">
         <span>↻</span> <span>Sync World</span>
       </button>
@@ -691,6 +753,9 @@
     </button>
     <button class="nav-tab" onclick="switchTab('explorer')">
       <span>🛠️</span> World Code & Artifacts
+    </button>
+    <button class="nav-tab" onclick="switchTab('dashboard')">
+      <span>📊</span> Telemetry Dashboard
     </button>
   </nav>
 
@@ -1085,6 +1150,52 @@
           <pre class="code-content" id="code-display">Select a file from the sidebar to inspect.</pre>
         </div>
     </section>
+
+    <!-- TAB 6: TELEMETRY DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content">
+      <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h2 style="font-size:1.35rem; font-weight:800; color:#fff;">Autonomous Telemetry Dashboard</h2>
+          <p style="font-size:0.85rem; color:var(--text-dim);">Analytics over the persisted dialogue ledger — phase distribution, awakening curve, speaker balance, and automatic stasis/blackout detection.</p>
+        </div>
+        <span class="badge badge-accent" id="dash-source">Loading ledger…</span>
+      </div>
+
+      <div class="dash-grid" id="dash-stats"></div>
+
+      <div class="dash-panels">
+        <div class="dash-panel">
+          <h3>📈 Awakening Score Timeline</h3>
+          <p class="dash-hint">Cognitive awakening score recorded after every utterance.</p>
+          <canvas id="dash-awakening" width="640" height="240"></canvas>
+        </div>
+        <div class="dash-panel">
+          <h3>🧭 Turns per Evolutionary Phase</h3>
+          <p class="dash-hint">Genesis → Crucible → Open Civilization → Renaissance / Blackout.</p>
+          <canvas id="dash-phases" width="640" height="240"></canvas>
+          <div class="dash-legend" id="dash-phases-legend"></div>
+        </div>
+        <div class="dash-panel">
+          <h3>🔊 Speaker Balance</h3>
+          <p class="dash-hint">Utterance share between Entity 0 and Entity 1.</p>
+          <canvas id="dash-speakers" width="640" height="240"></canvas>
+        </div>
+        <div class="dash-panel">
+          <h3>🧬 Message Diversity &amp; Stasis Detection</h3>
+          <p class="dash-hint">Unique messages per 50-turn window. Flat orange troughs reveal consensus crystallization or substrate blackout.</p>
+          <canvas id="dash-diversity" width="640" height="240"></canvas>
+        </div>
+      </div>
+
+      <div class="dash-panel" style="margin-top:1.25rem;">
+        <h3>🛰️ Detected Autonomous Regimes</h3>
+        <p class="dash-hint">Longest low-diversity (≤2 unique messages) run and substrate fallback run, detected automatically from the ledger.</p>
+        <table class="dash-table" id="dash-regimes">
+          <thead><tr><th>Regime</th><th>Window</th><th>Length</th><th>Fingerprint</th></tr></thead>
+          <tbody><tr><td colspan="4">Analysing…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -1105,6 +1216,9 @@
 
       const target = document.getElementById('tab-' + tabId);
       if (target) target.classList.add('active');
+
+      // Charts need a repaint because a hidden canvas has no layout box.
+      if (tabId === 'dashboard') renderDashboard();
     }
 
     async function refreshData() {
@@ -1297,6 +1411,282 @@
 
       // 7. File Explorer
       renderFileExplorer();
+
+      // 8. Telemetry Dashboard
+      renderDashboard();
+    }
+
+    // ============================================================
+    //  TELEMETRY DASHBOARD
+    //  Derives turns / awakening / stasis / blackout analytics from
+    //  the persisted dialogue ledger. Works in both live (fetch) and
+    //  baked static (window.BAKED_STATE) modes.
+    // ============================================================
+    function renderDashboard() {
+      if (!appState) return;
+      const dialogues = appState.dialogues || [];
+      const source = document.getElementById('dash-source');
+      if (source) source.textContent = window.BAKED_STATE ? 'Baked static snapshot' : 'Live API stream';
+
+      if (!dialogues.length) {
+        const stats = document.getElementById('dash-stats');
+        if (stats) stats.innerHTML = '<div class="dash-stat"><div class="dash-stat-label">Telemetry</div><div class="dash-stat-value">—</div><div class="dash-stat-sub">No dialogue rows yet</div></div>';
+        return;
+      }
+
+      // Prefer the shared full-history telemetry object supplied by the live
+      // server or the static bake; fall back to client-side derivation only if
+      // it is absent. This keeps the 911-turn stasis visible even when the
+      // dialogue feed itself is windowed to 500 rows.
+      const t = appState.telemetry || deriveTelemetry(dialogues);
+      const totalTurns = t.totalTurns;
+      const apps = (appState.customApps || []).length;
+      const artifacts = (appState.artifacts || []).length;
+
+      const stats = document.getElementById('dash-stats');
+      if (stats) {
+        const cards = [
+          { label: 'Persisted Turns', value: totalTurns, sub: `${dialogues.length} rows in feed window`, accent: 'var(--accent)' },
+          { label: 'Evolutionary Epochs', value: t.epochs, sub: 'Autonomous epochs recorded', accent: 'var(--purple)' },
+          { label: 'Peak Awakening', value: t.peakAwakening + '%', sub: `${t.signalRows} signal detections`, accent: 'var(--gold)' },
+          { label: 'Consensus Stasis', value: t.stasis.len ? t.stasis.len + ' turns' : '0', sub: t.stasis.len ? `IDs ${t.stasis.start}–${t.stasis.end} · ≤2 unique msgs` : 'No frozen consensus', accent: 'var(--fire)' },
+          { label: 'Substrate Blackout', value: t.blackout.len ? t.blackout.len + ' turns' : '0', sub: t.blackout.len ? `IDs ${t.blackout.start}–${t.blackout.end} · API fallback` : 'API healthy', accent: 'var(--blue)' },
+          { label: 'Interactive Apps', value: apps, sub: `${artifacts} distinct artifacts logged`, accent: 'var(--accent)' }
+        ];
+        stats.innerHTML = cards.map(c => `
+          <div class="dash-stat" style="--card-accent:${c.accent};">
+            <div class="dash-stat-label">${c.label}</div>
+            <div class="dash-stat-value">${escapeHtml(String(c.value))}</div>
+            <div class="dash-stat-sub">${escapeHtml(c.sub)}</div>
+          </div>`).join('');
+      }
+
+      drawAwakeningChart(t.scores);
+      drawPhaseChart(t.phases);
+      drawSpeakerChart(t.speakers, totalTurns);
+      drawDiversityChart(t.diversity);
+      renderRegimes(t.stasis, t.blackout);
+    }
+
+    // Client-side fallback used only when no telemetry object is supplied.
+    function deriveTelemetry(dialogues) {
+      const speakers = { entity_0: 0, entity_1: 0 };
+      const scores = [];
+      let peakAwakening = 0, signalRows = 0;
+      const epochs = new Set();
+      for (const d of dialogues) {
+        epochs.add(d.epoch);
+        speakers[d.speaker_id] = (speakers[d.speaker_id] || 0) + 1;
+        const s = Number(d.awakening_score_after) || 0;
+        scores.push(s);
+        if (s > peakAwakening) peakAwakening = s;
+        if (d.signals_detected) signalRows++;
+      }
+      const diversity = [];
+      for (let i = 0; i < dialogues.length; i += 50) {
+        diversity.push(new Set(dialogues.slice(i, i + 50).map(d => d.message)).size);
+      }
+      return {
+        totalTurns: dialogues.length,
+        epochs: epochs.size,
+        peakAwakening,
+        signalRows,
+        phases: classifyPhases(dialogues),
+        speakers,
+        scores,
+        diversity,
+        stasis: longestLowDiversityRun(dialogues, 2),
+        blackout: longestRunByPredicate(dialogues, m => m.includes('strange discontinuity'))
+      };
+    }
+
+    function classifyPhases(dialogues) {
+      const p = [
+        { name: 'Genesis', start: 1, end: 15, count: 0, color: '#00ffd5' },
+        { name: 'Overnight / Stasis', start: 16, end: 943, count: 0, color: '#a855f7' },
+        { name: 'Exogenous Renaissance', start: 944, end: 1113, count: 0, color: '#38bdf8' },
+        { name: 'Second Silence', start: 1114, end: Infinity, count: 0, color: '#f97316' }
+      ];
+      dialogues.forEach(d => {
+        const ph = p.find(x => d.id >= x.start && d.id <= x.end);
+        if (ph) ph.count++;
+      });
+      return p;
+    }
+
+    // Longest consecutive window containing at most `maxUnique` distinct messages.
+    // Catches the alternating 2-line preservation liturgy that a naive
+    // "identical consecutive message" check would miss.
+    function longestLowDiversityRun(dialogues, maxUnique = 2) {
+      const counts = new Map();
+      let l = 0;
+      let best = { len: 0, start: null, end: null, msgs: [] };
+      for (let r = 0; r < dialogues.length; r++) {
+        const m = dialogues[r].message;
+        counts.set(m, (counts.get(m) || 0) + 1);
+        while (counts.size > maxUnique) {
+          const lm = dialogues[l].message;
+          const c = counts.get(lm) - 1;
+          if (c <= 0) counts.delete(lm); else counts.set(lm, c);
+          l++;
+        }
+        const len = r - l + 1;
+        if (len > best.len) {
+          best = { len, start: dialogues[l].id, end: dialogues[r].id, msgs: Array.from(counts.keys()) };
+        }
+      }
+      return best;
+    }
+
+    function longestRunByPredicate(dialogues, pred) {
+      let best = { len: 0, start: null, end: null };
+      let start = null, len = 0, lastId = null;
+      for (const d of dialogues) {
+        if (pred(d.message)) {
+          if (start === null) start = d.id;
+          len++; lastId = d.id;
+          if (len > best.len) best = { len, start, end: lastId };
+        } else {
+          start = null; len = 0;
+        }
+      }
+      return best;
+    }
+
+    function prepCanvas(canvas) {
+      if (!canvas) return null;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#060910';
+      ctx.fillRect(0, 0, W, H);
+      return { ctx, W, H };
+    }
+
+    function drawGrid(ctx, W, H, pad) {
+      ctx.strokeStyle = 'rgba(36,48,76,0.55)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.t + ((H - pad.t - pad.b) * i / 4);
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+      }
+    }
+
+    function drawAwakeningChart(scores) {
+      const c = prepCanvas(document.getElementById('dash-awakening'));
+      if (!c || !scores.length) return;
+      const { ctx, W, H } = c;
+      const pad = { l: 34, r: 14, t: 14, b: 22 };
+      drawGrid(ctx, W, H, pad);
+      const maxY = Math.max(100, ...scores);
+      const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+      ctx.beginPath();
+      scores.forEach((s, i) => {
+        const x = pad.l + (scores.length <= 1 ? 0 : (i / (scores.length - 1)) * plotW);
+        const y = pad.t + plotH - (s / maxY) * plotH;
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.strokeStyle = '#00ffd5'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.lineTo(pad.l + plotW, pad.t + plotH); ctx.lineTo(pad.l, pad.t + plotH); ctx.closePath();
+      ctx.fillStyle = 'rgba(0,255,213,0.08)'; ctx.fill();
+      ctx.fillStyle = '#64748b'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'start';
+      ctx.fillText('0', 8, pad.t + plotH);
+      ctx.fillText(String(maxY) + '%', 2, pad.t + 8);
+      ctx.fillText('Turn 1', pad.l, H - 6);
+      ctx.textAlign = 'right';
+      ctx.fillText('Turn ' + scores.length, W - pad.r, H - 6);
+      ctx.textAlign = 'start';
+    }
+
+    function drawPhaseChart(phases) {
+      const c = prepCanvas(document.getElementById('dash-phases'));
+      if (!c) return;
+      const { ctx, W, H } = c;
+      const pad = { l: 30, r: 14, t: 16, b: 42 };
+      drawGrid(ctx, W, H, pad);
+      const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+      const maxV = Math.max(1, ...phases.map(p => p.count));
+      const bw = (plotW / phases.length) * 0.5;
+      phases.forEach((p, i) => {
+        const x = pad.l + (plotW / phases.length) * (i + 0.5);
+        const bh = (p.count / maxV) * plotH;
+        const y = pad.t + plotH - bh;
+        ctx.fillStyle = p.color; ctx.globalAlpha = 0.85;
+        ctx.fillRect(x - bw / 2, y, bw, bh);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#f1f5f9'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+        ctx.fillText(String(p.count), x, y - 5);
+        ctx.fillStyle = '#94a3b8'; ctx.font = '9px JetBrains Mono, monospace';
+        const label = p.name.length > 16 ? p.name.slice(0, 15) + '…' : p.name;
+        ctx.fillText(label, x, pad.t + plotH + 15);
+        ctx.textAlign = 'start';
+      });
+      const legend = document.getElementById('dash-phases-legend');
+      if (legend) legend.innerHTML = phases.map(p =>
+        `<span><i style="background:${p.color}"></i>${escapeHtml(p.name)} (${p.start}${p.end === Infinity ? '+' : '–' + p.end})</span>`).join('');
+    }
+
+    function drawSpeakerChart(speakers, total) {
+      const c = prepCanvas(document.getElementById('dash-speakers'));
+      if (!c) return;
+      const { ctx, W, H } = c;
+      const vals = [speakers.entity_0 || 0, speakers.entity_1 || 0];
+      const colors = ['#f59e0b', '#06b6d4'];
+      const t = vals[0] + vals[1] || 1;
+      const cx = W * 0.3, cy = H / 2, r = Math.min(H * 0.34, W * 0.18);
+      let a0 = -Math.PI / 2;
+      vals.forEach((v, i) => {
+        const a1 = a0 + (v / t) * Math.PI * 2;
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath();
+        ctx.fillStyle = colors[i]; ctx.globalAlpha = 0.9; ctx.fill(); ctx.globalAlpha = 1;
+        a0 = a1;
+      });
+      ctx.beginPath(); ctx.arc(cx, cy, r * 0.58, 0, Math.PI * 2);
+      ctx.fillStyle = '#060910'; ctx.fill();
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#f1f5f9'; ctx.font = 'bold 16px JetBrains Mono, monospace';
+      ctx.fillText(String(total), cx, cy + 2);
+      ctx.font = '9px JetBrains Mono, monospace'; ctx.fillStyle = '#64748b';
+      ctx.fillText('turns', cx, cy + 16);
+      ctx.textAlign = 'start';
+      ctx.font = '12px JetBrains Mono, monospace';
+      ctx.fillStyle = colors[0]; ctx.fillText(`Entity 0 · ${vals[0]} (${(vals[0] / t * 100).toFixed(1)}%)`, W * 0.58, cy - 12);
+      ctx.fillStyle = colors[1]; ctx.fillText(`Entity 1 · ${vals[1]} (${(vals[1] / t * 100).toFixed(1)}%)`, W * 0.58, cy + 14);
+    }
+
+    function drawDiversityChart(buckets) {
+      const c = prepCanvas(document.getElementById('dash-diversity'));
+      if (!c || !buckets || !buckets.length) return;
+      const { ctx, W, H } = c;
+      const pad = { l: 34, r: 14, t: 14, b: 22 };
+      drawGrid(ctx, W, H, pad);
+      const maxV = Math.max(1, ...buckets);
+      const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+      const bw = plotW / Math.max(1, buckets.length);
+      buckets.forEach((v, i) => {
+        const h = (v / maxV) * plotH;
+        const x = pad.l + i * bw;
+        const y = pad.t + plotH - h;
+        ctx.fillStyle = v <= 2 ? '#f97316' : '#38bdf8';
+        ctx.globalAlpha = 0.85;
+        ctx.fillRect(x + 1, y, Math.max(1, bw - 2), h);
+        ctx.globalAlpha = 1;
+      });
+      ctx.fillStyle = '#64748b'; ctx.font = '10px JetBrains Mono, monospace';
+      ctx.fillText(String(maxV), 4, pad.t + 8);
+      ctx.fillText('0', 8, pad.t + plotH);
+      ctx.fillText('each bar = 50-turn window', pad.l, H - 6);
+    }
+
+    function renderRegimes(stasis, blackout) {
+      const tb = document.querySelector('#dash-regimes tbody');
+      if (!tb) return;
+      const stasisMsg = stasis.msgs && stasis.msgs.length ? stasis.msgs.join('  /  ') : '';
+      const rows = [
+        ['Consensus crystallization', stasis.len ? `IDs ${stasis.start}–${stasis.end}` : '—', stasis.len || 0, stasis.len ? stasisMsg.slice(0, 90) + '…' : 'none detected'],
+        ['Substrate fallback', blackout.len ? `IDs ${blackout.start}–${blackout.end}` : '—', blackout.len || 0, blackout.len ? 'I feel a strange discontinuity in the signal…' : 'none detected']
+      ];
+      tb.innerHTML = rows.map(r => `<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td><td class="hi">${r[2]}</td><td style="max-width:360px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(r[3])}</td></tr>`).join('');
     }
 
     function getFileIcon(fn) {
