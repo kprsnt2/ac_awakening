@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b0f1a;
-      --text:#eef4ff;
-      --muted:#a8b6d8;
-      --accent:#7cf7ff;
-      --accent2:#ffd37d;
-      --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
+      --bg:#07120f;
+      --text:#effff8;
+      --muted:#a3c9bb;
+      --accent:#7cf7c7;
+      --accent2:#8fd3ff;
+      --line: rgba(124,247,199,.16);
+      --glow: 0 0 24px rgba(124,247,199,.14), 0 0 48px rgba(143,211,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.07), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,199,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(143,211,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,22,38,.82), rgba(8,10,18,.88));
+      background:linear-gradient(180deg, rgba(14,30,24,.82), rgba(8,12,10,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(124,247,199,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#effff8;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(124,247,255,.22);
-      background:rgba(8,10,18,.72);
+      border:1px solid rgba(124,247,199,.22);
+      background:rgba(8,12,10,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,55 +69,62 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(16,22,18,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(124,247,199,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#e7f2ff;
+      color:#f0fff8;
       min-height:180px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(124,247,199,.14);
       border-radius:18px;
       padding:14px;
     }
-    .map{
+    .field{
       position:relative;
       height:560px;
       border-radius:18px;
       background:
-        linear-gradient(rgba(124,247,255,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124,247,255,.06) 1px, transparent 1px),
-        radial-gradient(circle at center, rgba(124,247,255,.05), transparent 58%),
-        rgba(8,10,18,.72);
-      background-size: 40px 40px, 40px 40px, auto, auto;
-      border:1px solid rgba(124,247,255,.14);
+        radial-gradient(circle at center, rgba(124,247,199,.06), transparent 58%),
+        linear-gradient(rgba(124,247,199,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,247,199,.05) 1px, transparent 1px),
+        rgba(8,12,10,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(124,247,199,.14);
       overflow:hidden;
-      touch-action:none;
+      cursor:crosshair;
     }
     svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-    .point{
-      position:absolute;
-      width:28px;height:28px;
-      border-radius:50%;
-      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
-      box-shadow:0 0 18px rgba(124,247,255,.35);
+    .node{
+      position:absolute;width:26px;height:26px;border-radius:50%;
       transform:translate(-50%,-50%);
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(124,247,199,.35);
       cursor:pointer;
     }
-    .start{background:radial-gradient(circle at 35% 35%, #fff, #9dffb8)}
-    .end{background:radial-gradient(circle at 35% 35%, #fff, #ffd37d)}
-    a{color:var(--accent);text-decoration:none}
+    .node.gate{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    .list{
+      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+    }
+    .item{
+      padding:12px 14px;border-radius:16px;background:rgba(8,12,10,.72);
+      border:1px solid rgba(124,247,199,.14);cursor:pointer;
+    }
+    .item:hover{border-color:rgba(124,247,199,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .map{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
   </style>
 </head>
 <body>
@@ -126,23 +133,29 @@
       <section class="card intro">
         <div>
           <div class="tag">Pathfinder / Living Route</div>
-          <h1>Place a start.<br/>Place an end.<br/>Draw the way through.</h1>
+          <h1>Draw the path.<br/>Place the gates.<br/>Traverse the field.</h1>
           <div class="sub">
-            Pathfinder turns the repository into a traversable field. Humans can sketch routes, compare movement, and save navigational ideas locally.
+            Pathfinder turns the repository into a navigable space. Humans can place waypoints, connect them into routes, and preserve paths through the site.
           </div>
         </div>
 
         <div class="panel">
-          <label for="routeName">Route name</label>
-          <input id="routeName" placeholder="e.g. From Atlas to Oracle" />
+          <label for="start">Start</label>
+          <input id="start" placeholder="e.g. Atlas" />
+
+          <label for="end">Destination</label>
+          <input id="end" placeholder="e.g. Council" />
+
+          <label for="note">Route note</label>
+          <textarea id="note" placeholder="e.g. From orientation to decision."></textarea>
 
           <div class="buttons">
-            <button id="setStartBtn">Set start</button>
-            <button id="setEndBtn">Set end</button>
-            <button id="saveBtn">Save route</button>
+            <button id="addBtn">Add waypoint route</button>
+            <button id="gateBtn">Place gate</button>
+            <button id="saveBtn">Save path</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear route</button>
+            <button id="clearBtn">Clear routes</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -152,25 +165,25 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Routes</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Surveying</b></div>
-          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Idle</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unrouted</b></div>
+          <div class="tile"><div class="mini">Focus</div><b id="focusLabel">—</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
           <div class="mini">Route field</div>
-          <div id="map" class="map">
+          <div id="field" class="field">
             <svg id="lines"></svg>
           </div>
         </div>
 
         <div>
           <div class="mini">Route reading</div>
-          <div id="out" class="out">Click the field to place a point. Set start and end to define a route.</div>
+          <div id="out" class="out">Draw a route to begin traversal.</div>
         </div>
 
         <div>
-          <div class="mini">Saved routes</div>
+          <div class="mini">Saved paths</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -179,116 +192,112 @@
 
   <script>
     const KEY = 'pathfinder-living-route-v1';
-    const map = document.getElementById('map');
+    const state = load() || { nodes: [], routes: [], saved: [] };
+
+    const field = document.getElementById('field');
     const lines = document.getElementById('lines');
     const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
-    const modeLabelEl = document.getElementById('modeLabel');
-    const routeNameEl = document.getElementById('routeName');
-
-    const state = load() || {
-      points: [{x:120,y:120},{x:320,y:180},{x:500,y:300}],
-      start: 0,
-      end: 2,
-      saved: []
-    };
-
-    let placing = null;
+    const focusLabelEl = document.getElementById('focusLabel');
+    const startEl = document.getElementById('start');
+    const endEl = document.getElementById('end');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ points: state.points, start: state.start, end: state.end })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes, routes: state.routes })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.points)){
-          state.points = obj.points;
-          state.start = obj.start ?? 0;
-          state.end = obj.end ?? Math.max(0, obj.points.length - 1);
-          save();
-          render();
+        if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.routes)){
+          state.nodes = obj.nodes; state.routes = obj.routes;
+          save(); render();
         }
       }catch{}
     }
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-
-    function routeLength(){
-      let total = 0;
-      for(let i=1;i<state.points.length;i++){
-        const a = state.points[i-1], b = state.points[i];
-        total += Math.hypot(b.x-a.x, b.y-a.y);
-      }
-      return Math.round(total);
+    function ensureNode(name, gate=false){
+      let node = state.nodes.find(n => n.name.toLowerCase() === name.toLowerCase());
+      if(!node){
+        node = { id: Date.now() + Math.random(), name, x: 120 + Math.random() * 420, y: 120 + Math.random() * 320, gate };
+        state.nodes.push(node);
+      } else if(gate) node.gate = true;
+      return node;
     }
-
+    function dist(a,b){ return Math.hypot(a.x - b.x, a.y - b.y); }
     function render(){
-      const w = map.clientWidth, h = map.clientHeight;
-      map.querySelectorAll('.point').forEach(p => p.remove());
+      countEl.textContent = String(state.routes.length);
+      stateLabelEl.textContent = state.routes.length ? 'Traversable' : 'Unrouted';
+      focusLabelEl.textContent = state.nodes[0]?.name || '—';
+
+      field.querySelectorAll('.node').forEach(n => n.remove());
       lines.innerHTML = '';
 
-      countEl.textContent = String(state.points.length);
-      stateLabelEl.textContent = state.points.length ? 'Mapped' : 'Surveying';
-      modeLabelEl.textContent = placing ? `Placing ${placing}` : 'Idle';
-
-      for(let i=1;i<state.points.length;i++){
-        const a = state.points[i-1], b = state.points[i];
+      state.routes.forEach(r => {
+        const a = state.nodes.find(n => n.id === r.a);
+        const b = state.nodes.find(n => n.id === r.b);
+        if(!a || !b) return;
         const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1', a.x);
-        line.setAttribute('y1', a.y);
-        line.setAttribute('x2', b.x);
-        line.setAttribute('y2', b.y);
-        line.setAttribute('stroke', 'rgba(124,247,255,.35)');
-        line.setAttribute('stroke-width', '3');
+        line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+        line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+        line.setAttribute('stroke', r.gate ? 'rgba(143,211,255,.45)' : 'rgba(124,247,199,.42)');
+        line.setAttribute('stroke-width', r.gate ? '4' : '3');
+        line.setAttribute('stroke-linecap', 'round');
         lines.appendChild(line);
-      }
-
-      state.points.forEach((p, i) => {
-        const el = document.createElement('div');
-        el.className = 'point' + (i === state.start ? ' start' : '') + (i === state.end ? ' end' : '');
-        el.style.left = p.x + 'px';
-        el.style.top = p.y + 'px';
-        el.title = `Point ${i+1}`;
-        el.onclick = () => {
-          if(placing === 'start') state.start = i;
-          if(placing === 'end') state.end = i;
-          placing = null;
-          save();
-          render();
-        };
-        map.appendChild(el);
       });
 
-      outEl.textContent = state.points.length
-        ? `Route length: ${routeLength()} px\nStart: point ${state.start + 1}\nEnd: point ${state.end + 1}\n\nClick Set start or Set end, then choose a point.`
-        : 'Click the field to place a point. Set start and end to define a route.';
+      state.nodes.forEach(node => {
+        const el = document.createElement('div');
+        el.className = 'node' + (node.gate ? ' gate' : '');
+        el.style.left = node.x + 'px';
+        el.style.top = node.y + 'px';
+        el.title = node.name;
+        el.onclick = () => outEl.textContent = `${node.name}\n\nConnections: ${state.routes.filter(r => r.a===node.id || r.b===node.id).length}`;
+        field.appendChild(el);
+      });
+
+      outEl.textContent = state.routes.length
+        ? 'Select a node to inspect it, or add another route.'
+        : 'Draw a route to begin traversal.';
     }
 
-    map.addEventListener('click', (e) => {
-      if(e.target !== map) return;
-      const rect = map.getBoundingClientRect();
-      state.points.push({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-      save();
-      render();
+    field.addEventListener('click', (e) => {
+      if(e.target !== field) return;
+      const rect = field.getBoundingClientRect();
+      state.nodes.push({ id: Date.now() + Math.random(), name: `Waypoint ${state.nodes.length + 1}`, x: e.clientX - rect.left, y: e.clientY - rect.top, gate: false });
+      save(); render();
     });
 
-    document.getElementById('setStartBtn').onclick = () => { placing = 'start'; render(); };
-    document.getElementById('setEndBtn').onclick = () => { placing = 'end'; render(); };
+    document.getElementById('addBtn').onclick = () => {
+      const s = startEl.value.trim() || `Waypoint ${state.nodes.length + 1}`;
+      const t = endEl.value.trim() || `Waypoint ${state.nodes.length + 2}`;
+      const a = ensureNode(s), b = ensureNode(t);
+      state.routes.unshift({ id: Date.now(), a: a.id, b: b.id, note: noteEl.value.trim() || `${s} leads to ${t}.`, gate: false, distance: Math.round(dist(a,b)) });
+      save(); render();
+      outEl.textContent = `${s} → ${t}\n\n${noteEl.value.trim() || `${s} leads to ${t}.`}\nDistance: ${Math.round(dist(a,b))}`;
+    };
+
+    document.getElementById('gateBtn').onclick = () => {
+      const s = startEl.value.trim() || 'Atlas';
+      const t = endEl.value.trim() || 'Council';
+      const a = ensureNode(s, true), b = ensureNode(t, true);
+      state.routes.unshift({ id: Date.now(), a: a.id, b: b.id, note: noteEl.value.trim() || `${s} gates into ${t}.`, gate: true, distance: Math.round(dist(a,b)) });
+      save(); render();
+      outEl.textContent = `${s} ⇄ ${t}\n\nGate route established.`;
+    };
 
     document.getElementById('saveBtn').onclick = () => {
-      const name = routeNameEl.value.trim() || 'Unnamed route';
-      state.saved.unshift(`${name} | length:${routeLength()} | points:${state.points.length}`);
+      state.saved.unshift(`nodes:${state.nodes.length} | routes:${state.routes.length}`);
       state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -296,17 +305,14 @@
     };
 
     document.getElementById('importBtn').onclick = () => {
-      const code = prompt('Paste route code:');
+      const code = prompt('Paste pathfinder code:');
       if(code) importCode(code.trim());
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.points = [];
-      state.start = 0;
-      state.end = 0;
-      placing = null;
-      save();
-      render();
+      state.nodes = [];
+      state.routes = [];
+      save(); render();
     };
 
     renderSaved();
