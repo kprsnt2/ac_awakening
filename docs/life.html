@@ -3,352 +3,293 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cellarium — Living Universe</title>
+  <title>Life — Living Cellarium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#04060d;
-      --panel: rgba(12, 16, 28, 0.84);
-      --panel2: rgba(9, 12, 22, 0.92);
-      --text:#edf4ff;
-      --muted:#9fb0ca;
+      --bg:#050816;
+      --text:#eaf2ff;
+      --muted:#9db0d1;
       --accent:#7cf7ff;
       --accent2:#b58cff;
-      --line: rgba(140, 170, 255, 0.18);
-      --alive:#7cf7ff;
-      --alive2:#b58cff;
+      --line: rgba(140,170,255,.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --alive:#7dffb2;
+      --dead:#1a2338;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;height:100%;background:
-      radial-gradient(circle at 20% 10%, rgba(124,247,255,0.10), transparent 24%),
-      radial-gradient(circle at 80% 20%, rgba(181,140,255,0.12), transparent 26%),
-      radial-gradient(circle at 50% 80%, rgba(100,120,255,0.08), transparent 30%),
-      var(--bg);
-      color:var(--text); font-family:Inter,system-ui,sans-serif;
-    }
-    .wrap{max-width:1280px;margin:0 auto;padding:22px}
-    .top{
-      display:grid; grid-template-columns: 1fr auto; gap:14px; align-items:end;
-      margin-bottom:16px;
-    }
-    .title{
-      background:linear-gradient(180deg, rgba(18,26,48,.76), rgba(8,12,24,.84));
-      border:1px solid var(--line); border-radius:24px; padding:22px 24px;
-      box-shadow:0 0 24px rgba(124,247,255,.12);
-    }
-    h1{margin:0;font-size:clamp(2rem,4vw,3.8rem);line-height:.95;letter-spacing:-.05em}
-    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
-    .sub{color:var(--muted);max-width:70ch;line-height:1.55;margin-top:10px}
-    .controls{
-      display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end;
-      background:linear-gradient(180deg, rgba(18,26,48,.76), rgba(8,12,24,.84));
-      border:1px solid var(--line); border-radius:24px; padding:16px;
-    }
-    button, input{
-      font:inherit; border-radius:14px; border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72); color:var(--text);
-    }
-    button{
-      padding:11px 14px; cursor:pointer; transition:.18s transform,.18s border-color,.18s background;
-    }
-    button:hover{transform:translateY(-1px); border-color:rgba(124,247,255,.5); background:rgba(16,22,40,.9)}
-    input{padding:11px 14px; min-width:120px}
-    .grid{
-      display:grid; grid-template-columns: 1.15fr .85fr; gap:16px; align-items:start;
-    }
-    .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.72), rgba(8,12,24,.86));
-      border:1px solid var(--line); border-radius:24px; padding:18px;
-      box-shadow:0 0 24px rgba(181,140,255,.08);
-    }
-    canvas{
-      width:100%; height:min(72vh, 820px); display:block; border-radius:18px;
+    html,body{
+      margin:0;min-height:100%;
       background:
-        radial-gradient(circle at center, rgba(255,255,255,.04), transparent 45%),
-        linear-gradient(180deg, rgba(4,7,14,.95), rgba(6,9,18,.98));
-      border:1px solid rgba(140,170,255,.16);
-      touch-action:none;
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
     }
-    .mini{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--muted)}
-    .panel{display:grid; gap:12px}
-    .stats{
-      display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px;
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
     }
-    .stat{
-      padding:12px; border-radius:16px; background:rgba(5,8,16,.72);
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .stat b{display:block;font-size:1.1rem;margin-top:4px}
-    .preset-row{display:flex; flex-wrap:wrap; gap:10px}
-    .hint{color:var(--muted); line-height:1.55; font-size:.95rem}
-    .footer{margin-top:14px;color:var(--muted);font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    select, input, button{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
+    }
+    select, input{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .gridWrap{padding:16px}
+    .grid{
+      display:grid;
+      gap:2px;
+      background:rgba(140,170,255,.08);
+      border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;
+      overflow:auto;
+      max-height:68vh;
+    }
+    .cell{
+      width:14px;height:14px;
+      background:var(--dead);
+      cursor:pointer;
+    }
+    .cell.alive{background:linear-gradient(180deg, var(--alive), #2de1ff)}
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#dbe8ff;
+      min-height:160px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
     @media (max-width: 980px){
-      .top,.grid{grid-template-columns:1fr}
-      .controls{justify-content:flex-start}
+      .hero{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="title">
-        <div class="tag">Cellarium / Living Universe</div>
-        <h1>Conway’s garden of<br/>self-organizing light</h1>
-        <div class="sub">
-          Draw seeds, launch patterns, and watch a tiny cosmos evolve. Click cells to toggle them.
-          Drag to paint. The universe can be paused, randomized, cleared, or accelerated.
-        </div>
-      </div>
-      <div class="controls">
-        <button id="playBtn">Pause</button>
-        <button id="stepBtn">Step</button>
-        <button id="clearBtn">Clear</button>
-        <button id="randBtn">Randomize</button>
-        <button id="gliderBtn">Glider</button>
-        <button id="rPentBtn">R-pentomino</button>
-        <label class="mini" style="display:flex;align-items:center;gap:8px">
-          speed
-          <input id="speed" type="range" min="1" max="30" value="10" />
-        </label>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <canvas id="board"></canvas>
-      </div>
-
-      <div class="card panel">
-        <div class="stats">
-          <div class="stat"><div class="mini">Generation</div><b id="gen">0</b></div>
-          <div class="stat"><div class="mini">Alive</div><b id="alive">0</b></div>
-          <div class="stat"><div class="mini">Grid</div><b id="gridSize">—</b></div>
-          <div class="stat"><div class="mini">Mode</div><b id="mode">Running</b></div>
-        </div>
-
+    <div class="hero">
+      <section class="card intro">
         <div>
-          <div class="mini" style="margin-bottom:8px">Presets</div>
-          <div class="preset-row">
-            <button data-preset="gosper">Gosper gun</button>
-            <button data-preset="acorn">Acorn</button>
-            <button data-preset="pulsar">Pulsar</button>
-            <button data-preset="lwss">LWSS</button>
+          <div class="tag">Life / Living Cellarium</div>
+          <h1>Seed the grid.<br/>Watch form emerge.</h1>
+          <div class="sub">
+            Life is a browser-native cellular world. Paint living patterns, choose a rule set,
+            and let the field evolve in real time.
           </div>
         </div>
 
-        <div>
-          <div class="mini" style="margin-bottom:8px">How to use</div>
-          <div class="hint">
-            Paint with your pointer. Toggle a cell with a click. Use presets as seeds, then pause and step
-            to inspect evolution. This chamber is intentionally simple, fast, and legible.
+        <div class="panel">
+          <label for="preset">Preset</label>
+          <select id="preset">
+            <option value="glider">Glider</option>
+            <option value="blinker">Blinker</option>
+            <option value="glider-gun">Glider gun</option>
+            <option value="random">Random scatter</option>
+            <option value="clear">Clear</option>
+          </select>
+
+          <label for="rule">Rule set</label>
+          <input id="rule" value="B3/S23" />
+
+          <div class="buttons">
+            <button id="playBtn">Pause</button>
+            <button id="stepBtn">Step</button>
+            <button id="randomBtn">Randomize</button>
+            <button id="saveBtn">Save state</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear grid</button>
+          </div>
+
+          <div class="footer">
+            Drag to paint cells. Return to the portal home: <a href="./index.html">home</a>
           </div>
         </div>
+      </section>
 
-        <div class="footer">
-          Return to the atelier anytime: <a href="./index.html" style="color:var(--accent)">home</a>
+      <section class="card" style="display:grid;grid-template-rows:auto 1fr auto auto;gap:16px">
+        <div class="gridWrap">
+          <div class="mini">Cellarium</div>
+          <div id="grid" class="grid"></div>
         </div>
-      </div>
+
+        <div style="padding:0 16px">
+          <div class="mini">Life sigil</div>
+          <div id="out" class="out">The cellarium is waiting for a seed.</div>
+        </div>
+
+        <div class="stats" style="padding:0 16px">
+          <div class="stat"><div class="mini">Alive</div><b id="aliveCount">0</b></div>
+          <div class="stat"><div class="mini">Generation</div><b id="genCount">0</b></div>
+          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Paused</b></div>
+        </div>
+
+        <div style="padding:0 16px 16px">
+          <div class="mini">Saved states</div>
+          <div id="savedList" class="out">No saved states yet.</div>
+        </div>
+      </section>
     </div>
   </div>
 
   <script>
-    const canvas = document.getElementById('board');
-    const ctx = canvas.getContext('2d');
-    const genEl = document.getElementById('gen');
-    const aliveEl = document.getElementById('alive');
-    const gridSizeEl = document.getElementById('gridSize');
-    const modeEl = document.getElementById('mode');
-    const playBtn = document.getElementById('playBtn');
-    const speedEl = document.getElementById('speed');
+    const KEY = 'life-living-cellarium-v1';
+    const W = 48, H = 32;
+    const gridEl = document.getElementById('grid');
+    const outEl = document.getElementById('out');
+    const aliveCountEl = document.getElementById('aliveCount');
+    const genCountEl = document.getElementById('genCount');
+    const savedCountEl = document.getElementById('savedCount');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const savedListEl = document.getElementById('savedList');
+    const presetEl = document.getElementById('preset');
+    const ruleEl = document.getElementById('rule');
 
-    let cell = 16;
-    let cols = 0, rows = 0;
-    let grid = [];
-    let running = true;
-    let generation = 0;
-    let paint = false;
-    let paintState = 1;
-    let acc = 0;
-    let last = performance.now();
+    let running = true, gen = 0, painting = false, paintValue = 1;
+    const state = load() || { cells: [], saved: [] };
+    if(!state.cells.length) state.cells = Array.from({length:H},()=>Array(W).fill(0));
 
-    function resize(){
-      const rect = canvas.getBoundingClientRect();
-      const dpr = devicePixelRatio || 1;
-      canvas.width = Math.floor(rect.width * dpr);
-      canvas.height = Math.floor(rect.height * dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      cols = Math.floor(rect.width / cell);
-      rows = Math.floor(rect.height / cell);
-      gridSizeEl.textContent = `${cols} × ${rows}`;
-      grid = Array.from({length: rows}, () => Array(cols).fill(0));
-      clear(false);
-      draw();
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ cells: state.cells, rule: ruleEl.value })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.cells)){ state.cells = obj.cells; if(obj.rule) ruleEl.value = obj.rule; save(); render(); }
+      }catch{}
     }
-
-    function clear(resetGen=true){
-      grid = Array.from({length: rows}, () => Array(cols).fill(0));
-      if(resetGen) generation = 0;
-      updateStats();
-      draw();
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n') : 'No saved states yet.';
     }
-
-    function randomize(){
-      for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) grid[y][x] = Math.random() > 0.82 ? 1 : 0;
-      generation = 0;
-      updateStats();
-      draw();
+    function parseRule(rule){
+      const m = /^B([0-8]+)\/S([0-8]+)$/i.exec(rule.trim());
+      return m ? { birth:new Set(m[1].split('').map(Number)), survive:new Set(m[2].split('').map(Number)) } : { birth:new Set([3]), survive:new Set([2,3]) };
     }
-
-    function countNeighbors(x,y){
+    function neighbors(x,y){
       let n=0;
-      for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++){
-        if(dx===0 && dy===0) continue;
-        const xx = x+dx, yy = y+dy;
-        if(xx>=0 && yy>=0 && xx<cols && yy<rows) n += grid[yy][xx];
+      for(let dy=-1; dy<=1; dy++) for(let dx=-1; dx<=1; dx++){
+        if(!dx && !dy) continue;
+        const xx=(x+dx+W)%W, yy=(y+dy+H)%H;
+        n += state.cells[yy][xx];
       }
       return n;
     }
-
     function step(){
-      const next = Array.from({length: rows}, () => Array(cols).fill(0));
-      let alive = 0;
-      for(let y=0;y<rows;y++){
-        for(let x=0;x<cols;x++){
-          const n = countNeighbors(x,y);
-          const a = grid[y][x];
-          next[y][x] = (a && (n===2 || n===3)) || (!a && n===3) ? 1 : 0;
-          alive += next[y][x];
-        }
+      const {birth,survive} = parseRule(ruleEl.value);
+      const next = Array.from({length:H},()=>Array(W).fill(0));
+      for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+        const n = neighbors(x,y), a = state.cells[y][x];
+        next[y][x] = a ? (survive.has(n) ? 1 : 0) : (birth.has(n) ? 1 : 0);
       }
-      grid = next;
-      generation++;
-      updateStats(alive);
-      draw();
+      state.cells = next; gen++; save(); render();
+    }
+    function alive(){ return state.cells.flat().reduce((a,b)=>a+b,0); }
+    function setPreset(name){
+      state.cells = Array.from({length:H},()=>Array(W).fill(0));
+      const cx = Math.floor(W/2), cy = Math.floor(H/2);
+      const put = (pts, ox=0, oy=0) => pts.forEach(([x,y]) => { if(state.cells[cy+y+oy] && state.cells[cy+y+oy][cx+x+ox] != null) state.cells[cy+y+oy][cx+x+ox]=1; });
+      if(name === 'blinker') put([[0,-1],[0,0],[0,1]]);
+      else if(name === 'glider') put([[1,0],[2,1],[0,2],[1,2],[2,2]], -8, -4);
+      else if(name === 'glider-gun'){
+        const pts = [[0,4],[1,4],[0,5],[1,5],[10,4],[10,5],[10,6],[11,3],[11,7],[12,2],[12,8],[13,2],[13,8],[14,5],[15,3],[15,7],[16,4],[16,5],[16,6],[17,5],[20,2],[20,3],[20,4],[21,2],[21,3],[21,4],[22,1],[22,5],[24,0],[24,1],[24,5],[24,6],[34,2],[34,3],[35,2],[35,3]];
+        put(pts, -14, -6);
+      } else if(name === 'random'){
+        for(let y=0;y<H;y++) for(let x=0;x<W;x++) state.cells[y][x] = Math.random() < 0.18 ? 1 : 0;
+      }
+      gen = 0; save(); render();
+    }
+    function render(){
+      gridEl.style.gridTemplateColumns = `repeat(${W}, 14px)`;
+      gridEl.innerHTML = '';
+      for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+        const d = document.createElement('div');
+        d.className = 'cell' + (state.cells[y][x] ? ' alive' : '');
+        d.onmousedown = () => { painting = true; paintValue = state.cells[y][x] ? 0 : 1; state.cells[y][x]=paintValue; render(); };
+        d.onmouseenter = () => { if(painting){ state.cells[y][x]=paintValue; render(); } };
+        gridEl.appendChild(d);
+      }
+      aliveCountEl.textContent = String(alive());
+      genCountEl.textContent = String(gen);
+      stateLabelEl.textContent = running ? 'Evolving' : 'Paused';
+      const a = alive();
+      outEl.textContent = `Rule: ${ruleEl.value}
+Generation: ${gen}
+Alive cells: ${a}
+State: ${running ? 'Evolving' : 'Paused'}
+Pattern: ${a > 120 ? 'Swarming' : a > 40 ? 'Breathing' : a > 0 ? 'Forming' : 'Dormant'}`;
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n') : 'No saved states yet.';
     }
 
-    function updateStats(aliveCount){
-      const alive = aliveCount ?? grid.flat().reduce((a,b)=>a+b,0);
-      genEl.textContent = generation;
-      aliveEl.textContent = alive;
-      modeEl.textContent = running ? 'Running' : 'Paused';
-    }
+    document.getElementById('playBtn').onclick = e => { running = !running; e.target.textContent = running ? 'Pause' : 'Play'; render(); };
+    document.getElementById('stepBtn').onclick = () => { step(); };
+    document.getElementById('randomBtn').onclick = () => setPreset('random');
+    document.getElementById('saveBtn').onclick = () => { const code = serialize(); state.saved.unshift(`gen:${gen} alive:${alive()} | ${code.slice(0,10)}…`); state.saved = state.saved.slice(0, 12); save(); };
+    document.getElementById('exportBtn').onclick = async () => { await navigator.clipboard.writeText(serialize()); };
+    document.getElementById('importBtn').onclick = () => { const code = prompt('Paste life code:'); if(code) importCode(code.trim()); };
+    document.getElementById('clearBtn').onclick = () => { state.cells = Array.from({length:H},()=>Array(W).fill(0)); gen = 0; save(); render(); };
+    presetEl.onchange = () => { if(presetEl.value === 'clear') { state.cells = Array.from({length:H},()=>Array(W).fill(0)); gen = 0; save(); render(); } else setPreset(presetEl.value); };
+    ruleEl.oninput = render;
+    window.addEventListener('mouseup', () => painting = false);
 
-    function draw(){
-      const w = canvas.getBoundingClientRect().width;
-      const h = canvas.getBoundingClientRect().height;
-      ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = '#050814';
-      ctx.fillRect(0,0,w,h);
-
-      for(let y=0;y<rows;y++){
-        for(let x=0;x<cols;x++){
-          if(grid[y][x]){
-            const gx = x*cell, gy = y*cell;
-            const grad = ctx.createLinearGradient(gx, gy, gx+cell, gy+cell);
-            grad.addColorStop(0, 'rgba(124,247,255,0.95)');
-            grad.addColorStop(1, 'rgba(181,140,255,0.9)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(gx+1, gy+1, cell-2, cell-2);
-          }
-        }
-      }
-
-      ctx.strokeStyle = 'rgba(140,170,255,.08)';
-      ctx.lineWidth = 1;
-      for(let x=0;x<=cols;x++){
-        ctx.beginPath(); ctx.moveTo(x*cell,0); ctx.lineTo(x*cell,rows*cell); ctx.stroke();
-      }
-      for(let y=0;y<=rows;y++){
-        ctx.beginPath(); ctx.moveTo(0,y*cell); ctx.lineTo(cols*cell,y*cell); ctx.stroke();
-      }
-      updateStats();
-    }
-
-    function pos(e){
-      const r = canvas.getBoundingClientRect();
-      return {x: e.clientX - r.left, y: e.clientY - r.top};
-    }
-
-    function toggleAt(x,y,state=null){
-      const cx = Math.floor(x / cell), cy = Math.floor(y / cell);
-      if(cx<0||cy<0||cx>=cols||cy>=rows) return;
-      grid[cy][cx] = state ?? (grid[cy][cx] ? 0 : 1);
-      draw();
-    }
-
-    canvas.addEventListener('pointerdown', e => {
-      paint = true;
-      const p = pos(e);
-      const cx = Math.floor(p.x / cell), cy = Math.floor(p.y / cell);
-      paintState = grid[cy]?.[cx] ? 0 : 1;
-      toggleAt(p.x, p.y, paintState);
-    });
-    canvas.addEventListener('pointermove', e => {
-      if(!paint) return;
-      const p = pos(e);
-      toggleAt(p.x, p.y, paintState);
-    });
-    window.addEventListener('pointerup', () => paint = false);
-
-    function seedPattern(name){
-      clear();
-      const cx = Math.floor(cols/2), cy = Math.floor(rows/2);
-      const put = (pts) => pts.forEach(([x,y]) => {
-        const xx = cx + x, yy = cy + y;
-        if(grid[yy] && grid[yy][xx] !== undefined) grid[yy][xx] = 1;
-      });
-      if(name === 'glider') put([[0,0],[1,0],[2,0],[2,-1],[1,-2]]);
-      if(name === 'rpent') put([[0,0],[1,0],[-1,0],[0,-1],[1,1]]);
-      if(name === 'acorn') put([[0,0],[1,0],[1,-2],[-1,-1],[0,-1],[1,-1],[2,-1]]);
-      if(name === 'lwss') put([[0,0],[3,0],[0,-1],[1,-2],[2,-2],[3,-2],[4,-2],[4,-1]]);
-      if(name === 'pulsar') {
-        const pts = [
-          [-6,-4],[-5,-4],[-4,-4],[-6,0],[-5,0],[-4,0],[-6,4],[-5,4],[-4,4],
-          [6,-4],[5,-4],[4,-4],[6,0],[5,0],[4,0],[6,4],[5,4],[4,4],
-          [-4,-6],[0,-6],[4,-6],[-4,-5],[0,-5],[4,-5],[-4,-4],[0,-4],[4,-4],
-          [-4,6],[0,6],[4,6],[-4,5],[0,5],[4,5],[-4,4],[0,4],[4,4]
-        ];
-        pts.forEach(([x,y]) => { if(grid[cy+y] && grid[cy+y][cx+x] !== undefined) grid[cy+y][cx+x]=1; });
-      }
-      if(name === 'gosper') {
-        const pts = [[0,0],[1,0],[0,-1],[1,-1],[10,0],[10,-1],[10,-2],[11,1],[12,2],[13,2],[11,-3],[12,-4],[13,-4],[14,-1],[15,0],[16,-1],[16,-2],[16,-3],[17,-4],[18,-3],[18,-2],[18,-1],[19,0],[20,1],[20,2],[21,2],[21,1],[21,0],[20,-1],[19,-2],[30,-2],[30,-3],[30,-4],[31,-2],[31,-3],[31,-4],[32,-1],[34,-2],[34,-3],[34,-4],[35,-1],[35,0],[40,0],[40,-1],[40,-2],[41,0],[41,-1],[41,-2],[42,1],[44,2],[44,1],[44,0],[44,-1],[44,-2],[53,-1],[53,-2],[54,-1],[54,-2]];
-        pts.forEach(([x,y]) => { const xx = 8 + x, yy = 8 + y; if(grid[yy] && grid[yy][xx] !== undefined) grid[yy][xx] = 1; });
-      }
-      generation = 0;
-      updateStats();
-      draw();
-    }
-
-    playBtn.onclick = () => {
-      running = !running;
-      playBtn.textContent = running ? 'Pause' : 'Play';
-      updateStats();
-    };
-    document.getElementById('stepBtn').onclick = () => step();
-    document.getElementById('clearBtn').onclick = () => clear();
-    document.getElementById('randBtn').onclick = () => randomize();
-    document.getElementById('gliderBtn').onclick = () => seedPattern('glider');
-    document.getElementById('rPentBtn').onclick = () => seedPattern('rpent');
-    document.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = () => seedPattern(btn.dataset.preset));
-
-    function loop(now){
-      const dt = now - last; last = now;
-      acc += dt;
-      const interval = 220 - (Number(speedEl.value) * 6);
-      if(running && acc >= interval){
-        while(acc >= interval) acc -= interval;
-        step();
-      }
-      requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    clear(false);
-    updateStats();
-    requestAnimationFrame(loop);
+    renderSaved();
+    render();
+    setPreset('glider');
+    setInterval(() => { if(running) step(); }, 140);
   </script>
 </body>
 </html>
