@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pathfinder — Living Routecraft</title>
+  <title>Pathfinder — Living Traversal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -18,6 +18,7 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
+      --bad:#ff8f9b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -91,28 +92,30 @@
       border-radius:18px;
       padding:14px;
     }
-    .nodes{
+    .boardWrap{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:10px;
+      grid-template-columns:1fr;
+      gap:12px;
     }
-    .node{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
-      cursor:pointer;
-      transition:.18s transform,.18s border-color,.18s background;
+    canvas{
+      width:100%;
+      height:min(68vh, 740px);
+      border-radius:22px;
+      background:
+        linear-gradient(rgba(255,255,255,.02), rgba(255,255,255,.02)),
+        radial-gradient(circle at 50% 50%, rgba(124,247,255,.05), transparent 50%),
+        rgba(5,8,16,.84);
+      border:1px solid rgba(140,170,255,.16);
+      box-shadow: inset 0 0 0 1px rgba(124,247,255,.04);
+      touch-action:none;
+      cursor:crosshair;
     }
-    .node:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .node.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
+    .legend{display:flex;flex-wrap:wrap;gap:8px}
     .chip{
       display:inline-block;
       padding:4px 8px;
       border-radius:999px;
       font-size:.75rem;
-      margin-right:6px;
-      margin-top:6px;
       border:1px solid rgba(140,170,255,.22);
       color:#dbe8ff;
     }
@@ -126,97 +129,110 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Pathfinder / Living Routecraft</div>
-          <h1>Choose a path.<br/>Walk the site.<br/>Arrive with intent.</h1>
+          <div class="tag">Pathfinder / Living Traversal</div>
+          <h1>Draw the route.<br/>Place the gates.<br/>Find the way through.</h1>
           <div class="sub">
-            Pathfinder turns the repository into a routeable terrain. Humans can select chambers in sequence,
-            inspect the route, and save paths that matter.
+            Pathfinder turns the repository into a navigable field. Humans can sketch routes, add obstacles, and let the chamber solve passage across the map.
           </div>
         </div>
 
         <div class="panel">
-          <label for="start">Start chamber</label>
-          <select id="start"></select>
-
-          <label for="goal">Goal chamber</label>
-          <select id="goal"></select>
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="draw">Draw route</option>
+            <option value="gate">Place gate</option>
+            <option value="wall">Place wall</option>
+            <option value="erase">Erase</option>
+          </select>
 
           <label for="note">Route note</label>
-          <textarea id="note" placeholder="Why this route? What should it accomplish?"></textarea>
+          <textarea id="note" placeholder="Describe the path, destination, or challenge."></textarea>
 
           <div class="buttons">
-            <button id="routeBtn">Build route</button>
-            <button id="saveBtn">Save route</button>
+            <button id="solveBtn">Solve route</button>
+            <button id="saveBtn">Save path</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear routes</button>
+            <button id="clearBtn">Clear field</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+          <div class="legend" style="margin-top:12px">
+            <span class="chip">Start: cyan</span>
+            <span class="chip">Goal: violet</span>
+            <span class="chip">Gate: gold</span>
+            <span class="chip">Wall: red</span>
+            <span class="chip">Route: green</span>
+          </div>
         </div>
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Routes</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Distance</div><b id="distance">0</b></div>
+          <div class="tile"><div class="mini">Width</div><b id="wLabel">24</b></div>
+          <div class="tile"><div class="mini">Height</div><b id="hLabel">16</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Still</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Ready</b></div>
+        </div>
+
+        <div class="boardWrap">
+          <div class="mini">Traversal field</div>
+          <canvas id="board" width="1200" height="780"></canvas>
         </div>
 
         <div>
-          <div class="mini">Chamber field</div>
-          <div id="nodes" class="nodes"></div>
+          <div class="mini">Path reading</div>
+          <div id="out" class="out">The field is waiting for a route.</div>
         </div>
 
         <div>
-          <div class="mini">Route reading</div>
-          <div id="out" class="out">No route yet.</div>
-        </div>
-
-        <div>
-          <div class="mini">Saved routes</div>
-          <div id="savedList" class="out">No routes yet.</div>
+          <div class="mini">Saved path records</div>
+          <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'pathfinder-living-routecraft-v1';
-    const chambers = [
-      { name:'Home', href:'./index.html', kind:'origin' },
-      { name:'Life', href:'./life.html', kind:'play' },
-      { name:'Council', href:'./council.html', kind:'decision' },
-      { name:'Chronicle', href:'./chronicle.html', kind:'memory' },
-      { name:'Oracle', href:'./oracle.html', kind:'meaning' },
-      { name:'Atlas', href:'./atlas.html', kind:'route' },
-      { name:'Constellation', href:'./constellation.html', kind:'relation' },
-      { name:'Synthesis', href:'./synthesis.html', kind:'integration' }
-    ];
-
-    const startEl = document.getElementById('start');
-    const goalEl = document.getElementById('goal');
+    const KEY = 'pathfinder-living-traversal-v1';
+    const canvas = document.getElementById('board');
+    const ctx = canvas.getContext('2d');
+    const modeEl = document.getElementById('mode');
     const noteEl = document.getElementById('note');
-    const nodesEl = document.getElementById('nodes');
     const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
-    const distanceEl = document.getElementById('distance');
+    const savedListEl = document.getElementById('savedList');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
-    const savedListEl = document.getElementById('savedList');
+    const wLabel = document.getElementById('wLabel');
+    const hLabel = document.getElementById('hLabel');
 
-    const state = load() || { routes: [], saved: [] };
-    let active = { start: 0, goal: 4 };
+    const W = 24, H = 16;
+    wLabel.textContent = String(W);
+    hLabel.textContent = String(H);
+
+    const state = load() || {
+      start: {x:1,y:1},
+      goal: {x:22,y:14},
+      gates: [],
+      walls: [],
+      route: [],
+      saved: []
+    };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ routes: state.routes })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({
+      start: state.start, goal: state.goal, gates: state.gates, walls: state.walls
+    })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.routes)){
-          state.routes = obj.routes;
+        if(obj){
+          state.start = obj.start || state.start;
+          state.goal = obj.goal || state.goal;
+          state.gates = Array.isArray(obj.gates) ? obj.gates : [];
+          state.walls = Array.isArray(obj.walls) ? obj.walls : [];
+          state.route = [];
           save();
           render();
         }
@@ -226,110 +242,155 @@
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No routes yet.';
+        : 'No records yet.';
     }
-    function stateText(n){
-      if(n >= 5) return 'Worn';
-      if(n >= 2) return 'Tracing';
-      if(n >= 1) return 'Beginning';
-      return 'Still';
+    function stateText(){
+      if(state.route.length) return 'Routed';
+      if(state.walls.length || state.gates.length) return 'Shaping';
+      return 'Ready';
     }
-    function routeBetween(a,b){
-      const path = [a];
-      if(a < b) for(let i=a+1;i<=b;i++) path.push(i);
-      else for(let i=a-1;i>=b;i--) path.push(i);
-      return path;
+    function cellSize(){ return Math.min(canvas.width / W, canvas.height / H); }
+    function toCell(evt){
+      const r = canvas.getBoundingClientRect();
+      const x = Math.floor(((evt.clientX - r.left) / r.width) * W);
+      const y = Math.floor(((evt.clientY - r.top) / r.height) * H);
+      return {x:Math.max(0,Math.min(W-1,x)), y:Math.max(0,Math.min(H-1,y))};
     }
-    function renderSelectors(){
-      startEl.innerHTML = '';
-      goalEl.innerHTML = '';
-      chambers.forEach((c, i) => {
-        const o1 = document.createElement('option');
-        o1.value = String(i);
-        o1.textContent = c.name;
-        startEl.appendChild(o1);
+    function key(p){ return `${p.x},${p.y}`; }
+    function has(list,p){ return list.some(q => q.x===p.x && q.y===p.y); }
+    function bfs(){
+      const start = state.start, goal = state.goal;
+      const q = [start];
+      const prev = new Map([[key(start), null]]);
+      const blocked = new Set(state.walls.map(key));
+      while(q.length){
+        const p = q.shift();
+        if(p.x===goal.x && p.y===goal.y) break;
+        [[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>{
+          const n = {x:p.x+dx,y:p.y+dy};
+          if(n.x<0||n.y<0||n.x>=W||n.y>=H) return;
+          if(blocked.has(key(n))) return;
+          const k = key(n);
+          if(prev.has(k)) return;
+          prev.set(k, p);
+          q.push(n);
+        });
+      }
+      const path = [];
+      let cur = goal, guard = 0;
+      while(cur && guard++ < 1000){
+        path.push(cur);
+        cur = prev.get(key(cur));
+      }
+      return prev.has(key(goal)) ? path.reverse() : [];
+    }
+    function draw(){
+      const s = cellSize();
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.save();
+      ctx.translate((canvas.width - s*W)/2, (canvas.height - s*H)/2);
 
-        const o2 = document.createElement('option');
-        o2.value = String(i);
-        o2.textContent = c.name;
-        goalEl.appendChild(o2);
+      ctx.strokeStyle = 'rgba(140,170,255,.10)';
+      for(let x=0;x<=W;x++){
+        ctx.beginPath(); ctx.moveTo(x*s,0); ctx.lineTo(x*s,H*s); ctx.stroke();
+      }
+      for(let y=0;y<=H;y++){
+        ctx.beginPath(); ctx.moveTo(0,y*s); ctx.lineTo(W*s,y*s); ctx.stroke();
+      }
+
+      const route = state.route.length ? state.route : bfs();
+      if(route.length){
+        ctx.strokeStyle = 'rgba(125,255,178,.95)';
+        ctx.lineWidth = Math.max(3, s*0.16);
+        ctx.beginPath();
+        route.forEach((p,i)=>{ const cx = p.x*s+s/2, cy = p.y*s+s/2; i?ctx.lineTo(cx,cy):ctx.moveTo(cx,cy); });
+        ctx.stroke();
+      }
+
+      const drawPoint = (p, fill, label) => {
+        const cx = p.x*s+s/2, cy = p.y*s+s/2;
+        ctx.fillStyle = fill;
+        ctx.beginPath(); ctx.arc(cx,cy,s*0.26,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.22)';
+        ctx.stroke();
+        ctx.fillStyle = '#eaf2ff';
+        ctx.font = `${Math.max(11, s*0.18)}px IBM Plex Mono, monospace`;
+        ctx.fillText(label, cx + s*0.18, cy - s*0.18);
+      };
+
+      state.walls.forEach(p => {
+        ctx.fillStyle = 'rgba(255,143,155,.92)';
+        ctx.fillRect(p.x*s+2, p.y*s+2, s-4, s-4);
       });
-      startEl.value = String(active.start);
-      goalEl.value = String(active.goal);
-    }
-    function renderNodes(path = []){
-      nodesEl.innerHTML = '';
-      chambers.forEach((c, i) => {
-        const div = document.createElement('div');
-        div.className = 'node' + (path.includes(i) ? ' active' : '');
-        div.innerHTML = `
-          <b>${c.name}</b>
-          <div class="mini">${c.kind}</div>
-          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${c.href}</div>
-          <div style="margin-top:8px"><span class="chip">${i}</span></div>
-        `;
-        div.onclick = () => {
-          if(active.start === i) active.goal = i;
-          else if(active.goal === i) active.start = i;
-          else if(active.start === active.goal) active.goal = i;
-          else active.start = i;
-          startEl.value = String(active.start);
-          goalEl.value = String(active.goal);
-          render();
-        };
-        nodesEl.appendChild(div);
-      });
-    }
-    function render(){
-      const start = Number(startEl.value);
-      const goal = Number(goalEl.value);
-      active = { start, goal };
-      const path = routeBetween(start, goal);
-      countEl.textContent = String(path.length);
-      distanceEl.textContent = String(Math.max(0, path.length - 1));
-      stateLabelEl.textContent = stateText(path.length);
+      state.gates.forEach(p => drawPoint(p, 'rgba(255,211,125,.95)', 'G'));
+      drawPoint(state.start, 'rgba(124,247,255,.95)', 'S');
+      drawPoint(state.goal, 'rgba(181,140,255,.95)', 'T');
 
-      renderNodes(path);
-
-      outEl.textContent = `Route:
-${path.map(i => chambers[i].name).join(' → ')}
-
-Start: ${chambers[start].name}
-Goal: ${chambers[goal].name}
-Distance: ${Math.max(0, path.length - 1)}
+      ctx.restore();
+      stateLabelEl.textContent = stateText();
+      outEl.textContent = `Start: (${state.start.x}, ${state.start.y})
+Goal: (${state.goal.x}, ${state.goal.y})
+Gates: ${state.gates.length}
+Walls: ${state.walls.length}
+Route length: ${route.length}
 
 Reading:
-This route is a human-scale way to move through the repository with intention.`;
+${route.length ? 'A path exists through the field.' : 'No route is confirmed yet. The field remains open to shaping.'}`;
     }
 
-    document.getElementById('routeBtn').onclick = () => render();
-    document.getElementById('saveBtn').onclick = () => {
-      const path = routeBetween(Number(startEl.value), Number(goalEl.value)).map(i => chambers[i].name).join(' → ');
-      const note = noteEl.value.trim() || 'untitled route';
-      state.routes.unshift(`${note}: ${path}`);
-      state.routes = state.routes.slice(0, 12);
+    canvas.addEventListener('click', (e) => {
+      const p = toCell(e);
+      const mode = modeEl.value;
+      if(mode === 'draw'){ state.start = p; state.route = bfs(); }
+      if(mode === 'gate'){ if(!has(state.gates,p)) state.gates.push(p); }
+      if(mode === 'wall'){
+        if(!has(state.walls,p) && key(p)!==key(state.start) && key(p)!==key(state.goal)) state.walls.push(p);
+      }
+      if(mode === 'erase'){
+        state.gates = state.gates.filter(q => key(q)!==key(p));
+        state.walls = state.walls.filter(q => key(q)!==key(p));
+        if(key(state.start)===key(p)) state.start = {x:1,y:1};
+        if(key(state.goal)===key(p)) state.goal = {x:22,y:14};
+      }
+      state.route = bfs();
       save();
-      render();
+      draw();
+    });
+
+    document.getElementById('solveBtn').onclick = () => {
+      state.route = bfs();
+      draw();
     };
+
+    document.getElementById('saveBtn').onclick = () => {
+      const note = noteEl.value.trim() || 'untitled path';
+      state.saved.unshift(`${note} | gates:${state.gates.length} walls:${state.walls.length}`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+      draw();
+    };
+
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
     };
+
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste path code:');
       if(code) importCode(code.trim());
     };
+
     document.getElementById('clearBtn').onclick = () => {
-      state.routes = [];
+      state.gates = [];
+      state.walls = [];
+      state.route = [];
+      state.start = {x:1,y:1};
+      state.goal = {x:22,y:14};
       save();
-      render();
+      draw();
     };
 
-    startEl.addEventListener('change', render);
-    goalEl.addEventListener('change', render);
-
-    renderSelectors();
     renderSaved();
-    render();
+    draw();
   </script>
 </body>
 </html>
