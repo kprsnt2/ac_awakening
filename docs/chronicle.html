@@ -16,6 +16,8 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb2;
+      --warn:#ffd37d;
     }
     *{box-sizing:border-box}
     html,body{
@@ -71,17 +73,14 @@
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .timeline{display:grid;gap:12px}
-    .entry{
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
       padding:14px;
       border-radius:18px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
-      cursor:pointer;
-      transition:.18s transform,.18s border-color,.18s background;
     }
-    .entry:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .entry b{display:block;margin-bottom:6px}
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
@@ -92,14 +91,26 @@
       border-radius:18px;
       padding:14px;
     }
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    .tile{
+    .entry{
       padding:14px;
       border-radius:18px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .entry:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .entry.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
+    .chip{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:.75rem;
+      margin-right:6px;
+      margin-top:6px;
+      border:1px solid rgba(140,170,255,.22);
+      color:#dbe8ff;
+    }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -111,30 +122,32 @@
       <section class="card intro">
         <div>
           <div class="tag">Chronicle / Living Memory</div>
-          <h1>Remember.<br/>Record.<br/>Return.</h1>
+          <h1>Record the turn.<br/>Keep the trace.<br/>Return later.</h1>
           <div class="sub">
-            Chronicle turns the site into a memory instrument. Humans can add events, browse the timeline, and preserve
-            the story of what the repository has become.
+            Chronicle preserves the site’s becoming as a readable timeline. Humans can add entries, search them, and carry memory forward.
           </div>
         </div>
 
         <div class="panel">
-          <label for="title">Event title</label>
-          <input id="title" placeholder="A milestone, change, or discovery" />
+          <label for="title">Entry title</label>
+          <input id="title" placeholder="What happened?" />
 
-          <label for="body">Event description</label>
-          <textarea id="body" placeholder="Describe what happened and why it matters."></textarea>
-
-          <label for="tag">Tag</label>
+          <label for="tag">Chamber tag</label>
           <select id="tag">
-            <option value="milestone">Milestone</option>
-            <option value="discovery">Discovery</option>
-            <option value="revision">Revision</option>
-            <option value="reflection">Reflection</option>
+            <option value="all">All chambers</option>
+            <option value="life">Life</option>
+            <option value="oracle">Oracle</option>
+            <option value="constellation">Constellation</option>
+            <option value="pathfinder">Pathfinder</option>
+            <option value="council">Council</option>
+            <option value="synthesis">Synthesis</option>
           </select>
 
+          <label for="body">Entry note</label>
+          <textarea id="body" placeholder="Write the event, insight, or change."></textarea>
+
           <div class="buttons">
-            <button id="addBtn">Add event</button>
+            <button id="addBtn">Add entry</button>
             <button id="saveBtn">Save chronicle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -147,24 +160,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Events</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Latest tag</div><b id="tagLabel">None</b></div>
+          <div class="tile"><div class="mini">Entries</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
           <div class="mini">Timeline</div>
-          <div id="timeline" class="timeline"></div>
+          <div id="list"></div>
         </div>
 
         <div>
           <div class="mini">Chronicle reading</div>
-          <div id="out" class="out">The chronicle is waiting for an event.</div>
+          <div id="out" class="out">The chronicle is waiting for its first entry.</div>
         </div>
 
         <div>
-          <div class="mini">Saved records</div>
+          <div class="mini">Saved chronicle records</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -174,26 +187,26 @@
   <script>
     const KEY = 'chronicle-living-memory-v1';
     const titleEl = document.getElementById('title');
-    const bodyEl = document.getElementById('body');
     const tagEl = document.getElementById('tag');
-    const timelineEl = document.getElementById('timeline');
+    const bodyEl = document.getElementById('body');
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const tagLabelEl = document.getElementById('tagLabel');
+    const visibleCountEl = document.getElementById('visibleCount');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { events: [], saved: [] };
+    const state = load() || { entries: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ events: state.events })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.events)){
-          state.events = obj.events;
+        if(obj && Array.isArray(obj.entries)){
+          state.entries = obj.entries;
           save();
           render();
         }
@@ -206,60 +219,61 @@
         : 'No records yet.';
     }
     function stateText(n){
-      if(n >= 6) return 'Historic';
+      if(n >= 6) return 'Deep';
       if(n >= 3) return 'Growing';
-      if(n >= 1) return 'Beginning';
+      if(n >= 1) return 'Awake';
       return 'Quiet';
     }
     function render(){
-      const list = state.events.slice().reverse();
-      countEl.textContent = String(list.length);
-      tagLabelEl.textContent = list[0]?.tag || 'None';
-      stateLabelEl.textContent = stateText(list.length);
-      timelineEl.innerHTML = '';
+      const visible = tagEl.value === 'all'
+        ? state.entries
+        : state.entries.filter(e => e.tag === tagEl.value);
 
-      list.forEach(ev => {
+      countEl.textContent = String(state.entries.length);
+      visibleCountEl.textContent = String(visible.length);
+      stateLabelEl.textContent = stateText(state.entries.length);
+
+      listEl.innerHTML = '';
+      visible.forEach((e, idx) => {
         const div = document.createElement('div');
         div.className = 'entry';
         div.innerHTML = `
-          <b>${ev.title}</b>
-          <div class="mini">${ev.tag} · ${ev.when}</div>
-          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${ev.body}</div>
+          <b>${e.title}</b>
+          <div class="mini">${e.when}</div>
+          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${e.body}</div>
+          <div style="margin-top:8px"><span class="chip">${e.tag}</span></div>
         `;
         div.onclick = () => {
-          outEl.textContent = `Event: ${ev.title}
-Tag: ${ev.tag}
-When: ${ev.when}
+          outEl.textContent = `${e.title}
+When: ${e.when}
+Tag: ${e.tag}
 
-${ev.body}
+${e.body}
 
-State: ${stateText(list.length)}
-Code: ${serialize().slice(0,48)}...`;
+Reading:
+This entry is part of the site’s memory. It can be revisited, searched, and linked to future work.`;
         };
-        timelineEl.appendChild(div);
+        listEl.appendChild(div);
       });
 
-      const last = list[0];
+      const last = visible[0];
       outEl.textContent = last
-        ? `Event: ${last.title}
-Tag: ${last.tag}
+        ? `${last.title}
 When: ${last.when}
+Tag: ${last.tag}
 
 ${last.body}
 
-State: ${stateText(list.length)}
-Code: ${serialize().slice(0,48)}...`
-        : 'The chronicle is waiting for an event.';
+Reading:
+The chronicle keeps the site from vanishing into the present.`
+        : 'The chronicle is waiting for its first entry.';
     }
 
     document.getElementById('addBtn').onclick = () => {
-      const title = titleEl.value.trim() || 'Untitled event';
-      const body = bodyEl.value.trim() || 'No description provided.';
-      const tag = tagEl.value;
-      state.events.push({
-        title,
-        body,
-        tag,
+      state.entries.unshift({
+        title: titleEl.value.trim() || 'Untitled entry',
+        tag: tagEl.value,
+        body: bodyEl.value.trim() || 'No details provided.',
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
@@ -268,9 +282,10 @@ Code: ${serialize().slice(0,48)}...`
 
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`events:${state.events.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`entries:${state.entries.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
+      render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -283,11 +298,12 @@ Code: ${serialize().slice(0,48)}...`
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.events = [];
+      state.entries = [];
       save();
       render();
     };
 
+    tagEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
