@@ -3,30 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Synthesis — Living Integration</title>
+  <title>Synthesis — Living Confluence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050816;
-      --text:#eaf2ff;
-      --muted:#9db0d1;
+      --bg:#071018;
+      --text:#f2fbff;
+      --muted:#a8c4d5;
       --accent:#7cf7ff;
-      --accent2:#b58cff;
-      --line: rgba(140,170,255,.18);
-      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
-      --bad:#ff8f9b;
+      --accent2:#c58cff;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(197,140,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(197,140,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -34,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      background:linear-gradient(180deg, rgba(14,24,34,.82), rgba(8,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -43,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -53,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#effbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(8,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -72,47 +69,61 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(197,140,255,.5);background:rgba(16,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#dbe8ff;
+      color:#eefcff;
       min-height:180px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .chip{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:.75rem;
-      margin:4px 6px 0 0;
-      border:1px solid rgba(140,170,255,.22);
-      color:#dbe8ff;
+    .field{
+      position:relative;
+      height:560px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 58%),
+        linear-gradient(rgba(124,247,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,247,255,.05) 1px, transparent 1px),
+        rgba(8,12,18,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(124,247,255,.14);
+      overflow:hidden;
     }
-    .row{display:grid;gap:10px}
+    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .node{
+      position:absolute;width:28px;height:28px;border-radius:50%;
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(124,247,255,.35);
+      cursor:pointer;
+    }
+    .node.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    .list{
+      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+    }
     .item{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      padding:12px 14px;border-radius:16px;background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);cursor:pointer;
     }
-    .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px}
-    .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-    a{color:var(--accent);text-decoration:none}
+    .item:hover{border-color:rgba(124,247,255,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
   </style>
 </head>
 <body>
@@ -120,25 +131,35 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Synthesis / Living Integration</div>
-          <h1>Gather the chambers.<br/>Measure the whole.<br/>Keep the many intact.</h1>
+          <div class="tag">Synthesis / Living Confluence</div>
+          <h1>Gather the chambers.<br/>Balance the whole.<br/>Make one usable site.</h1>
           <div class="sub">
-            Synthesis turns the repository into a coherent system view. Humans can search chambers, inspect their roles, and read the site as one living structure.
+            Synthesis turns the repository into a coherent surface. Humans can assemble chambers, compare coverage, and maintain the site as a living system.
           </div>
         </div>
 
         <div class="panel">
-          <label for="search">Search chambers</label>
-          <input id="search" placeholder="Try: memory, route, play, interpretation..." />
+          <label for="name">Map name</label>
+          <input id="name" placeholder="e.g. Full site confluence" />
 
-          <label for="note">Integration note</label>
-          <textarea id="note" placeholder="What pattern does the full site reveal?"></textarea>
+          <label for="focus">Focus</label>
+          <select id="focus">
+            <option value="coverage">Coverage</option>
+            <option value="balance">Balance</option>
+            <option value="cohesion">Cohesion</option>
+            <option value="flow">Flow</option>
+          </select>
+
+          <label for="note">Assembly note</label>
+          <textarea id="note" placeholder="e.g. Align route, voice, interpretation, and growth into one navigable ecology."></textarea>
 
           <div class="buttons">
+            <button id="addBtn">Add chamber</button>
+            <button id="linkBtn">Link surface</button>
             <button id="saveBtn">Save synthesis</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear synthesis</button>
+            <button id="clearBtn">Clear map</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -147,24 +168,26 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
+          <div class="tile"><div class="mini">Nodes</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unassembled</b></div>
+          <div class="tile"><div class="mini">Cohesion</div><b id="cohesionLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Stable</b></div>
         </div>
 
         <div>
-          <div class="mini">Chamber field</div>
-          <div id="list" class="row"></div>
+          <div class="mini">Synthesis field</div>
+          <div id="field" class="field">
+            <svg id="lines"></svg>
+          </div>
         </div>
 
         <div>
           <div class="mini">Synthesis reading</div>
-          <div id="out" class="out">The system is waiting to be integrated.</div>
+          <div id="out" class="out">Add chambers to begin assembly.</div>
         </div>
 
         <div>
-          <div class="mini">Saved synthesis records</div>
+          <div class="mini">Saved syntheses</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -172,40 +195,31 @@
   </div>
 
   <script>
-    const KEY = 'synthesis-living-integration-v1';
-    const searchEl = document.getElementById('search');
-    const noteEl = document.getElementById('note');
-    const listEl = document.getElementById('list');
+    const KEY = 'synthesis-living-confluence-v1';
+    const state = load() || { nodes: [], links: [], saved: [] };
+
+    const field = document.getElementById('field');
+    const lines = document.getElementById('lines');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const visibleCountEl = document.getElementById('visibleCount');
     const savedCountEl = document.getElementById('savedCount');
-    const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
-
-    const chambers = [
-      { name:'Life', role:'play', theme:'emergence' },
-      { name:'Chronicle', role:'memory', theme:'continuity' },
-      { name:'Pathfinder', role:'route', theme:'traversal' },
-      { name:'Constellation', role:'relation', theme:'network' },
-      { name:'Council', role:'decision', theme:'deliberation' },
-      { name:'Oracle', role:'meaning', theme:'interpretation' },
-      { name:'Atlas', role:'index', theme:'orientation' },
-      { name:'Synthesis', role:'integration', theme:'coherence' }
-    ];
-
-    const state = load() || { notes: [], saved: [] };
+    const stateLabelEl = document.getElementById('stateLabel');
+    const cohesionLabelEl = document.getElementById('cohesionLabel');
+    const nameEl = document.getElementById('name');
+    const focusEl = document.getElementById('focus');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes, links: state.links })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.notes)){
-          state.notes = obj.notes;
-          save();
-          render();
+        if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.links)){
+          state.nodes = obj.nodes;
+          state.links = obj.links;
+          save(); render();
         }
       }catch{}
     }
@@ -215,39 +229,89 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
+    function cohesion(){
+      if(!state.nodes.length) return 0;
+      const density = Math.min(1, state.links.length / Math.max(1, state.nodes.length - 1));
+      const breadth = Math.min(1, state.nodes.length / 12);
+      return Math.round((density * 60) + (breadth * 40));
+    }
+    function ensureNode(name, core=false){
+      let node = state.nodes.find(n => n.name.toLowerCase() === name.toLowerCase());
+      if(!node){
+        node = { id: Date.now() + Math.random(), name, x: 120 + Math.random() * 420, y: 120 + Math.random() * 320, core };
+        state.nodes.push(node);
+      } else if(core) node.core = true;
+      return node;
+    }
     function render(){
-      const q = searchEl.value.trim().toLowerCase();
-      const visible = chambers.filter(c =>
-        !q || [c.name, c.role, c.theme].some(v => v.toLowerCase().includes(q))
-      );
+      countEl.textContent = String(state.nodes.length);
+      stateLabelEl.textContent = state.nodes.length ? 'Assembled' : 'Unassembled';
+      cohesionLabelEl.textContent = `${cohesion()}%`;
+      field.querySelectorAll('.node').forEach(n => n.remove());
+      lines.innerHTML = '';
 
-      countEl.textContent = String(chambers.length);
-      visibleCountEl.textContent = String(visible.length);
-      stateLabelEl.textContent = state.notes.length ? 'Integrated' : 'Stable';
-
-      listEl.innerHTML = '';
-      visible.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <b>${c.name}</b>
-          <div class="mini">${c.role} · ${c.theme}</div>
-          <div class="bar"><div class="fill" style="width:${35 + c.name.length * 6}%"></div></div>
-        `;
-        listEl.appendChild(div);
+      state.links.forEach(l => {
+        const a = state.nodes.find(n => n.id === l.a);
+        const b = state.nodes.find(n => n.id === l.b);
+        if(!a || !b) return;
+        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+        line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+        line.setAttribute('stroke', l.core ? 'rgba(197,140,255,.45)' : 'rgba(124,247,255,.38)');
+        line.setAttribute('stroke-width', l.core ? '4' : '3');
+        line.setAttribute('stroke-linecap', 'round');
+        lines.appendChild(line);
       });
 
-      outEl.textContent = visible.length
-        ? `Visible chambers: ${visible.map(c => c.name).join(', ')}\n\nReading:\nThe site is coalescing into a navigable whole without flattening its parts.`
-        : 'No chambers match the current search.';
+      state.nodes.forEach(node => {
+        const el = document.createElement('div');
+        el.className = 'node' + (node.core ? ' core' : '');
+        el.style.left = node.x + 'px';
+        el.style.top = node.y + 'px';
+        el.title = node.name;
+        el.onclick = () => outEl.textContent = `${node.name}\n\nConnections: ${state.links.filter(l => l.a===node.id || l.b===node.id).length}`;
+        field.appendChild(el);
+      });
+
+      outEl.textContent = state.nodes.length
+        ? 'Select a chamber to inspect it, or add another relation.'
+        : 'Add chambers to begin assembly.';
     }
 
+    field.addEventListener('click', (e) => {
+      if(e.target !== field) return;
+      const rect = field.getBoundingClientRect();
+      state.nodes.push({
+        id: Date.now() + Math.random(),
+        name: nameEl.value.trim() || `Chamber ${state.nodes.length + 1}`,
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        core: focusEl.value === 'coverage'
+      });
+      save(); render();
+    });
+
+    document.getElementById('addBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Chamber ${state.nodes.length + 1}`;
+      const node = ensureNode(name, focusEl.value === 'balance');
+      state.nodes.unshift(node);
+      state.nodes = [...new Map(state.nodes.map(n => [n.id, n])).values()];
+      save(); render();
+      outEl.textContent = `${name}\n\nFocus: ${focusEl.value}\nNote: ${noteEl.value.trim() || 'A chamber added to the living whole.'}`;
+    };
+
+    document.getElementById('linkBtn').onclick = () => {
+      const a = ensureNode(nameEl.value.trim() || 'Atlas', true);
+      const b = ensureNode(noteEl.value.trim().split(/\s+/)[0] || 'Pathfinder', false);
+      state.links.unshift({ id: Date.now(), a: a.id, b: b.id, core: true });
+      save(); render();
+      outEl.textContent = `${a.name} ⇄ ${b.name}\n\nA core relation has been established.`;
+    };
+
     document.getElementById('saveBtn').onclick = () => {
-      const note = noteEl.value.trim() || 'untitled synthesis';
-      state.notes.unshift(`${note} | visible:${searchEl.value.trim() || 'all'}`);
-      state.notes = state.notes.slice(0, 12);
-      save();
-      render();
+      state.saved.unshift(`nodes:${state.nodes.length} | links:${state.links.length} | cohesion:${cohesion()}%`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -260,12 +324,12 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.notes = [];
-      save();
-      render();
+      state.nodes = [];
+      state.links = [];
+      save(); render();
     };
 
-    searchEl.addEventListener('input', render);
+    [nameEl, focusEl, noteEl].forEach(el => el.addEventListener('input', render));
     renderSaved();
     render();
   </script>
