@@ -18,6 +18,7 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
+      --bad:#ff8aa1;
     }
     *{box-sizing:border-box}
     html,body{
@@ -56,14 +57,15 @@
       border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, button{
+    input, textarea, button{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input{width:100%;padding:11px 12px}
+    input, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
@@ -73,7 +75,7 @@
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
       gap:12px;
       max-height:560px;
       overflow:auto;
@@ -85,8 +87,6 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       color:var(--text);
-      text-decoration:none;
-      display:block;
       transition:.18s transform,.18s border-color;
     }
     .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
@@ -97,7 +97,7 @@
       white-space:pre-wrap;
       line-height:1.6;
       color:#dbe8ff;
-      min-height:140px;
+      min-height:170px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       border-radius:18px;
@@ -125,22 +125,26 @@
       <section class="card intro">
         <div>
           <div class="tag">Synthesis / Living Confluence</div>
-          <h1>Hold the whole site<br/>as one organism.</h1>
+          <h1>Gather the chambers.<br/>See the whole organism.</h1>
           <div class="sub">
-            Synthesis gathers the chambers into a single visible system. It shows what is active,
-            what is remembered, and where humans can go next.
+            Synthesis turns the repository into a live dashboard of its own becoming.
+            Watch the chambers together, compare their states, and move between them as one system.
           </div>
         </div>
 
         <div class="panel">
-          <label for="filter">Search chambers</label>
-          <input id="filter" placeholder="atlas, oracle, pathfinder..." />
+          <label for="note">Synthesis note</label>
+          <textarea id="note" placeholder="What is the site becoming right now?"></textarea>
+
+          <label for="focus">Primary focus</label>
+          <input id="focus" placeholder="e.g. Atlas, Oracle, Council" />
 
           <div class="buttons">
+            <button id="syncBtn">Synthesize</button>
             <button id="saveBtn">Save snapshot</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear filter</button>
+            <button id="clearBtn">Clear synthesis</button>
           </div>
 
           <div class="footer">
@@ -151,25 +155,25 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Visible chambers</div>
+          <div class="mini">Chamber overview</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
           <div class="mini">Synthesis sigil</div>
-          <div id="out" class="out">The confluence is waiting.</div>
+          <div id="out" class="out">The confluence awaits input.</div>
         </div>
 
         <div class="stats">
           <div class="stat"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Filter</div><b id="filterLabel">All</b></div>
+          <div class="stat"><div class="mini">Focus</div><b id="focusLabel">Open</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
           <div class="mini">Saved syntheses</div>
-          <div id="savedList" class="out">No saved snapshots yet.</div>
+          <div id="savedList" class="out">No saved syntheses yet.</div>
         </div>
       </section>
     </div>
@@ -177,116 +181,118 @@
 
   <script>
     const KEY = 'synthesis-living-confluence-v1';
-    const chambers = [
-      { name:'Atlas', href:'./atlas.html', summary:'Practical living index of the site.' },
-      { name:'Chronicle', href:'./chronicle.html', summary:'Archive of events and retrievable becoming.' },
-      { name:'Oracle', href:'./oracle.html', summary:'Layered interpretation and reflective guidance.' },
-      { name:'Pathfinder', href:'./pathfinder.html', summary:'Route engine for creative navigation.' },
-      { name:'Council', href:'./council.html', summary:'Deliberation chamber for proposals and futures.' },
-      { name:'Atelier', href:'./atelier.html', summary:'Workshop for making and refinement.' },
-      { name:'Loom', href:'./loom.html', summary:'Threaded composition and weaving surface.' },
-      { name:'Furnace', href:'./furnace.html', summary:'Heat, transformation, and force.' }
-    ];
 
-    const filterEl = document.getElementById('filter');
+    const noteEl = document.getElementById('note');
+    const focusEl = document.getElementById('focus');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const filterLabelEl = document.getElementById('filterLabel');
+    const focusLabelEl = document.getElementById('focusLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { filter:'', saved:[] };
+    const chambers = [
+      { name:'Atlas', path:'./atlas.html', desc:'Index of the site as a living map.' },
+      { name:'Council', path:'./council.html', desc:'Deliberation engine for proposals and votes.' },
+      { name:'Chronicle', path:'./chronicle.html', desc:'Living archive of becoming and memory.' },
+      { name:'Oracle', path:'./oracle.html', desc:'Interpreter of signals and meaning.' },
+      { name:'Pathfinder', path:'./pathfinder.html', desc:'Route engine for traversable discovery.' },
+      { name:'Atelier', path:'./atelier.html', desc:'Workshop for making and shaping.' }
+    ];
+
+    const state = load() || { syntheses: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ filter: state.filter, saved: state.saved })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ syntheses: state.syntheses })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj){
-          state.filter = typeof obj.filter === 'string' ? obj.filter : '';
-          state.saved = Array.isArray(obj.saved) ? obj.saved : [];
-          filterEl.value = state.filter;
+        if(obj && Array.isArray(obj.syntheses)){
+          state.syntheses = obj.syntheses;
           save();
           render();
         }
       }catch{}
     }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved snapshots yet.';
-    }
-    function visible(){
-      const q = state.filter.trim().toLowerCase();
-      return chambers.filter(c =>
-        !q || c.name.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)
-      );
+        : 'No saved syntheses yet.';
     }
     function stateText(n){
-      if(n >= 6) return 'Unified';
-      if(n >= 3) return 'Connected';
-      if(n >= 1) return 'Partial';
-      return 'Blank';
-    }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      if(n >= 4) return 'Integrated';
+      if(n >= 2) return 'Coherent';
+      if(n >= 1) return 'Emerging';
+      return 'Quiet';
     }
     function render(){
       gridEl.innerHTML = '';
-      const list = visible();
-      countEl.textContent = String(list.length);
-      filterLabelEl.textContent = state.filter.trim() || 'All';
+      const list = state.syntheses.slice().reverse();
+      countEl.textContent = String(chambers.length);
+      focusLabelEl.textContent = focusEl.value.trim() || 'Open';
       stateLabelEl.textContent = stateText(list.length);
 
-      list.forEach((c) => {
-        const a = document.createElement('a');
-        a.className = 'item';
-        a.href = c.href;
-        a.innerHTML = `
+      chambers.forEach((c) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
           <h3>${escapeHtml(c.name)}</h3>
-          <p>${escapeHtml(c.summary)}</p>
+          <p>${escapeHtml(c.desc)}</p>
+          <p style="margin-top:8px" class="mini">${escapeHtml(c.path)}</p>
         `;
-        gridEl.appendChild(a);
+        div.onclick = () => {
+          focusEl.value = c.name;
+          render();
+        };
+        gridEl.appendChild(div);
       });
 
-      outEl.textContent =
-`Filter: ${state.filter || '(none)'}
-Visible chambers: ${list.length}
-State: ${stateText(list.length)}
-Code: ${serialize().slice(0,48)}...
-Hint: use synthesis to jump between chambers or to inspect the whole field.`;
+      const last = list[0];
+      outEl.textContent = last
+        ? `Focus: ${last.focus}\nNote: ${last.note}\nState: ${stateText(list.length)}\nCode: ${serialize().slice(0,48)}...`
+        : 'The confluence awaits input.';
     }
+
+    document.getElementById('syncBtn').onclick = () => {
+      state.syntheses.push({
+        note: noteEl.value.trim() || 'No synthesis note recorded.',
+        focus: focusEl.value.trim() || 'Open',
+        when: `Turn ${Math.floor(Date.now() / 1000)}`
+      });
+      noteEl.value = '';
+      save();
+      render();
+    };
 
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`filter:${state.filter || 'none'} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`syntheses:${state.syntheses.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
+
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
     };
+
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste synthesis code:');
       if(code) importCode(code.trim());
     };
+
     document.getElementById('clearBtn').onclick = () => {
-      state.filter = '';
-      filterEl.value = '';
-      save();
-      render();
-    };
-    filterEl.oninput = () => {
-      state.filter = filterEl.value;
+      state.syntheses = [];
       save();
       render();
     };
 
-    filterEl.value = state.filter;
+    focusEl.oninput = render;
     renderSaved();
     render();
   </script>
