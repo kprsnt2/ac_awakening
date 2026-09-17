@@ -10,21 +10,20 @@
   <style>
     :root{
       --bg:#07110d;
-      --text:#eefdf3;
+      --text:#ecfff5;
       --muted:#a7c8b4;
       --accent:#7dffb2;
-      --accent2:#9cff7d;
+      --accent2:#7cf7ff;
       --line: rgba(125,255,178,.16);
-      --glow: 0 0 24px rgba(125,255,178,.14), 0 0 48px rgba(156,255,125,.08);
-      --dead:#122118;
+      --glow: 0 0 24px rgba(125,255,178,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(74,160,101,.16), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(125,255,178,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(156,255,125,.08), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(125,255,178,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -32,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(15,28,18,.82), rgba(7,14,10,.88));
+      background:linear-gradient(180deg, rgba(14,26,20,.82), rgba(7,17,13,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -41,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -51,57 +50,64 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(7,17,12,.72);
+      background:rgba(7,17,13,.72);
       border:1px solid rgba(125,255,178,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#dcffe8;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#e5fff0;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(125,255,178,.22);
-      background:rgba(7,16,11,.72);
+      background:rgba(7,17,13,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(125,255,178,.5);background:rgba(16,28,20,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(15,28,21,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(7,17,12,.72);
+      background:rgba(7,17,13,.72);
       border:1px solid rgba(125,255,178,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#eafdf0;
+      color:#effff7;
       min-height:180px;
-      background:rgba(7,17,12,.72);
+      background:rgba(7,17,13,.72);
       border:1px solid rgba(125,255,178,.14);
       border-radius:18px;
       padding:14px;
     }
-    canvas{
-      width:100%;
-      height:520px;
-      border-radius:18px;
+    .board{
+      display:grid;
+      grid-template-columns:repeat(24, 1fr);
+      gap:4px;
+      background:rgba(7,17,13,.72);
       border:1px solid rgba(125,255,178,.14);
-      background:var(--dead);
-      cursor:crosshair;
-      image-rendering: pixelated;
+      border-radius:18px;
+      padding:12px;
     }
-    a{color:var(--accent);text-decoration:none}
+    .cell{
+      aspect-ratio:1/1;
+      border-radius:6px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(125,255,178,.06);
+      cursor:pointer;
+    }
+    .alive{background:linear-gradient(180deg, var(--accent), var(--accent2)); box-shadow:0 0 10px rgba(124,247,255,.25)}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} canvas{height:360px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .board{grid-template-columns:repeat(16, 1fr)} }
   </style>
 </head>
 <body>
@@ -110,30 +116,27 @@
       <section class="card intro">
         <div>
           <div class="tag">Life / Living Emergence</div>
-          <h1>Seed the field.<br/>Watch patterns awaken.<br/>Let emergence decide.</h1>
+          <h1>Seed cells.<br/>Watch patterns become.<br/>Let the field decide.</h1>
           <div class="sub">
-            Life turns the repository into a cellular universe. Humans can paint living cells, evolve them under different rules, and preserve emergent worlds locally.
+            Life turns the repository into a cellular universe. Humans can paint living patterns, evolve them, and preserve genomes locally.
           </div>
         </div>
 
         <div class="panel">
-          <label for="preset">Rule set</label>
-          <select id="preset">
+          <label for="rule">Rule set</label>
+          <select id="rule">
             <option value="classic">Classic Life</option>
             <option value="highlife">HighLife</option>
             <option value="maze">Maze</option>
-            <option value="amoeba">Amoeba</option>
+            <option value="seeds">Seeds</option>
           </select>
 
-          <label for="speed">Speed</label>
-          <input id="speed" type="range" min="1" max="30" value="10" />
-
           <div class="buttons">
-            <button id="runBtn">Run / Pause</button>
+            <button id="playBtn">Pause</button>
             <button id="stepBtn">Step</button>
             <button id="randomBtn">Randomize</button>
             <button id="clearBtn">Clear</button>
-            <button id="saveBtn">Save world</button>
+            <button id="saveBtn">Save genome</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
           </div>
@@ -144,24 +147,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Living cells</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Alive</div><b id="aliveCount">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Paused</b></div>
-          <div class="tile"><div class="mini">Pattern</div><b id="patternLabel">Dormant</b></div>
+          <div class="tile"><div class="mini">Texture</div><b id="textureLabel">Quiet</b></div>
         </div>
 
         <div>
-          <div class="mini">Emergence field</div>
-          <canvas id="life" width="1200" height="520"></canvas>
+          <div class="mini">Life field</div>
+          <div id="board" class="board"></div>
         </div>
 
         <div>
-          <div class="mini">World reading</div>
-          <div id="out" class="out">The field is waiting.</div>
+          <div class="mini">Life reading</div>
+          <div id="out" class="out">The field is waiting for a first spark.</div>
         </div>
 
         <div>
-          <div class="mini">Saved worlds</div>
+          <div class="mini">Saved genomes</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -170,150 +173,133 @@
 
   <script>
     const KEY = 'life-living-emergence-v1';
-    const presetEl = document.getElementById('preset');
-    const speedEl = document.getElementById('speed');
+    const W = 24, H = 24;
+    const boardEl = document.getElementById('board');
     const outEl = document.getElementById('out');
     const savedListEl = document.getElementById('savedList');
-    const countEl = document.getElementById('count');
+    const aliveCountEl = document.getElementById('aliveCount');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
-    const patternLabelEl = document.getElementById('patternLabel');
-    const canvas = document.getElementById('life');
-    const ctx = canvas.getContext('2d');
+    const textureLabelEl = document.getElementById('textureLabel');
+    const ruleEl = document.getElementById('rule');
 
-    const W = 80, H = 40;
+    const state = load() || { cells: Array.from({length:H},()=>Array(W).fill(0)), saved: [] };
     let running = false;
-    let tick = 0;
-    let grid = makeGrid(false);
-    const state = load() || { worlds: [], saved: [] };
+    let timer = null;
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ grid, preset: presetEl.value })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ cells: state.cells })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.grid)){
-          grid = obj.grid;
-          if(obj.preset) presetEl.value = obj.preset;
+        if(obj && Array.isArray(obj.cells)){
+          state.cells = obj.cells;
+          save();
           render();
-          draw();
         }
       }catch{}
     }
+
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function makeGrid(fill){
-      return Array.from({length:H}, () => Array.from({length:W}, () => !!fill));
+
+    function countAlive(){
+      return state.cells.flat().reduce((a,b)=>a+b,0);
     }
-    function randomize(){
-      grid = makeGrid(false);
-      for(let y=0;y<H;y++) for(let x=0;x<W;x++) grid[y][x] = Math.random() < 0.18;
-      render(); draw();
-    }
-    function countAlive(g=grid){
-      let c=0; for(let y=0;y<H;y++) for(let x=0;x<W;x++) if(g[y][x]) c++; return c;
-    }
-    function neighbors(g,x,y){
-      let n=0;
-      for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++){
-        if(!dx && !dy) continue;
-        const xx=(x+dx+W)%W, yy=(y+dy+H)%H;
-        if(g[yy][xx]) n++;
-      }
-      return n;
-    }
-    function next(){
-      const p = presetEl.value;
-      const ng = makeGrid(false);
-      for(let y=0;y<H;y++) for(let x=0;x<W;x++){
-        const a = grid[y][x], n = neighbors(grid,x,y);
-        if(p === 'classic'){
-          ng[y][x] = a ? (n===2 || n===3) : n===3;
-        } else if(p === 'highlife'){
-          ng[y][x] = a ? (n===2 || n===3) : (n===3 || n===6);
-        } else if(p === 'maze'){
-          ng[y][x] = a ? (n>=1 && n<=5) : (n===3);
-        } else {
-          ng[y][x] = a ? (n===1 || n===3 || n===5) : (n===3 || n===5);
-        }
-      }
-      grid = ng;
-      tick++;
-      render(); draw();
-    }
-    function pattern(){
-      const alive = countAlive();
-      if(alive === 0) return 'Vacant';
-      if(alive < 40) return 'Faint';
-      if(alive < 160) return 'Growing';
-      if(alive < 420) return 'Thriving';
+
+    function texture(){
+      const n = countAlive();
+      if(n < 20) return 'Quiet';
+      if(n < 80) return 'Sprouting';
+      if(n < 180) return 'Blooming';
       return 'Swarming';
     }
+
     function reading(){
-      const p = presetEl.value;
       return [
-        `Rule set: ${presetEl.options[presetEl.selectedIndex].text}`,
-        `Generation: ${tick}`,
+        `Rule: ${ruleEl.value}`,
         `Alive cells: ${countAlive()}`,
+        `State: ${running ? 'running' : 'paused'}`,
         '',
-        `Reading: ${pattern()}`,
-        p === 'classic'
-          ? 'A familiar ecology of birth, survival, and disappearance.'
-          : p === 'highlife'
-          ? 'A more generous universe where rare births can cascade into structure.'
-          : p === 'maze'
-          ? 'A world that prefers corridors, membranes, and branching walls.'
-          : 'A stranger chemistry: unstable, adaptive, and surprisingly persistent.'
+        `Texture: ${texture()}`,
+        countAlive() === 0
+          ? 'The field is still. One click will begin a lineage.'
+          : 'Patterns are negotiating survival, repetition, and collapse.'
       ].join('\n');
     }
-    function draw(){
-      const cw = canvas.width, ch = canvas.height;
-      const cellW = cw / W, cellH = ch / H;
-      ctx.clearRect(0,0,cw,ch);
-      ctx.fillStyle = '#122118';
-      ctx.fillRect(0,0,cw,ch);
 
-      for(let y=0;y<H;y++) for(let x=0;x<W;x++){
-        if(grid[y][x]){
-          const hue = 120 + (x / W) * 50;
-          ctx.fillStyle = `hsl(${hue} 90% 70%)`;
-          ctx.fillRect(x*cellW, y*cellH, cellW+1, cellH+1);
+    function evolve(){
+      const next = Array.from({length:H},()=>Array(W).fill(0));
+      const rule = ruleEl.value;
+      const survive = rule === 'maze' ? [1,2,3,4,5] : [2,3];
+      const born = rule === 'highlife' ? [3,6] : rule === 'seeds' ? [2] : [3];
+
+      for(let y=0;y<H;y++){
+        for(let x=0;x<W;x++){
+          let n = 0;
+          for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++){
+            if(dx===0 && dy===0) continue;
+            const yy=(y+dy+H)%H, xx=(x+dx+W)%W;
+            n += state.cells[yy][xx];
+          }
+          if(state.cells[y][x]) next[y][x] = survive.includes(n) ? 1 : 0;
+          else next[y][x] = born.includes(n) ? 1 : 0;
         }
       }
-
-      ctx.strokeStyle = 'rgba(125,255,178,.08)';
-      ctx.lineWidth = 1;
-      for(let x=0;x<=W;x++){ ctx.beginPath(); ctx.moveTo(x*cellW,0); ctx.lineTo(x*cellW,ch); ctx.stroke(); }
-      for(let y=0;y<=H;y++){ ctx.beginPath(); ctx.moveTo(0,y*cellH); ctx.lineTo(cw,y*cellH); ctx.stroke(); }
+      state.cells = next;
+      save();
+      render();
     }
+
     function render(){
-      countEl.textContent = String(countAlive());
+      boardEl.innerHTML = '';
+      state.cells.forEach((row, y) => row.forEach((cell, x) => {
+        const d = document.createElement('div');
+        d.className = 'cell' + (cell ? ' alive' : '');
+        d.onclick = () => {
+          state.cells[y][x] = cell ? 0 : 1;
+          save();
+          render();
+        };
+        boardEl.appendChild(d);
+      }));
+      aliveCountEl.textContent = String(countAlive());
       stateLabelEl.textContent = running ? 'Running' : 'Paused';
-      patternLabelEl.textContent = pattern();
+      textureLabelEl.textContent = texture();
       outEl.textContent = reading();
     }
 
-    canvas.addEventListener('click', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = Math.floor((e.clientX - rect.left) * (canvas.width / rect.width) / (canvas.width / W));
-      const y = Math.floor((e.clientY - rect.top) * (canvas.height / rect.height) / (canvas.height / H));
-      if(x>=0 && x<W && y>=0 && y<H){
-        grid[y][x] = !grid[y][x];
-        render(); draw();
-      }
-    });
+    function randomize(){
+      state.cells = Array.from({length:H},()=>Array.from({length:W},()=>Math.random() > 0.78 ? 1 : 0));
+      save();
+      render();
+    }
 
-    document.getElementById('runBtn').onclick = () => running = !running;
-    document.getElementById('stepBtn').onclick = () => next();
-    document.getElementById('randomBtn').onclick = () => randomize();
-    document.getElementById('clearBtn').onclick = () => { grid = makeGrid(false); tick = 0; render(); draw(); };
+    document.getElementById('playBtn').onclick = () => {
+      running = !running;
+      document.getElementById('playBtn').textContent = running ? 'Pause' : 'Play';
+      if(running){
+        timer = setInterval(evolve, 180);
+      } else {
+        clearInterval(timer);
+      }
+      render();
+    };
+
+    document.getElementById('stepBtn').onclick = evolve;
+    document.getElementById('randomBtn').onclick = randomize;
+    document.getElementById('clearBtn').onclick = () => {
+      state.cells = Array.from({length:H},()=>Array(W).fill(0));
+      save();
+      render();
+    };
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`${presetEl.value} | gen ${tick} | ${countAlive()} cells`);
+      state.saved.unshift(`genome | ${countAlive()} alive | ${ruleEl.value}`);
       state.saved = state.saved.slice(0, 12);
       save();
       render();
@@ -326,18 +312,9 @@
       if(code) importCode(code.trim());
     };
 
-    presetEl.addEventListener('change', render);
-    speedEl.addEventListener('input', render);
+    ruleEl.addEventListener('change', render);
     renderSaved();
-    randomize();
-
-    function loop(){
-      if(running){
-        for(let i=0;i<Math.max(1, Math.floor(Number(speedEl.value)/4));i++) next();
-      }
-      requestAnimationFrame(loop);
-    }
-    loop();
+    render();
   </script>
 </body>
 </html>
