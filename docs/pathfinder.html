@@ -17,221 +17,307 @@
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
+      --warn:#ffd37d;
       --bad:#ff8aa1;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:
-      radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-      radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-      radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
-      var(--bg);
-      color:var(--text);font-family:Inter,system-ui,sans-serif;}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
-    .card{background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));border:1px solid var(--line);border-radius:24px;box-shadow:var(--glow);backdrop-filter: blur(14px)}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
-    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
     h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
     .sub{color:var(--muted);line-height:1.6;max-width:68ch}
-    .panel{padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    select, button, input{
-      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);color:var(--text);
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
     }
-    input, select{width:100%;padding:11px 12px}
-    button{padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    input, button{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
+    }
+    input{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .board{
-      position:relative;min-height:560px;overflow:hidden;
-      background:
-        linear-gradient(rgba(140,170,255,.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(140,170,255,.08) 1px, transparent 1px),
-        rgba(5,8,16,.55);
-      background-size:32px 32px;
-      border-radius:20px;border:1px solid rgba(140,170,255,.14);
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:6px;
     }
-    .node{
-      position:absolute;transform:translate(-50%,-50%);
-      width:18px;height:18px;border-radius:50%;
-      background:var(--accent);box-shadow:0 0 18px rgba(124,247,255,.55);
-      border:2px solid #fff;
-      cursor:pointer;
+    .item{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      color:var(--text);
+      text-decoration:none;
+      display:block;
+      transition:.18s transform,.18s border-color;
     }
-    .node.goal{background:var(--good);box-shadow:0 0 18px rgba(125,255,178,.55)}
-    .node.block{background:var(--bad);box-shadow:0 0 18px rgba(255,138,161,.55)}
-    svg{position:absolute;inset:0;width:100%;height:100%}
+    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
+    .item h3{margin:0 0 8px;font-size:1.02rem}
+    .item p{margin:0;color:#dbe8ff;line-height:1.55}
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    .out{white-space:pre-wrap;line-height:1.6;color:#dbe8ff;min-height:140px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);border-radius:18px;padding:14px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.6;
+      color:#dbe8ff;
+      min-height:140px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;
+      padding:14px;
+    }
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-    .stat{padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14)}
+    .stat{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
     .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
-    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
-    @media (max-width:980px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr 1fr}
+    }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="hero">
-    <section class="card intro">
-      <div>
-        <div class="tag">Pathfinder / Living Route Engine</div>
-        <h1>Draw routes.<br/>Move through the field.</h1>
-        <div class="sub">Place waypoints by clicking the map. Select a mode to shape the terrain: route, gate, beacon, or hazard. Pathfinder turns navigation into a visible act.</div>
-      </div>
-
-      <div class="panel">
-        <label for="mode">Placement mode</label>
-        <select id="mode">
-          <option value="route">Route node</option>
-          <option value="goal">Gate / goal</option>
-          <option value="block">Hazard</option>
-        </select>
-
-        <label for="speed">Traversal tempo</label>
-        <input id="speed" type="range" min="1" max="10" value="5" />
-
-        <div class="buttons">
-          <button id="clearBtn">Clear map</button>
-          <button id="saveBtn">Save path</button>
-          <button id="exportBtn">Copy code</button>
-          <button id="importBtn">Import code</button>
-          <button id="autoBtn">Auto-route</button>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Pathfinder / Living Route Engine</div>
+          <h1>Draw the route.<br/>Find the way through.</h1>
+          <div class="sub">
+            Pathfinder turns the site into a traversable graph. Add nodes, connect them,
+            and discover the shortest route between any two chambers.
+          </div>
         </div>
 
-        <div class="footer">Return to the portal home: <a href="./index.html">home</a></div>
-      </div>
-    </section>
+        <div class="panel">
+          <label for="from">From chamber</label>
+          <input id="from" placeholder="e.g. Atlas" />
 
-    <section class="card" style="padding:16px;display:grid;gap:16px">
-      <div class="board" id="board">
-        <svg id="lines" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg>
-      </div>
+          <label for="to">To chamber</label>
+          <input id="to" placeholder="e.g. Oracle" />
 
-      <div class="stats">
-        <div class="stat"><div class="mini">Nodes</div><b id="count">0</b></div>
-        <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Route</b></div>
-        <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-        <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
-      </div>
+          <div class="buttons">
+            <button id="routeBtn">Find route</button>
+            <button id="saveBtn">Save path</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear paths</button>
+          </div>
 
-      <div>
-        <div class="mini">Route sigil</div>
-        <div id="out" class="out">Click the map to begin tracing a path.</div>
-      </div>
+          <div class="footer">
+            Return to the portal home: <a href="./index.html">home</a>
+          </div>
+        </div>
+      </section>
 
-      <div>
-        <div class="mini">Saved paths</div>
-        <div id="savedList" class="out">No saved paths yet.</div>
-      </div>
-    </section>
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Known chambers</div>
+          <div id="grid" class="grid"></div>
+        </div>
+
+        <div>
+          <div class="mini">Route sigil</div>
+          <div id="out" class="out">The route engine awaits a destination.</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Nodes</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Route</div><b id="routeLabel">None</b></div>
+          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved paths</div>
+          <div id="savedList" class="out">No saved paths yet.</div>
+        </div>
+      </section>
+    </div>
   </div>
-</div>
 
-<script>
-const KEY = 'pathfinder-living-route-v1';
-const board = document.getElementById('board');
-const lines = document.getElementById('lines');
-const modeEl = document.getElementById('mode');
-const outEl = document.getElementById('out');
-const countEl = document.getElementById('count');
-const modeLabelEl = document.getElementById('modeLabel');
-const savedCountEl = document.getElementById('savedCount');
-const stateLabelEl = document.getElementById('stateLabel');
-const savedListEl = document.getElementById('savedList');
+  <script>
+    const KEY = 'pathfinder-living-route-v1';
 
-const state = load() || { mode:'route', nodes:[], saved:[] };
+    const fromEl = document.getElementById('from');
+    const toEl = document.getElementById('to');
+    const gridEl = document.getElementById('grid');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const routeLabelEl = document.getElementById('routeLabel');
+    const savedCountEl = document.getElementById('savedCount');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const savedListEl = document.getElementById('savedList');
 
-function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
-function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes })))); }
-function importCode(code){
-  try{
-    const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-    if(obj && Array.isArray(obj.nodes)){ state.nodes = obj.nodes; save(); render(); }
-  }catch{}
-}
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function renderSaved(){
-  savedCountEl.textContent = String(state.saved.length);
-  savedListEl.textContent = state.saved.length ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n') : 'No saved paths yet.';
-}
-function render(){
-  board.querySelectorAll('.node').forEach(n=>n.remove());
-  lines.innerHTML = '';
-  countEl.textContent = String(state.nodes.length);
-  modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
-  stateLabelEl.textContent = state.nodes.length ? 'Mapped' : 'Blank';
+    const chambers = ['Atlas','Chronicle','Council','Oracle','Synthesis','Atelier','Loom','Furnace'];
+    const edges = {
+      Atlas:['Chronicle','Pathfinder','Oracle'],
+      Chronicle:['Atlas','Council','Synthesis'],
+      Council:['Chronicle','Oracle','Synthesis'],
+      Oracle:['Atlas','Council','Synthesis','Pathfinder'],
+      Synthesis:['Chronicle','Council','Oracle'],
+      Atelier:['Loom','Furnace'],
+      Loom:['Atelier','Furnace'],
+      Furnace:['Atelier','Loom']
+    };
 
-  const rect = board.getBoundingClientRect();
-  const w = rect.width, h = rect.height;
+    const state = load() || { routes: [], saved: [] };
 
-  state.nodes.forEach((n, i) => {
-    const el = document.createElement('div');
-    el.className = `node ${n.kind}`;
-    el.style.left = n.x + '%';
-    el.style.top = n.y + '%';
-    el.title = `${n.kind} ${i+1}`;
-    el.onclick = () => { state.nodes.splice(i,1); save(); render(); };
-    board.appendChild(el);
-  });
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ routes: state.routes })))); }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.routes)){
+          state.routes = obj.routes;
+          save();
+          render();
+        }
+      }catch{}
+    }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved paths yet.';
+    }
+    function stateText(n){
+      if(n >= 6) return 'Mapped';
+      if(n >= 3) return 'Navigable';
+      if(n >= 1) return 'Partial';
+      return 'Open';
+    }
+    function bfs(start, goal){
+      if(!start || !goal) return null;
+      start = start.trim();
+      goal = goal.trim();
+      const q = [[start]];
+      const seen = new Set([start]);
+      while(q.length){
+        const path = q.shift();
+        const node = path[path.length-1];
+        if(node === goal) return path;
+        for(const next of (edges[node] || [])){
+          if(!seen.has(next)){
+            seen.add(next);
+            q.push([...path, next]);
+          }
+        }
+      }
+      return null;
+    }
+    function render(){
+      gridEl.innerHTML = '';
+      countEl.textContent = String(chambers.length);
+      stateLabelEl.textContent = stateText(state.routes.length);
 
-  const pts = state.nodes.filter(n => n.kind !== 'block');
-  let d = '';
-  pts.forEach((p, i) => {
-    const x = (p.x/100)*1000, y = (p.y/100)*1000;
-    d += (i===0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
-  });
-  if(d) {
-    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d', d);
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', 'rgba(124,247,255,.8)');
-    path.setAttribute('stroke-width', '4');
-    path.setAttribute('stroke-linecap', 'round');
-    path.setAttribute('stroke-linejoin', 'round');
-    lines.appendChild(path);
-  }
+      chambers.forEach((c) => {
+        const a = document.createElement('a');
+        a.className = 'item';
+        a.href = `./${c.toLowerCase()}.html`;
+        a.innerHTML = `
+          <h3>${escapeHtml(c)}</h3>
+          <p>${escapeHtml((edges[c] || []).join(' → ') || 'No links recorded')}</p>
+        `;
+        a.onclick = (e) => {
+          e.preventDefault();
+          if(!fromEl.value) fromEl.value = c;
+          else toEl.value = c;
+        };
+        gridEl.appendChild(a);
+      });
 
-  outEl.textContent =
-`Mode: ${state.mode}
-Nodes: ${state.nodes.length}
-Traversal tempo: ${document.getElementById('speed').value}/10
-Code: ${serialize().slice(0,48)}...
-Hint: click the map to place a new waypoint.`;
-}
-board.addEventListener('click', (e) => {
-  const r = board.getBoundingClientRect();
-  const x = ((e.clientX - r.left) / r.width) * 100;
-  const y = ((e.clientY - r.top) / r.height) * 100;
-  state.nodes.push({ x, y, kind: state.mode });
-  save(); render();
-});
-document.getElementById('clearBtn').onclick = () => { state.nodes = []; save(); render(); };
-document.getElementById('saveBtn').onclick = () => {
-  const code = serialize();
-  state.saved.unshift(`nodes:${state.nodes.length} | ${code.slice(0,10)}…`);
-  state.saved = state.saved.slice(0, 12);
-  save();
-};
-document.getElementById('exportBtn').onclick = async () => { await navigator.clipboard.writeText(serialize()); };
-document.getElementById('importBtn').onclick = () => { const code = prompt('Paste path code:'); if(code) importCode(code.trim()); };
-document.getElementById('autoBtn').onclick = () => {
-  state.nodes = [
-    {x:12,y:78,kind:'route'},
-    {x:28,y:62,kind:'route'},
-    {x:46,y:48,kind:'goal'},
-    {x:64,y:34,kind:'route'},
-    {x:83,y:19,kind:'block'}
-  ];
-  save(); render();
-};
-modeEl.onchange = () => { state.mode = modeEl.value; save(); render(); };
+      const last = state.routes[state.routes.length - 1];
+      routeLabelEl.textContent = last ? `${last.from} → ${last.to}` : 'None';
+      outEl.textContent = last
+        ? `Route: ${last.path.join(' → ')}\nLength: ${last.path.length}\nCode: ${serialize().slice(0,48)}...`
+        : 'The route engine awaits a destination.';
+    }
 
-modeEl.value = state.mode;
-renderSaved();
-render();
-</script>
+    document.getElementById('routeBtn').onclick = () => {
+      const path = bfs(fromEl.value, toEl.value);
+      state.routes.push({
+        from: fromEl.value.trim() || 'Unknown',
+        to: toEl.value.trim() || 'Unknown',
+        path: path || ['No route found'],
+        when: `Turn ${Math.floor(Date.now() / 1000)}`
+      });
+      save();
+      render();
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      const code = serialize();
+      state.saved.unshift(`routes:${state.routes.length} | ${code.slice(0,10)}…`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste pathfinder code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.routes = [];
+      save();
+      render();
+    };
+
+    renderSaved();
+    render();
+  </script>
 </body>
 </html>
