@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metamorphosis — Living Transform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#12080f;
+      --text:#fff3fb;
+      --muted:#d5b7c8;
+      --accent:#ff8fd1;
+      --accent2:#8cffc1;
+      --line: rgba(255,143,209,.16);
+      --glow: 0 0 24px rgba(255,143,209,.14), 0 0 48px rgba(140,255,193,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255,143,209,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(140,255,193,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(34,16,28,.82), rgba(12,8,12,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(12,8,12,.72);
+      border:1px solid rgba(255,143,209,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#fff6fb;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(255,143,209,.22);
+      background:rgba(12,8,12,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(140,255,193,.5);background:rgba(24,14,20,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(12,8,12,.72);
+      border:1px solid rgba(255,143,209,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#fff0f8;
+      min-height:180px;
+      background:rgba(12,8,12,.72);
+      border:1px solid rgba(255,143,209,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .field{
+      position:relative;
+      height:560px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(255,143,209,.06), transparent 58%),
+        linear-gradient(rgba(255,143,209,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,143,209,.05) 1px, transparent 1px),
+        rgba(12,8,12,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(255,143,209,.14);
+      overflow:hidden;
+    }
+    .shape{
+      position:absolute;
+      width:34px;height:34px;
+      transform:translate(-50%,-50%);
+      border-radius:16px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 18px rgba(255,143,209,.3);
+      cursor:pointer;
+    }
+    .shape.round{border-radius:50%}
+    .shape.wide{width:46px}
+    .shape.tall{height:46px}
+    .list{
+      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+    }
+    .item{
+      padding:12px 14px;border-radius:16px;background:rgba(12,8,12,.72);
+      border:1px solid rgba(255,143,209,.14);cursor:pointer;
+    }
+    .item:hover{border-color:rgba(255,143,209,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Metamorphosis / Living Transform</div>
+          <h1>Change the shape.<br/>Keep the memory.<br/>Become something new.</h1>
+          <div class="sub">
+            Metamorphosis turns the repository into a chamber of deliberate transformation. Humans can reshape forms, compare versions, and preserve the trail of becoming.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="name">Form name</label>
+          <input id="name" placeholder="e.g. Seed to Signal" />
+
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="round">Round</option>
+            <option value="wide">Wide</option>
+            <option value="tall">Tall</option>
+            <option value="mixed">Mixed</option>
+          </select>
+
+          <label for="note">Transformation note</label>
+          <textarea id="note" placeholder="e.g. Expand the chorus into a navigable lattice while retaining its pulse."></textarea>
+
+          <div class="buttons">
+            <button id="mutateBtn">Mutate form</button>
+            <button id="shiftBtn">Shift state</button>
+            <button id="saveBtn">Save trail</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear trail</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Forms</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Stable</b></div>
+          <div class="tile"><div class="mini">Flux</div><b id="fluxLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Transformation field</div>
+          <div id="field" class="field"></div>
+        </div>
+
+        <div>
+          <div class="mini">Metamorphosis reading</div>
+          <div id="out" class="out">Create a form to begin transformation.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved trails</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'metamorphosis-living-transform-v1';
+    const state = load() || { forms: [], saved: [], flux: 18 };
+
+    const field = document.getElementById('field');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const fluxLabelEl = document.getElementById('fluxLabel');
+    const nameEl = document.getElementById('name');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ forms: state.forms, flux: state.flux })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.forms)){
+          state.forms = obj.forms;
+          state.flux = Number(obj.flux ?? 18);
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function flux(){
+      return Math.max(0, Math.min(100, Math.round(state.flux + state.forms.length * 11)));
+    }
+    function makeForm(name, mode){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        mode,
+        note: noteEl.value.trim() || 'A form in transit.',
+        x: 120 + Math.random() * 420,
+        y: 120 + Math.random() * 320
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.forms.length);
+      stateLabelEl.textContent = state.forms.length ? 'Transforming' : 'Stable';
+      fluxLabelEl.textContent = `${flux()}%`;
+      field.querySelectorAll('.shape').forEach(n => n.remove());
+
+      state.forms.forEach((f, idx) => {
+        const el = document.createElement('div');
+        el.className = 'shape ' + (f.mode === 'mixed' ? (idx % 2 ? 'wide' : 'tall') : f.mode);
+        el.style.left = f.x + 'px';
+        el.style.top = f.y + 'px';
+        el.title = f.name;
+        el.onclick = () => outEl.textContent = `${f.name}\n\nMode: ${f.mode}\nFlux: ${flux()}%\n\n${f.note}`;
+        field.appendChild(el);
+      });
+
+      outEl.textContent = state.forms.length
+        ? 'Select a form to inspect its state, or mutate the trail.'
+        : 'Create a form to begin transformation.';
+    }
+
+    document.getElementById('mutateBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Form ${state.forms.length + 1}`;
+      state.forms.unshift(makeForm(name, modeEl.value));
+      if(state.forms.length > 1){
+        state.forms[0].x = state.forms[1].x + (Math.random() * 80 - 40);
+        state.forms[0].y = state.forms[1].y + (Math.random() * 80 - 40);
+      }
+      save(); render();
+      outEl.textContent = `${name}\n\nMode: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A form in transit.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.flux = Math.min(100, state.flux + 9);
+      state.forms.forEach((f, i) => {
+        f.mode = ['round','wide','tall','mixed'][(i + Math.floor(state.flux / 10)) % 4];
+      });
+      save(); render();
+      outEl.textContent = `The field shifts.\n\nFlux: ${flux()}%\nForms remapped across the chamber.`;
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`forms:${state.forms.length} | flux:${flux()}%`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste metamorphosis code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.forms = [];
+      state.flux = 18;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
