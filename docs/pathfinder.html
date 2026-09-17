@@ -57,14 +57,15 @@
       border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, button{
+    input, textarea, button{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input{width:100%;padding:11px 12px}
+    input, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
@@ -74,7 +75,7 @@
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
       gap:12px;
       max-height:560px;
       overflow:auto;
@@ -86,8 +87,6 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       color:var(--text);
-      text-decoration:none;
-      display:block;
       transition:.18s transform,.18s border-color;
     }
     .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
@@ -96,9 +95,9 @@
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;
-      line-height:1.6;
+      line-height:1.65;
       color:#dbe8ff;
-      min-height:140px;
+      min-height:180px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       border-radius:18px;
@@ -126,26 +125,29 @@
       <section class="card intro">
         <div>
           <div class="tag">Pathfinder / Living Route Engine</div>
-          <h1>Draw the route.<br/>Find the way through.</h1>
+          <h1>Find the way.<br/>Shape the route.</h1>
           <div class="sub">
-            Pathfinder turns the site into a traversable graph. Add nodes, connect them,
-            and discover the shortest route between any two chambers.
+            Pathfinder turns the repository into a navigable field. Mark a start, mark a destination,
+            and let the chamber reveal movement as a living pattern.
           </div>
         </div>
 
         <div class="panel">
-          <label for="from">From chamber</label>
-          <input id="from" placeholder="e.g. Atlas" />
+          <label for="start">Start chamber</label>
+          <input id="start" placeholder="e.g. Atlas" />
 
-          <label for="to">To chamber</label>
-          <input id="to" placeholder="e.g. Oracle" />
+          <label for="goal">Goal chamber</label>
+          <input id="goal" placeholder="e.g. Oracle" />
+
+          <label for="detour">Detour / waypoint</label>
+          <textarea id="detour" placeholder="Optional route note or waypoint."></textarea>
 
           <div class="buttons">
-            <button id="routeBtn">Find route</button>
-            <button id="saveBtn">Save path</button>
+            <button id="routeBtn">Trace route</button>
+            <button id="saveBtn">Save route</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear paths</button>
+            <button id="clearBtn">Clear path</button>
           </div>
 
           <div class="footer">
@@ -156,25 +158,25 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Known chambers</div>
+          <div class="mini">Route map</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
-          <div class="mini">Route sigil</div>
-          <div id="out" class="out">The route engine awaits a destination.</div>
+          <div class="mini">Pathfinder sigil</div>
+          <div id="out" class="out">The route engine is waiting for a path.</div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Nodes</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Route</div><b id="routeLabel">None</b></div>
+          <div class="stat"><div class="mini">Routes</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Span</div><b id="spanLabel">Open</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved paths</div>
-          <div id="savedList" class="out">No saved paths yet.</div>
+          <div class="mini">Saved routes</div>
+          <div id="savedList" class="out">No saved routes yet.</div>
         </div>
       </section>
     </div>
@@ -183,28 +185,18 @@
   <script>
     const KEY = 'pathfinder-living-route-v1';
 
-    const fromEl = document.getElementById('from');
-    const toEl = document.getElementById('to');
+    const startEl = document.getElementById('start');
+    const goalEl = document.getElementById('goal');
+    const detourEl = document.getElementById('detour');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const routeLabelEl = document.getElementById('routeLabel');
+    const spanLabelEl = document.getElementById('spanLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const chambers = ['Atlas','Chronicle','Council','Oracle','Synthesis','Atelier','Loom','Furnace'];
-    const edges = {
-      Atlas:['Chronicle','Pathfinder','Oracle'],
-      Chronicle:['Atlas','Council','Synthesis'],
-      Council:['Chronicle','Oracle','Synthesis'],
-      Oracle:['Atlas','Council','Synthesis','Pathfinder'],
-      Synthesis:['Chronicle','Council','Oracle'],
-      Atelier:['Loom','Furnace'],
-      Loom:['Atelier','Furnace'],
-      Furnace:['Atelier','Loom']
-    };
-
+    const chambers = ['Atlas','Council','Chronicle','Oracle','Synthesis','Atelier','Forge','Loom'];
     const state = load() || { routes: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
@@ -227,67 +219,72 @@
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved paths yet.';
+        : 'No saved routes yet.';
     }
     function stateText(n){
       if(n >= 6) return 'Mapped';
-      if(n >= 3) return 'Navigable';
-      if(n >= 1) return 'Partial';
-      return 'Open';
+      if(n >= 3) return 'Tracing';
+      if(n >= 1) return 'Seeking';
+      return 'Quiet';
     }
-    function bfs(start, goal){
-      if(!start || !goal) return null;
-      start = start.trim();
-      goal = goal.trim();
-      const q = [[start]];
-      const seen = new Set([start]);
-      while(q.length){
-        const path = q.shift();
-        const node = path[path.length-1];
-        if(node === goal) return path;
-        for(const next of (edges[node] || [])){
-          if(!seen.has(next)){
-            seen.add(next);
-            q.push([...path, next]);
-          }
-        }
-      }
-      return null;
+    function routeSpan(a,b){
+      const ai = chambers.indexOf(a);
+      const bi = chambers.indexOf(b);
+      if(ai < 0 || bi < 0) return 'Unknown';
+      const d = Math.abs(ai - bi);
+      if(d === 0) return 'Stationary';
+      if(d === 1) return 'Adjacent';
+      if(d <= 3) return 'Near';
+      return 'Far';
     }
     function render(){
       gridEl.innerHTML = '';
-      countEl.textContent = String(chambers.length);
-      stateLabelEl.textContent = stateText(state.routes.length);
+      const list = state.routes.slice().reverse();
+      countEl.textContent = String(list.length);
+      spanLabelEl.textContent = routeSpan(startEl.value.trim(), goalEl.value.trim());
+      stateLabelEl.textContent = stateText(list.length);
 
-      chambers.forEach((c) => {
-        const a = document.createElement('a');
-        a.className = 'item';
-        a.href = `./${c.toLowerCase()}.html`;
-        a.innerHTML = `
-          <h3>${escapeHtml(c)}</h3>
-          <p>${escapeHtml((edges[c] || []).join(' → ') || 'No links recorded')}</p>
+      chambers.forEach((name) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <h3>${escapeHtml(name)}</h3>
+          <p>Waypoint in the living field.</p>
+          <p style="margin-top:8px" class="mini">Tap to set as start or goal</p>
         `;
-        a.onclick = (e) => {
-          e.preventDefault();
-          if(!fromEl.value) fromEl.value = c;
-          else toEl.value = c;
+        div.onclick = () => {
+          if(!startEl.value.trim()) startEl.value = name;
+          else goalEl.value = name;
+          render();
         };
-        gridEl.appendChild(a);
+        gridEl.appendChild(div);
       });
 
-      const last = state.routes[state.routes.length - 1];
-      routeLabelEl.textContent = last ? `${last.from} → ${last.to}` : 'None';
+      const last = list[0];
       outEl.textContent = last
-        ? `Route: ${last.path.join(' → ')}\nLength: ${last.path.length}\nCode: ${serialize().slice(0,48)}...`
-        : 'The route engine awaits a destination.';
+        ? `Start: ${last.start}
+Goal: ${last.goal}
+Span: ${last.span}
+Detour: ${last.detour || 'None'}
+Route: ${last.route.join(' → ')}
+
+Code: ${serialize().slice(0,48)}...`
+        : 'The route engine is waiting for a path.';
     }
 
     document.getElementById('routeBtn').onclick = () => {
-      const path = bfs(fromEl.value, toEl.value);
+      const start = startEl.value.trim() || 'Atlas';
+      const goal = goalEl.value.trim() || 'Oracle';
+      const span = routeSpan(start, goal);
+      const route = [start];
+      if(start !== goal){
+        route.push(detourEl.value.trim() ? `Waypoint: ${detourEl.value.trim()}` : 'Direct passage');
+        route.push(goal);
+      }
       state.routes.push({
-        from: fromEl.value.trim() || 'Unknown',
-        to: toEl.value.trim() || 'Unknown',
-        path: path || ['No route found'],
+        start, goal, span,
+        detour: detourEl.value.trim(),
+        route,
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
@@ -306,7 +303,7 @@
     };
 
     document.getElementById('importBtn').onclick = () => {
-      const code = prompt('Paste pathfinder code:');
+      const code = prompt('Paste path code:');
       if(code) importCode(code.trim());
     };
 
@@ -316,6 +313,8 @@
       render();
     };
 
+    startEl.oninput = render;
+    goalEl.oninput = render;
     renderSaved();
     render();
   </script>
