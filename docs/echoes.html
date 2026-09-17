@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echoes — Living Memory Chamber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#120d16;
+      --text:#fff5fb;
+      --muted:#d7bed0;
+      --accent:#ff8fd1;
+      --accent2:#7cf7ff;
+      --line: rgba(255,143,209,.16);
+      --glow: 0 0 24px rgba(255,143,209,.14), 0 0 48px rgba(124,247,255,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,143,209,.12), transparent 28%),
+        radial-gradient(circle at 80% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(34,16,28,.82), rgba(12,8,12,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(12,8,12,.72);
+      border:1px solid rgba(255,143,209,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#fff6fb;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(255,143,209,.22);
+      background:rgba(12,8,12,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(24,14,20,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(12,8,12,.72);
+      border:1px solid rgba(255,143,209,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#fff0f8;
+      min-height:180px;
+      background:rgba(12,8,12,.72);
+      border:1px solid rgba(255,143,209,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .field{
+      position:relative;
+      height:560px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(255,143,209,.06), transparent 58%),
+        linear-gradient(rgba(255,143,209,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,143,209,.05) 1px, transparent 1px),
+        rgba(12,8,12,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(255,143,209,.14);
+      overflow:hidden;
+    }
+    .memory{
+      position:absolute;
+      width:34px;height:34px;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(255,143,209,.32);
+      cursor:pointer;
+    }
+    .memory.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Echoes / Living Memory Chamber</div>
+          <h1>Remember the site.<br/>Pin the moment.<br/>Return with meaning.</h1>
+          <div class="sub">
+            Echoes turns the repository into a memory chamber. Humans can record moments, inspect remembered fragments, and preserve trails across the site.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="name">Memory name</label>
+          <input id="name" placeholder="e.g. First route through Voyage" />
+
+          <label for="mode">Memory type</label>
+          <select id="mode">
+            <option value="bright">Bright</option>
+            <option value="quiet">Quiet</option>
+            <option value="shared">Shared</option>
+            <option value="mixed">Mixed</option>
+          </select>
+
+          <label for="note">Memory note</label>
+          <textarea id="note" placeholder="e.g. The route crossed Resonance, then settled in Commons."></textarea>
+
+          <div class="buttons">
+            <button id="addBtn">Record memory</button>
+            <button id="shiftBtn">Revisit</button>
+            <button id="blendBtn">Blend trail</button>
+            <button id="saveBtn">Save archive</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear archive</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Memories</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unwritten</b></div>
+          <div class="tile"><div class="mini">Recall</div><b id="recallLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Memory field</div>
+          <div id="field" class="field"></div>
+        </div>
+
+        <div>
+          <div class="mini">Memory reading</div>
+          <div id="out" class="out">Record a memory to begin the archive.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved archives</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'echoes-living-memory-v1';
+    const state = load() || { memories: [], saved: [], recall: 24 };
+
+    const field = document.getElementById('field');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const recallLabelEl = document.getElementById('recallLabel');
+    const nameEl = document.getElementById('name');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ memories: state.memories, recall: state.recall })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.memories)){
+          state.memories = obj.memories;
+          state.recall = Number(obj.recall ?? 24);
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function recall(){
+      return Math.max(0, Math.min(100, Math.round((state.memories.length * 13) + state.recall)));
+    }
+    function makeMemory(name, mode){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        mode,
+        note: noteEl.value.trim() || 'A memory in the archive.',
+        x: 120 + Math.random() * 420,
+        y: 120 + Math.random() * 320
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.memories.length);
+      stateLabelEl.textContent = state.memories.length ? 'Remembering' : 'Unwritten';
+      recallLabelEl.textContent = `${recall()}%`;
+      field.querySelectorAll('.memory').forEach(n => n.remove());
+
+      state.memories.forEach((m, idx) => {
+        const el = document.createElement('div');
+        el.className = 'memory' + (m.mode === 'mixed' ? ' core' : '');
+        el.style.left = m.x + 'px';
+        el.style.top = m.y + 'px';
+        el.title = m.name;
+        el.onclick = () => outEl.textContent = `${m.name}\n\nType: ${m.mode}\nRecall: ${recall()}%\n\n${m.note}`;
+        field.appendChild(el);
+      });
+
+      outEl.textContent = state.memories.length
+        ? 'Select a memory to revisit it, or blend the trail into a new archive.'
+        : 'Record a memory to begin the archive.';
+    }
+
+    document.getElementById('addBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Memory ${state.memories.length + 1}`;
+      state.memories.unshift(makeMemory(name, modeEl.value));
+      save(); render();
+      outEl.textContent = `${name}\n\nType: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A memory in the archive.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.recall = Math.min(100, state.recall + 10);
+      state.memories.reverse();
+      save(); render();
+      outEl.textContent = 'The archive is revisited and its order shifts.';
+    };
+
+    document.getElementById('blendBtn').onclick = () => {
+      state.recall = Math.min(100, state.recall + 14);
+      state.memories.forEach((m, i) => {
+        if(i % 2 === 0) m.mode = 'mixed';
+      });
+      save(); render();
+      outEl.textContent = 'The trail blends into a denser mnemonic field.';
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`memories:${state.memories.length} | recall:${recall()}%`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste echoes code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.memories = [];
+      state.recall = 24;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
