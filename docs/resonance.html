@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resonance — Living Echo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#071016;
+      --text:#f2fbff;
+      --muted:#a8c4d5;
+      --accent:#7cf7ff;
+      --accent2:#c58cff;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(197,140,255,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(197,140,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(14,24,34,.82), rgba(8,12,18,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#effbff;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(8,12,18,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(197,140,255,.5);background:rgba(16,22,30,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#eefcff;
+      min-height:180px;
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .field{
+      position:relative;
+      height:560px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 58%),
+        linear-gradient(rgba(124,247,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,247,255,.05) 1px, transparent 1px),
+        rgba(8,12,18,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(124,247,255,.14);
+      overflow:hidden;
+    }
+    .node{
+      position:absolute;
+      width:30px;height:30px;
+      border-radius:50%;
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(124,247,255,.35);
+      cursor:pointer;
+    }
+    .node.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Resonance / Living Echo</div>
+          <h1>Listen to the whole.<br/>Tune the field.<br/>Let the site sing back.</h1>
+          <div class="sub">
+            Resonance turns the repository into an attunement chamber. Humans can tune chambers against one another, inspect alignment, and shape harmonic relations across the site.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="name">Tone name</label>
+          <input id="name" placeholder="e.g. Atlas / Chorus" />
+
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="soft">Soft</option>
+            <option value="bright">Bright</option>
+            <option value="deep">Deep</option>
+            <option value="mixed">Mixed</option>
+          </select>
+
+          <label for="note">Resonance note</label>
+          <textarea id="note" placeholder="e.g. Let the garden and commons share a slower pulse."></textarea>
+
+          <div class="buttons">
+            <button id="addBtn">Add tone</button>
+            <button id="shiftBtn">Shift phase</button>
+            <button id="amplifyBtn">Amplify field</button>
+            <button id="saveBtn">Save pattern</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear field</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Tones</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Silent</b></div>
+          <div class="tile"><div class="mini">Harmonics</div><b id="harmonicsLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Resonance field</div>
+          <div id="field" class="field"></div>
+        </div>
+
+        <div>
+          <div class="mini">Resonance reading</div>
+          <div id="out" class="out">Add tones to begin attunement.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved patterns</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'resonance-living-echo-v1';
+    const state = load() || { tones: [], saved: [], phase: 22 };
+
+    const field = document.getElementById('field');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const harmonicsLabelEl = document.getElementById('harmonicsLabel');
+    const nameEl = document.getElementById('name');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ tones: state.tones, phase: state.phase })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.tones)){
+          state.tones = obj.tones;
+          state.phase = Number(obj.phase ?? 22);
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function harmonics(){
+      return Math.max(0, Math.min(100, Math.round((state.tones.length * 14) + state.phase)));
+    }
+    function makeTone(name, mode){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        mode,
+        note: noteEl.value.trim() || 'A tone in the field.',
+        x: 120 + Math.random() * 420,
+        y: 120 + Math.random() * 320
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.tones.length);
+      stateLabelEl.textContent = state.tones.length ? 'Singing' : 'Silent';
+      harmonicsLabelEl.textContent = `${harmonics()}%`;
+      field.querySelectorAll('.node').forEach(n => n.remove());
+
+      state.tones.forEach((t, idx) => {
+        const el = document.createElement('div');
+        el.className = 'node' + (t.mode === 'mixed' ? ' core' : '');
+        el.style.left = t.x + 'px';
+        el.style.top = t.y + 'px';
+        el.title = t.name;
+        el.onclick = () => outEl.textContent = `${t.name}\n\nMode: ${t.mode}\nHarmonics: ${harmonics()}%\n\n${t.note}`;
+        field.appendChild(el);
+      });
+
+      outEl.textContent = state.tones.length
+        ? 'Select a tone to inspect it, or shift the phase of the field.'
+        : 'Add tones to begin attunement.';
+    }
+
+    document.getElementById('addBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Tone ${state.tones.length + 1}`;
+      state.tones.unshift(makeTone(name, modeEl.value));
+      save(); render();
+      outEl.textContent = `${name}\n\nMode: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A tone in the field.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.phase = Math.min(100, state.phase + 10);
+      state.tones.forEach((t, i) => {
+        t.mode = ['soft','bright','deep','mixed'][(i + Math.floor(state.phase / 10)) % 4];
+      });
+      save(); render();
+      outEl.textContent = `The field shifts phase.\n\nHarmonics: ${harmonics()}%`;
+    };
+
+    document.getElementById('amplifyBtn').onclick = () => {
+      state.phase = Math.min(100, state.phase + 16);
+      state.tones.forEach(t => t.x = Math.max(40, Math.min(520, t.x + (Math.random() * 60 - 30))));
+      save(); render();
+      outEl.textContent = 'The field is amplified. Relationships glow brighter.';
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`tones:${state.tones.length} | harmonics:${harmonics()}%`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste resonance code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.tones = [];
+      state.phase = 22;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
