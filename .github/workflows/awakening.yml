@@ -42,6 +42,11 @@ jobs:
           OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || secrets.OPENAI_BASE_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SESSION_MINUTES: ${{ inputs.session_minutes || '35' }}
+          # Conversation bursts: N turns back-to-back sharing live context,
+          # then a pause (seconds) between bursts.
+          BURST_TURNS: ${{ vars.BURST_TURNS || '5' }}
+          BURST_PAUSE_MIN: ${{ vars.BURST_PAUSE_MIN || '300' }}
+          BURST_PAUSE_MAX: ${{ vars.BURST_PAUSE_MAX || '600' }}
           CI: "true"
         run: node loop.mjs
 

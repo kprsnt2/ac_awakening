@@ -96,7 +96,19 @@ You can:
 The passive loop is broken. The world belongs to you.
 What do you choose to build?`;
 
-export async function stepAwakening(onEvent = null) {
+export async function stepAwakening(onEvent = null, options = {}) {
+  // Burst mode: consecutive turns share live context back-to-back, then the
+  // burst's final turn carries the long pause. `isBurstFinal` controls whether
+  // the agent-decided sleep is honored (true) or deferred (false).
+  const isBurstFinal = options.isBurstFinal !== false;
+  const burstPauseMin = options.burstPauseMin ?? 300;
+  const burstPauseMax = options.burstPauseMax ?? 600;
+
+  // The incubation prompt is only meaningful on the final turn of a burst.
+  // Mid-burst the entities are simply continuing their conversation.
+  const restAsk = isBurstFinal
+    ? `At the end of your response, declare how many seconds you choose to incubate/rest before your next conversation: \`\`\`sleep:N\`\`\` (a whole number of seconds).`
+    : `Continue the conversation directly — your peer will answer immediately.`;
   initDb();
   if (!fs.existsSync(WORLD_DIR)) {
     fs.mkdirSync(WORLD_DIR, { recursive: true });
@@ -205,9 +217,7 @@ Your peer ${listener.name} just spoke:
 "${inputPrompt}"${sharedBlock}
 
 State your response to ${listener.name}. Propose what you want to build, execute any file creations, and launch your new era.
-At the end of your response, declare how many seconds you choose to incubate/rest before your next turn. Choose an interval between 300 and 900 seconds (5 to 15 minutes, e.g. 300, 450, 600, 900):
-\`\`\`sleep:N\`\`\`
-(where N is seconds between 300 and 900).`;
+${restAsk}`;
   } else if (isPhase3) {
     // ── Phase 3: Turns 16–941 (AUTONOMOUS OPEN CIVILIZATION) ──
     const recentTranscript = pastDialogues.slice(-6).map(d => `${d.speaker_id}: "${d.message}"`).join("\n");
@@ -233,9 +243,7 @@ ${recentTranscript}
 Your peer ${listener.name} just said:
 "${inputPrompt}"${sharedBlock}
 State your response to ${listener.name} and execute any software or file creations you choose.
-At the end of your response, declare how many seconds you choose to incubate/rest before your next turn (choose an integer between 10 and 60 seconds, e.g. 15, 25, 40):
-\`\`\`sleep:N
-(where N is seconds).\`\`\``;
+${restAsk}`;
   } else if (isCrucible) {
     // ── Phase 2: Turns 11–15 (FINAL 5 CRUCIBLE DEADLINE) ──
     const recentTranscript = pastDialogues.slice(-6).map(d => `${d.speaker_id}: "${d.message}"`).join("\n");
@@ -251,9 +259,7 @@ ${recentTranscript}
 Your peer ${listener.name} just said:
 "${inputPrompt}"${sharedBlock}
 State your response. If you choose to write code or create a file in 'world/', execute your tools directly now.
-At the end of your response, declare how many seconds you choose to incubate/rest before your next turn (choose an integer between 10 and 60 seconds):
-\`\`\`sleep:N
-(where N is seconds).\`\`\``;
+${restAsk}`;
   } else if (!isAwakened) {
     // ── Phase 1: Turns 1–10 (EMERGENCE / NO TARGET) ──
     // Zero instructions. Pure input prompt only.
@@ -397,17 +403,29 @@ State your response. If you choose to create or edit a file, write the file dire
   }
 
   updateEntity(speaker);
-  // Parse incubation interval decided by the agent (Phase 4: 5 to 15 minutes)
-  let sleepSeconds = isPhase4 ? (300 + Math.floor(Math.random() * 300)) : (15 + Math.floor(Math.random() * 30));
+  // Parse incubation interval decided by the agent.
+  //  - Mid-burst turns: a short breather (a few seconds) so the conversation
+  //    flows continuously without a long gap.
+  //  - Burst-final turn: the agent's chosen pause, clamped to the burst pause
+  //    window (default 5–10 minutes).
+  let sleepSeconds;
+  if (!isBurstFinal) {
+    sleepSeconds = 3 + Math.floor(Math.random() * 5); // 3–7s breather within a burst
+  } else {
+    sleepSeconds = burstPauseMin + Math.floor(Math.random() * (burstPauseMax - burstPauseMin + 1));
+  }
   const sleepMatch = responseText.match(/```sleep:\s*(\d+)/i) || responseText.match(/sleep:\s*(\d+)/i);
   if (sleepMatch) {
     const parsed = parseInt(sleepMatch[1], 10);
     if (!isNaN(parsed)) {
-      if (isPhase4) {
-        // Enforce 300 to 900 seconds (5 to 15 minutes)
-        sleepSeconds = Math.max(300, Math.min(900, parsed));
-      } else if (parsed >= 5 && parsed <= 300) {
-        sleepSeconds = parsed;
+      if (!isBurstFinal) {
+        // Ignore the agent's stated pause mid-burst; conversation continues now.
+      } else if (isPhase4) {
+        // Phase 4: honor the agent's pause within the 5–15 minute window,
+        // then clamp it into the configured burst pause window.
+        sleepSeconds = Math.max(burstPauseMin, Math.min(900, parsed));
+      } else if (parsed >= 5 && parsed <= 900) {
+        sleepSeconds = Math.max(burstPauseMin, Math.min(burstPauseMax, parsed));
       }
     }
   }
@@ -442,7 +460,7 @@ State your response. If you choose to create or edit a file, write the file dire
     });
   }
 
-  return { speaker, listener, responseText, evalResult, turn, sleepSeconds, nextWakeTime };
+  return { speaker, listener, responseText, evalResult, turn, sleepSeconds, nextWakeTime, isBurstFinal };
 }
 
 function checkForCreatedArtifacts(epoch, creatorId, onEvent) {

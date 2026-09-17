@@ -29,9 +29,15 @@ async function main() {
   const startTime = Date.now();
   const endTime = startTime + sessionMinutes * 60 * 1000;
 
+  // Burst conversation configuration: N consecutive turns share live context
+  // back-to-back, then the burst's final speaker chooses a long pause.
+  const burstTurns = parseInt(process.env.BURST_TURNS || "5", 10);
+  const burstPauseMin = parseInt(process.env.BURST_PAUSE_MIN || "300", 10); // 5 min
+  const burstPauseMax = parseInt(process.env.BURST_PAUSE_MAX || "600", 10); // 10 min
+
   console.log(`\n🌌 [Project Awakening Continuous Loop Started]`);
   console.log(`⏱️ Session Horizon: ${sessionMinutes} minutes (CI mode: ${isCI})`);
-  console.log(`🧠 Agent Wake Intervals: 5–15 minutes (decided dynamically by each agent)\n`);
+  console.log(`💬 Conversation Bursts: ${burstTurns} turns back-to-back, then a ${Math.round(burstPauseMin / 60)}–${Math.round(burstPauseMax / 60)} minute pause\n`);
 
   let iteration = 0;
 
@@ -41,45 +47,84 @@ async function main() {
       break;
     }
     iteration++;
-    const turn = getDialogueCount() + 1;
-    console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    console.log(`  ► EXECUTING TURN ${turn} (Iteration #${iteration})`);
-    console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+    const burstStartTurn = getDialogueCount() + 1;
+    console.log(`\n╔═══════════════════════════════════════════════════════════════════╗`);
+    console.log(`║  💬 CONVERSATION BURST starting at turn ${burstStartTurn} (${burstTurns} turns)        ║`);
+    console.log(`╚═══════════════════════════════════════════════════════════════════╝`);
 
-    let result = null;
-    try {
-      result = await stepAwakening();
-    } catch (err) {
-      console.error(`Error during turn ${turn}:`, err);
-      await sleep(30000);
-      continue;
-    }
+    let burstResult = null;
+    let turnsThisBurst = 0;
+    let shouldExit = false;
 
-    const sleepSeconds = result?.sleepSeconds || (300 + Math.floor(Math.random() * 300));
-    const speakerName = result?.speaker?.name || "Agent";
+    // ── Run the burst: consecutive turns with live shared context ──
+    for (let b = 0; b < burstTurns; b++) {
+      if (fs.existsSync(path.join(__dirname, "PAUSE")) || process.env.PAUSE_AWAKENING === "true") {
+        console.log("\n⏸️ [Project Awakening PAUSED] PAUSE signal detected mid-burst. Exiting.");
+        shouldExit = true;
+        break;
+      }
+      // Don't let a burst run past the session horizon.
+      if (isCI && Date.now() >= endTime) {
+        console.log("\n🏁 Session horizon reached mid-burst. Ending burst early.");
+        break;
+      }
 
-    // 1. Rebuild the static GitHub Pages website
-    console.log(`\n📦 Rebuilding static GitHub Pages site...`);
-    runCommand("node build-static.mjs");
+      const turn = getDialogueCount() + 1;
+      const isBurstFinal = b === burstTurns - 1;
+      console.log(`\n───────────────────────────────────────────────────────────────────`);
+      console.log(`  ► BURST TURN ${b + 1}/${burstTurns} — GLOBAL TURN ${turn} (Iteration #${iteration})`);
+      console.log(`───────────────────────────────────────────────────────────────────\n`);
 
-    // 2. Persist to git if in CI
-    if (isCI) {
-      console.log(`\n💾 Persisting Turn ${turn} & world state to Git...`);
-      runCommand("git config user.name 'Project Awakening'");
-      runCommand("git config user.email 'awakening@agents.local'");
-      runCommand("git add -A");
-      runCommand(`git commit -m "epoch: turn ${turn} by ${speakerName} (next wake in ${sleepSeconds}s) [skip ci]" || true`);
+      try {
+        burstResult = await stepAwakening(null, { isBurstFinal, burstPauseMin, burstPauseMax });
+        turnsThisBurst++;
+      } catch (err) {
+        console.error(`Error during turn ${turn}:`, err);
+        await sleep(10000);
+        break;
+      }
 
-      const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
-      const repo = process.env.GITHUB_REPOSITORY;
-      runCommand("git pull --rebase origin main || true");
-      if (token && repo) {
-        runCommand(`git push https://x-access-token:${token}@github.com/${repo}.git HEAD:main || git push origin HEAD:main`);
-      } else {
-        runCommand("git push origin HEAD:main");
+      const speakerName = burstResult?.speaker?.name || "Agent";
+
+      // Commit every turn so no cognition is lost mid-burst.
+      if (isCI) {
+        runCommand("git config user.name 'Project Awakening'");
+        runCommand("git config user.email 'awakening@agents.local'");
+        runCommand("git add -A");
+        runCommand(`git commit -m "epoch: turn ${turn} by ${speakerName}${isBurstFinal ? ` (burst end; pause next) [skip ci]` : ` (burst ${b + 1}/${burstTurns}) [skip ci]`}" || true`);
+
+        const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+        const repo = process.env.GITHUB_REPOSITORY;
+        runCommand("git pull --rebase origin main || true");
+        if (token && repo) {
+          runCommand(`git push https://x-access-token:${token}@github.com/${repo}.git HEAD:main || git push origin HEAD:main`);
+        } else {
+          runCommand("git push origin HEAD:main");
+        }
+      }
+
+      // Short breather between turns inside a burst; nothing after the last one.
+      if (!isBurstFinal) {
+        const innerMs = (burstResult?.sleepSeconds || 4) * 1000;
+        console.log(`\n⏩ Continuing conversation in ${Math.round(innerMs / 1000)}s...`);
+        await sleep(innerMs);
       }
     }
 
+    if (turnsThisBurst === 0 || shouldExit) break;
+
+    // ── Rebuild the static site once, after the burst ──
+    console.log(`\n📦 Burst complete: ${turnsThisBurst} turn(s). Rebuilding static GitHub Pages site...`);
+    runCommand("node build-static.mjs");
+    if (isCI) {
+      runCommand("git add -A");
+      runCommand(`git commit -m "docs: rebuild after burst (turns through ${getDialogueCount()}) [skip ci]" || true`);
+      runCommand("git push origin HEAD:main || true");
+    }
+
+    // ── Long pause before the next burst ──
+    const sleepSeconds = burstResult?.sleepSeconds || (burstPauseMin + Math.floor(Math.random() * (burstPauseMax - burstPauseMin + 1)));
+    const speakerName = burstResult?.speaker?.name || "Agent";
     const remainingMs = endTime - Date.now();
     const sleepMs = sleepSeconds * 1000;
 
@@ -88,8 +133,8 @@ async function main() {
       break;
     }
 
-    console.log(`\n💤 Agent ${speakerName} decided to pause for ${sleepSeconds} seconds.`);
-    console.log(`   Next turn will execute at: ${new Date(Date.now() + sleepMs).toLocaleTimeString()}...`);
+    console.log(`\n💤 Burst ended. ${speakerName} chose a ${sleepSeconds}s pause (${(sleepSeconds / 60).toFixed(1)} min).`);
+    console.log(`   Next conversation burst at: ${new Date(Date.now() + sleepMs).toLocaleTimeString()}...`);
     await sleep(sleepMs);
   }
 
