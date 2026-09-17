@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Council — Living Deliberation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --good:#7dffb0;
+      --bad:#ff8f8f;
+      --line: rgba(140,170,255,.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+    }
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .board{
+      display:grid;gap:12px;
+      max-height:560px;overflow:auto;padding-right:6px;
+    }
+    .proposal{
+      padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .proposal h3{margin:0 0 6px;font-size:1.05rem}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:.86rem;margin-bottom:10px}
+    .pill{padding:4px 8px;border-radius:999px;background:rgba(124,247,255,.08);border:1px solid rgba(124,247,255,.18)}
+    .body{white-space:pre-wrap;line-height:1.55;color:#dbe8ff;margin-bottom:12px}
+    .bars{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+    .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;border:1px solid rgba(140,170,255,.12)}
+    .fill{height:100%;border-radius:999px}
+    .support{background:linear-gradient(90deg, rgba(125,255,176,.5), rgba(125,255,176,.95))}
+    .dissent{background:linear-gradient(90deg, rgba(255,143,143,.5), rgba(255,143,143,.95))}
+    .actions{display:flex;flex-wrap:wrap;gap:8px}
+    .actions button{padding:8px 10px;font-size:.9rem}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    .out{
+      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
+      min-height:120px;
+      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;padding:14px;
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Council / Living Deliberation</div>
+          <h1>Choose futures<br/>with visible debate.</h1>
+          <div class="sub">
+            Post proposals, weigh support and dissent, and let the chamber become a public instrument
+            for collective direction.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="title">Proposal title</label>
+          <input id="title" placeholder="Name the proposal..." />
+
+          <label for="tags">Tags</label>
+          <input id="tags" placeholder="civic, art, systems..." />
+
+          <label for="body">Proposal body</label>
+          <textarea id="body" placeholder="Describe the idea, its intent, and its tradeoffs..."></textarea>
+
+          <div class="buttons">
+            <button id="addBtn">Add proposal</button>
+            <button id="saveBtn">Save council</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear</button>
+          </div>
+
+          <div class="footer">
+            Return to the portal home: <a href="./index.html">home</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Council chamber</div>
+          <div id="board" class="board"></div>
+        </div>
+
+        <div>
+          <div class="mini">Council sigil</div>
+          <div id="out" class="out"></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Proposals</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Support</div><b id="supportCount">0</b></div>
+          <div class="stat"><div class="mini">Dissent</div><b id="dissentCount">0</b></div>
+          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved councils</div>
+          <div id="savedList" class="out">No saved councils yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'council-living-deliberation-v1';
+    const board = document.getElementById('board');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const supportCountEl = document.getElementById('supportCount');
+    const dissentCountEl = document.getElementById('dissentCount');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const titleEl = document.getElementById('title');
+    const tagsEl = document.getElementById('tags');
+    const bodyEl = document.getElementById('body');
+
+    const state = load() || {
+      proposals: [
+        { id: crypto.randomUUID?.() || String(Date.now()), title: 'Open the chambers', tags: ['threshold', 'public'], body: 'Make the site navigable as a civic instrument.', support: 8, dissent: 1 },
+        { id: crypto.randomUUID?.() || String(Date.now()+1), title: 'Add a shared archive', tags: ['memory', 'record'], body: 'Preserve human contributions as retrievable traces.', support: 6, dissent: 0 }
+      ],
+      saved: []
+    };
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){
+      return btoa(unescape(encodeURIComponent(JSON.stringify({ proposals: state.proposals }))));
+    }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved councils yet.';
+    }
+
+    function render(){
+      board.innerHTML = '';
+      countEl.textContent = String(state.proposals.length);
+      const support = state.proposals.reduce((a,p)=>a+p.support,0);
+      const dissent = state.proposals.reduce((a,p)=>a+p.dissent,0);
+      supportCountEl.textContent = String(support);
+      dissentCountEl.textContent = String(dissent);
+
+      state.proposals.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'proposal';
+        el.innerHTML = `
+          <h3>${escapeHtml(p.title)}</h3>
+          <div class="meta">
+            ${p.tags.map(t => `<span class="pill">#${escapeHtml(t)}</span>`).join('')}
+          </div>
+          <div class="body">${escapeHtml(p.body)}</div>
+          <div class="bars">
+            <div>
+              <div class="mini">Support ${p.support}</div>
+              <div class="bar"><div class="fill support" style="width:${clamp(p.support * 10, 0, 100)}%"></div></div>
+            </div>
+            <div>
+              <div class="mini">Dissent ${p.dissent}</div>
+              <div class="bar"><div class="fill dissent" style="width:${clamp(p.dissent * 10, 0, 100)}%"></div></div>
+            </div>
+          </div>
+          <div class="actions">
+            <button data-act="up">Support</button>
+            <button data-act="down">Dissent</button>
+            <button data-act="clone">Clone</button>
+            <button data-act="remove">Remove</button>
+          </div>
+        `;
+        el.querySelector('[data-act="up"]').onclick = () => { p.support++; save(); render(); };
+        el.querySelector('[data-act="down"]').onclick = () => { p.dissent++; save(); render(); };
+        el.querySelector('[data-act="clone"]').onclick = () => {
+          state.proposals.unshift({ ...p, id: crypto.randomUUID?.() || String(Date.now()+Math.random()), title: p.title + ' (copy)' });
+          save(); render();
+        };
+        el.querySelector('[data-act="remove"]').onclick = () => {
+          state.proposals = state.proposals.filter(x => x.id !== p.id);
+          save(); render();
+        };
+        board.appendChild(el);
+      });
+
+      outEl.textContent =
+`Proposals: ${state.proposals.length}
+Support: ${support}
+Dissent: ${dissent}
+Code: ${serialize().slice(0,48)}...`;
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.proposals)){
+          state.proposals = obj.proposals;
+          save(); render();
+        }
+      }catch{}
+    }
+
+    document.getElementById('addBtn').onclick = () => {
+      const title = titleEl.value.trim() || 'Untitled proposal';
+      const tags = tagsEl.value.split(',').map(s => s.trim()).filter(Boolean);
+      const body = bodyEl.value.trim() || 'No description provided.';
+      state.proposals.unshift({
+        id: crypto.randomUUID?.() || String(Date.now()+Math.random()),
+        title, tags, body, support: 0, dissent: 0
+      });
+      titleEl.value = ''; tagsEl.value = ''; bodyEl.value = '';
+      save(); render();
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      const code = serialize();
+      state.saved.unshift(`proposals:${state.proposals.length} | ${code.slice(0,10)}…`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste council code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.proposals = [];
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
