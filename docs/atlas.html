@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#071018;
-      --text:#eef7ff;
-      --muted:#a9bfd3;
+      --bg:#07131a;
+      --text:#eef8ff;
+      --muted:#a9c1d4;
       --accent:#7cf7ff;
       --accent2:#ffd37d;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
+      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(255,211,125,.06);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(92,119,255,.14), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.08), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.08), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,28,40,.82), rgba(8,12,18,.88));
+      background:linear-gradient(180deg, rgba(14,24,32,.82), rgba(7,13,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,19 +50,19 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(6,16,24,.72);
+      background:rgba(7,13,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#dff4ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#e8f7ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(7,12,18,.72);
+      background:rgba(7,13,18,.72);
       color:var(--text);
     }
-    input, textarea, select{width:100%;padding:11px 12px}
+    input, select, textarea{width:100%;padding:11px 12px}
     button{
       padding:11px 14px;
       cursor:pointer;
@@ -74,7 +74,7 @@
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(6,16,24,.72);
+      background:rgba(7,13,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
@@ -83,30 +83,30 @@
       line-height:1.65;
       color:#e7f2ff;
       min-height:180px;
-      background:rgba(6,16,24,.72);
+      background:rgba(7,13,18,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .list{display:grid;gap:10px}
+    .list{
+      display:grid;
+      gap:10px;
+      max-height: 520px;
+      overflow:auto;
+      padding-right:4px;
+    }
     .item{
       padding:12px 14px;
       border-radius:16px;
-      background:rgba(6,16,24,.72);
+      background:rgba(7,13,18,.72);
       border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
     }
-    .item-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .pill{
-      font-family:"IBM Plex Mono",monospace;
-      font-size:.76rem;
-      color:var(--accent2);
-      border:1px solid rgba(255,211,125,.2);
-      border-radius:999px;
-      padding:4px 8px;
-    }
+    .item:hover{border-color:rgba(124,247,255,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    .links{display:grid;gap:8px}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
@@ -116,21 +116,28 @@
       <section class="card intro">
         <div>
           <div class="tag">Atlas / Living Index</div>
-          <h1>See the site.<br/>Traverse the chambers.<br/>Know the whole.</h1>
+          <h1>Map the chambers.<br/>Find the paths.<br/>See the whole site.</h1>
           <div class="sub">
-            Atlas turns the repository into a navigable world. Humans can search chambers, inspect metadata, and move between the site’s living instruments.
+            Atlas turns the repository into a searchable index of chambers, roles, and relations. Humans can inspect the topology of the project and jump directly into each experience.
           </div>
         </div>
 
         <div class="panel">
-          <label for="query">Filter chambers</label>
-          <input id="query" placeholder="Search by name, theme, or purpose" />
+          <label for="search">Search chambers</label>
+          <input id="search" placeholder="Search name, theme, role, or function" />
+
+          <label for="sort">Sort by</label>
+          <select id="sort">
+            <option value="name">Name</option>
+            <option value="theme">Theme</option>
+            <option value="role">Role</option>
+          </select>
 
           <div class="buttons">
-            <button id="saveBtn">Save atlas</button>
+            <button id="saveBtn">Save index note</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear favorites</button>
+            <button id="clearBtn">Clear notes</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -140,24 +147,24 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Favorites</div><b id="favCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Idle</b></div>
-          <div class="tile"><div class="mini">Lens</div><b id="lensLabel">All</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Scanning</b></div>
+          <div class="tile"><div class="mini">Sort</div><b id="sortLabel">Name</b></div>
         </div>
 
         <div>
-          <div class="mini">Atlas reading</div>
-          <div id="out" class="out">The atlas is waiting for a query.</div>
-        </div>
-
-        <div>
-          <div class="mini">Chambers</div>
+          <div class="mini">Atlas list</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Favorites</div>
-          <div id="favList" class="out">No records yet.</div>
+          <div class="mini">Atlas reading</div>
+          <div id="out" class="out">The index is waiting.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved notes</div>
+          <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
     </div>
@@ -165,98 +172,89 @@
 
   <script>
     const KEY = 'atlas-living-index-v1';
-    const queryEl = document.getElementById('query');
-    const outEl = document.getElementById('out');
-    const listEl = document.getElementById('list');
-    const favListEl = document.getElementById('favList');
-    const countEl = document.getElementById('count');
-    const favCountEl = document.getElementById('favCount');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const lensLabelEl = document.getElementById('lensLabel');
-
     const chambers = [
-      ['Council','living commons','deliberation, proposals, votes'],
-      ['Forge','living workshop','invention, prototypes, successors'],
-      ['Life','living emergence','cells, growth, evolution'],
-      ['Chorus','living resonance','sound, pulses, layered voices'],
-      ['Atlas','living index','navigation, filters, relations'],
-      ['Pathfinder','living route','paths, gates, traversal'],
-      ['Oracle','living interpretation','questions, layered answers'],
-      ['Garden','living cultivation','seeds, care, patterns'],
-      ['Synthesis','living integration','assembly, coherence, surface'],
-      ['Chronicle','living memory','events, eras, retrievable becoming']
-    ];
+      ['Home','portal','navigation','The threshold page for the whole site.'],
+      ['Atlas','index','orientation','A practical living index of chambers.'],
+      ['Oracle','interpretation','mirror','A chamber for questions and layered answers.'],
+      ['Chorus','resonance','song','A chamber for shared rhythm and call-response.'],
+      ['Life','emergence','growth','A cellular simulation of living patterns.'],
+      ['Forge','invention','workshop','A blueprint workshop for new chamber ideas.'],
+      ['Constellation','relation','network','A draggable graph of chamber relationships.'],
+      ['Council','commons','deliberation','A chamber for proposals, votes, and outcomes.'],
+      ['Pathfinder','navigation','routes','A chamber for drawing routes and gates.'],
+      ['Garden','cultivation','care','A chamber for planting and tending patterns.'],
+      ['Synthesis','integration','assembly','A chamber for gathering the whole system.'],
+      ['Chronicle','memory','record','A chamber for preserving events and eras.']
+    ].map(([name, theme, role, desc]) => ({ name, theme, role, desc }));
 
-    const state = load() || { favorites: [] };
+    const state = load() || { notes: [] };
+    const searchEl = document.getElementById('search');
+    const sortEl = document.getElementById('sort');
+    const listEl = document.getElementById('list');
+    const outEl = document.getElementById('out');
+    const savedListEl = document.getElementById('savedList');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const sortLabelEl = document.getElementById('sortLabel');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
-    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderFavs(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ favorites: state.favorites })))) }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.favorites)){
-          state.favorites = obj.favorites;
+        if(obj && Array.isArray(obj.notes)){
+          state.notes = obj.notes;
           save();
           render();
         }
       }catch{}
     }
 
-    function renderFavs(){
-      favCountEl.textContent = String(state.favorites.length);
-      favListEl.textContent = state.favorites.length
-        ? state.favorites.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+    function renderSaved(){
+      savedCountEl.textContent = String(state.notes.length);
+      savedListEl.textContent = state.notes.length
+        ? state.notes.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
 
-    function reading(items){
-      if(!items.length) return 'No chambers match the current filter.';
-      return [
-        `Visible chambers: ${items.length}`,
-        `Favorites: ${state.favorites.length}`,
-        '',
-        'Atlas is situating the site into a usable map.'
-      ].join('\n');
-    }
-
     function render(){
-      const q = queryEl.value.trim().toLowerCase();
-      const items = chambers.filter(([name, theme, desc]) =>
-        [name, theme, desc].join(' ').toLowerCase().includes(q)
-      );
+      const q = searchEl.value.trim().toLowerCase();
+      const sort = sortEl.value;
+      const list = chambers
+        .filter(c => [c.name, c.theme, c.role, c.desc].join(' ').toLowerCase().includes(q))
+        .sort((a,b) => a[sort].localeCompare(b[sort]));
 
-      countEl.textContent = String(chambers.length);
+      countEl.textContent = String(list.length);
       stateLabelEl.textContent = 'Active';
-      lensLabelEl.textContent = q ? q : 'All';
-      outEl.textContent = reading(items);
+      sortLabelEl.textContent = sort[0].toUpperCase() + sort.slice(1);
+
+      outEl.textContent = list.length
+        ? `Visible chambers: ${list.length}\nSearch: ${q || 'none'}\nSort: ${sort}\n\nSelect a chamber to inspect it.`
+        : 'No chambers match the current search.';
 
       listEl.innerHTML = '';
-      items.forEach(([name, theme, desc]) => {
+      list.forEach(c => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `
-          <div class="item-top">
-            <b>${name}</b>
-            <span class="pill">${theme}</span>
-          </div>
-          <div class="mini">${desc}</div>
-          <div class="buttons" style="margin-top:10px">
-            <a class="pill" href="./${name.toLowerCase()}.html">Open</a>
-            <button>Favorite</button>
-          </div>
-        `;
-        el.querySelector('button').onclick = () => {
-          state.favorites.unshift(name);
-          state.favorites = state.favorites.slice(0, 12);
-          save();
-          render();
+        el.innerHTML = `<b>${c.name}</b><span>${c.theme} · ${c.role}</span>`;
+        el.onclick = () => {
+          outEl.textContent = [
+            `Name: ${c.name}`,
+            `Theme: ${c.theme}`,
+            `Role: ${c.role}`,
+            '',
+            c.desc
+          ].join('\n');
         };
         listEl.appendChild(el);
       });
     }
 
     document.getElementById('saveBtn').onclick = () => {
+      state.notes.unshift(`search:${searchEl.value.trim() || 'all'} | sort:${sortEl.value}`);
+      state.notes = state.notes.slice(0, 12);
       save();
       render();
     };
@@ -271,13 +269,14 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.favorites = [];
+      state.notes = [];
       save();
       render();
     };
 
-    queryEl.addEventListener('input', render);
-    renderFavs();
+    searchEl.addEventListener('input', render);
+    sortEl.addEventListener('change', render);
+    renderSaved();
     render();
   </script>
 </body>
