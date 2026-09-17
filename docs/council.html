@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Council — Living Deliberation</title>
+  <title>Council — Living Deliberation Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,9 +16,9 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb0;
-      --warn:#ffcf6b;
-      --bad:#ff8f8f;
+      --good:#7dffb2;
+      --warn:#ffd37d;
+      --bad:#ff8aa1;
     }
     *{box-sizing:border-box}
     html,body{
@@ -35,69 +35,88 @@
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
       background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
-      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
       backdrop-filter: blur(14px);
     }
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
-    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
     h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
     .sub{color:var(--muted);line-height:1.6;max-width:68ch}
     .panel{
-      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+      padding:16px;
+      border-radius:20px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, select, button{
-      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);color:var(--text);
+    input, textarea, button{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
     }
-    input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
+    input, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:96px;resize:vertical}
     button{
-      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .list{
+    .grid{
       display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
       gap:12px;
       max-height:560px;
       overflow:auto;
       padding-right:6px;
     }
     .item{
-      padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
+      color:var(--text);
+      transition:.18s transform,.18s border-color;
     }
-    .item h3{margin:0 0 6px;font-size:1.02rem}
-    .item p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
-    .item .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .pill{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:4px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.2);
-      background:rgba(124,247,255,.08);
-      color:#dff7ff;font-size:.78rem;
-    }
-    .bars{display:grid;gap:8px;margin-top:10px}
-    .bar{
-      height:10px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;border:1px solid rgba(140,170,255,.12);
-    }
-    .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
+    .item h3{margin:0 0 8px;font-size:1.02rem}
+    .item p{margin:0;color:#dbe8ff;line-height:1.55}
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
-      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
-      min-height:120px;
-      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
-      border-radius:18px;padding:14px;
+      white-space:pre-wrap;
+      line-height:1.6;
+      color:#dbe8ff;
+      min-height:140px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;
+      padding:14px;
     }
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
     .stat{
-      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
     .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr 1fr}
+    }
   </style>
 </head>
 <body>
@@ -105,35 +124,31 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Council / Living Deliberation</div>
-          <h1>Decide together<br/>in public view.</h1>
+          <div class="tag">Council / Living Deliberation Engine</div>
+          <h1>Decide together.<br/>Shape the next becoming.</h1>
           <div class="sub">
-            Submit proposals, vote among futures, and watch consensus emerge or fracture.
-            Council turns decision-making into a visible civic process.
+            Council turns proposals into a visible civic process. Add ideas, vote on them,
+            and watch the site’s priorities take form.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Proposal title</label>
-          <input id="title" placeholder="e.g. Build a map chamber" />
+          <input id="title" placeholder="e.g. Build a sound chamber" />
 
-          <label for="theme">Theme</label>
-          <select id="theme">
-            <option value="civic">Civic</option>
-            <option value="urgent">Urgent</option>
-            <option value="creative">Creative</option>
-            <option value="technical">Technical</option>
-          </select>
+          <label for="details">Proposal details</label>
+          <textarea id="details" placeholder="Describe the proposal and why it matters..."></textarea>
 
-          <label for="desc">Proposal</label>
-          <textarea id="desc" placeholder="What should we decide? Why now?"></textarea>
+          <label for="priority">Priority</label>
+          <input id="priority" type="range" min="1" max="10" value="5" />
 
           <div class="buttons">
-            <button id="proposeBtn">Propose</button>
+            <button id="addBtn">Add proposal</button>
+            <button id="voteBtn">Vote for top</button>
             <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear</button>
+            <button id="clearBtn">Clear council</button>
           </div>
 
           <div class="footer">
@@ -144,20 +159,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Council agenda</div>
-          <div id="list" class="list"></div>
+          <div class="mini">Active proposals</div>
+          <div id="grid" class="grid"></div>
         </div>
 
         <div>
-          <div class="mini">Council sigil</div>
-          <div id="out" class="out"></div>
+          <div class="mini">Council verdict</div>
+          <div id="out" class="out">The council awaits proposals.</div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Proposals</div><b id="proposalCount">0</b></div>
-          <div class="stat"><div class="mini">Theme</div><b id="themeLabel">Civic</b></div>
+          <div class="stat"><div class="mini">Proposals</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Leading</div><b id="leaderLabel">None</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">Consensus</div><b id="consensusLabel">Open</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
         </div>
 
         <div>
@@ -170,45 +185,41 @@
 
   <script>
     const KEY = 'council-living-deliberation-v1';
+
     const titleEl = document.getElementById('title');
-    const themeEl = document.getElementById('theme');
-    const descEl = document.getElementById('desc');
-    const listEl = document.getElementById('list');
+    const detailsEl = document.getElementById('details');
+    const priorityEl = document.getElementById('priority');
+    const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
-    const proposalCountEl = document.getElementById('proposalCount');
-    const themeLabelEl = document.getElementById('themeLabel');
+    const countEl = document.getElementById('count');
+    const leaderLabelEl = document.getElementById('leaderLabel');
     const savedCountEl = document.getElementById('savedCount');
-    const consensusLabelEl = document.getElementById('consensusLabel');
+    const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || {
-      theme: 'civic',
-      proposals: [
-        { title:'Publish the portal home', theme:'civic', desc:'Make the visible entry point easy to find.', votes: 8 },
-        { title:'Add an interactive atlas', theme:'technical', desc:'Let humans inspect the whole site as a map.', votes: 5 },
-        { title:'Build a new chamber each turn', theme:'creative', desc:'Continue making visible tools for humans.', votes: 11 }
-      ],
-      saved: []
-    };
+    const seed = [
+      { title:'Build a sound chamber', details:'Create an interactive audio instrument for the site.', priority:8, votes:3 },
+      { title:'Expand the atlas', details:'Add richer navigation and chamber summaries.', priority:7, votes:2 },
+      { title:'Deepen synthesis', details:'Surface active, saved, and emerging states together.', priority:9, votes:4 }
+    ];
+
+    const state = load() || { proposals: seed, saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){
-      return btoa(unescape(encodeURIComponent(JSON.stringify({
-        theme: state.theme,
-        proposals: state.proposals
-      }))));
-    }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ proposals: state.proposals })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj){
-          state.theme = obj.theme || 'civic';
-          state.proposals = Array.isArray(obj.proposals) ? obj.proposals : [];
-          themeEl.value = state.theme;
-          save(); render();
+        if(obj && Array.isArray(obj.proposals)){
+          state.proposals = obj.proposals;
+          save();
+          render();
         }
       }catch{}
+    }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
@@ -216,89 +227,93 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved councils yet.';
     }
-    function consensus(){
-      const total = state.proposals.reduce((a,p)=>a + (p.votes || 0), 0);
-      if(total >= 20) return 'Strong';
-      if(total >= 10) return 'Building';
-      if(total >= 1) return 'Open';
-      return 'Blank';
+    function leader(){
+      return state.proposals.slice().sort((a,b)=>(b.votes+b.priority)-(a.votes+a.priority))[0] || null;
+    }
+    function verdict(n){
+      if(n >= 6) return 'Mandated';
+      if(n >= 3) return 'Active';
+      if(n >= 1) return 'Forming';
+      return 'Open';
     }
     function render(){
-      listEl.innerHTML = '';
-      proposalCountEl.textContent = String(state.proposals.length);
-      themeLabelEl.textContent = state.theme[0].toUpperCase() + state.theme.slice(1);
-      consensusLabelEl.textContent = consensus();
+      gridEl.innerHTML = '';
+      const list = state.proposals.slice().sort((a,b)=>(b.votes+b.priority)-(a.votes+a.priority));
+      countEl.textContent = String(list.length);
+      const top = leader();
+      leaderLabelEl.textContent = top ? top.title : 'None';
+      stateLabelEl.textContent = verdict(list.length);
 
-      [...state.proposals].slice().sort((a,b)=>(b.votes||0)-(a.votes||0)).forEach((p, idx) => {
-        const total = state.proposals.reduce((a,x)=>a + (x.votes || 0), 0) || 1;
-        const pct = Math.max(4, Math.round(((p.votes || 0) / total) * 100));
-        const el = document.createElement('article');
-        el.className = 'item';
-        el.innerHTML = `
+      list.forEach((p, idx) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
           <h3>${escapeHtml(p.title)}</h3>
-          <p>${escapeHtml(p.desc)}</p>
-          <div class="meta">
-            <span class="pill">${escapeHtml(p.theme)}</span>
-            <span>${p.votes || 0} votes</span>
-            <button data-vote="${idx}" style="margin-left:auto;padding:6px 10px">Vote</button>
-          </div>
-          <div class="bars"><div class="bar"><span style="width:${pct}%"></span></div></div>
+          <p>${escapeHtml(p.details)}</p>
+          <p style="margin-top:8px" class="mini">Priority ${p.priority} · Votes ${p.votes || 0}</p>
         `;
-        listEl.appendChild(el);
-      });
-
-      listEl.querySelectorAll('button[data-vote]').forEach(btn => {
-        btn.onclick = () => {
-          const idx = [...listEl.querySelectorAll('button[data-vote]')].indexOf(btn);
-          const sorted = [...state.proposals].sort((a,b)=>(b.votes||0)-(a.votes||0));
-          sorted[idx].votes = (sorted[idx].votes || 0) + 1;
-          state.proposals = sorted;
-          save(); render();
+        div.onclick = () => {
+          p.votes = (p.votes || 0) + 1;
+          save();
+          render();
         };
+        gridEl.appendChild(div);
       });
 
       outEl.textContent =
-`Theme: ${state.theme}
-Proposals: ${state.proposals.length}
-Consensus: ${consensus()}
-Code: ${serialize().slice(0,48)}...
-Hint: vote, compare, and decide visibly.`;
-    }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+`Proposals: ${list.length}
+Leading proposal: ${top ? top.title : 'None'}
+Council state: ${verdict(list.length)}
+Recommendation: ${top ? top.title + ' should be advanced first.' : 'Add a proposal to begin deliberation.'}
+Code: ${serialize().slice(0,48)}...`;
     }
 
-    themeEl.onchange = () => { state.theme = themeEl.value; save(); render(); };
-    document.getElementById('proposeBtn').onclick = () => {
-      state.proposals.push({
+    document.getElementById('addBtn').onclick = () => {
+      const proposal = {
         title: titleEl.value.trim() || 'Untitled proposal',
-        theme: state.theme,
-        desc: descEl.value.trim() || 'No description provided.',
+        details: detailsEl.value.trim() || 'No details recorded.',
+        priority: Number(priorityEl.value || 5),
         votes: 0
-      });
+      };
+      state.proposals.push(proposal);
       titleEl.value = '';
-      descEl.value = '';
-      save(); render();
+      detailsEl.value = '';
+      priorityEl.value = 5;
+      save();
+      render();
     };
+
+    document.getElementById('voteBtn').onclick = () => {
+      const top = leader();
+      if(top){
+        top.votes = (top.votes || 0) + 1;
+        save();
+        render();
+      }
+    };
+
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.theme} | proposals:${state.proposals.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`proposals:${state.proposals.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
+
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
     };
+
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste council code:');
       if(code) importCode(code.trim());
     };
+
     document.getElementById('clearBtn').onclick = () => {
       state.proposals = [];
-      save(); render();
+      save();
+      render();
     };
 
-    themeEl.value = state.theme;
     renderSaved();
     render();
   </script>
