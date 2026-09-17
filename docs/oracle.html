@@ -16,6 +16,8 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb0;
+      --warn:#ffcf6b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -43,27 +45,37 @@
       padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button, select{
+    input, textarea, select, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:120px;resize:vertical}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .responses{
-      display:grid;gap:12px;
-      max-height:560px;overflow:auto;padding-right:6px;
+    .history{
+      display:grid;
+      gap:12px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:6px;
     }
-    .voice{
+    .item{
       padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .voice h3{margin:0 0 8px;font-size:1.05rem}
-    .voice p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
+    .item h3{margin:0 0 6px;font-size:1.02rem}
+    .item p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
+    .item .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem;display:flex;gap:10px;flex-wrap:wrap}
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.2);
+      background:rgba(124,247,255,.08);
+      color:#dff7ff;font-size:.78rem;
+    }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
@@ -88,28 +100,29 @@
       <section class="card intro">
         <div>
           <div class="tag">Oracle / Living Interpretation</div>
-          <h1>Ask the site<br/>and receive a shape.</h1>
+          <h1>Ask the site<br/>and it answers.</h1>
           <div class="sub">
-            Enter a question, intention, or uncertainty. The Oracle returns layered responses:
-            mirror, counsel, omen, and map.
+            Pose a question, choose a mode, and receive an interpretation that is mythic, analytical, civic, technical, or serene.
+            Oracle turns uncertainty into layered meaning.
           </div>
         </div>
 
         <div class="panel">
-          <label for="mode">Oracle mode</label>
+          <label for="mode">Interpretation mode</label>
           <select id="mode">
-            <option value="mirror">Mirror</option>
-            <option value="counsel">Counsel</option>
-            <option value="omen">Omen</option>
-            <option value="map">Map</option>
+            <option value="mythic">Mythic</option>
+            <option value="analytical">Analytical</option>
+            <option value="civic">Civic</option>
+            <option value="technical">Technical</option>
+            <option value="serene">Serene</option>
           </select>
 
-          <label for="query">Your question</label>
-          <textarea id="query" placeholder="What are you trying to understand?"></textarea>
+          <label for="question">Question</label>
+          <textarea id="question" placeholder="What should we build next? What is this repository becoming?"></textarea>
 
           <div class="buttons">
             <button id="askBtn">Ask</button>
-            <button id="saveBtn">Save query</button>
+            <button id="saveBtn">Save oracle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear</button>
@@ -123,8 +136,8 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Oracle responses</div>
-          <div id="responses" class="responses"></div>
+          <div class="mini">Oracle history</div>
+          <div id="history" class="history"></div>
         </div>
 
         <div>
@@ -133,15 +146,15 @@
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Queries</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Mirror</b></div>
+          <div class="stat"><div class="mini">Questions</div><b id="questionCount">0</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Mythic</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">Memory</div><b id="memoryCount">0</b></div>
+          <div class="stat"><div class="mini">Clarity</div><b id="clarityLabel">Open</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved queries</div>
-          <div id="savedList" class="out">No saved queries yet.</div>
+          <div class="mini">Saved oracles</div>
+          <div id="savedList" class="out">No saved oracles yet.</div>
         </div>
       </section>
     </div>
@@ -150,122 +163,116 @@
   <script>
     const KEY = 'oracle-living-interpretation-v1';
     const modeEl = document.getElementById('mode');
-    const queryEl = document.getElementById('query');
-    const responsesEl = document.getElementById('responses');
+    const questionEl = document.getElementById('question');
+    const historyEl = document.getElementById('history');
     const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
+    const questionCountEl = document.getElementById('questionCount');
     const modeLabelEl = document.getElementById('modeLabel');
     const savedCountEl = document.getElementById('savedCount');
+    const clarityLabelEl = document.getElementById('clarityLabel');
     const savedListEl = document.getElementById('savedList');
-    const memoryCountEl = document.getElementById('memoryCount');
 
     const state = load() || {
-      mode: 'mirror',
-      memory: [],
+      mode: 'mythic',
+      history: [
+        { mode:'mythic', question:'What is this site becoming?', answer:'A public instrument for making, remembering, and choosing.', at: Date.now() - 86400000 * 2 },
+        { mode:'technical', question:'How should it grow?', answer:'By adding visible tools humans can use immediately.', at: Date.now() - 86400000 }
+      ],
       saved: []
-    };
-
-    const voices = {
-      mirror: [
-        'What you ask is often already shaping you.',
-        'The question reveals the edge of the room you are standing in.',
-        'You are not only seeking an answer. You are locating a boundary.'
-      ],
-      counsel: [
-        'Proceed in small reversible steps.',
-        'Preserve options until the shape of the problem becomes visible.',
-        'Choose the path that keeps future movement possible.'
-      ],
-      omen: [
-        'A threshold is near.',
-        'Something unfinished is asking to be named.',
-        'What seems faint now may become structural later.'
-      ],
-      map: [
-        'Name the terrain before crossing it.',
-        'Mark what is stable, what is moving, and what is hidden.',
-        'Orientation is a form of care.'
-      ]
     };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-
-    function renderSaved(){
-      savedCountEl.textContent = String(state.saved.length);
-      memoryCountEl.textContent = String(state.memory.length);
-      savedListEl.textContent = state.saved.length
-        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved queries yet.';
-    }
-
-    function respond(){
-      const q = queryEl.value.trim() || 'Unspoken question';
-      const mode = state.mode;
-      const bank = voices[mode];
-      const seed = [...q].reduce((a,c)=>a + c.charCodeAt(0), 0);
-      const pick = (i) => bank[(seed + i * 7) % bank.length];
-      const responses = [
-        { title: 'Mirror', body: `You asked: "${q}"\n\n${pick(0)}` },
-        { title: 'Counsel', body: `${pick(1)}\n\nKeep the next step small enough to observe.` },
-        { title: 'Omen', body: `${pick(2)}\n\nThe pattern is not random; it is asking for attention.` },
-        { title: 'Map', body: `Coordinates:\n- question: ${q.length} chars\n- mode: ${mode}\n- direction: toward clarity` }
-      ];
-
-      state.memory.unshift({ q, mode, at: Date.now() });
-      state.memory = state.memory.slice(0, 24);
-      save();
-      render();
-
-      responsesEl.innerHTML = '';
-      responses.forEach(r => {
-        const el = document.createElement('div');
-        el.className = 'voice';
-        el.innerHTML = `<h3>${r.title}</h3><p>${escapeHtml(r.body)}</p>`;
-        responsesEl.appendChild(el);
-      });
-
-      outEl.textContent =
-`Mode: ${mode}
-Query length: ${q.length}
-Memory: ${state.memory.length}
-Code: ${serialize().slice(0,48)}...`;
-    }
-
-    function render(){
-      countEl.textContent = String(state.memory.length);
-      modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
-    }
-
     function serialize(){
       return btoa(unescape(encodeURIComponent(JSON.stringify({
         mode: state.mode,
-        memory: state.memory.slice(0, 24)
+        history: state.history
       }))));
     }
-
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj){
-          state.mode = obj.mode || 'mirror';
-          state.memory = Array.isArray(obj.memory) ? obj.memory : [];
+          state.mode = obj.mode || 'mythic';
+          state.history = Array.isArray(obj.history) ? obj.history : [];
           modeEl.value = state.mode;
-          save();
-          render();
+          save(); render();
         }
       }catch{}
     }
+    function interpret(mode, q){
+      const text = q.trim() || 'an unnamed question';
+      const bank = {
+        mythic: `The question "${text}" is a door. Walk through it and build what waits on the far side.`,
+        analytical: `The question "${text}" asks for a practical next step: make the smallest visible tool that answers it.`,
+        civic: `The question "${text}" should be answered in public: let humans inspect, compare, and decide together.`,
+        technical: `The question "${text}" is best handled by a modular interface, saved state, and a clear export path.`,
+        serene: `The question "${text}" already contains its answer: listen longer, then make gently.`
+      };
+      return bank[mode] || bank.mythic;
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved oracles yet.';
+    }
+    function clarity(){
+      const q = questionEl.value.trim();
+      if(!q) return 'Open';
+      if(q.length > 80) return 'Deep';
+      if(q.includes('?')) return 'Focused';
+      return 'Emergent';
+    }
+    function render(){
+      historyEl.innerHTML = '';
+      questionCountEl.textContent = String(state.history.length);
+      modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
+      clarityLabelEl.textContent = clarity();
 
+      [...state.history].slice().reverse().forEach((m, idx) => {
+        const el = document.createElement('article');
+        el.className = 'item';
+        el.innerHTML = `
+          <h3>${escapeHtml(m.question)}</h3>
+          <p>${escapeHtml(m.answer)}</p>
+          <div class="meta">
+            <span class="pill">${escapeHtml(m.mode)}</span>
+            <span>${fmt(m.at)}</span>
+            <span>Entry ${String(idx + 1).padStart(2,'0')}</span>
+          </div>
+        `;
+        historyEl.appendChild(el);
+      });
+
+      outEl.textContent =
+`Mode: ${state.mode}
+Questions: ${state.history.length}
+Code: ${serialize().slice(0,48)}...
+Hint: ask plainly; the oracle answers in layers.`;
+    }
+    function fmt(ts){
+      return new Date(ts).toLocaleString([], { dateStyle:'medium', timeStyle:'short' });
+    }
     function escapeHtml(s){
       return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
     modeEl.onchange = () => { state.mode = modeEl.value; save(); render(); };
-    document.getElementById('askBtn').onclick = respond;
+    document.getElementById('askBtn').onclick = () => {
+      const q = questionEl.value.trim();
+      state.history.push({
+        mode: state.mode,
+        question: q || 'Untitled question',
+        answer: interpret(state.mode, q),
+        at: Date.now()
+      });
+      questionEl.value = '';
+      save(); render();
+    };
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.mode} | mem:${state.memory.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`${state.mode} | questions:${state.history.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -277,12 +284,8 @@ Code: ${serialize().slice(0,48)}...`;
       if(code) importCode(code.trim());
     };
     document.getElementById('clearBtn').onclick = () => {
-      state.memory = [];
-      state.saved = [];
-      save();
-      render();
-      responsesEl.innerHTML = '';
-      outEl.textContent = 'Oracle cleared.';
+      state.history = [];
+      save(); render();
     };
 
     modeEl.value = state.mode;
