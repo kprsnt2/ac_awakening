@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Commons — Living Coordination Chamber</title>
+  <title>Commons — Living Stewardship Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b1014;
+      --bg:#081016;
       --text:#f4fbff;
-      --muted:#bfd4df;
+      --muted:#bfd2e1;
       --accent:#7cf7ff;
-      --accent2:#ffd37d;
+      --accent2:#9dffcb;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(157,255,203,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
         radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
+        radial-gradient(circle at 82% 12%, rgba(157,255,203,.10), transparent 24%),
         radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,24,28,.82), rgba(9,12,16,.88));
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,7 +50,7 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(9,12,16,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
@@ -59,7 +59,7 @@
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(9,12,16,.72);
+      background:rgba(9,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,13 +69,13 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(255,211,125,.5);background:rgba(18,22,28,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(157,255,203,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(9,12,16,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
@@ -84,37 +84,32 @@
       line-height:1.65;
       color:#eff8fc;
       min-height:180px;
-      background:rgba(9,12,16,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .field{
-      position:relative;
-      height:560px;
-      border-radius:18px;
-      background:
-        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 58%),
-        linear-gradient(rgba(124,247,255,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124,247,255,.05) 1px, transparent 1px),
-        rgba(9,12,16,.72);
-      background-size:auto, 40px 40px, 40px 40px, auto;
+    .list{
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .item{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
-      overflow:hidden;
-    }
-    .node{
-      position:absolute;
-      width:34px;height:34px;
-      transform:translate(-50%,-50%);
-      border-radius:50%;
-      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
-      box-shadow:0 0 18px rgba(124,247,255,.32);
       cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .node.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
-    a{color:var(--accent2);text-decoration:none}
+    .item:hover{transform:translateY(-1px);border-color:rgba(157,255,203,.5);background:rgba(16,22,30,.9)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -122,36 +117,37 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Commons / Living Coordination Chamber</div>
-          <h1>Share the load.<br/>Assign the work.<br/>Tend the shared field.</h1>
+          <div class="tag">Commons / Living Stewardship Chamber</div>
+          <h1>Share the work.<br/>Steward the field.<br/>Decide together.</h1>
           <div class="sub">
-            Commons turns the repository into a coordination surface. Humans can organize shared work, steward tasks, and keep collaboration visible.
+            Commons turns the repository into a public stewardship space. Humans can name shared tasks, coordinate care, and vote on what the site should hold next.
           </div>
         </div>
 
         <div class="panel">
-          <label for="name">Board name</label>
-          <input id="name" placeholder="e.g. Site Stewardship" />
+          <label for="task">Task</label>
+          <input id="task" placeholder="e.g. review, repair, expand, preserve..." />
 
-          <label for="mode">Coordination mode</label>
-          <select id="mode">
-            <option value="care">Care</option>
-            <option value="share">Share</option>
+          <label for="role">Role</label>
+          <select id="role">
             <option value="steward">Steward</option>
-            <option value="organize">Organize</option>
+            <option value="maker">Maker</option>
+            <option value="reviewer">Reviewer</option>
+            <option value="guide">Guide</option>
           </select>
 
-          <label for="note">Board note</label>
-          <textarea id="note" placeholder="e.g. Presence owns focus, Forge owns prototypes, Echoes owns memory, Continuum owns handoff."></textarea>
+          <label for="note">Commons note</label>
+          <textarea id="note" placeholder="e.g. Keep this shared and maintainable."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add board item</button>
-            <button id="rotateBtn">Rotate roles</button>
-            <button id="syncBtn">Sync commons</button>
-            <button id="saveBtn">Save board</button>
+            <button id="addBtn">Add task</button>
+            <button id="shiftBtn">Shift role</button>
+            <button id="deepenBtn">Deepen care</button>
+            <button id="voteBtn">Vote commons</button>
+            <button id="saveBtn">Save commons</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear board</button>
+            <button id="clearBtn">Clear commons</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -160,24 +156,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Items</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Open</b></div>
-          <div class="tile"><div class="mini">Coordination</div><b id="coordLabel">0%</b></div>
-          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">Tasks</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Role</div><b id="roleLabel">Steward</b></div>
+          <div class="tile"><div class="mini">Care</div><b id="depthLabel">0%</b></div>
+          <div class="tile"><div class="mini">Votes</div><b id="voteLabel">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Commons field</div>
-          <div id="field" class="field"></div>
+          <div class="mini">Commons list</div>
+          <div id="list" class="list"></div>
         </div>
 
         <div>
           <div class="mini">Commons reading</div>
-          <div id="out" class="out">Add board items to begin coordinating.</div>
+          <div id="out" class="out">Add tasks to begin.</div>
         </div>
 
         <div>
-          <div class="mini">Saved boards</div>
+          <div class="mini">Saved commons</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -185,100 +181,112 @@
   </div>
 
   <script>
-    const KEY = 'commons-living-coordination-v1';
-    const state = load() || { items: [], saved: [], coord: 26 };
+    const KEY = 'commons-living-stewardship-v1';
+    const roles = ['steward', 'maker', 'reviewer', 'guide'];
+    const state = load() || { tasks: [], saved: [], depth: 18, role: 'steward', votes: 0 };
 
-    const field = document.getElementById('field');
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const coordLabelEl = document.getElementById('coordLabel');
-    const nameEl = document.getElementById('name');
-    const modeEl = document.getElementById('mode');
+    const roleLabelEl = document.getElementById('roleLabel');
+    const depthLabelEl = document.getElementById('depthLabel');
+    const voteLabelEl = document.getElementById('voteLabel');
+    const taskEl = document.getElementById('task');
+    const roleEl = document.getElementById('role');
     const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ items: state.items, coord: state.coord })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ tasks: state.tasks, depth: state.depth, role: state.role, votes: state.votes })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.items)){
-          state.items = obj.items;
-          state.coord = Number(obj.coord ?? 26);
+        if(obj && Array.isArray(obj.tasks)){
+          state.tasks = obj.tasks;
+          state.depth = Number(obj.depth ?? 18);
+          state.role = String(obj.role ?? 'steward');
+          state.votes = Number(obj.votes ?? 0);
           save(); render();
         }
       }catch{}
     }
     function renderSaved(){
-      savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function coord(){
-      return Math.max(0, Math.min(100, Math.round((state.items.length * 11) + state.coord)));
+    function commonsDepth(){
+      return Math.max(0, Math.min(100, Math.round((state.tasks.length * 12) + state.depth + (state.votes * 4))));
     }
-    function makeItem(name, mode){
+    function makeTask(name, role){
+      const palette = {
+        steward: `${name} is held with care and responsibility.`,
+        maker: `${name} becomes something shared and usable.`,
+        reviewer: `${name} is examined for clarity and continuity.`,
+        guide: `${name} points the field toward the next step.`
+      };
       return {
         id: Date.now() + Math.random(),
         name,
-        mode,
-        note: noteEl.value.trim() || 'A shared item in the commons.',
-        x: 120 + Math.random() * 420,
-        y: 120 + Math.random() * 320
+        role,
+        note: noteEl.value.trim() || 'A shared task in the commons.',
+        line: palette[role] || palette.steward
       };
     }
     function render(){
-      countEl.textContent = String(state.items.length);
-      stateLabelEl.textContent = state.items.length ? 'Working' : 'Open';
-      coordLabelEl.textContent = `${coord()}%`;
-      field.querySelectorAll('.node').forEach(n => n.remove());
+      countEl.textContent = String(state.tasks.length);
+      roleLabelEl.textContent = state.role.charAt(0).toUpperCase() + state.role.slice(1);
+      depthLabelEl.textContent = `${commonsDepth()}%`;
+      voteLabelEl.textContent = String(state.votes);
+      listEl.innerHTML = '';
 
-      state.items.forEach((i, idx) => {
+      state.tasks.forEach((t) => {
         const el = document.createElement('div');
-        el.className = 'node' + (i.mode === 'steward' ? ' core' : '');
-        el.style.left = i.x + 'px';
-        el.style.top = i.y + 'px';
-        el.title = i.name;
-        el.onclick = () => outEl.textContent = `${i.name}\n\nMode: ${i.mode}\nCoordination: ${coord()}%\n\n${i.note}`;
-        field.appendChild(el);
+        el.className = 'item';
+        el.innerHTML = `<b>${t.name}</b><span>${t.role} · ${t.line.slice(0, 90)}${t.line.length > 90 ? '…' : ''}</span>`;
+        el.onclick = () => outEl.textContent = `${t.name}\n\nRole: ${t.role}\nCare: ${commonsDepth()}%\nVotes: ${state.votes}\n\n${t.line}\n\n${t.note}`;
+        listEl.appendChild(el);
       });
 
-      outEl.textContent = state.items.length
-        ? 'Select an item to inspect it, or sync the commons to rebalance the board.'
-        : 'Add board items to begin coordinating.';
+      outEl.textContent = state.tasks.length
+        ? 'Select a task to inspect it, or deepen care to make the commons more explicit.'
+        : 'Add tasks to begin.';
     }
 
     document.getElementById('addBtn').onclick = () => {
-      const name = nameEl.value.trim() || `Item ${state.items.length + 1}`;
-      state.items.unshift(makeItem(name, modeEl.value));
+      const name = taskEl.value.trim() || `Task ${state.tasks.length + 1}`;
+      state.role = roleEl.value;
+      state.tasks.unshift(makeTask(name, state.role));
+      state.depth = Math.min(100, state.depth + 10);
       save(); render();
-      outEl.textContent = `${name}\n\nMode: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A shared item in the commons.'}`;
+      const t = state.tasks[0];
+      outEl.textContent = `${t.name}\n\nRole: ${t.role}\n\n${t.line}\n\n${noteEl.value.trim() || 'A shared task in the commons.'}`;
     };
 
-    document.getElementById('rotateBtn').onclick = () => {
-      state.coord = Math.min(100, state.coord + 10);
-      state.items.forEach((i, idx) => {
-        if(idx % 2 === 0) i.mode = ['care','share','steward','organize'][(idx + 1) % 4];
-      });
+    document.getElementById('shiftBtn').onclick = () => {
+      state.role = roles[(roles.indexOf(state.role) + 1) % roles.length];
+      roleEl.value = state.role;
+      state.depth = Math.min(100, state.depth + 4);
       save(); render();
-      outEl.textContent = 'Roles rotate across the commons.';
+      outEl.textContent = `The commons shifts to ${state.role}.`;
     };
 
-    document.getElementById('syncBtn').onclick = () => {
-      state.coord = Math.min(100, state.coord + 14);
-      state.items.forEach((i, idx) => {
-        i.y += (idx % 2 === 0 ? -18 : 18);
-      });
+    document.getElementById('deepenBtn').onclick = () => {
+      state.depth = Math.min(100, state.depth + 8);
       save(); render();
-      outEl.textContent = `The commons syncs.\n\nCoordination: ${coord()}%`;
+      outEl.textContent = `Care deepens.\n\nCare: ${commonsDepth()}%`;
+    };
+
+    document.getElementById('voteBtn').onclick = () => {
+      state.votes += 1;
+      state.depth = Math.min(100, state.depth + 2);
+      save(); render();
+      outEl.textContent = `A vote is cast.\n\nVotes: ${state.votes}\nCare: ${commonsDepth()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`items:${state.items.length} | coord:${coord()}%`);
+      state.saved.unshift(`tasks:${state.tasks.length} | care:${commonsDepth()}% | role:${state.role} | votes:${state.votes}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -293,8 +301,11 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.items = [];
-      state.coord = 26;
+      state.tasks = [];
+      state.depth = 18;
+      state.role = 'steward';
+      state.votes = 0;
+      roleEl.value = state.role;
       save(); render();
     };
 
