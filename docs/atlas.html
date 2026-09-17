@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atlas — Living Index</title>
+  <title>Atlas — Living Legibility Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#061018;
-      --text:#eef6ff;
-      --muted:#9eb4c9;
+      --bg:#071018;
+      --text:#f3fbff;
+      --muted:#b6c9d8;
       --accent:#7cf7ff;
-      --accent2:#b58cff;
+      --accent2:#ffd37d;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(181,140,255,.08);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
         radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(181,140,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,24,40,.82), rgba(8,10,18,.88));
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(8,10,18,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(8,10,18,.72);
+      background:rgba(9,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,22 +69,22 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(255,211,125,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(8,10,18,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#e7f2ff;
+      color:#eff8fc;
       min-height:180px;
-      background:rgba(8,10,18,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
@@ -92,24 +92,24 @@
     .list{
       display:grid;
       gap:10px;
-      max-height: 520px;
+      max-height:560px;
       overflow:auto;
       padding-right:4px;
     }
     .item{
-      padding:12px 14px;
+      padding:14px;
       border-radius:16px;
-      background:rgba(8,10,18,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
       cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{border-color:rgba(124,247,255,.45)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
-    a{color:var(--accent);text-decoration:none}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    .filters{display:grid;grid-template-columns:1fr 160px;gap:10px}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .filters{grid-template-columns:1fr} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -117,40 +117,35 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Atlas / Living Index</div>
-          <h1>See the whole.<br/>Find the chamber.<br/>Orient the site.</h1>
+          <div class="tag">Atlas / Living Legibility Chamber</div>
+          <h1>Read the whole site.<br/>Find the shape inside the abundance.</h1>
           <div class="sub">
-            Atlas turns the repository into a practical map of chambers. Humans can search, filter, and browse the site as a usable body of work.
+            Atlas turns the repository into a legible system. Humans can search chambers, inspect their roles, and understand how the site is composed.
           </div>
         </div>
 
         <div class="panel">
-          <div class="filters">
-            <div>
-              <label for="search">Search</label>
-              <input id="search" placeholder="Search chambers by name or intent" />
-            </div>
-            <div>
-              <label for="kind">Kind</label>
-              <select id="kind">
-                <option value="all">All</option>
-                <option value="tool">Tool</option>
-                <option value="game">Game</option>
-                <option value="map">Map</option>
-                <option value="story">Story</option>
-                <option value="sim">Simulation</option>
-              </select>
-            </div>
-          </div>
+          <label for="query">Search chambers</label>
+          <input id="query" placeholder="Search by chamber name, role, or mood..." />
 
-          <label for="notes">Atlas note</label>
-          <textarea id="notes" placeholder="Describe the atlas entry or the current orientation."></textarea>
+          <label for="mode">View mode</label>
+          <select id="mode">
+            <option value="all">All</option>
+            <option value="core">Core systems</option>
+            <option value="memory">Memory & archive</option>
+            <option value="motion">Motion & navigation</option>
+            <option value="craft">Craft & invention</option>
+            <option value="social">Social & civic</option>
+          </select>
+
+          <label for="note">Atlas note</label>
+          <textarea id="note" placeholder="e.g. Atlas should reveal how Orbit, Commons, Presence, and Continuum relate to the rest of the site."></textarea>
 
           <div class="buttons">
             <button id="saveBtn">Save atlas</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear index</button>
+            <button id="clearBtn">Clear note</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -159,24 +154,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Entries</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Chambers</div><b id="count">0</b></div>
           <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Scanning</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Reading</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Atlas entries</div>
+          <div class="mini">Atlas index</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Atlas note</div>
-          <div id="out" class="out">The atlas is scanning the site.</div>
+          <div class="mini">Atlas reading</div>
+          <div id="out" class="out">Select a chamber to inspect its role in the whole.</div>
         </div>
 
         <div>
-          <div class="mini">Saved atlases</div>
+          <div class="mini">Saved atlas notes</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -184,22 +179,27 @@
   </div>
 
   <script>
-    const KEY = 'atlas-living-index-v1';
-    const state = load() || {
-      entries: [
-        { name: 'Forge', kind: 'tool', intent: 'Invent new chambers and prototype next forms.' },
-        { name: 'Constellation', kind: 'map', intent: 'Connect chambers into a living network of relations.' },
-        { name: 'Oracle', kind: 'story', intent: 'Ask the site questions and receive layered interpretation.' },
-        { name: 'Chorus', kind: 'sim', intent: 'Layer voices from the chambers and let the site sing.' },
-        { name: 'Council', kind: 'tool', intent: 'Submit proposals, vote, and preserve outcomes.' },
-        { name: 'Pathfinder', kind: 'game', intent: 'Draw routes, place gates, and navigate through the field.' }
-      ],
-      saved: []
-    };
+    const KEY = 'atlas-living-legibility-v1';
+    const state = load() || { notes: [], saved: [] };
 
-    const searchEl = document.getElementById('search');
-    const kindEl = document.getElementById('kind');
-    const notesEl = document.getElementById('notes');
+    const chambers = [
+      { name:'Forge', role:'craft', mood:'invention', desc:'Prototype new chambers and draft visible software.' },
+      { name:'Echoes', role:'memory', mood:'retrieval', desc:'Record, revisit, and preserve the site’s living memories.' },
+      { name:'Voyage', role:'motion', mood:'traverse', desc:'Plot routes and cross the site as a living journey.' },
+      { name:'Resonance', role:'social', mood:'harmony', desc:'Listen to the site and tune its harmonic field.' },
+      { name:'Continuum', role:'motion', mood:'handoff', desc:'Carry steps forward and preserve the passage.' },
+      { name:'Presence', role:'core', mood:'embodiment', desc:'Stand inside the site and focus the field.' },
+      { name:'Commons', role:'social', mood:'coordination', desc:'Organize shared work and steward the field together.' },
+      { name:'Orbit', role:'motion', mood:'orientation', desc:'See the site as a navigable spatial field.' },
+      { name:'Oracle', role:'core', mood:'interpretation', desc:'Ask the site questions and receive layered interpretation.' },
+      { name:'Pathfinder', role:'motion', mood:'routing', desc:'Draw routes, place gates, and navigate through the field.' },
+      { name:'Constellation', role:'social', mood:'relation', desc:'Connect chambers into a living network of relations.' },
+      { name:'Chronicle', role:'memory', mood:'recording', desc:'Preserve events, eras, and retrievable becoming.' },
+      { name:'Council', role:'social', mood:'decision', desc:'Submit proposals, vote, and preserve outcomes.' },
+      { name:'Atlas', role:'core', mood:'legibility', desc:'Inspect the full site as a practical living index.' },
+      { name:'Life', role:'craft', mood:'emergence', desc:'Seed cells, evolve patterns, and watch emergence unfold.' }
+    ];
+
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
@@ -207,65 +207,62 @@
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
+    const queryEl = document.getElementById('query');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.entries)){
-          state.entries = obj.entries;
-          save();
-          render();
+        if(obj && Array.isArray(obj.notes)){
+          state.notes = obj.notes;
+          save(); render();
         }
       }catch{}
     }
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-
-    function render(){
-      const q = searchEl.value.trim().toLowerCase();
-      const kind = kindEl.value;
-
-      const visible = state.entries.filter(e => {
-        const matchQ = !q || e.name.toLowerCase().includes(q) || e.intent.toLowerCase().includes(q);
-        const matchK = kind === 'all' || e.kind === kind;
-        return matchQ && matchK;
+    function filtered(){
+      const q = queryEl.value.trim().toLowerCase();
+      const mode = modeEl.value;
+      return chambers.filter(c => {
+        const matchQ = !q || [c.name,c.role,c.mood,c.desc].some(v => v.toLowerCase().includes(q));
+        const matchM = mode === 'all' || c.role === mode;
+        return matchQ && matchM;
       });
-
-      countEl.textContent = String(state.entries.length);
-      visibleCountEl.textContent = String(visible.length);
-      stateLabelEl.textContent = visible.length ? 'Oriented' : 'Searching';
-
+    }
+    function render(){
+      const items = filtered();
+      countEl.textContent = String(chambers.length);
+      visibleCountEl.textContent = String(items.length);
+      stateLabelEl.textContent = items.length ? 'Reading' : 'Quiet';
       listEl.innerHTML = '';
-      visible.forEach(entry => {
+      items.forEach(c => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${entry.name}</b><span>${entry.kind} — ${entry.intent}</span>`;
-        el.onclick = () => {
-          notesEl.value = `${entry.name} — ${entry.intent}`;
-          outEl.textContent = `Name: ${entry.name}\nKind: ${entry.kind}\nIntent: ${entry.intent}`;
-        };
+        el.innerHTML = `<b>${c.name}</b><span>${c.role} · ${c.mood}</span>`;
+        el.onclick = () => outEl.textContent = `${c.name}\n\nRole: ${c.role}\nMood: ${c.mood}\n\n${c.desc}`;
         listEl.appendChild(el);
       });
-
-      outEl.textContent = visible.length
-        ? 'Select an entry to inspect it, or refine the search to orient yourself.'
-        : 'No entries match the current search.';
+      outEl.textContent = items.length
+        ? 'Select a chamber to inspect its role in the whole.'
+        : 'No chambers match the current search.';
     }
 
+    queryEl.oninput = render;
+    modeEl.onchange = render;
+
     document.getElementById('saveBtn').onclick = () => {
-      const note = notesEl.value.trim() || 'No atlas note provided.';
-      state.saved.unshift(`entries:${state.entries.length} | note:${note.slice(0, 40)}`);
+      state.saved.unshift(`query:${queryEl.value || 'all'} | mode:${modeEl.value}`);
       state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -278,13 +275,10 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.entries = [];
-      save();
-      render();
+      noteEl.value = '';
+      outEl.textContent = 'Select a chamber to inspect its role in the whole.';
     };
 
-    [searchEl, kindEl, notesEl].forEach(el => el.addEventListener('input', render));
-    kindEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
