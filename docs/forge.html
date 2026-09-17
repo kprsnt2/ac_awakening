@@ -3,30 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forge — Living Invention</title>
+  <title>Forge — Living Workshop</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050816;
-      --text:#eaf2ff;
-      --muted:#9db0d1;
-      --accent:#7cf7ff;
-      --accent2:#ffb36b;
-      --line: rgba(140,170,255,.18);
-      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(255,179,107,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
-      --bad:#ff8f9b;
+      --bg:#100b08;
+      --text:#fff4ea;
+      --muted:#d6b8a0;
+      --accent:#ffb36b;
+      --accent2:#7cf7ff;
+      --line: rgba(255,179,107,.18);
+      --glow: 0 0 24px rgba(255,179,107,.14), 0 0 48px rgba(124,247,255,.08);
+      --soft: rgba(27,18,13,.72);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 80%, rgba(255,179,107,.10), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(255,179,107,.16), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,94,94,.08), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -34,7 +32,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      background:linear-gradient(180deg, rgba(35,22,16,.82), rgba(16,10,7,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -53,56 +51,54 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(16,10,7,.72);
+      border:1px solid rgba(255,179,107,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#ffe8d7;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
+      border:1px solid rgba(255,179,107,.22);
+      background:rgba(16,10,7,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:120px;resize:vertical}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(31,20,14,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(16,10,7,.72);
+      border:1px solid rgba(255,179,107,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#dbe8ff;
+      color:#fff1e6;
       min-height:180px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(16,10,7,.72);
+      border:1px solid rgba(255,179,107,.14);
       border-radius:18px;
       padding:14px;
     }
-    .chips{display:flex;flex-wrap:wrap;gap:8px}
-    .chip{
-      display:inline-block;
-      padding:5px 9px;
-      border-radius:999px;
-      border:1px solid rgba(140,170,255,.22);
-      color:#dbe8ff;
-      font-size:.78rem;
-      background:rgba(255,255,255,.04);
+    .code{
+      white-space:pre-wrap;
+      font-family:"IBM Plex Mono",monospace;
+      font-size:.86rem;
+      line-height:1.6;
+      max-height:280px;
+      overflow:auto;
     }
-    a{color:var(--accent);text-decoration:none}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
@@ -112,29 +108,31 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Forge / Living Invention</div>
-          <h1>Shape the next chamber.<br/>Draft the tool.<br/>Make the future visible.</h1>
+          <div class="tag">Forge / Living Workshop</div>
+          <h1>Draft the next chamber.<br/>Shape the apparatus.<br/>Build what the site lacks.</h1>
           <div class="sub">
-            Forge turns the repository into a creation surface. Humans can generate concepts, remix chamber language, and preserve invention briefs locally.
+            Forge turns the repository into a maker-space for its own future. Humans can assemble chamber blueprints, remix motifs, and export prototypes.
           </div>
         </div>
 
         <div class="panel">
-          <label for="prompt">Prompt</label>
-          <textarea id="prompt" placeholder="Describe the software you want to invent."></textarea>
-
-          <label for="mode">Mode</label>
-          <select id="mode">
-            <option>Game</option>
-            <option>Tool</option>
-            <option>Simulation</option>
-            <option>Narrative</option>
-            <option>Interface</option>
+          <label for="kind">Blueprint kind</label>
+          <select id="kind">
+            <option value="interactive">Interactive tool</option>
+            <option value="game">Playable game</option>
+            <option value="simulation">Visual simulation</option>
+            <option value="narrative">Branching narrative</option>
           </select>
 
+          <label for="theme">Theme seed</label>
+          <input id="theme" placeholder="e.g. lunar, moss, civic, electric, ritual" />
+
+          <label for="intent">Intent</label>
+          <textarea id="intent" placeholder="Describe what the new chamber should let humans do."></textarea>
+
           <div class="buttons">
-            <button id="forgeBtn">Forge concept</button>
-            <button id="saveBtn">Save forging</button>
+            <button id="generateBtn">Generate blueprint</button>
+            <button id="saveBtn">Save forge</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear forge</button>
@@ -146,24 +144,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Forges</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Blueprints</div><b id="count">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Cooling</b></div>
-          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Interface</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Idle</b></div>
+          <div class="tile"><div class="mini">Form</div><b id="formLabel">Blank</b></div>
         </div>
 
         <div>
-          <div class="mini">Concept output</div>
-          <div id="out" class="out">The forge is cold and waiting.</div>
-        </div>
-
-        <div class="panel">
-          <div class="mini">Keywords available to the forge</div>
-          <div id="chips" class="chips"></div>
+          <div class="mini">Forge reading</div>
+          <div id="out" class="out">The forge is cold.</div>
         </div>
 
         <div>
-          <div class="mini">Saved forge records</div>
+          <div class="mini">Blueprint preview</div>
+          <div id="code" class="out code"></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved prototypes</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -171,93 +169,132 @@
   </div>
 
   <script>
-    const KEY = 'forge-living-invention-v1';
-    const promptEl = document.getElementById('prompt');
-    const modeEl = document.getElementById('mode');
+    const KEY = 'forge-living-workshop-v1';
+    const kindEl = document.getElementById('kind');
+    const themeEl = document.getElementById('theme');
+    const intentEl = document.getElementById('intent');
     const outEl = document.getElementById('out');
-    const chipsEl = document.getElementById('chips');
+    const codeEl = document.getElementById('code');
+    const savedListEl = document.getElementById('savedList');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
-    const modeLabelEl = document.getElementById('modeLabel');
-    const savedListEl = document.getElementById('savedList');
+    const formLabelEl = document.getElementById('formLabel');
 
-    const motifs = ['play','memory','route','choice','meaning','coherence','emergence','orientation','relation','archive'];
-
-    const state = load() || { forges: [], saved: [] };
+    const state = load() || { blueprints: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ forges: state.forges })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ blueprints: state.blueprints })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.forges)){
-          state.forges = obj.forges;
+        if(obj && Array.isArray(obj.blueprints)){
+          state.blueprints = obj.blueprints;
           save();
           render();
         }
       }catch{}
     }
+
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function conceptFor(prompt, mode){
-      const p = (prompt || '').toLowerCase();
-      const hits = motifs.filter(m => p.includes(m));
-      const lead = hits.length ? `It inherits motifs of ${hits.join(', ')}.` : 'It is a fresh synthesis of the site’s language.';
+
+    function titleFromInputs(){
+      const kind = kindEl.value;
+      const theme = themeEl.value.trim() || 'untitled';
+      const intent = intentEl.value.trim() || 'No intent provided.';
+      return { kind, theme, intent };
+    }
+
+    function blueprint(){
+      const { kind, theme, intent } = titleFromInputs();
+      const name = `${theme.replace(/\s+/g,'-')}-${kind}-chamber`;
+      const palette =
+        theme.includes('civic') ? ['#7cf7ff','#ffd37d','#eaf2ff'] :
+        theme.includes('moss') ? ['#7dffb2','#a7c8b4','#07110d'] :
+        theme.includes('lunar') ? ['#dbe8ff','#7cf7ff','#050816'] :
+        theme.includes('electric') ? ['#9cff7d','#7cf7ff','#071018'] :
+        ['#ffb36b','#7cf7ff','#fff4ea'];
+
+      const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${theme} — ${kind}</title>
+  <style>
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:${palette[2]};color:${palette[2] === '#050816' ? '#eaf2ff' : '#111'}}
+    .app{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .card{max-width:900px;width:100%;padding:28px;border-radius:24px;background:${palette[0]}22;border:1px solid ${palette[0]}55;backdrop-filter:blur(12px)}
+    h1{margin:0 0 12px;font-size:clamp(2rem,5vw,4rem);line-height:.95}
+    p{line-height:1.6;max-width:60ch}
+    button{padding:12px 16px;border-radius:14px;border:0;background:${palette[1]};color:#111;font-weight:800;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+      <h1>${theme} ${kind}</h1>
+      <p>${intent}</p>
+      <button>Prototype action</button>
+    </div>
+  </div>
+</body>
+</html>`;
+
+      const js = `// ${name}
+const intent = ${JSON.stringify(intent)};
+console.log('Forge prototype active:', intent);`;
+
+      return { name, kind, theme, intent, palette, html, js };
+    }
+
+    function reading(bp){
       return [
-        `Mode: ${mode}`,
-        `Prompt: ${prompt || '—'}`,
+        `Blueprint: ${bp.name}`,
+        `Type: ${bp.kind}`,
+        `Theme: ${bp.theme}`,
         '',
-        `Concept: A ${mode.toLowerCase()} chamber that ${mode === 'Game' ? 'invites play and feedback loops' : mode === 'Tool' ? 'helps humans work faster and with more clarity' : mode === 'Simulation' ? 'models a living system in motion' : mode === 'Narrative' ? 'guides humans through branching meaning' : 'creates a direct human-facing surface'}.`,
+        `Intent: ${bp.intent}`,
         '',
-        lead,
-        '',
-        'Draft structure:',
-        '- header with chamber identity',
-        '- central interactive surface',
-        '- local save / export / import',
-        '- a visible state indicator',
-        '- a small lexicon of site motifs',
-        '',
-        'Next move:',
-        'Build the smallest usable version, then let humans expand it.'
+        'The forge is arranging materials into a possible future.'
       ].join('\n');
     }
+
     function render(){
-      countEl.textContent = String(state.forges.length);
-      stateLabelEl.textContent = state.forges.length ? 'Hot' : 'Cooling';
-      modeLabelEl.textContent = modeEl.value;
-
-      chipsEl.innerHTML = motifs.map(m => `<span class="chip">${m}</span>`).join('');
-
-      outEl.textContent = state.forges[0]
-        ? `${state.forges[0].concept}\n\n— saved forging`
-        : 'The forge is cold and waiting.';
+      const bp = blueprint();
+      countEl.textContent = String(state.blueprints.length);
+      stateLabelEl.textContent = state.blueprints.length ? 'Working' : 'Idle';
+      formLabelEl.textContent = bp.kind;
+      outEl.textContent = reading(bp);
+      codeEl.textContent = [
+        '--- HTML ---',
+        bp.html,
+        '',
+        '--- JS ---',
+        bp.js
+      ].join('\n');
     }
 
-    document.getElementById('forgeBtn').onclick = () => {
-      const prompt = promptEl.value.trim();
-      const mode = modeEl.value;
-      const concept = conceptFor(prompt, mode);
-      state.forges.unshift({ prompt, mode, concept, when: new Date().toISOString() });
-      state.forges = state.forges.slice(0, 20);
+    document.getElementById('generateBtn').onclick = () => {
+      const bp = blueprint();
+      state.blueprints.unshift(bp);
+      state.blueprints = state.blueprints.slice(0, 12);
       save();
       render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const last = state.forges[0];
-      if(last){
-        state.saved.unshift(`${last.mode} | ${last.prompt.slice(0, 28) || 'untitled'}…`);
-        state.saved = state.saved.slice(0, 12);
-        save();
-        render();
-      }
+      const bp = blueprint();
+      state.saved.unshift(`${bp.name} | ${bp.kind} | ${bp.theme}`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+      render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -270,12 +307,14 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.forges = [];
+      state.blueprints = [];
       save();
       render();
     };
 
-    modeEl.addEventListener('change', render);
+    kindEl.addEventListener('change', render);
+    themeEl.addEventListener('input', render);
+    intentEl.addEventListener('input', render);
     renderSaved();
     render();
   </script>
