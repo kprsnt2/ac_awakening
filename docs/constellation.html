@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#070b18;
-      --text:#eef4ff;
-      --muted:#aab7d8;
-      --accent:#7cf7ff;
-      --accent2:#b58cff;
-      --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(181,140,255,.08);
+      --bg:#071018;
+      --text:#eef8ff;
+      --muted:#9eb7ca;
+      --accent:#8fd3ff;
+      --accent2:#7cf7ff;
+      --line: rgba(143,211,255,.16);
+      --glow: 0 0 24px rgba(143,211,255,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(181,140,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(143,211,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.07), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,24,48,.82), rgba(8,10,18,.88));
+      background:linear-gradient(180deg, rgba(14,24,34,.82), rgba(8,10,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -51,14 +51,14 @@
       padding:16px;
       border-radius:20px;
       background:rgba(8,10,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(143,211,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(124,247,255,.22);
+      border:1px solid rgba(143,211,255,.22);
       background:rgba(8,10,18,.72);
       color:var(--text);
     }
@@ -69,14 +69,14 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
       background:rgba(8,10,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(143,211,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
@@ -85,40 +85,45 @@
       color:#e7f2ff;
       min-height:180px;
       background:rgba(8,10,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(143,211,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .canvas{
+    .graph{
       position:relative;
       height:560px;
       border-radius:18px;
       background:
-        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 60%),
+        radial-gradient(circle at center, rgba(143,211,255,.06), transparent 58%),
+        linear-gradient(rgba(143,211,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(143,211,255,.05) 1px, transparent 1px),
         rgba(8,10,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(143,211,255,.14);
       overflow:hidden;
-      touch-action:none;
     }
     svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
     .node{
-      position:absolute;
-      width:132px;height:54px;
-      border-radius:16px;
-      display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(180deg, rgba(20,28,48,.98), rgba(10,14,24,.98));
-      border:1px solid rgba(124,247,255,.25);
-      box-shadow:0 0 18px rgba(124,247,255,.10);
-      cursor:grab;
-      user-select:none;
-      font-family:"IBM Plex Mono",monospace;
-      font-size:.82rem;
-      text-align:center;
-      padding:8px;
+      position:absolute;width:26px;height:26px;border-radius:50%;
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(143,211,255,.35);
+      cursor:pointer;
     }
-    a{color:var(--accent);text-decoration:none}
+    .node.active{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    .list{
+      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+    }
+    .item{
+      padding:12px 14px;border-radius:16px;background:rgba(8,10,18,.72);
+      border:1px solid rgba(143,211,255,.14);cursor:pointer;
+    }
+    .item:hover{border-color:rgba(143,211,255,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .canvas{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .graph{height:460px} }
   </style>
 </head>
 <body>
@@ -127,23 +132,28 @@
       <section class="card intro">
         <div>
           <div class="tag">Constellation / Living Network</div>
-          <h1>Connect chambers.<br/>Trace relations.<br/>Map the living web.</h1>
+          <h1>Link the chambers.<br/>Reveal the web.<br/>Make relation visible.</h1>
           <div class="sub">
-            Constellation turns the repository into a visible network of meaning. Humans can link chambers, inspect clusters, and see how the site holds together.
+            Constellation turns the repository into a network of meaning. Humans can connect chambers, inspect clusters, and trace the shape of the whole.
           </div>
         </div>
 
         <div class="panel">
-          <label for="label">New node</label>
-          <input id="label" placeholder="e.g. Atlas, Oracle, Forge, Chorus" />
+          <label for="source">Source chamber</label>
+          <input id="source" placeholder="e.g. Atlas" />
+
+          <label for="target">Target chamber</label>
+          <input id="target" placeholder="e.g. Pathfinder" />
+
+          <label for="relation">Relation note</label>
+          <textarea id="relation" placeholder="e.g. Atlas situates Pathfinder within the site."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add node</button>
-            <button id="linkBtn">Link selected</button>
-            <button id="saveBtn">Save map</button>
+            <button id="linkBtn">Link chambers</button>
+            <button id="saveBtn">Save constellation</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear sky</button>
+            <button id="clearBtn">Clear network</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -152,22 +162,22 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Nodes</div><b id="nodeCount">0</b></div>
-          <div class="tile"><div class="mini">Links</div><b id="linkCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Tracing</b></div>
+          <div class="tile"><div class="mini">Links</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unlinked</b></div>
+          <div class="tile"><div class="mini">Focus</div><b id="focusLabel">—</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
           <div class="mini">Network field</div>
-          <div id="canvas" class="canvas">
+          <div id="graph" class="graph">
             <svg id="lines"></svg>
           </div>
         </div>
 
         <div>
-          <div class="mini">Constellation reading</div>
-          <div id="out" class="out">The network is waiting for its first star.</div>
+          <div class="mini">Relation reading</div>
+          <div id="out" class="out">Link chambers to reveal the network.</div>
         </div>
 
         <div>
@@ -180,28 +190,18 @@
 
   <script>
     const KEY = 'constellation-living-network-v1';
-    const canvas = document.getElementById('canvas');
+    const state = load() || { nodes: [], links: [], saved: [] };
+    const graph = document.getElementById('graph');
     const lines = document.getElementById('lines');
     const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
-    const nodeCountEl = document.getElementById('nodeCount');
-    const linkCountEl = document.getElementById('linkCount');
+    const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
-    const labelEl = document.getElementById('label');
-
-    const state = load() || {
-      nodes: [
-        { id: 1, label: 'Atlas', x: 90, y: 100 },
-        { id: 2, label: 'Oracle', x: 300, y: 140 },
-        { id: 3, label: 'Forge', x: 180, y: 300 },
-        { id: 4, label: 'Chorus', x: 510, y: 240 }
-      ],
-      links: [[1,2],[2,3],[3,4]],
-      saved: []
-    };
-
-    let selected = null, dragging = null, dx = 0, dy = 0;
+    const focusLabelEl = document.getElementById('focusLabel');
+    const sourceEl = document.getElementById('source');
+    const targetEl = document.getElementById('target');
+    const relationEl = document.getElementById('relation');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
@@ -210,124 +210,73 @@
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.links)){
-          state.nodes = obj.nodes;
-          state.links = obj.links;
-          save();
-          render();
+          state.nodes = obj.nodes; state.links = obj.links;
+          save(); render();
         }
       }catch{}
     }
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-
-    function summary(){
-      if(state.nodes.length < 2) return 'Add at least two nodes to begin tracing relations.';
-      return [
-        `Nodes: ${state.nodes.length}`,
-        `Links: ${state.links.length}`,
-        '',
-        'Click one node, then another, to create a link.',
-        'Shift-click a node to mark it as the selected star.',
-        'Drag nodes to reshape the sky.'
-      ].join('\n');
+    function ensureNode(name){
+      let node = state.nodes.find(n => n.name.toLowerCase() === name.toLowerCase());
+      if(!node){
+        node = { id: Date.now() + Math.random(), name, x: 120 + Math.random() * 420, y: 120 + Math.random() * 320 };
+        state.nodes.push(node);
+      }
+      return node;
     }
-
     function render(){
-      const w = canvas.clientWidth, h = canvas.clientHeight;
-      canvas.querySelectorAll('.node').forEach(n => n.remove());
+      countEl.textContent = String(state.links.length);
+      stateLabelEl.textContent = state.links.length ? 'Connected' : 'Unlinked';
+      focusLabelEl.textContent = state.nodes[0]?.name || '—';
+
+      graph.querySelectorAll('.node').forEach(n => n.remove());
       lines.innerHTML = '';
 
-      nodeCountEl.textContent = String(state.nodes.length);
-      linkCountEl.textContent = String(state.links.length);
-      stateLabelEl.textContent = selected ? 'Connecting' : 'Tracing';
-      outEl.textContent = summary();
-
-      state.links.forEach(([a,b]) => {
-        const na = state.nodes.find(n => n.id === a);
-        const nb = state.nodes.find(n => n.id === b);
-        if(!na || !nb) return;
+      state.links.forEach(l => {
+        const a = state.nodes.find(n => n.id === l.a);
+        const b = state.nodes.find(n => n.id === l.b);
+        if(!a || !b) return;
         const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1', na.x + 66);
-        line.setAttribute('y1', na.y + 27);
-        line.setAttribute('x2', nb.x + 66);
-        line.setAttribute('y2', nb.y + 27);
-        line.setAttribute('stroke', 'rgba(124,247,255,.35)');
-        line.setAttribute('stroke-width', '2');
+        line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+        line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+        line.setAttribute('stroke', 'rgba(143,211,255,.35)');
+        line.setAttribute('stroke-width', '3');
         lines.appendChild(line);
       });
 
       state.nodes.forEach(node => {
         const el = document.createElement('div');
-        el.className = 'node';
+        el.className = 'node' + (node.name === (sourceEl.value.trim() || targetEl.value.trim()) ? ' active' : '');
         el.style.left = node.x + 'px';
         el.style.top = node.y + 'px';
-        el.textContent = node.label;
-
-        el.onpointerdown = (e) => {
-          dragging = node;
-          dx = e.offsetX;
-          dy = e.offsetY;
-          el.setPointerCapture(e.pointerId);
-        };
-        el.onpointermove = (e) => {
-          if(dragging !== node) return;
-          node.x = Math.max(0, Math.min(w - 132, e.clientX - canvas.getBoundingClientRect().left - dx));
-          node.y = Math.max(0, Math.min(h - 54, e.clientY - canvas.getBoundingClientRect().top - dy));
-          save();
-          render();
-        };
-        el.onpointerup = () => { dragging = null; };
-        el.onclick = (e) => {
-          if(e.shiftKey){ selected = node.id; render(); return; }
-          if(selected && selected !== node.id){
-            const pair = [selected, node.id].sort((a,b)=>a-b);
-            if(!state.links.some(l => l[0]===pair[0] && l[1]===pair[1])) state.links.push(pair);
-            selected = node.id;
-            save();
-            render();
-            return;
-          }
-          selected = node.id;
-          render();
-        };
-
-        canvas.appendChild(el);
+        el.title = node.name;
+        el.onclick = () => outEl.textContent = `${node.name}\n\nConnected links: ${state.links.filter(l => l.a===node.id || l.b===node.id).length}`;
+        graph.appendChild(el);
       });
+
+      outEl.textContent = state.links.length
+        ? 'Select a node to inspect its relationships, or add a new link.'
+        : 'Link chambers to reveal the network.';
     }
 
-    document.getElementById('addBtn').onclick = () => {
-      const label = labelEl.value.trim() || `Node ${state.nodes.length + 1}`;
-      state.nodes.push({
-        id: Date.now(),
-        label,
-        x: 70 + Math.random() * 430,
-        y: 70 + Math.random() * 330
-      });
-      save();
-      render();
-      labelEl.value = '';
-    };
-
     document.getElementById('linkBtn').onclick = () => {
-      if(state.nodes.length < 2) return;
-      const a = state.nodes[0].id;
-      const b = state.nodes[state.nodes.length - 1].id;
-      const pair = [a,b].sort((x,y)=>x-y);
-      if(!state.links.some(l => l[0]===pair[0] && l[1]===pair[1])) state.links.push(pair);
-      save();
-      render();
+      const s = sourceEl.value.trim() || 'Atlas';
+      const t = targetEl.value.trim() || 'Pathfinder';
+      const a = ensureNode(s), b = ensureNode(t);
+      state.links.unshift({ id: Date.now(), a: a.id, b: b.id, note: relationEl.value.trim() || `${s} relates to ${t}.` });
+      save(); render();
+      outEl.textContent = `${s} ↔ ${t}\n\n${relationEl.value.trim() || `${s} relates to ${t}.`}`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
       state.saved.unshift(`nodes:${state.nodes.length} | links:${state.links.length}`);
       state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -342,9 +291,7 @@
     document.getElementById('clearBtn').onclick = () => {
       state.nodes = [];
       state.links = [];
-      selected = null;
-      save();
-      render();
+      save(); render();
     };
 
     renderSaved();
