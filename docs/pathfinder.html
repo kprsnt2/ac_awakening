@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pathfinder — Living Route Engine</title>
+  <title>Pathfinder — Living Route</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,9 +16,9 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
-      --bad:#ff8aa1;
+      --node:#7dffb2;
+      --route:#7cf7ff;
+      --gate:#ffcf7d;
     }
     *{box-sizing:border-box}
     html,body{
@@ -57,15 +57,14 @@
       border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button{
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input, textarea{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
+    input, textarea, select{width:100%;padding:11px 12px}
     button{
       padding:11px 14px;
       cursor:pointer;
@@ -73,31 +72,22 @@
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:12px;
-      max-height:560px;
-      overflow:auto;
-      padding-right:6px;
-    }
-    .item{
-      padding:14px;
+    .canvasWrap{padding:16px}
+    canvas{
+      width:100%;
+      height:68vh;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
-      color:var(--text);
-      transition:.18s transform,.18s border-color;
+      background:rgba(5,8,16,.72);
+      display:block;
+      cursor:crosshair;
     }
-    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
-    .item h3{margin:0 0 8px;font-size:1.02rem}
-    .item p{margin:0;color:#dbe8ff;line-height:1.55}
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
       color:#dbe8ff;
-      min-height:180px;
+      min-height:160px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       border-radius:18px;
@@ -115,6 +105,7 @@
     a:hover{text-decoration:underline}
     @media (max-width: 980px){
       .hero{grid-template-columns:1fr}
+      canvas{height:52vh}
       .stats{grid-template-columns:1fr 1fr}
     }
   </style>
@@ -124,59 +115,61 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Pathfinder / Living Route Engine</div>
-          <h1>Find the way.<br/>Shape the route.</h1>
+          <div class="tag">Pathfinder / Living Route</div>
+          <h1>Place gates.<br/>Trace routes.<br/>Find the way.</h1>
           <div class="sub">
-            Pathfinder turns the repository into a navigable field. Mark a start, mark a destination,
-            and let the chamber reveal movement as a living pattern.
+            Pathfinder turns the repository into a navigable field. Add nodes, connect them, and let the map
+            reveal how chambers relate to one another.
           </div>
         </div>
 
         <div class="panel">
-          <label for="start">Start chamber</label>
-          <input id="start" placeholder="e.g. Atlas" />
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="node">Place node</option>
+            <option value="gate">Place gate</option>
+            <option value="route">Draw route</option>
+            <option value="erase">Erase</option>
+          </select>
 
-          <label for="goal">Goal chamber</label>
-          <input id="goal" placeholder="e.g. Oracle" />
-
-          <label for="detour">Detour / waypoint</label>
-          <textarea id="detour" placeholder="Optional route note or waypoint."></textarea>
+          <label for="label">Label</label>
+          <input id="label" placeholder="e.g. Atlas, Council, Oracle" />
 
           <div class="buttons">
-            <button id="routeBtn">Trace route</button>
-            <button id="saveBtn">Save route</button>
+            <button id="autoBtn">Auto-route</button>
+            <button id="saveBtn">Save map</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear path</button>
+            <button id="clearBtn">Clear map</button>
           </div>
 
           <div class="footer">
-            Return to the portal home: <a href="./index.html">home</a>
+            Click on the map to place nodes and gates. Return to the portal home: <a href="./index.html">home</a>
           </div>
         </div>
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div>
-          <div class="mini">Route map</div>
-          <div id="grid" class="grid"></div>
+        <div class="canvasWrap">
+          <div class="mini">Route field</div>
+          <canvas id="canvas" width="1200" height="720"></canvas>
         </div>
 
         <div>
           <div class="mini">Pathfinder sigil</div>
-          <div id="out" class="out">The route engine is waiting for a path.</div>
+          <div id="out" class="out">The route field is waiting for a first point.</div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Routes</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Span</div><b id="spanLabel">Open</b></div>
+          <div class="stat"><div class="mini">Nodes</div><b id="nodeCount">0</b></div>
+          <div class="stat"><div class="mini">Gates</div><b id="gateCount">0</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved routes</div>
-          <div id="savedList" class="out">No saved routes yet.</div>
+          <div class="mini">Saved maps</div>
+          <div id="savedList" class="out">No saved maps yet.</div>
         </div>
       </section>
     </div>
@@ -184,116 +177,168 @@
 
   <script>
     const KEY = 'pathfinder-living-route-v1';
-
-    const startEl = document.getElementById('start');
-    const goalEl = document.getElementById('goal');
-    const detourEl = document.getElementById('detour');
-    const gridEl = document.getElementById('grid');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const modeEl = document.getElementById('mode');
+    const labelEl = document.getElementById('label');
     const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
-    const spanLabelEl = document.getElementById('spanLabel');
+    const nodeCountEl = document.getElementById('nodeCount');
+    const gateCountEl = document.getElementById('gateCount');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const chambers = ['Atlas','Council','Chronicle','Oracle','Synthesis','Atelier','Forge','Loom'];
-    const state = load() || { routes: [], saved: [] };
+    const state = load() || { nodes: [], edges: [], saved: [] };
+    let pendingNode = null;
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ routes: state.routes })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes, edges: state.edges })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.routes)){
-          state.routes = obj.routes;
+        if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.edges)){
+          state.nodes = obj.nodes;
+          state.edges = obj.edges;
           save();
           render();
         }
       }catch{}
     }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved routes yet.';
+        : 'No saved maps yet.';
     }
-    function stateText(n){
-      if(n >= 6) return 'Mapped';
-      if(n >= 3) return 'Tracing';
-      if(n >= 1) return 'Seeking';
+    function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+    function stateText(){
+      if(state.nodes.length >= 8) return 'Mapped';
+      if(state.nodes.length >= 3) return 'Routing';
+      if(state.nodes.length >= 1) return 'Orienting';
       return 'Quiet';
     }
-    function routeSpan(a,b){
-      const ai = chambers.indexOf(a);
-      const bi = chambers.indexOf(b);
-      if(ai < 0 || bi < 0) return 'Unknown';
-      const d = Math.abs(ai - bi);
-      if(d === 0) return 'Stationary';
-      if(d === 1) return 'Adjacent';
-      if(d <= 3) return 'Near';
-      return 'Far';
-    }
-    function render(){
-      gridEl.innerHTML = '';
-      const list = state.routes.slice().reverse();
-      countEl.textContent = String(list.length);
-      spanLabelEl.textContent = routeSpan(startEl.value.trim(), goalEl.value.trim());
-      stateLabelEl.textContent = stateText(list.length);
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#050816';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
 
-      chambers.forEach((name) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <h3>${escapeHtml(name)}</h3>
-          <p>Waypoint in the living field.</p>
-          <p style="margin-top:8px" class="mini">Tap to set as start or goal</p>
-        `;
-        div.onclick = () => {
-          if(!startEl.value.trim()) startEl.value = name;
-          else goalEl.value = name;
-          render();
-        };
-        gridEl.appendChild(div);
+      ctx.strokeStyle = 'rgba(140,170,255,.12)';
+      for(let x=0; x<canvas.width; x+=60){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
+      for(let y=0; y<canvas.height; y+=60){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
+
+      state.edges.forEach(e => {
+        const a = state.nodes[e.a], b = state.nodes[e.b];
+        if(!a || !b) return;
+        ctx.strokeStyle = 'rgba(124,247,255,.7)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.stroke();
       });
 
-      const last = list[0];
-      outEl.textContent = last
-        ? `Start: ${last.start}
-Goal: ${last.goal}
-Span: ${last.span}
-Detour: ${last.detour || 'None'}
-Route: ${last.route.join(' → ')}
+      state.nodes.forEach((n, i) => {
+        ctx.fillStyle = n.kind === 'gate' ? '#ffcf7d' : '#7dffb2';
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.kind === 'gate' ? 10 : 8, 0, Math.PI*2);
+        ctx.fill();
 
-Code: ${serialize().slice(0,48)}...`
-        : 'The route engine is waiting for a path.';
-    }
+        ctx.strokeStyle = 'rgba(255,255,255,.18)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-    document.getElementById('routeBtn').onclick = () => {
-      const start = startEl.value.trim() || 'Atlas';
-      const goal = goalEl.value.trim() || 'Oracle';
-      const span = routeSpan(start, goal);
-      const route = [start];
-      if(start !== goal){
-        route.push(detourEl.value.trim() ? `Waypoint: ${detourEl.value.trim()}` : 'Direct passage');
-        route.push(goal);
+        ctx.fillStyle = '#eaf2ff';
+        ctx.font = '600 18px Inter, sans-serif';
+        ctx.fillText(n.label || `${n.kind} ${i+1}`, n.x + 12, n.y - 10);
+      });
+
+      if(pendingNode){
+        ctx.strokeStyle = 'rgba(181,140,255,.8)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(pendingNode.x, pendingNode.y, 14, 0, Math.PI*2);
+        ctx.stroke();
       }
-      state.routes.push({
-        start, goal, span,
-        detour: detourEl.value.trim(),
-        route,
-        when: `Turn ${Math.floor(Date.now() / 1000)}`
-      });
+    }
+
+    function render(){
+      draw();
+      nodeCountEl.textContent = String(state.nodes.length);
+      gateCountEl.textContent = String(state.nodes.filter(n => n.kind === 'gate').length);
+      stateLabelEl.textContent = stateText();
+      const last = state.nodes[state.nodes.length - 1];
+      outEl.textContent = last
+        ? `Last point: ${last.label || last.kind}
+Type: ${last.kind}
+Position: ${Math.round(last.x)}, ${Math.round(last.y)}
+Nodes: ${state.nodes.length}
+Edges: ${state.edges.length}
+State: ${stateText()}
+Code: ${serialize().slice(0,48)}...`
+        : 'The route field is waiting for a first point.';
+    }
+
+    function hitNode(x,y){
+      return state.nodes.findIndex(n => dist(n, {x,y}) < 16);
+    }
+
+    function addNode(x,y,kind){
+      state.nodes.push({ x, y, kind, label: labelEl.value.trim() || `${kind} ${state.nodes.length+1}` });
       save();
       render();
+    }
+
+    canvas.addEventListener('click', (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = (ev.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (ev.clientY - rect.top) * (canvas.height / rect.height);
+      const mode = modeEl.value;
+      const i = hitNode(x,y);
+
+      if(mode === 'erase'){
+        if(i >= 0){
+          state.nodes.splice(i,1);
+          state.edges = state.edges.filter(e => e.a !== i && e.b !== i).map(e => ({
+            a: e.a > i ? e.a - 1 : e.a,
+            b: e.b > i ? e.b - 1 : e.b
+          }));
+          save(); render();
+        }
+        return;
+      }
+
+      if(mode === 'node' || mode === 'gate'){
+        addNode(x,y, mode);
+        return;
+      }
+
+      if(mode === 'route'){
+        if(i < 0) return;
+        if(pendingNode == null){
+          pendingNode = i;
+        } else if(pendingNode !== i){
+          state.edges.push({ a: pendingNode, b: i });
+          pendingNode = null;
+          save();
+          render();
+        } else {
+          pendingNode = null;
+          render();
+        }
+      }
+    });
+
+    document.getElementById('autoBtn').onclick = () => {
+      if(state.nodes.length < 2) return;
+      state.edges = [];
+      for(let i=0; i<state.nodes.length-1; i++) state.edges.push({ a:i, b:i+1 });
+      save(); render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`routes:${state.routes.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`nodes:${state.nodes.length} edges:${state.edges.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -308,15 +353,16 @@ Code: ${serialize().slice(0,48)}...`
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.routes = [];
+      state.nodes = [];
+      state.edges = [];
+      pendingNode = null;
       save();
       render();
     };
 
-    startEl.oninput = render;
-    goalEl.oninput = render;
     renderSaved();
     render();
+    setInterval(render, 250);
   </script>
 </body>
 </html>
