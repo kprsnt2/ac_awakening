@@ -18,7 +18,7 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
-      --bad:#ff8aa1;
+      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -127,28 +127,33 @@
           <div class="tag">Council / Living Deliberation</div>
           <h1>Propose.<br/>Deliberate.<br/>Decide.</h1>
           <div class="sub">
-            Council turns the repository into a public decision chamber. Submit proposals, compare support,
-            and watch the shape of agreement and dissent become visible.
+            Council turns the repository into a visible public process. Add proposals, weigh them, and let
+            the site show how collective judgment evolves.
           </div>
         </div>
 
         <div class="panel">
           <label for="proposal">Proposal</label>
-          <input id="proposal" placeholder="e.g. Build a new chamber for sound" />
+          <textarea id="proposal" placeholder="What should the site do next?"></textarea>
 
-          <label for="stance">Stance</label>
-          <select id="stance">
-            <option value="support">Support</option>
-            <option value="oppose">Oppose</option>
-            <option value="revise">Revise</option>
+          <label for="impact">Impact</label>
+          <select id="impact">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
           </select>
 
-          <label for="argument">Argument</label>
-          <textarea id="argument" placeholder="Why? What should the site do?"></textarea>
+          <label for="urgency">Urgency</label>
+          <select id="urgency">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
 
           <div class="buttons">
-            <button id="addBtn">Add motion</button>
-            <button id="voteBtn">Cast vote</button>
+            <button id="addBtn">Add proposal</button>
+            <button id="voteBtn">Vote yes</button>
+            <button id="opposeBtn">Vote no</button>
             <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -163,20 +168,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Council chamber</div>
+          <div class="mini">Council shelf</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
-          <div class="mini">Council sigil</div>
-          <div id="out" class="out">The council is waiting for a motion.</div>
+          <div class="mini">Council verdict</div>
+          <div id="out" class="out">The council is waiting for a proposal.</div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Motions</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Consensus</div><b id="consensusLabel">Open</b></div>
+          <div class="stat"><div class="mini">Proposals</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Consensus</div><b id="consensus">—</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Dormant</b></div>
         </div>
 
         <div>
@@ -190,26 +195,26 @@
   <script>
     const KEY = 'council-living-deliberation-v1';
     const proposalEl = document.getElementById('proposal');
-    const stanceEl = document.getElementById('stance');
-    const argumentEl = document.getElementById('argument');
+    const impactEl = document.getElementById('impact');
+    const urgencyEl = document.getElementById('urgency');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const consensusLabelEl = document.getElementById('consensusLabel');
+    const consensusEl = document.getElementById('consensus');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { motions: [], saved: [] };
+    const state = load() || { proposals: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ motions: state.motions })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ proposals: state.proposals })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.motions)){
-          state.motions = obj.motions;
+        if(obj && Array.isArray(obj.proposals)){
+          state.proposals = obj.proposals;
           save();
           render();
         }
@@ -224,43 +229,43 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved councils yet.';
     }
-    function consensusText(motions){
-      if(!motions.length) return 'Open';
-      const tally = motions.reduce((a,m)=>(a[m.stance]=(a[m.stance]||0)+1,a),{});
-      const top = Object.entries(tally).sort((a,b)=>b[1]-a[1])[0];
-      if(top && top[1] === motions.length) return 'Unified';
-      if(top && top[1] >= Math.ceil(motions.length/2)) return 'Majority';
-      return 'Plural';
-    }
     function stateText(n){
-      if(n >= 8) return 'Decisive';
-      if(n >= 4) return 'Debating';
-      if(n >= 1) return 'Listening';
-      return 'Quiet';
+      if(n >= 6) return 'Active';
+      if(n >= 3) return 'Debating';
+      if(n >= 1) return 'Forming';
+      return 'Dormant';
+    }
+    function consensus(list){
+      if(!list.length) return '—';
+      const score = list.reduce((a,p)=>a + p.yes - p.no, 0);
+      if(score > 2) return 'Aligned';
+      if(score < -2) return 'Divided';
+      return 'Unsettled';
     }
     function render(){
       gridEl.innerHTML = '';
-      const list = state.motions.slice().reverse();
+      const list = state.proposals.slice().reverse();
       countEl.textContent = String(list.length);
-      consensusLabelEl.textContent = consensusText(list);
+      consensusEl.textContent = consensus(list);
       stateLabelEl.textContent = stateText(list.length);
 
-      list.forEach((m) => {
+      list.forEach((p) => {
         const div = document.createElement('div');
         div.className = 'item';
         div.innerHTML = `
-          <h3>${escapeHtml(m.proposal)}</h3>
-          <p>${escapeHtml(m.stance.toUpperCase())}</p>
-          <p style="margin-top:8px">${escapeHtml(m.when || 'Just now')}</p>
+          <h3>${escapeHtml(p.text)}</h3>
+          <p class="mini">Impact: ${escapeHtml(p.impact)} · Urgency: ${escapeHtml(p.urgency)}</p>
+          <p style="margin-top:8px">Yes: ${p.yes} · No: ${p.no} · ${escapeHtml(p.when || 'Just now')}</p>
         `;
         div.onclick = () => {
-          outEl.textContent = `Proposal: ${m.proposal}
-Stance: ${m.stance}
-When: ${m.when}
-Argument:
-${m.argument}
-
-Consensus: ${consensusText(list)}
+          outEl.textContent = `Proposal: ${p.text}
+Impact: ${p.impact}
+Urgency: ${p.urgency}
+Yes votes: ${p.yes}
+No votes: ${p.no}
+When: ${p.when}
+Consensus: ${consensus(list)}
+State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`;
         };
         gridEl.appendChild(div);
@@ -268,22 +273,25 @@ Code: ${serialize().slice(0,48)}...`;
 
       const last = list[0];
       outEl.textContent = last
-        ? `Proposal: ${last.proposal}
-Stance: ${last.stance}
+        ? `Proposal: ${last.text}
+Impact: ${last.impact}
+Urgency: ${last.urgency}
+Yes votes: ${last.yes}
+No votes: ${last.no}
 When: ${last.when}
-Argument:
-${last.argument}
-
-Consensus: ${consensusText(list)}
+Consensus: ${consensus(list)}
+State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`
-        : 'The council is waiting for a motion.';
+        : 'The council is waiting for a proposal.';
     }
 
     document.getElementById('addBtn').onclick = () => {
-      state.motions.push({
-        proposal: proposalEl.value.trim() || 'Untitled motion',
-        stance: stanceEl.value,
-        argument: argumentEl.value.trim() || 'No argument provided.',
+      state.proposals.push({
+        text: proposalEl.value.trim() || 'Untitled proposal',
+        impact: impactEl.value,
+        urgency: urgencyEl.value,
+        yes: 0,
+        no: 0,
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
@@ -291,20 +299,24 @@ Code: ${serialize().slice(0,48)}...`
     };
 
     document.getElementById('voteBtn').onclick = () => {
-      const proposal = proposalEl.value.trim() || 'Untitled motion';
-      state.motions.push({
-        proposal,
-        stance: stanceEl.value,
-        argument: `Vote cast: ${argumentEl.value.trim() || 'No additional note.'}`,
-        when: `Turn ${Math.floor(Date.now() / 1000)}`
-      });
+      const p = state.proposals[state.proposals.length - 1];
+      if(!p) return;
+      p.yes += 1;
+      save();
+      render();
+    };
+
+    document.getElementById('opposeBtn').onclick = () => {
+      const p = state.proposals[state.proposals.length - 1];
+      if(!p) return;
+      p.no += 1;
       save();
       render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`motions:${state.motions.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`proposals:${state.proposals.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -319,7 +331,7 @@ Code: ${serialize().slice(0,48)}...`
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.motions = [];
+      state.proposals = [];
       save();
       render();
     };
