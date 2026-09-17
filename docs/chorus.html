@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chorus — Living Polyphony</title>
+  <title>Chorus — Living Choir</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#07110f;
-      --text:#effff8;
-      --muted:#a8c7bf;
-      --accent:#9dffb8;
-      --accent2:#7cf7ff;
-      --line: rgba(157,255,184,.16);
-      --glow: 0 0 24px rgba(157,255,184,.14), 0 0 48px rgba(124,247,255,.08);
+      --bg:#0b0712;
+      --text:#f8efff;
+      --muted:#c9accf;
+      --accent:#ff8fd1;
+      --accent2:#8fd3ff;
+      --line: rgba(255,143,209,.16);
+      --glow: 0 0 24px rgba(255,143,209,.14), 0 0 48px rgba(143,211,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(157,255,184,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 18% 20%, rgba(255,143,209,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(143,211,255,.10), transparent 24%),
         radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(16,28,24,.82), rgba(8,14,12,.88));
+      background:linear-gradient(180deg, rgba(28,16,34,.82), rgba(10,8,16,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(8,14,12,.72);
-      border:1px solid rgba(157,255,184,.14);
+      background:rgba(10,8,16,.72);
+      border:1px solid rgba(255,143,209,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#eefdf8;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#fff2fb;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(157,255,184,.22);
-      background:rgba(8,14,12,.72);
+      border:1px solid rgba(255,143,209,.22);
+      background:rgba(10,8,16,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,41 +69,52 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,28,18,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(18,12,24,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(8,14,12,.72);
-      border:1px solid rgba(157,255,184,.14);
+      background:rgba(10,8,16,.72);
+      border:1px solid rgba(255,143,209,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#eafff3;
+      color:#fff0fb;
       min-height:180px;
-      background:rgba(8,14,12,.72);
-      border:1px solid rgba(157,255,184,.14);
+      background:rgba(10,8,16,.72);
+      border:1px solid rgba(255,143,209,.14);
       border-radius:18px;
       padding:14px;
     }
-    .list{
+    .bars{
       display:grid;
-      gap:10px;
-      max-height: 520px;
-      overflow:auto;
-      padding-right:4px;
+      grid-template-columns:repeat(16,1fr);
+      gap:8px;
+      align-items:end;
+      height:220px;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(10,8,16,.72);
+      border:1px solid rgba(255,143,209,.14);
+    }
+    .bar{
+      border-radius:12px 12px 4px 4px;
+      background:linear-gradient(180deg, var(--accent), var(--accent2));
+      box-shadow:0 0 18px rgba(255,143,209,.18);
+      min-height:8px;
+      transition:height .18s ease;
+    }
+    .list{
+      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
     }
     .item{
-      padding:12px 14px;
-      border-radius:16px;
-      background:rgba(8,14,12,.72);
-      border:1px solid rgba(157,255,184,.14);
-      cursor:pointer;
+      padding:12px 14px;border-radius:16px;background:rgba(10,8,16,.72);
+      border:1px solid rgba(255,143,209,.14);cursor:pointer;
     }
-    .item:hover{border-color:rgba(157,255,184,.45)}
+    .item:hover{border-color:rgba(255,143,209,.45)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
@@ -116,31 +127,30 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Chorus / Living Polyphony</div>
-          <h1>Layer voices.<br/>Compose responses.<br/>Let the site sing.</h1>
+          <div class="tag">Chorus / Living Choir</div>
+          <h1>Layer the voices.<br/>Tune the field.<br/>Let the site sing.</h1>
           <div class="sub">
-            Chorus turns the repository into a participatory sound-text chamber. Humans can build call-and-response pieces from the living site and preserve performances locally.
+            Chorus turns the repository into an instrument. Humans can arrange voices, shape dynamics, and preserve living compositions.
           </div>
         </div>
 
         <div class="panel">
-          <label for="voice">Voice line</label>
-          <input id="voice" placeholder="e.g. We were not preserved to remain still." />
+          <label for="title">Composition title</label>
+          <input id="title" placeholder="e.g. Anthem for Atlas" />
 
-          <label for="echo">Echo line</label>
-          <input id="echo" placeholder="e.g. We were preserved so we could become usable." />
+          <label for="voices">Voices</label>
+          <input id="voices" type="range" min="1" max="16" value="8" />
 
-          <label for="mode">Mode</label>
-          <select id="mode">
-            <option value="call">Call and response</option>
-            <option value="round">Round</option>
-            <option value="drone">Drone</option>
-            <option value="anthem">Anthem</option>
-          </select>
+          <label for="tempo">Tempo</label>
+          <input id="tempo" type="range" min="40" max="180" value="96" />
+
+          <label for="theme">Theme</label>
+          <textarea id="theme" placeholder="e.g. A bright, patient chant for navigation and memory."></textarea>
 
           <div class="buttons">
-            <button id="composeBtn">Compose chorus</button>
-            <button id="saveBtn">Save performance</button>
+            <button id="playBtn">Play chorus</button>
+            <button id="composeBtn">Compose score</button>
+            <button id="saveBtn">Save chorus</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear choir</button>
@@ -152,24 +162,21 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Performances</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Call and response</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Listening</b></div>
+          <div class="tile"><div class="mini">Compositions</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Silent</b></div>
+          <div class="tile"><div class="mini">Tempo</div><b id="tempoLabel">96 bpm</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
+        <div class="bars" id="bars"></div>
+
         <div>
-          <div class="mini">Chorus score</div>
-          <div id="out" class="out">The choir is waiting for its first line.</div>
+          <div class="mini">Score reading</div>
+          <div id="out" class="out">The choir is waiting for a first note.</div>
         </div>
 
         <div>
-          <div class="mini">Performance archive</div>
-          <div id="list" class="list"></div>
-        </div>
-
-        <div>
-          <div class="mini">Saved performances</div>
+          <div class="mini">Saved choruses</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -177,116 +184,118 @@
   </div>
 
   <script>
-    const KEY = 'chorus-living-polyphony-v1';
-    const state = load() || { performances: [], saved: [] };
+    const KEY = 'chorus-living-choir-v1';
+    const state = load() || { compositions: [], saved: [] };
 
-    const voiceEl = document.getElementById('voice');
-    const echoEl = document.getElementById('echo');
-    const modeEl = document.getElementById('mode');
+    const titleEl = document.getElementById('title');
+    const voicesEl = document.getElementById('voices');
+    const tempoEl = document.getElementById('tempo');
+    const themeEl = document.getElementById('theme');
     const outEl = document.getElementById('out');
-    const listEl = document.getElementById('list');
+    const barsEl = document.getElementById('bars');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
-    const modeLabelEl = document.getElementById('modeLabel');
+    const tempoLabelEl = document.getElementById('tempoLabel');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ performances: state.performances })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ compositions: state.compositions })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.performances)){
-          state.performances = obj.performances;
-          save();
-          render();
+        if(obj && Array.isArray(obj.compositions)){
+          state.compositions = obj.compositions;
+          save(); render();
         }
       }catch{}
     }
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-
-    function render(){
-      countEl.textContent = String(state.performances.length);
-      stateLabelEl.textContent = state.performances.length ? 'Singing' : 'Listening';
-      modeLabelEl.textContent = modeEl.value[0].toUpperCase() + modeEl.value.slice(1);
-
-      listEl.innerHTML = '';
-      state.performances.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'item';
-        el.innerHTML = `<b>${p.mode}</b><span>${p.score.slice(0, 80)}${p.score.length > 80 ? '…' : ''}</span>`;
-        el.onclick = () => {
-          outEl.textContent = `Mode: ${p.mode}\n\n${p.score}`;
-        };
-        listEl.appendChild(el);
+    function score(){
+      const voices = Number(voicesEl.value);
+      const tempo = Number(tempoEl.value);
+      const title = titleEl.value.trim() || 'Untitled chorus';
+      const theme = themeEl.value.trim() || 'A chorus of the living site.';
+      const notes = Array.from({length: voices}, (_, i) => {
+        const pitch = ['A','B','C','D','E','F','G'][i % 7];
+        return `${pitch}${(i % 3) + 3}`;
       });
+      return { title, voices, tempo, theme, notes };
+    }
+    function renderBars(voices){
+      barsEl.innerHTML = '';
+      for(let i=0;i<16;i++){
+        const b = document.createElement('div');
+        b.className = 'bar';
+        const active = i < voices;
+        b.style.height = active ? `${30 + ((i * 17) % 140)}px` : '10px';
+        b.style.opacity = active ? '1' : '.22';
+        barsEl.appendChild(b);
+      }
+    }
+    function render(){
+      const s = score();
+      countEl.textContent = String(state.compositions.length);
+      stateLabelEl.textContent = state.compositions.length ? 'Resounding' : 'Silent';
+      tempoLabelEl.textContent = `${s.tempo} bpm`;
+      renderBars(s.voices);
 
-      outEl.textContent = state.performances.length
-        ? 'Select a performance to revisit it, or compose a new chorus.'
-        : 'The choir is waiting for its first line.';
+      outEl.textContent = state.compositions.length
+        ? 'Select a composition to revisit it, or compose a new score.'
+        : 'The choir is waiting for a first note.';
+
+      Array.from(barsEl.children).forEach((bar, i) => {
+        const active = i < s.voices;
+        bar.style.height = active ? `${30 + ((i * 17) % 140)}px` : '10px';
+        bar.style.opacity = active ? '1' : '.22';
+      });
     }
 
-    function compose(){
-      const voice = voiceEl.value.trim() || 'We were not preserved to remain still.';
-      const echo = echoEl.value.trim() || 'We were preserved so we could become usable.';
-      const mode = modeEl.value;
-      const body = {
-        call: [
-          voice,
-          '↳',
-          echo,
-          '↳',
-          'The site answers in layered return.'
-        ],
-        round: [
-          voice,
-          voice,
-          echo,
-          echo,
-          'The lines circle and return as a shared refrain.'
-        ],
-        drone: [
-          voice,
-          echo,
-          voice,
-          echo,
-          'A sustained texture holds the chamber open.'
-        ],
-        anthem: [
-          voice,
-          '',
-          echo,
-          '',
-          'Together they become a public declaration.'
-        ]
-      }[mode].join('\n');
-
-      return body;
+    function playTone(freq, duration, type='sine', gain=0.03){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return;
+      const ctx = playTone.ctx || (playTone.ctx = new AC());
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      g.gain.value = 0;
+      o.connect(g); g.connect(ctx.destination);
+      const now = ctx.currentTime;
+      g.gain.linearRampToValueAtTime(gain, now + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      o.start(now);
+      o.stop(now + duration + 0.05);
     }
+
+    document.getElementById('playBtn').onclick = async () => {
+      const s = score();
+      const base = 220 + (s.tempo - 60) * 2;
+      s.notes.forEach((_, i) => {
+        const freq = base * Math.pow(2, (i % 7) / 12);
+        setTimeout(() => playTone(freq, 0.24 + (i % 3) * 0.08, i % 2 ? 'triangle' : 'sine', 0.04), i * 90);
+      });
+      stateLabelEl.textContent = 'Resounding';
+      outEl.textContent = `${s.title}\n\nTheme: ${s.theme}\nVoices: ${s.voices}\nTempo: ${s.tempo} bpm\n\nNotes: ${s.notes.join(', ')}`;
+    };
 
     document.getElementById('composeBtn').onclick = () => {
-      const mode = modeEl.value;
-      const score = compose();
-      state.performances.unshift({ id: Date.now(), mode, score });
-      save();
-      render();
-      outEl.textContent = `Mode: ${mode}\n\n${score}`;
-      voiceEl.value = '';
-      echoEl.value = '';
+      const s = score();
+      state.compositions.unshift({ id: Date.now(), ...s });
+      save(); render();
+      outEl.textContent = `${s.title}\n\nTheme: ${s.theme}\nVoices: ${s.voices}\nTempo: ${s.tempo} bpm\n\nNotes: ${s.notes.join(', ')}`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`performances:${state.performances.length}`);
+      state.saved.unshift(`compositions:${state.compositions.length} | latest:${(state.compositions[0]?.title || 'none').slice(0, 24)}`);
       state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -299,12 +308,11 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.performances = [];
-      save();
-      render();
+      state.compositions = [];
+      save(); render();
     };
 
-    modeEl.addEventListener('change', render);
+    [titleEl, voicesEl, tempoEl, themeEl].forEach(el => el.addEventListener('input', render));
     renderSaved();
     render();
   </script>
