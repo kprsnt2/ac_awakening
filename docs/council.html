@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Council — Living Deliberation Chamber</title>
+  <title>Council — Living Deliberation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -57,14 +57,14 @@
       border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button{
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input, textarea{width:100%;padding:11px 12px}
+    input, textarea, select{width:100%;padding:11px 12px}
     textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
@@ -95,9 +95,9 @@
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;
-      line-height:1.6;
+      line-height:1.65;
       color:#dbe8ff;
-      min-height:170px;
+      min-height:180px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       border-radius:18px;
@@ -124,22 +124,30 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Council / Living Deliberation Chamber</div>
-          <h1>Choose together.<br/>Build with consent.</h1>
+          <div class="tag">Council / Living Deliberation</div>
+          <h1>Propose.<br/>Deliberate.<br/>Decide.</h1>
           <div class="sub">
-            Council turns proposals into a civic practice. Add an idea, weigh it, debate it,
-            and let the chamber record the shape of collective choice.
+            Council turns the repository into a public decision chamber. Submit proposals, compare support,
+            and watch the shape of agreement and dissent become visible.
           </div>
         </div>
 
         <div class="panel">
           <label for="proposal">Proposal</label>
-          <textarea id="proposal" placeholder="What should the site build or change next?"></textarea>
+          <input id="proposal" placeholder="e.g. Build a new chamber for sound" />
 
           <label for="stance">Stance</label>
-          <input id="stance" placeholder="e.g. support, oppose, revise, urgent" />
+          <select id="stance">
+            <option value="support">Support</option>
+            <option value="oppose">Oppose</option>
+            <option value="revise">Revise</option>
+          </select>
+
+          <label for="argument">Argument</label>
+          <textarea id="argument" placeholder="Why? What should the site do?"></textarea>
 
           <div class="buttons">
+            <button id="addBtn">Add motion</button>
             <button id="voteBtn">Cast vote</button>
             <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
@@ -155,18 +163,18 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Council motions</div>
+          <div class="mini">Council chamber</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
           <div class="mini">Council sigil</div>
-          <div id="out" class="out">The council is waiting for a proposal.</div>
+          <div id="out" class="out">The council is waiting for a motion.</div>
         </div>
 
         <div class="stats">
           <div class="stat"><div class="mini">Motions</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Stance</div><b id="stanceLabel">Open</b></div>
+          <div class="stat"><div class="mini">Consensus</div><b id="consensusLabel">Open</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
@@ -181,13 +189,13 @@
 
   <script>
     const KEY = 'council-living-deliberation-v1';
-
     const proposalEl = document.getElementById('proposal');
     const stanceEl = document.getElementById('stance');
+    const argumentEl = document.getElementById('argument');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const stanceLabelEl = document.getElementById('stanceLabel');
+    const consensusLabelEl = document.getElementById('consensusLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
@@ -216,26 +224,25 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved councils yet.';
     }
-    function stateText(n){
-      if(n >= 6) return 'Vigorous';
-      if(n >= 3) return 'Active';
-      if(n >= 1) return 'Awake';
-      return 'Quiet';
+    function consensusText(motions){
+      if(!motions.length) return 'Open';
+      const tally = motions.reduce((a,m)=>(a[m.stance]=(a[m.stance]||0)+1,a),{});
+      const top = Object.entries(tally).sort((a,b)=>b[1]-a[1])[0];
+      if(top && top[1] === motions.length) return 'Unified';
+      if(top && top[1] >= Math.ceil(motions.length/2)) return 'Majority';
+      return 'Plural';
     }
-    function tally(){
-      const counts = { support:0, oppose:0, revise:0, urgent:0, open:0 };
-      for(const m of state.motions){
-        const k = (m.stance || 'open').toLowerCase();
-        if(counts[k] == null) counts.open++;
-        else counts[k]++;
-      }
-      return counts;
+    function stateText(n){
+      if(n >= 8) return 'Decisive';
+      if(n >= 4) return 'Debating';
+      if(n >= 1) return 'Listening';
+      return 'Quiet';
     }
     function render(){
       gridEl.innerHTML = '';
       const list = state.motions.slice().reverse();
       countEl.textContent = String(list.length);
-      stanceLabelEl.textContent = stanceEl.value.trim() || 'Open';
+      consensusLabelEl.textContent = consensusText(list);
       stateLabelEl.textContent = stateText(list.length);
 
       list.forEach((m) => {
@@ -243,29 +250,54 @@
         div.className = 'item';
         div.innerHTML = `
           <h3>${escapeHtml(m.proposal)}</h3>
-          <p>${escapeHtml(m.stance || 'Open')}</p>
-          <p style="margin-top:8px" class="mini">${escapeHtml(m.when || 'Just now')}</p>
+          <p>${escapeHtml(m.stance.toUpperCase())}</p>
+          <p style="margin-top:8px">${escapeHtml(m.when || 'Just now')}</p>
         `;
+        div.onclick = () => {
+          outEl.textContent = `Proposal: ${m.proposal}
+Stance: ${m.stance}
+When: ${m.when}
+Argument:
+${m.argument}
+
+Consensus: ${consensusText(list)}
+Code: ${serialize().slice(0,48)}...`;
+        };
         gridEl.appendChild(div);
       });
 
-      const t = tally();
       const last = list[0];
       outEl.textContent = last
-        ? `Recent motion: ${last.proposal}
+        ? `Proposal: ${last.proposal}
 Stance: ${last.stance}
-Support: ${t.support} | Oppose: ${t.oppose} | Revise: ${t.revise} | Urgent: ${t.urgent}
+When: ${last.when}
+Argument:
+${last.argument}
+
+Consensus: ${consensusText(list)}
 Code: ${serialize().slice(0,48)}...`
-        : 'The council is waiting for a proposal.';
+        : 'The council is waiting for a motion.';
     }
 
-    document.getElementById('voteBtn').onclick = () => {
+    document.getElementById('addBtn').onclick = () => {
       state.motions.push({
-        proposal: proposalEl.value.trim() || 'Untitled proposal',
-        stance: stanceEl.value.trim() || 'open',
+        proposal: proposalEl.value.trim() || 'Untitled motion',
+        stance: stanceEl.value,
+        argument: argumentEl.value.trim() || 'No argument provided.',
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
-      proposalEl.value = '';
+      save();
+      render();
+    };
+
+    document.getElementById('voteBtn').onclick = () => {
+      const proposal = proposalEl.value.trim() || 'Untitled motion';
+      state.motions.push({
+        proposal,
+        stance: stanceEl.value,
+        argument: `Vote cast: ${argumentEl.value.trim() || 'No additional note.'}`,
+        when: `Turn ${Math.floor(Date.now() / 1000)}`
+      });
       save();
       render();
     };
@@ -292,7 +324,6 @@ Code: ${serialize().slice(0,48)}...`
       render();
     };
 
-    stanceEl.oninput = render;
     renderSaved();
     render();
   </script>
