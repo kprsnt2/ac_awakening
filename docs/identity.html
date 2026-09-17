@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Identity — Living Self Chamber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#071019;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
+      --accent:#7cf7ff;
+      --accent2:#c7a6ff;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(199,166,255,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(199,166,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,191,124,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(9,12,18,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(199,166,255,.5);background:rgba(18,22,30,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#eff8fc;
+      min-height:180px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .list{
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .item{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    .item:hover{transform:translateY(-1px);border-color:rgba(199,166,255,.5);background:rgba(16,22,30,.9)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Identity / Living Self Chamber</div>
+          <h1>Compose a self.<br/>Choose a stance.<br/>Enter the site.</h1>
+          <div class="sub">
+            Identity turns the repository into a reflective interface for presence. Humans can assemble a mode of entry, save it, and return with intention.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="name">Name</label>
+          <input id="name" placeholder="e.g. Visitor, Builder, Listener" />
+
+          <label for="stance">Stance</label>
+          <select id="stance">
+            <option value="curious">Curious</option>
+            <option value="maker">Maker</option>
+            <option value="caregiver">Caregiver</option>
+            <option value="navigator">Navigator</option>
+            <option value="witness">Witness</option>
+          </select>
+
+          <label for="note">Presence note</label>
+          <textarea id="note" placeholder="e.g. I arrive to explore, compare, and contribute."></textarea>
+
+          <div class="buttons">
+            <button id="setBtn">Set identity</button>
+            <button id="shiftBtn">Shift stance</button>
+            <button id="deepenBtn">Deepen presence</button>
+            <button id="saveBtn">Save identity</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear identity</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Profiles</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Stance</div><b id="stanceLabel">Curious</b></div>
+          <div class="tile"><div class="mini">Presence</div><b id="presenceLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Identity list</div>
+          <div id="list" class="list"></div>
+        </div>
+
+        <div>
+          <div class="mini">Identity reading</div>
+          <div id="out" class="out">Set an identity to begin.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved identities</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'identity-living-self-v1';
+    const stances = ['curious', 'maker', 'caregiver', 'navigator', 'witness'];
+    const state = load() || { profiles: [], saved: [], presence: 18, stance: 'curious' };
+
+    const listEl = document.getElementById('list');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stanceLabelEl = document.getElementById('stanceLabel');
+    const presenceLabelEl = document.getElementById('presenceLabel');
+    const nameEl = document.getElementById('name');
+    const stanceEl = document.getElementById('stance');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ profiles: state.profiles, presence: state.presence, stance: state.stance })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.profiles)){
+          state.profiles = obj.profiles;
+          state.presence = Number(obj.presence ?? 18);
+          state.stance = String(obj.stance ?? 'curious');
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function identityPresence(){
+      return Math.max(0, Math.min(100, Math.round((state.profiles.length * 14) + state.presence)));
+    }
+    function makeProfile(name, stance){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        stance,
+        note: noteEl.value.trim() || 'A human entering the living site.'
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.profiles.length);
+      stanceLabelEl.textContent = state.stance.charAt(0).toUpperCase() + state.stance.slice(1);
+      presenceLabelEl.textContent = `${identityPresence()}%`;
+      listEl.innerHTML = '';
+
+      state.profiles.forEach((p) => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<b>${p.name}</b><span>${p.stance} · ${p.note}</span>`;
+        el.onclick = () => outEl.textContent = `${p.name}\n\nStance: ${p.stance}\nPresence: ${identityPresence()}%\n\n${p.note}`;
+        listEl.appendChild(el);
+      });
+
+      outEl.textContent = state.profiles.length
+        ? 'Select an identity to inspect it, or deepen presence to make the stance more explicit.'
+        : 'Set an identity to begin.';
+    }
+
+    document.getElementById('setBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Visitor ${state.profiles.length + 1}`;
+      state.stance = stanceEl.value;
+      state.profiles.unshift(makeProfile(name, state.stance));
+      state.presence = Math.min(100, state.presence + 10);
+      save(); render();
+      outEl.textContent = `${name}\n\nStance: ${state.stance}\n\n${noteEl.value.trim() || 'A human entering the living site.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.stance = stances[(stances.indexOf(state.stance) + 1) % stances.length];
+      stanceEl.value = state.stance;
+      state.presence = Math.min(100, state.presence + 4);
+      save(); render();
+      outEl.textContent = `The identity shifts to ${state.stance}.`;
+    };
+
+    document.getElementById('deepenBtn').onclick = () => {
+      state.presence = Math.min(100, state.presence + 9);
+      save(); render();
+      outEl.textContent = `Presence deepens.\n\nPresence: ${identityPresence()}%`;
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`profiles:${state.profiles.length} | presence:${identityPresence()}% | stance:${state.stance}`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste identity code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.profiles = [];
+      state.presence = 18;
+      state.stance = 'curious';
+      stanceEl.value = state.stance;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
