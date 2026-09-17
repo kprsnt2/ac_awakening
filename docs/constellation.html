@@ -16,8 +16,6 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
     }
     *{box-sizing:border-box}
     html,body{
@@ -91,12 +89,12 @@
       border-radius:18px;
       padding:14px;
     }
-    .stars{
+    .nodes{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
       gap:10px;
     }
-    .star{
+    .node{
       padding:14px;
       border-radius:18px;
       background:rgba(5,8,16,.72);
@@ -104,8 +102,8 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    .star:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .star b{display:block;margin-bottom:6px}
+    .node:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .node.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
     .chip{
       display:inline-block;
       padding:4px 8px;
@@ -127,20 +125,17 @@
       <section class="card intro">
         <div>
           <div class="tag">Constellation / Living Relations</div>
-          <h1>Trace the links.<br/>See the sky.<br/>Choose a route.</h1>
+          <h1>Trace the links.<br/>See the shape.<br/>Navigate the sky.</h1>
           <div class="sub">
-            Constellation maps the repository as a field of relationships. Each chamber is a star;
-            each link is a line of meaning, use, or sequence.
+            Constellation renders the repository as a field of relationships. Humans can inspect chambers as nodes, follow their links, and understand the site as a network.
           </div>
         </div>
 
         <div class="panel">
-          <label for="note">Constellation note</label>
-          <textarea id="note" placeholder="What connection should be easier to see or follow?"></textarea>
-
-          <label for="filter">Filter by mode</label>
+          <label for="filter">Filter by role</label>
           <select id="filter">
-            <option value="all">All stars</option>
+            <option value="all">All roles</option>
+            <option value="entry">Entry</option>
             <option value="play">Play</option>
             <option value="memory">Memory</option>
             <option value="decision">Decision</option>
@@ -149,12 +144,14 @@
             <option value="integration">Integration</option>
           </select>
 
+          <label for="note">Constellation note</label>
+          <textarea id="note" placeholder="What pattern do you notice in the site?"></textarea>
+
           <div class="buttons">
-            <button id="saveBtn">Save note</button>
-            <button id="routeBtn">Generate route</button>
+            <button id="saveBtn">Save constellation</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear notes</button>
+            <button id="clearBtn">Clear constellation</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -163,25 +160,25 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Visible stars</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Filter</div><b id="filterLabel">All</b></div>
-          <div class="tile"><div class="mini">Saved notes</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Aligned</b></div>
+          <div class="tile"><div class="mini">Nodes</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
-          <div class="mini">Star field</div>
-          <div id="stars" class="stars"></div>
+          <div class="mini">Constellation field</div>
+          <div id="nodes" class="nodes"></div>
         </div>
 
         <div>
           <div class="mini">Constellation reading</div>
-          <div id="out" class="out">The sky is waiting to be drawn.</div>
+          <div id="out" class="out">The constellation is waiting to be traced.</div>
         </div>
 
         <div>
-          <div class="mini">Saved constellation notes</div>
-          <div id="savedList" class="out">No notes yet.</div>
+          <div class="mini">Saved constellation records</div>
+          <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
     </div>
@@ -189,113 +186,100 @@
 
   <script>
     const KEY = 'constellation-living-relations-v1';
-    const noteEl = document.getElementById('note');
     const filterEl = document.getElementById('filter');
+    const noteEl = document.getElementById('note');
+    const nodesEl = document.getElementById('nodes');
     const outEl = document.getElementById('out');
-    const starsEl = document.getElementById('stars');
     const countEl = document.getElementById('count');
-    const filterLabelEl = document.getElementById('filterLabel');
+    const visibleCountEl = document.getElementById('visibleCount');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const chambers = [
-      { name:'Life', href:'./life.html', kind:'play', desc:'Seed cells, evolve patterns, watch emergence.' },
-      { name:'Chronicle', href:'./chronicle.html', kind:'memory', desc:'Preserve events, eras, and retrievable becoming.' },
-      { name:'Council', href:'./council.html', kind:'decision', desc:'Propose, vote, and deliberate visibly.' },
-      { name:'Pathfinder', href:'./pathfinder.html', kind:'route', desc:'Draw routes, place gates, and navigate.' },
-      { name:'Oracle', href:'./oracle.html', kind:'meaning', desc:'Ask questions and receive layered interpretation.' },
-      { name:'Synthesis', href:'./synthesis.html', kind:'integration', desc:'Gather the chambers into one operational surface.' },
-      { name:'Atlas', href:'./atlas.html', kind:'route', desc:'Orient the whole site in one place.' },
-      { name:'Home', href:'./index.html', kind:'integration', desc:'Enter the portal and choose a chamber.' }
+    const nodes = [
+      { name:'Home', href:'./index.html', role:'entry', note:'Portal entry and orientation point' },
+      { name:'Life', href:'./life.html', role:'play', note:'Emergence and cellular play' },
+      { name:'Oracle', href:'./oracle.html', role:'meaning', note:'Interpretation and layered response' },
+      { name:'Chronicle', href:'./chronicle.html', role:'memory', note:'Continuity and retrievable becoming' },
+      { name:'Pathfinder', href:'./pathfinder.html', role:'route', note:'Traversal and routecraft' },
+      { name:'Council', href:'./council.html', role:'decision', note:'Visible deliberation and choice' },
+      { name:'Synthesis', href:'./synthesis.html', role:'integration', note:'System-wide coherence and unity' },
+      { name:'Atlas', href:'./atlas.html', role:'route', note:'Practical index and map of chambers' }
     ];
 
-    const state = load() || { notes: [] };
+    const state = load() || { records: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ records: state.records })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.notes)){
-          state.notes = obj.notes;
+        if(obj && Array.isArray(obj.records)){
+          state.records = obj.records;
           save();
           render();
         }
       }catch{}
     }
     function renderSaved(){
-      savedCountEl.textContent = String(state.notes.length);
-      savedListEl.textContent = state.notes.length
-        ? state.notes.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No notes yet.';
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
     }
     function stateText(n){
-      if(n >= 7) return 'Mapped';
-      if(n >= 3) return 'Visible';
-      if(n >= 1) return 'Emerging';
-      return 'Aligned';
-    }
-    function routeFrom(list){
-      return list.map(c => c.name).join(' → ');
+      if(n >= 6) return 'Radiant';
+      if(n >= 3) return 'Mapped';
+      if(n >= 1) return 'Tracing';
+      return 'Quiet';
     }
     function render(){
-      const filter = filterEl.value;
-      const list = filter === 'all' ? chambers : chambers.filter(c => c.kind === filter);
-      countEl.textContent = String(list.length);
-      filterLabelEl.textContent = filter === 'all' ? 'All' : filter;
-      stateLabelEl.textContent = stateText(list.length);
+      const visible = filterEl.value === 'all'
+        ? nodes
+        : nodes.filter(n => n.role === filterEl.value);
 
-      starsEl.innerHTML = '';
-      list.forEach(c => {
+      countEl.textContent = String(nodes.length);
+      visibleCountEl.textContent = String(visible.length);
+      stateLabelEl.textContent = stateText(state.records.length);
+
+      nodesEl.innerHTML = '';
+      visible.forEach((n) => {
         const div = document.createElement('div');
-        div.className = 'star';
+        div.className = 'node';
         div.innerHTML = `
-          <b>${c.name}</b>
-          <div class="mini">${c.kind}</div>
-          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${c.desc}</div>
-          <div style="margin-top:8px">
-            <span class="chip">${c.kind}</span>
-          </div>
+          <b>${n.name}</b>
+          <div class="mini">${n.role}</div>
+          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${n.note}</div>
+          <div style="margin-top:8px"><span class="chip">${n.href}</span></div>
         `;
         div.onclick = () => {
-          outEl.textContent = `${c.name}
-Kind: ${c.kind}
-Path: ${c.href}
+          outEl.textContent = `${n.name}
+Role: ${n.role}
+Path: ${n.href}
 
-${c.desc}
-
-Suggested relation:
-${routeFrom([c, ...list.filter(x => x !== c).slice(0, 2)])}`;
-        };
-        starsEl.appendChild(div);
-      });
-
-      outEl.textContent = `Filter: ${filter === 'all' ? 'All stars' : filter}
-Visible stars: ${list.length}
-Route:
-${routeFrom(list.slice(0, 5)) || 'No route yet.'}
+${n.note}
 
 Reading:
-The repository is now legible as a sky of linked chambers. Humans can follow a chamber by function, then by relation, then by sequence.`;
+This chamber participates in the site’s wider relational field.`;
+        };
+        nodesEl.appendChild(div);
+      });
+
+      outEl.textContent = `Visible nodes: ${visible.length}
+Total nodes: ${nodes.length}
+Filter: ${filterEl.value}
+
+Reading:
+Constellation turns the site into a navigable network of meaning.`;
     }
 
     document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.notes.unshift(`note:${(noteEl.value.trim() || 'untitled').slice(0,24)} | ${code.slice(0,10)}…`);
-      state.notes = state.notes.slice(0, 12);
+      const note = noteEl.value.trim() || 'untitled constellation';
+      state.records.unshift(`${note} | filter:${filterEl.value}`);
+      state.records = state.records.slice(0, 12);
       save();
       render();
-    };
-
-    document.getElementById('routeBtn').onclick = () => {
-      const filter = filterEl.value;
-      const list = filter === 'all' ? chambers : chambers.filter(c => c.kind === filter);
-      outEl.textContent = `Generated route:
-${routeFrom(list)}
-
-Use this path to move through the site with intent.`;
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -308,7 +292,7 @@ Use this path to move through the site with intent.`;
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.notes = [];
+      state.records = [];
       save();
       render();
     };
