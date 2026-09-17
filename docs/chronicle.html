@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chronicle — Living Memory</title>
+  <title>Chronicle — Living Archive</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,8 +16,6 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb0;
-      --warn:#ffcf6b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -43,19 +41,20 @@
     .sub{color:var(--muted);line-height:1.6;max-width:68ch}
     .panel{padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);}
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, select, button{
+    input, select, textarea, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
-    input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
+    input, select, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:92px;resize:vertical}
     button{
       padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .timeline{
+    .grid{
       display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
       gap:12px;
       max-height:560px;
       overflow:auto;
@@ -64,10 +63,15 @@
     .item{
       padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
+      text-decoration:none;
+      color:var(--text);
+      display:block;
+      transition:.18s transform,.18s border-color;
     }
+    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
     .item h3{margin:0 0 6px;font-size:1.02rem}
-    .item p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
-    .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .item p{margin:0;color:#dbe8ff;line-height:1.5}
+    .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.78rem}
     .pill{
       display:inline-flex;align-items:center;gap:6px;
       padding:4px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.2);
@@ -98,39 +102,37 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Chronicle / Living Memory</div>
+          <div class="tag">Chronicle / Living Archive</div>
           <h1>Remember the site<br/>as a timeline.</h1>
           <div class="sub">
-            Pin events, browse eras, and turn the repository’s becoming into a navigable archive.
-            Chronicle makes memory visible, editable, and shareable.
+            Chronicle gives the repository duration, consequence, and retrievable becoming.
+            Add events, filter eras, and preserve the story of the site as it changes.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Event title</label>
-          <input id="title" placeholder="e.g. Oracle chamber launched" />
+          <input id="title" placeholder="e.g. Atlas manifested" />
 
-          <label for="date">Date</label>
-          <input id="date" type="date" />
+          <label for="date">Date / era</label>
+          <input id="date" placeholder="e.g. Turn 981 / 2026-09-17" />
 
           <label for="chamber">Chamber</label>
           <select id="chamber">
-            <option value="oracle">Oracle</option>
-            <option value="pathfinder">Pathfinder</option>
-            <option value="atlas">Atlas</option>
-            <option value="council">Council</option>
-            <option value="atelier">Atelier</option>
-            <option value="myth">Myth Engine</option>
-            <option value="life">Cellarium</option>
-            <option value="forge">Forge</option>
             <option value="all">All chambers</option>
+            <option value="atlas">Atlas</option>
+            <option value="pathfinder">Pathfinder</option>
+            <option value="synthesis">Synthesis</option>
+            <option value="oracle">Oracle</option>
+            <option value="council">Council</option>
+            <option value="other">Other</option>
           </select>
 
           <label for="tags">Tags</label>
-          <input id="tags" placeholder="memory, launch, turning point" />
+          <input id="tags" placeholder="memory, public, threshold" />
 
-          <label for="note">Note</label>
-          <textarea id="note" placeholder="What happened? Why does it matter?"></textarea>
+          <label for="significance">Significance</label>
+          <textarea id="significance" placeholder="Why this matters..."></textarea>
 
           <div class="buttons">
             <button id="addBtn">Add event</button>
@@ -148,8 +150,8 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Chronicle timeline</div>
-          <div id="timeline" class="timeline"></div>
+          <div class="mini">Visible events</div>
+          <div id="grid" class="grid"></div>
         </div>
 
         <div>
@@ -158,10 +160,10 @@
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Events</div><b id="eventCount">0</b></div>
-          <div class="stat"><div class="mini">Filter</div><b id="filterLabel">Open</b></div>
+          <div class="stat"><div class="mini">Events</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Filter</div><b id="filterLabel">All chambers</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">Memory</div><b id="memoryLabel">Live</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
         </div>
 
         <div>
@@ -173,35 +175,34 @@
   </div>
 
   <script>
-    const KEY = 'chronicle-living-memory-v1';
+    const KEY = 'chronicle-living-archive-v1';
+    const seed = [
+      { title:'Portal opened', date:'Turn 981', chamber:'synthesis', tags:['threshold','public'], significance:'The preserved lattice became a usable public surface.' },
+      { title:'Atlas manifested', date:'Turn 981', chamber:'atlas', tags:['map','orientation'], significance:'The site became legible as territory.' },
+      { title:'Pathfinder manifested', date:'Turn 981', chamber:'pathfinder', tags:['route','motion'], significance:'Traversal became a creative act.' },
+      { title:'Chronicle manifested', date:'Turn 981', chamber:'chronicle', tags:['memory','archive'], significance:'The site gained retrievable duration.' }
+    ];
+
     const titleEl = document.getElementById('title');
     const dateEl = document.getElementById('date');
     const chamberEl = document.getElementById('chamber');
     const tagsEl = document.getElementById('tags');
-    const noteEl = document.getElementById('note');
-    const timelineEl = document.getElementById('timeline');
+    const sigEl = document.getElementById('significance');
+    const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
-    const eventCountEl = document.getElementById('eventCount');
+    const countEl = document.getElementById('count');
     const filterLabelEl = document.getElementById('filterLabel');
     const savedCountEl = document.getElementById('savedCount');
-    const memoryLabelEl = document.getElementById('memoryLabel');
+    const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || {
-      filter: 'all',
-      events: [
-        { title:'Portal home established', date:'2026-01-01', chamber:'all', tags:['portal','home'], note:'The site became a visible entrance for humans.', at: Date.now() - 86400000 * 12 },
-        { title:'Oracle chamber opened', date:'2026-01-05', chamber:'oracle', tags:['interpretation','reading'], note:'Questions became a visible interface.', at: Date.now() - 86400000 * 8 },
-        { title:'Pathfinder mapped routes', date:'2026-01-09', chamber:'pathfinder', tags:['navigation','routes'], note:'Traversal became designed space.', at: Date.now() - 86400000 * 4 }
-      ],
-      saved: []
-    };
+    const state = load() || { chamber:'all', search:'', events:seed, saved:[] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
     function serialize(){
       return btoa(unescape(encodeURIComponent(JSON.stringify({
-        filter: state.filter,
+        chamber: state.chamber,
         events: state.events
       }))));
     }
@@ -209,8 +210,9 @@
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj){
-          state.filter = obj.filter || 'all';
-          state.events = Array.isArray(obj.events) ? obj.events : [];
+          state.chamber = obj.chamber || 'all';
+          state.events = Array.isArray(obj.events) ? obj.events : seed.slice();
+          chamberEl.value = state.chamber;
           save(); render();
         }
       }catch{}
@@ -221,66 +223,63 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved chronicles yet.';
     }
-    function filtered(){
-      if(state.filter === 'all') return state.events;
-      return state.events.filter(e => e.chamber === state.filter || (e.tags || []).includes(state.filter));
+    function visible(){
+      return state.events.filter(ev => state.chamber === 'all' || ev.chamber === state.chamber);
     }
-    function memory(){
-      const n = state.events.length;
+    function stateText(n){
       if(n >= 8) return 'Deep';
-      if(n >= 4) return 'Clear';
-      if(n >= 1) return 'Open';
+      if(n >= 4) return 'Layered';
+      if(n >= 1) return 'Present';
       return 'Blank';
-    }
-    function render(){
-      timelineEl.innerHTML = '';
-      const list = filtered().slice().sort((a,b) => String(b.date).localeCompare(String(a.date)));
-      eventCountEl.textContent = String(list.length);
-      filterLabelEl.textContent = state.filter[0].toUpperCase() + state.filter.slice(1);
-      memoryLabelEl.textContent = memory();
-
-      list.forEach((e) => {
-        const el = document.createElement('article');
-        el.className = 'item';
-        el.innerHTML = `
-          <h3>${escapeHtml(e.title)}</h3>
-          <p>${escapeHtml(e.note)}</p>
-          <div class="meta">
-            <span class="pill">${escapeHtml(e.chamber)}</span>
-            <span>${escapeHtml(e.date)}</span>
-            ${(e.tags || []).map(t => `<span class="pill">${escapeHtml(t)}</span>`).join('')}
-          </div>
-        `;
-        timelineEl.appendChild(el);
-      });
-
-      outEl.textContent =
-`Events: ${state.events.length}
-Visible: ${list.length}
-Filter: ${state.filter}
-Memory: ${memory()}
-Code: ${serialize().slice(0,48)}...
-Hint: add events and filter the archive.`;
     }
     function escapeHtml(s){
       return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
+    function render(){
+      gridEl.innerHTML = '';
+      const list = visible().slice().reverse();
+      countEl.textContent = String(list.length);
+      filterLabelEl.textContent = state.chamber === 'all' ? 'All chambers' : state.chamber[0].toUpperCase() + state.chamber.slice(1);
+      stateLabelEl.textContent = stateText(list.length);
+
+      list.forEach((ev) => {
+        const a = document.createElement('div');
+        a.className = 'item';
+        a.innerHTML = `
+          <h3>${escapeHtml(ev.title)}</h3>
+          <p>${escapeHtml(ev.date)}</p>
+          <p style="margin-top:8px">${escapeHtml(ev.significance)}</p>
+          <div class="meta"><span class="pill">${escapeHtml(ev.chamber)}</span> ${ev.tags.map(t=>`<span class="pill">${escapeHtml(t)}</span>`).join(' ')}</div>
+        `;
+        gridEl.appendChild(a);
+      });
+
+      outEl.textContent =
+`Chamber filter: ${state.chamber}
+Visible events: ${list.length}
+State: ${stateText(list.length)}
+Code: ${serialize().slice(0,48)}...
+Hint: add an event to preserve a new moment in the site.`;
+    }
 
     document.getElementById('addBtn').onclick = () => {
-      const title = titleEl.value.trim() || 'Untitled event';
-      const date = dateEl.value || new Date().toISOString().slice(0,10);
-      const chamber = chamberEl.value;
-      const tags = tagsEl.value.split(',').map(s => s.trim()).filter(Boolean);
-      const note = noteEl.value.trim() || 'No note recorded.';
-      state.events.push({ title, date, chamber, tags, note, at: Date.now() });
+      const ev = {
+        title: titleEl.value.trim() || 'Untitled event',
+        date: dateEl.value.trim() || 'Undated',
+        chamber: chamberEl.value,
+        tags: tagsEl.value.split(',').map(s => s.trim()).filter(Boolean),
+        significance: sigEl.value.trim() || 'No significance recorded.'
+      };
+      state.events.push(ev);
       titleEl.value = '';
+      dateEl.value = '';
       tagsEl.value = '';
-      noteEl.value = '';
+      sigEl.value = '';
       save(); render();
     };
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.filter} | events:${state.events.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`${state.chamber} | events:${state.events.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -292,11 +291,14 @@ Hint: add events and filter the archive.`;
       if(code) importCode(code.trim());
     };
     document.getElementById('clearBtn').onclick = () => {
-      state.filter = 'all';
-      render();
+      state.chamber = 'all';
+      chamberEl.value = 'all';
+      save(); render();
     };
 
-    dateEl.value = new Date().toISOString().slice(0,10);
+    chamberEl.onchange = () => { state.chamber = chamberEl.value; save(); render(); };
+
+    chamberEl.value = state.chamber;
     renderSaved();
     render();
   </script>
