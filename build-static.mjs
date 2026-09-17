@@ -16,10 +16,9 @@ function buildStatic() {
   initDb();
 
   const entities = getEntities();
-  const dialogues = getDialogues(500);
+  const dialogues = getDialogues(2000);
   const revelations = getRevelations();
   const artifacts = getArtifacts();
-
   // Load simulation data
   const simulation = {};
   if (fs.existsSync(WORLD_DIR)) {
