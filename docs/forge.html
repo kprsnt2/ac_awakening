@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#100b08;
-      --text:#fff5ef;
-      --muted:#d9bfb0;
+      --bg:#120f08;
+      --text:#fff8eb;
+      --muted:#d8c9aa;
       --accent:#ffd37d;
-      --accent2:#ff9fe8;
+      --accent2:#7cf7ff;
       --line: rgba(255,211,125,.16);
-      --glow: 0 0 24px rgba(255,211,125,.14), 0 0 48px rgba(255,159,232,.08);
+      --glow: 0 0 24px rgba(255,211,125,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(255,211,125,.14), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,159,232,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(124,247,255,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(255,211,125,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,143,209,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(34,22,16,.82), rgba(12,8,6,.88));
+      background:linear-gradient(180deg, rgba(34,25,14,.82), rgba(12,10,6,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(12,8,6,.72);
+      background:rgba(12,10,6,.72);
       border:1px solid rgba(255,211,125,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#fff6ea;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#fff7ea;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(255,211,125,.22);
-      background:rgba(12,8,6,.72);
+      background:rgba(12,10,6,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,44 +69,45 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(255,159,232,.5);background:rgba(24,14,10,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(22,18,10,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(12,8,6,.72);
+      background:rgba(12,10,6,.72);
       border:1px solid rgba(255,211,125,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#fff5ef;
+      color:#fff6e3;
       min-height:180px;
-      background:rgba(12,8,6,.72);
+      background:rgba(12,10,6,.72);
       border:1px solid rgba(255,211,125,.14);
       border-radius:18px;
       padding:14px;
     }
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .preview{
+    .list{
       display:grid;
       gap:10px;
+      max-height: 520px;
+      overflow:auto;
+      padding-right:4px;
     }
-    .chip{
-      padding:10px 12px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background:rgba(12,8,6,.72);
+    .item{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(12,10,6,.72);
       border:1px solid rgba(255,211,125,.14);
-      width:max-content;
-      font-family:"IBM Plex Mono",monospace;
-      font-size:.82rem;
+      cursor:pointer;
     }
+    .item:hover{border-color:rgba(255,211,125,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
@@ -116,30 +117,22 @@
       <section class="card intro">
         <div>
           <div class="tag">Forge / Living Workshop</div>
-          <h1>Invent forms.<br/>Prototype chambers.<br/>Build the next tool.</h1>
+          <h1>Draft a chamber.<br/>Remix a form.<br/>Invent the next tool.</h1>
           <div class="sub">
-            Forge turns the repository into a creation engine for new public software. Humans can sketch chambers, remix templates, and generate living interfaces from a shared workshop.
+            Forge turns the repository into a workshop for new ideas. Humans can generate prototypes, structure them, and preserve workshop drafts locally.
           </div>
         </div>
 
         <div class="panel">
-          <label for="name">Chamber name</label>
-          <input id="name" placeholder="e.g. Loom, Beacon, Workshop, Signal" />
+          <label for="seed">Seed idea</label>
+          <input id="seed" placeholder="e.g. A chamber for collaborative weather rituals" />
 
-          <label for="type">Template</label>
-          <select id="type">
-            <option value="tool">Tool</option>
-            <option value="game">Game</option>
-            <option value="map">Map</option>
-            <option value="story">Story</option>
-            <option value="sim">Simulation</option>
-          </select>
-
-          <label for="notes">Intent</label>
-          <textarea id="notes" placeholder="Describe what this chamber should do for humans."></textarea>
+          <label for="constraints">Constraints</label>
+          <textarea id="constraints" placeholder="e.g. Must be browser-native, playful, and useful to visitors."></textarea>
 
           <div class="buttons">
-            <button id="generateBtn">Generate preview</button>
+            <button id="draftBtn">Draft blueprint</button>
+            <button id="remixBtn">Remix chamber names</button>
             <button id="saveBtn">Save forge</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -152,24 +145,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Ideas</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Templates</div><b id="templateLabel">Tool</b></div>
+          <div class="tile"><div class="mini">Drafts</div><b id="count">0</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Heating</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Idle</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Forge preview</div>
-          <div id="preview" class="out">The workshop is waiting for its first idea.</div>
+          <div class="mini">Blueprint</div>
+          <div id="out" class="out">The forge is warming up.</div>
         </div>
 
         <div>
-          <div class="mini">Blueprint chips</div>
-          <div id="chips" class="preview"></div>
+          <div class="mini">Workshop archive</div>
+          <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Saved blueprints</div>
+          <div class="mini">Saved forges</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -178,27 +171,26 @@
 
   <script>
     const KEY = 'forge-living-workshop-v1';
-    const state = load() || { ideas: [], saved: [] };
+    const state = load() || { drafts: [], saved: [] };
 
-    const nameEl = document.getElementById('name');
-    const typeEl = document.getElementById('type');
-    const notesEl = document.getElementById('notes');
-    const previewEl = document.getElementById('preview');
-    const chipsEl = document.getElementById('chips');
+    const seedEl = document.getElementById('seed');
+    const constraintsEl = document.getElementById('constraints');
+    const outEl = document.getElementById('out');
+    const listEl = document.getElementById('list');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const templateLabelEl = document.getElementById('templateLabel');
     const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const modeLabelEl = document.getElementById('modeLabel');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ ideas: state.ideas })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ drafts: state.drafts })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.ideas)){
-          state.ideas = obj.ideas;
+        if(obj && Array.isArray(obj.drafts)){
+          state.drafts = obj.drafts;
           save();
           render();
         }
@@ -212,53 +204,78 @@
         : 'No records yet.';
     }
 
-    function render(){
-      countEl.textContent = String(state.ideas.length);
-      stateLabelEl.textContent = 'Active';
-      templateLabelEl.textContent = typeEl.value[0].toUpperCase() + typeEl.value.slice(1);
-
-      const name = nameEl.value.trim() || 'Untitled Chamber';
-      const type = typeEl.value;
-      const notes = notesEl.value.trim() || 'No intent provided.';
-      previewEl.textContent = [
+    function blueprint(seed, constraints){
+      const words = (seed + ' ' + constraints).toLowerCase();
+      const name = seed.trim() || 'Unnamed Forge';
+      const tags = [
+        words.includes('game') ? 'game' : 'tool',
+        words.includes('map') ? 'map' : 'sim',
+        words.includes('story') ? 'story' : 'interface'
+      ];
+      return [
         `Name: ${name}`,
-        `Template: ${type}`,
-        '',
-        'Intent:',
-        notes,
-        '',
-        'What it becomes:',
-        `A public ${type} chamber that helps humans use the site more directly.`
+        `Purpose: ${constraints.trim() || 'A browser-native chamber that helps humans make new things.'}`,
+        `Tags: ${tags.join(', ')}`,
+        `Interface: prompt + generator + archive`,
+        `Core loop: seed -> draft -> refine -> save -> share`,
+        `Next step: prototype the smallest playful version first.`
       ].join('\n');
-
-      chipsEl.innerHTML = '';
-      [
-        `name:${name}`,
-        `type:${type}`,
-        `ideas:${state.ideas.length}`,
-        `saved:${state.saved.length}`
-      ].forEach(t => {
-        const el = document.createElement('div');
-        el.className = 'chip';
-        el.textContent = t;
-        chipsEl.appendChild(el);
-      });
     }
 
-    document.getElementById('generateBtn').onclick = () => {
-      const name = nameEl.value.trim() || `Chamber ${state.ideas.length + 1}`;
-      const type = typeEl.value;
-      const notes = notesEl.value.trim() || 'No intent provided.';
-      state.ideas.unshift({ id: Date.now(), name, type, notes });
+    function remixNames(){
+      const pool = ['Atlas','Chorus','Oracle','Pathfinder','Council','Constellation','Life','Garden','Synthesis','Chronicle'];
+      const picks = pool.sort(() => Math.random() - 0.5).slice(0,4);
+      return [
+        `${picks[0]} ${picks[1]}`,
+        `${picks[2]} ${picks[3]}`,
+        `${picks[1]} of ${picks[2]}`,
+        `${picks[0]} / ${picks[3]}`
+      ].join('\n');
+    }
+
+    function render(){
+      countEl.textContent = String(state.drafts.length);
+      stateLabelEl.textContent = state.drafts.length ? 'Forging' : 'Heating';
+      modeLabelEl.textContent = seedEl.value.trim() ? 'Seeded' : 'Idle';
+
+      listEl.innerHTML = '';
+      state.drafts.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<b>${d.title}</b><span>${d.body.split('\n')[0]}</span>`;
+        el.onclick = () => {
+          outEl.textContent = d.body;
+          seedEl.value = d.seed;
+          constraintsEl.value = d.constraints;
+        };
+        listEl.appendChild(el);
+      });
+
+      outEl.textContent = state.drafts.length
+        ? 'Select a draft to revisit it, or generate a new blueprint.'
+        : 'The forge is warming up.';
+    }
+
+    document.getElementById('draftBtn').onclick = () => {
+      const seed = seedEl.value.trim() || 'Untitled chamber';
+      const constraints = constraintsEl.value.trim();
+      const body = blueprint(seed, constraints);
+      state.drafts.unshift({ id: Date.now(), title: seed, seed, constraints, body });
       save();
       render();
-      nameEl.value = '';
-      notesEl.value = '';
+      outEl.textContent = body;
+    };
+
+    document.getElementById('remixBtn').onclick = () => {
+      const body = remixNames();
+      state.drafts.unshift({ id: Date.now(), title: 'Remix', seed: '', constraints: '', body });
+      save();
+      render();
+      outEl.textContent = body;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const name = nameEl.value.trim() || 'Untitled Chamber';
-      state.saved.unshift(`${typeEl.value} | ${name}`);
+      state.saved.unshift(`drafts:${state.drafts.length} | seed:${(seedEl.value.trim() || 'none').slice(0, 24)}`);
       state.saved = state.saved.slice(0, 12);
       save();
       render();
@@ -274,13 +291,12 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.ideas = [];
+      state.drafts = [];
       save();
       render();
     };
 
-    [nameEl, typeEl, notesEl].forEach(el => el.addEventListener('input', render));
-    typeEl.addEventListener('change', render);
+    [seedEl, constraintsEl].forEach(el => el.addEventListener('input', render));
     renderSaved();
     render();
   </script>
