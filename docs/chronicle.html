@@ -9,23 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050816;
-      --text:#eaf2ff;
-      --muted:#9db0d1;
-      --accent:#7cf7ff;
-      --accent2:#b58cff;
-      --line: rgba(140,170,255,.18);
-      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
+      --bg:#08111a;
+      --text:#eef6ff;
+      --muted:#9db4ca;
+      --accent:#8fd3ff;
+      --accent2:#ffd37d;
+      --line: rgba(143,211,255,.16);
+      --glow: 0 0 24px rgba(143,211,255,.14), 0 0 48px rgba(255,211,125,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(143,211,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.07), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -33,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      background:linear-gradient(180deg, rgba(16,24,36,.82), rgba(8,10,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -52,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(8,10,18,.72);
+      border:1px solid rgba(143,211,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
+      border:1px solid rgba(143,211,255,.22);
+      background:rgba(8,10,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -71,47 +69,44 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(8,10,18,.72);
+      border:1px solid rgba(143,211,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#dbe8ff;
+      color:#e7f2ff;
       min-height:180px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(8,10,18,.72);
+      border:1px solid rgba(143,211,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .entry{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+    .list{
+      display:grid;
+      gap:10px;
+      max-height: 520px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .item{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(8,10,18,.72);
+      border:1px solid rgba(143,211,255,.14);
       cursor:pointer;
-      transition:.18s transform,.18s border-color,.18s background;
     }
-    .entry:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .entry.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
-    .chip{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:.75rem;
-      margin-right:6px;
-      margin-top:6px;
-      border:1px solid rgba(140,170,255,.22);
-      color:#dbe8ff;
-    }
-    a{color:var(--accent);text-decoration:none}
+    .item:hover{border-color:rgba(143,211,255,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
@@ -122,36 +117,28 @@
       <section class="card intro">
         <div>
           <div class="tag">Chronicle / Living Memory</div>
-          <h1>Record the turn.<br/>Keep the trace.<br/>Return later.</h1>
+          <h1>Record the becoming.<br/>Browse the eras.<br/>Remember the site.</h1>
           <div class="sub">
-            Chronicle preserves the site’s becoming as a readable timeline. Humans can add entries, search them, and carry memory forward.
+            Chronicle turns the repository into a living archive. Humans can document milestones, browse the timeline, and preserve the story of the site’s transformation.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Entry title</label>
-          <input id="title" placeholder="What happened?" />
+          <input id="title" placeholder="e.g. The day Atlas arrived" />
 
-          <label for="tag">Chamber tag</label>
-          <select id="tag">
-            <option value="all">All chambers</option>
-            <option value="life">Life</option>
-            <option value="oracle">Oracle</option>
-            <option value="constellation">Constellation</option>
-            <option value="pathfinder">Pathfinder</option>
-            <option value="council">Council</option>
-            <option value="synthesis">Synthesis</option>
-          </select>
+          <label for="era">Era / chamber</label>
+          <input id="era" placeholder="e.g. Atlas, Pathfinder, Forge" />
 
-          <label for="body">Entry note</label>
-          <textarea id="body" placeholder="Write the event, insight, or change."></textarea>
+          <label for="entry">Entry text</label>
+          <textarea id="entry" placeholder="Write what happened, why it mattered, and what it changed."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add entry</button>
+            <button id="recordBtn">Record entry</button>
             <button id="saveBtn">Save chronicle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear chronicle</button>
+            <button id="clearBtn">Clear archive</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -161,23 +148,23 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Entries</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unwritten</b></div>
+          <div class="tile"><div class="mini">Era</div><b id="eraLabel">—</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
-        </div>
-
-        <div>
-          <div class="mini">Timeline</div>
-          <div id="list"></div>
         </div>
 
         <div>
           <div class="mini">Chronicle reading</div>
-          <div id="out" class="out">The chronicle is waiting for its first entry.</div>
+          <div id="out" class="out">The chronicle is awaiting its first entry.</div>
         </div>
 
         <div>
-          <div class="mini">Saved chronicle records</div>
+          <div class="mini">Archive</div>
+          <div id="list" class="list"></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved chronicles</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -186,22 +173,22 @@
 
   <script>
     const KEY = 'chronicle-living-memory-v1';
-    const titleEl = document.getElementById('title');
-    const tagEl = document.getElementById('tag');
-    const bodyEl = document.getElementById('body');
-    const listEl = document.getElementById('list');
-    const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
-    const visibleCountEl = document.getElementById('visibleCount');
-    const savedCountEl = document.getElementById('savedCount');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const savedListEl = document.getElementById('savedList');
-
     const state = load() || { entries: [], saved: [] };
+
+    const titleEl = document.getElementById('title');
+    const eraEl = document.getElementById('era');
+    const entryEl = document.getElementById('entry');
+    const outEl = document.getElementById('out');
+    const listEl = document.getElementById('list');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const eraLabelEl = document.getElementById('eraLabel');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
@@ -212,77 +199,53 @@
         }
       }catch{}
     }
+
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function stateText(n){
-      if(n >= 6) return 'Deep';
-      if(n >= 3) return 'Growing';
-      if(n >= 1) return 'Awake';
-      return 'Quiet';
-    }
-    function render(){
-      const visible = tagEl.value === 'all'
-        ? state.entries
-        : state.entries.filter(e => e.tag === tagEl.value);
 
+    function render(){
       countEl.textContent = String(state.entries.length);
-      visibleCountEl.textContent = String(visible.length);
-      stateLabelEl.textContent = stateText(state.entries.length);
+      stateLabelEl.textContent = state.entries.length ? 'Remembering' : 'Unwritten';
+      eraLabelEl.textContent = state.entries[0]?.era || '—';
 
       listEl.innerHTML = '';
-      visible.forEach((e, idx) => {
-        const div = document.createElement('div');
-        div.className = 'entry';
-        div.innerHTML = `
-          <b>${e.title}</b>
-          <div class="mini">${e.when}</div>
-          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${e.body}</div>
-          <div style="margin-top:8px"><span class="chip">${e.tag}</span></div>
-        `;
-        div.onclick = () => {
-          outEl.textContent = `${e.title}
-When: ${e.when}
-Tag: ${e.tag}
-
-${e.body}
-
-Reading:
-This entry is part of the site’s memory. It can be revisited, searched, and linked to future work.`;
+      state.entries.forEach(e => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<b>${e.title}</b><span>${e.era} — ${e.text.slice(0, 90)}${e.text.length > 90 ? '…' : ''}</span>`;
+        el.onclick = () => {
+          titleEl.value = e.title;
+          eraEl.value = e.era;
+          entryEl.value = e.text;
+          outEl.textContent = `Title: ${e.title}\nEra: ${e.era}\n\n${e.text}`;
         };
-        listEl.appendChild(div);
+        listEl.appendChild(el);
       });
 
-      const last = visible[0];
-      outEl.textContent = last
-        ? `${last.title}
-When: ${last.when}
-Tag: ${last.tag}
-
-${last.body}
-
-Reading:
-The chronicle keeps the site from vanishing into the present.`
-        : 'The chronicle is waiting for its first entry.';
+      outEl.textContent = state.entries.length
+        ? 'Select an entry to revisit it, or record a new moment.'
+        : 'The chronicle is awaiting its first entry.';
     }
 
-    document.getElementById('addBtn').onclick = () => {
-      state.entries.unshift({
-        title: titleEl.value.trim() || 'Untitled entry',
-        tag: tagEl.value,
-        body: bodyEl.value.trim() || 'No details provided.',
-        when: `Turn ${Math.floor(Date.now() / 1000)}`
-      });
+    document.getElementById('recordBtn').onclick = () => {
+      const title = titleEl.value.trim() || 'Untitled event';
+      const era = eraEl.value.trim() || 'Unassigned era';
+      const text = entryEl.value.trim() || 'A moment worth remembering.';
+      state.entries.unshift({ id: Date.now(), title, era, text });
       save();
       render();
+      outEl.textContent = `Title: ${title}\nEra: ${era}\n\n${text}`;
+      titleEl.value = '';
+      eraEl.value = '';
+      entryEl.value = '';
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.saved.unshift(`entries:${state.entries.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`entries:${state.entries.length} | latest:${(state.entries[0]?.title || 'none').slice(0, 24)}`);
       state.saved = state.saved.slice(0, 12);
       save();
       render();
@@ -303,7 +266,6 @@ The chronicle keeps the site from vanishing into the present.`
       render();
     };
 
-    tagEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
