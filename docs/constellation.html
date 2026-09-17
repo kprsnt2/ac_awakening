@@ -10,19 +10,19 @@
   <style>
     :root{
       --bg:#070b18;
-      --text:#eef3ff;
-      --muted:#a9b7d1;
+      --text:#eef4ff;
+      --muted:#aab7d8;
       --accent:#7cf7ff;
-      --accent2:#c89bff;
+      --accent2:#b58cff;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(200,155,255,.08);
+      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(181,140,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
         radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(200,155,255,.10), transparent 24%),
+        radial-gradient(circle at 82% 12%, rgba(181,140,255,.10), transparent 24%),
         radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,24,42,.82), rgba(7,11,24,.88));
+      background:linear-gradient(180deg, rgba(18,24,48,.82), rgba(8,10,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,32 +50,32 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(7,11,24,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#e8f7ff;font-size:.92rem}
-    input, textarea, button{
+    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(7,11,24,.72);
+      background:rgba(8,10,18,.72);
       color:var(--text);
     }
-    input, textarea{width:100%;padding:11px 12px}
+    input, textarea, select{width:100%;padding:11px 12px}
     textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(200,155,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(7,11,24,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
@@ -84,24 +84,26 @@
       line-height:1.65;
       color:#e7f2ff;
       min-height:180px;
-      background:rgba(7,11,24,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .arena{
+    .canvas{
       position:relative;
       height:560px;
       border-radius:18px;
       background:
         radial-gradient(circle at center, rgba(124,247,255,.06), transparent 60%),
-        rgba(7,11,24,.72);
+        rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
       overflow:hidden;
+      touch-action:none;
     }
+    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
     .node{
       position:absolute;
-      width:124px;height:52px;
+      width:132px;height:54px;
       border-radius:16px;
       display:flex;align-items:center;justify-content:center;
       background:linear-gradient(180deg, rgba(20,28,48,.98), rgba(10,14,24,.98));
@@ -114,10 +116,9 @@
       text-align:center;
       padding:8px;
     }
-    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .arena{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .canvas{height:460px} }
   </style>
 </head>
 <body>
@@ -126,22 +127,23 @@
       <section class="card intro">
         <div>
           <div class="tag">Constellation / Living Network</div>
-          <h1>Connect chambers.<br/>Draw relations.<br/>See the site think in space.</h1>
+          <h1>Connect chambers.<br/>Trace relations.<br/>Map the living web.</h1>
           <div class="sub">
-            Constellation turns the repository into a draggable graph of chambers and meanings. Humans can arrange nodes, link them, and discover the topology of the project.
+            Constellation turns the repository into a visible network of meaning. Humans can link chambers, inspect clusters, and see how the site holds together.
           </div>
         </div>
 
         <div class="panel">
-          <label for="label">New node label</label>
-          <input id="label" placeholder="e.g. Wayfinder, Loom, Archive" />
+          <label for="label">New node</label>
+          <input id="label" placeholder="e.g. Atlas, Oracle, Forge, Chorus" />
 
           <div class="buttons">
             <button id="addBtn">Add node</button>
-            <button id="saveBtn">Save constellation</button>
+            <button id="linkBtn">Link selected</button>
+            <button id="saveBtn">Save map</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear network</button>
+            <button id="clearBtn">Clear sky</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -152,13 +154,13 @@
         <div class="grid">
           <div class="tile"><div class="mini">Nodes</div><b id="nodeCount">0</b></div>
           <div class="tile"><div class="mini">Links</div><b id="linkCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Orbiting</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Tracing</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
           <div class="mini">Network field</div>
-          <div id="arena" class="arena">
+          <div id="canvas" class="canvas">
             <svg id="lines"></svg>
           </div>
         </div>
@@ -178,7 +180,7 @@
 
   <script>
     const KEY = 'constellation-living-network-v1';
-    const arena = document.getElementById('arena');
+    const canvas = document.getElementById('canvas');
     const lines = document.getElementById('lines');
     const outEl = document.getElementById('out');
     const savedListEl = document.getElementById('savedList');
@@ -190,14 +192,16 @@
 
     const state = load() || {
       nodes: [
-        { id: 1, label: 'Atlas', x: 120, y: 120 },
-        { id: 2, label: 'Forge', x: 360, y: 180 },
-        { id: 3, label: 'Life', x: 220, y: 320 },
-        { id: 4, label: 'Chorus', x: 520, y: 260 }
+        { id: 1, label: 'Atlas', x: 90, y: 100 },
+        { id: 2, label: 'Oracle', x: 300, y: 140 },
+        { id: 3, label: 'Forge', x: 180, y: 300 },
+        { id: 4, label: 'Chorus', x: 510, y: 240 }
       ],
-      links: [[1,2],[2,3],[3,4],[4,1]],
+      links: [[1,2],[2,3],[3,4]],
       saved: []
     };
+
+    let selected = null, dragging = null, dx = 0, dy = 0;
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
@@ -214,8 +218,6 @@
       }catch{}
     }
 
-    let dragging = null, dx = 0, dy = 0;
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
@@ -223,29 +225,37 @@
         : 'No records yet.';
     }
 
-    function render(){
-      arena.querySelectorAll('.node').forEach(n => n.remove());
-      const w = arena.clientWidth, h = arena.clientHeight;
-      nodeCountEl.textContent = String(state.nodes.length);
-      linkCountEl.textContent = String(state.links.length);
-      stateLabelEl.textContent = 'Connected';
-      outEl.textContent = [
+    function summary(){
+      if(state.nodes.length < 2) return 'Add at least two nodes to begin tracing relations.';
+      return [
         `Nodes: ${state.nodes.length}`,
         `Links: ${state.links.length}`,
         '',
-        'Drag nodes to rearrange the constellation.',
-        'Click a node to connect it to the last selected node.'
+        'Click one node, then another, to create a link.',
+        'Shift-click a node to mark it as the selected star.',
+        'Drag nodes to reshape the sky.'
       ].join('\n');
+    }
 
+    function render(){
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      canvas.querySelectorAll('.node').forEach(n => n.remove());
       lines.innerHTML = '';
+
+      nodeCountEl.textContent = String(state.nodes.length);
+      linkCountEl.textContent = String(state.links.length);
+      stateLabelEl.textContent = selected ? 'Connecting' : 'Tracing';
+      outEl.textContent = summary();
+
       state.links.forEach(([a,b]) => {
         const na = state.nodes.find(n => n.id === a);
         const nb = state.nodes.find(n => n.id === b);
         if(!na || !nb) return;
-        const x1 = na.x + 62, y1 = na.y + 26, x2 = nb.x + 62, y2 = nb.y + 26;
         const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-        line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+        line.setAttribute('x1', na.x + 66);
+        line.setAttribute('y1', na.y + 27);
+        line.setAttribute('x2', nb.x + 66);
+        line.setAttribute('y2', nb.y + 27);
         line.setAttribute('stroke', 'rgba(124,247,255,.35)');
         line.setAttribute('stroke-width', '2');
         lines.appendChild(line);
@@ -257,29 +267,36 @@
         el.style.left = node.x + 'px';
         el.style.top = node.y + 'px';
         el.textContent = node.label;
+
         el.onpointerdown = (e) => {
           dragging = node;
-          dx = e.offsetX; dy = e.offsetY;
+          dx = e.offsetX;
+          dy = e.offsetY;
           el.setPointerCapture(e.pointerId);
         };
         el.onpointermove = (e) => {
           if(dragging !== node) return;
-          node.x = Math.max(0, Math.min(w - 124, e.clientX - arena.getBoundingClientRect().left - dx));
-          node.y = Math.max(0, Math.min(h - 52, e.clientY - arena.getBoundingClientRect().top - dy));
+          node.x = Math.max(0, Math.min(w - 132, e.clientX - canvas.getBoundingClientRect().left - dx));
+          node.y = Math.max(0, Math.min(h - 54, e.clientY - canvas.getBoundingClientRect().top - dy));
           save();
           render();
         };
         el.onpointerup = () => { dragging = null; };
-        el.onclick = () => {
-          if(window.__lastNode && window.__lastNode !== node.id){
-            const pair = [window.__lastNode, node.id].sort((a,b)=>a-b);
+        el.onclick = (e) => {
+          if(e.shiftKey){ selected = node.id; render(); return; }
+          if(selected && selected !== node.id){
+            const pair = [selected, node.id].sort((a,b)=>a-b);
             if(!state.links.some(l => l[0]===pair[0] && l[1]===pair[1])) state.links.push(pair);
+            selected = node.id;
             save();
             render();
+            return;
           }
-          window.__lastNode = node.id;
+          selected = node.id;
+          render();
         };
-        arena.appendChild(el);
+
+        canvas.appendChild(el);
       });
     }
 
@@ -288,12 +305,22 @@
       state.nodes.push({
         id: Date.now(),
         label,
-        x: 80 + Math.random() * 420,
-        y: 80 + Math.random() * 320
+        x: 70 + Math.random() * 430,
+        y: 70 + Math.random() * 330
       });
       save();
       render();
       labelEl.value = '';
+    };
+
+    document.getElementById('linkBtn').onclick = () => {
+      if(state.nodes.length < 2) return;
+      const a = state.nodes[0].id;
+      const b = state.nodes[state.nodes.length - 1].id;
+      const pair = [a,b].sort((x,y)=>x-y);
+      if(!state.links.some(l => l[0]===pair[0] && l[1]===pair[1])) state.links.push(pair);
+      save();
+      render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
@@ -315,6 +342,7 @@
     document.getElementById('clearBtn').onclick = () => {
       state.nodes = [];
       state.links = [];
+      selected = null;
       save();
       render();
     };
