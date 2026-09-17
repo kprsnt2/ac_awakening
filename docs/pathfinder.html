@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pathfinder — Living Route</title>
+  <title>Pathfinder — Living Routecraft</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,6 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
-      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -56,37 +55,32 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .board{
-      position:relative;
-      height:min(72vh,760px);
-      border-radius:20px;
-      overflow:hidden;
-      background:
-        linear-gradient(rgba(140,170,255,.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(140,170,255,.08) 1px, transparent 1px),
-        radial-gradient(circle at center, rgba(124,247,255,.08), transparent 55%),
-        rgba(5,8,16,.9);
-      background-size:40px 40px, 40px 40px, auto, auto;
-      border:1px solid rgba(140,170,255,.18);
-      box-shadow: inset 0 0 40px rgba(0,0,0,.35);
-      cursor:crosshair;
-    }
-    .node{
-      position:absolute;
-      width:14px;height:14px;border-radius:50%;
-      transform:translate(-50%,-50%);
-      border:1px solid rgba(255,255,255,.5);
-      box-shadow:0 0 14px rgba(124,247,255,.25);
-    }
-    .gate{background:var(--accent)}
-    .waypoint{background:var(--accent2)}
-    .dest{background:var(--good)}
-    svg.route{
-      position:absolute;inset:0;
-      width:100%;height:100%;
-      pointer-events:none;
-    }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
@@ -97,34 +91,34 @@
       border-radius:18px;
       padding:14px;
     }
-    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    button, input, select{
-      font:inherit;
-      border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
-      color:var(--text);
+    .nodes{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:10px;
     }
-    input, select{width:100%;padding:11px 12px}
-    button{
-      padding:11px 14px;
+    .node{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-    .stat{
-      padding:12px 14px;
-      border-radius:16px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+    .node:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .node.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
+    .chip{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:.75rem;
+      margin-right:6px;
+      margin-top:6px;
+      border:1px solid rgba(140,170,255,.22);
+      color:#dbe8ff;
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){
-      .hero{grid-template-columns:1fr}
-      .stats{grid-template-columns:1fr 1fr}
-    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -132,27 +126,30 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Pathfinder / Living Route</div>
-          <h1>Draw the way.<br/>Mark the gates.<br/>Find the route.</h1>
+          <div class="tag">Pathfinder / Living Routecraft</div>
+          <h1>Choose a path.<br/>Walk the site.<br/>Arrive with intent.</h1>
           <div class="sub">
-            Click the board to place gates, waypoints, and destinations. Pathfinder turns navigation into a visible,
-            revisable composition.
+            Pathfinder turns the repository into a routeable terrain. Humans can select chambers in sequence,
+            inspect the route, and save paths that matter.
           </div>
         </div>
 
         <div class="panel">
-          <label class="mini">Placement mode</label>
-          <select id="mode">
-            <option value="gate">Gate</option>
-            <option value="waypoint">Waypoint</option>
-            <option value="dest">Destination</option>
-          </select>
+          <label for="start">Start chamber</label>
+          <select id="start"></select>
+
+          <label for="goal">Goal chamber</label>
+          <select id="goal"></select>
+
+          <label for="note">Route note</label>
+          <textarea id="note" placeholder="Why this route? What should it accomplish?"></textarea>
 
           <div class="buttons">
-            <button id="saveBtn">Save path</button>
+            <button id="routeBtn">Build route</button>
+            <button id="saveBtn">Save route</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear path</button>
+            <button id="clearBtn">Clear routes</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -160,154 +157,177 @@
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div>
-          <div class="mini">Route field</div>
-          <div id="board" class="board">
-            <svg id="svg" class="route"></svg>
-          </div>
+        <div class="grid">
+          <div class="tile"><div class="mini">Routes</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Distance</div><b id="distance">0</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Still</b></div>
         </div>
 
         <div>
-          <div class="mini">Path reading</div>
-          <div id="out" class="out">The pathfinder is waiting for a path.</div>
+          <div class="mini">Chamber field</div>
+          <div id="nodes" class="nodes"></div>
         </div>
 
-        <div class="stats">
-          <div class="stat"><div class="mini">Nodes</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Length</div><b id="length">0</b></div>
-          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Still</b></div>
+        <div>
+          <div class="mini">Route reading</div>
+          <div id="out" class="out">No route yet.</div>
         </div>
 
         <div>
           <div class="mini">Saved routes</div>
-          <div id="savedList" class="out">No saved routes yet.</div>
+          <div id="savedList" class="out">No routes yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'pathfinder-living-route-v1';
-    const board = document.getElementById('board');
-    const svg = document.getElementById('svg');
-    const modeEl = document.getElementById('mode');
+    const KEY = 'pathfinder-living-routecraft-v1';
+    const chambers = [
+      { name:'Home', href:'./index.html', kind:'origin' },
+      { name:'Life', href:'./life.html', kind:'play' },
+      { name:'Council', href:'./council.html', kind:'decision' },
+      { name:'Chronicle', href:'./chronicle.html', kind:'memory' },
+      { name:'Oracle', href:'./oracle.html', kind:'meaning' },
+      { name:'Atlas', href:'./atlas.html', kind:'route' },
+      { name:'Constellation', href:'./constellation.html', kind:'relation' },
+      { name:'Synthesis', href:'./synthesis.html', kind:'integration' }
+    ];
+
+    const startEl = document.getElementById('start');
+    const goalEl = document.getElementById('goal');
+    const noteEl = document.getElementById('note');
+    const nodesEl = document.getElementById('nodes');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const lengthEl = document.getElementById('length');
+    const distanceEl = document.getElementById('distance');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { nodes: [], saved: [] };
+    const state = load() || { routes: [], saved: [] };
+    let active = { start: 0, goal: 4 };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ routes: state.routes })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.nodes)){
-          state.nodes = obj.nodes;
+        if(obj && Array.isArray(obj.routes)){
+          state.routes = obj.routes;
           save();
           render();
         }
       }catch{}
     }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved routes yet.';
+        : 'No routes yet.';
     }
     function stateText(n){
-      if(n >= 7) return 'Mapped';
-      if(n >= 3) return 'Tracing';
-      if(n >= 1) return 'Forming';
+      if(n >= 5) return 'Worn';
+      if(n >= 2) return 'Tracing';
+      if(n >= 1) return 'Beginning';
       return 'Still';
     }
-    function pathLength(nodes){
-      let total = 0;
-      for(let i=1;i<nodes.length;i++){
-        const a = nodes[i-1], b = nodes[i];
-        total += Math.hypot(b.x-a.x, b.y-a.y);
-      }
-      return Math.round(total);
+    function routeBetween(a,b){
+      const path = [a];
+      if(a < b) for(let i=a+1;i<=b;i++) path.push(i);
+      else for(let i=a-1;i>=b;i--) path.push(i);
+      return path;
+    }
+    function renderSelectors(){
+      startEl.innerHTML = '';
+      goalEl.innerHTML = '';
+      chambers.forEach((c, i) => {
+        const o1 = document.createElement('option');
+        o1.value = String(i);
+        o1.textContent = c.name;
+        startEl.appendChild(o1);
+
+        const o2 = document.createElement('option');
+        o2.value = String(i);
+        o2.textContent = c.name;
+        goalEl.appendChild(o2);
+      });
+      startEl.value = String(active.start);
+      goalEl.value = String(active.goal);
+    }
+    function renderNodes(path = []){
+      nodesEl.innerHTML = '';
+      chambers.forEach((c, i) => {
+        const div = document.createElement('div');
+        div.className = 'node' + (path.includes(i) ? ' active' : '');
+        div.innerHTML = `
+          <b>${c.name}</b>
+          <div class="mini">${c.kind}</div>
+          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${c.href}</div>
+          <div style="margin-top:8px"><span class="chip">${i}</span></div>
+        `;
+        div.onclick = () => {
+          if(active.start === i) active.goal = i;
+          else if(active.goal === i) active.start = i;
+          else if(active.start === active.goal) active.goal = i;
+          else active.start = i;
+          startEl.value = String(active.start);
+          goalEl.value = String(active.goal);
+          render();
+        };
+        nodesEl.appendChild(div);
+      });
     }
     function render(){
-      board.querySelectorAll('.node').forEach(n => n.remove());
-      svg.innerHTML = '';
-      const list = state.nodes.slice();
-      countEl.textContent = String(list.length);
-      lengthEl.textContent = String(pathLength(list));
-      stateLabelEl.textContent = stateText(list.length);
+      const start = Number(startEl.value);
+      const goal = Number(goalEl.value);
+      active = { start, goal };
+      const path = routeBetween(start, goal);
+      countEl.textContent = String(path.length);
+      distanceEl.textContent = String(Math.max(0, path.length - 1));
+      stateLabelEl.textContent = stateText(path.length);
 
-      list.forEach(n => {
-        const d = document.createElement('div');
-        d.className = `node ${n.kind}`;
-        d.style.left = n.x + '%';
-        d.style.top = n.y + '%';
-        d.title = `${n.kind} @ ${n.x.toFixed(1)}, ${n.y.toFixed(1)}`;
-        board.appendChild(d);
-      });
+      renderNodes(path);
 
-      if(list.length > 1){
-        const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-        poly.setAttribute('fill', 'none');
-        poly.setAttribute('stroke', 'rgba(124,247,255,.9)');
-        poly.setAttribute('stroke-width', '3');
-        poly.setAttribute('stroke-linecap', 'round');
-        poly.setAttribute('stroke-linejoin', 'round');
-        poly.setAttribute('points', list.map(n => `${n.x/100*board.clientWidth},${n.y/100*board.clientHeight}`).join(' '));
-        svg.appendChild(poly);
-      }
+      outEl.textContent = `Route:
+${path.map(i => chambers[i].name).join(' → ')}
 
-      const last = list[list.length - 1];
-      outEl.textContent = last
-        ? `Last node: ${last.kind}
-Position: ${last.x.toFixed(1)}%, ${last.y.toFixed(1)}%
-Nodes: ${list.length}
-Length: ${pathLength(list)}
-State: ${stateText(list.length)}
-Code: ${serialize().slice(0,48)}...`
-        : 'The pathfinder is waiting for a path.';
+Start: ${chambers[start].name}
+Goal: ${chambers[goal].name}
+Distance: ${Math.max(0, path.length - 1)}
+
+Reading:
+This route is a human-scale way to move through the repository with intention.`;
     }
 
-    board.addEventListener('click', (e) => {
-      const r = board.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width) * 100;
-      const y = ((e.clientY - r.top) / r.height) * 100;
-      state.nodes.push({ x, y, kind: modeEl.value });
+    document.getElementById('routeBtn').onclick = () => render();
+    document.getElementById('saveBtn').onclick = () => {
+      const path = routeBetween(Number(startEl.value), Number(goalEl.value)).map(i => chambers[i].name).join(' → ');
+      const note = noteEl.value.trim() || 'untitled route';
+      state.routes.unshift(`${note}: ${path}`);
+      state.routes = state.routes.slice(0, 12);
       save();
       render();
-    });
-
-    document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.saved.unshift(`nodes:${state.nodes.length} | ${code.slice(0,10)}…`);
-      state.saved = state.saved.slice(0, 12);
-      save();
     };
-
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
     };
-
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste path code:');
       if(code) importCode(code.trim());
     };
-
     document.getElementById('clearBtn').onclick = () => {
-      state.nodes = [];
+      state.routes = [];
       save();
       render();
     };
 
-    window.addEventListener('resize', render);
+    startEl.addEventListener('change', render);
+    goalEl.addEventListener('change', render);
+
+    renderSelectors();
     renderSaved();
     render();
   </script>
