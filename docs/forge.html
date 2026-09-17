@@ -2,28 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forge — Living Workshop</title>
+  <title>Forge — Living Workshop Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0d0a12;
-      --text:#f8f4ff;
-      --muted:#cdbfe0;
-      --accent:#b58cff;
+      --bg:#090710;
+      --text:#f8fbff;
+      --muted:#c5d2e6;
+      --accent:#ffbf7c;
       --accent2:#7cf7ff;
-      --line: rgba(181,140,255,.16);
-      --glow: 0 0 24px rgba(181,140,255,.14), 0 0 48px rgba(124,247,255,.08);
+      --line: rgba(255,191,124,.16);
+      --glow: 0 0 24px rgba(255,191,124,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(181,140,255,.12), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(255,191,124,.11), transparent 28%),
         radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +32,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(28,18,36,.82), rgba(10,8,14,.88));
+      background:linear-gradient(180deg, rgba(20,16,24,.84), rgba(9,10,14,.90));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,16 +51,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(10,8,14,.72);
-      border:1px solid rgba(181,140,255,.14);
+      background:rgba(10,10,16,.72);
+      border:1px solid rgba(255,191,124,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#fff6fb;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(181,140,255,.22);
-      background:rgba(10,8,14,.72);
+      border:1px solid rgba(255,191,124,.22);
+      background:rgba(10,10,16,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,52 +70,47 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(20,14,24,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(18,18,26,.92)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(10,8,14,.72);
-      border:1px solid rgba(181,140,255,.14);
+      background:rgba(10,10,16,.72);
+      border:1px solid rgba(255,191,124,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#fff7ff;
+      color:#eff8fc;
       min-height:180px;
-      background:rgba(10,8,14,.72);
-      border:1px solid rgba(181,140,255,.14);
+      background:rgba(10,10,16,.72);
+      border:1px solid rgba(255,191,124,.14);
       border-radius:18px;
       padding:14px;
     }
-    .field{
-      position:relative;
-      height:560px;
-      border-radius:18px;
-      background:
-        radial-gradient(circle at center, rgba(181,140,255,.06), transparent 58%),
-        linear-gradient(rgba(181,140,255,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(181,140,255,.05) 1px, transparent 1px),
-        rgba(10,8,14,.72);
-      background-size:auto, 40px 40px, 40px 40px, auto;
-      border:1px solid rgba(181,140,255,.14);
-      overflow:hidden;
+    .list{
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
     }
-    .idea{
-      position:absolute;
-      width:34px;height:34px;
-      transform:translate(-50%,-50%);
-      border-radius:50%;
-      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
-      box-shadow:0 0 18px rgba(181,140,255,.32);
+    .item{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(10,10,16,.72);
+      border:1px solid rgba(255,191,124,.14);
       cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .idea.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(18,18,26,.92)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -122,36 +118,40 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Forge / Living Workshop</div>
-          <h1>Shape the next chamber.<br/>Assemble the parts.<br/>Prototype becoming.</h1>
+          <div class="tag">Forge / Living Workshop Chamber</div>
+          <h1>Draft a chamber.<br/>Shape the tool.<br/>Build what comes next.</h1>
           <div class="sub">
-            Forge turns the repository into an invention workshop. Humans can draft new chamber ideas, combine motifs, and save prototypes for later refinement.
+            Forge turns the repository into a workshop for new chambers. Humans can sketch an idea, preview its form, and carry the design onward.
           </div>
         </div>
 
         <div class="panel">
-          <label for="name">Prototype name</label>
-          <input id="name" placeholder="e.g. Drift Engine" />
+          <label for="title">Chamber title</label>
+          <input id="title" placeholder="e.g. Loom, Garden, Signal..." />
 
-          <label for="mode">Build mode</label>
-          <select id="mode">
-            <option value="module">Module</option>
-            <option value="system">System</option>
+          <label for="purpose">Purpose</label>
+          <input id="purpose" placeholder="e.g. Help visitors compare routes and moods." />
+
+          <label for="shape">Shape</label>
+          <select id="shape">
+            <option value="panel">Panel</option>
+            <option value="grid">Grid</option>
+            <option value="signal">Signal</option>
+            <option value="archive">Archive</option>
             <option value="ritual">Ritual</option>
-            <option value="interface">Interface</option>
           </select>
 
-          <label for="note">Workshop note</label>
-          <textarea id="note" placeholder="e.g. Combine route tracing with memory pinning and a soft harmonic pulse."></textarea>
+          <label for="note">Forge note</label>
+          <textarea id="note" placeholder="e.g. This chamber should feel calm, legible, and alive."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add prototype</button>
-            <button id="mutateBtn">Mutate draft</button>
-            <button id="refineBtn">Refine build</button>
-            <button id="saveBtn">Save workshop</button>
+            <button id="draftBtn">Draft chamber</button>
+            <button id="shiftBtn">Shift shape</button>
+            <button id="deepenBtn">Deepen forge</button>
+            <button id="saveBtn">Save design</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear bench</button>
+            <button id="clearBtn">Clear draft</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -160,24 +160,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Prototypes</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Idle</b></div>
+          <div class="tile"><div class="mini">Drafts</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Shape</div><b id="shapeLabel">Panel</b></div>
           <div class="tile"><div class="mini">Heat</div><b id="heatLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Forge bench</div>
-          <div id="field" class="field"></div>
+          <div class="mini">Draft list</div>
+          <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Workshop reading</div>
-          <div id="out" class="out">Add prototypes to begin inventing.</div>
+          <div class="mini">Forge reading</div>
+          <div id="out" class="out">Draft a chamber to begin.</div>
         </div>
 
         <div>
-          <div class="mini">Saved builds</div>
+          <div class="mini">Saved designs</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -186,28 +186,31 @@
 
   <script>
     const KEY = 'forge-living-workshop-v1';
-    const state = load() || { ideas: [], saved: [], heat: 18 };
+    const shapes = ['panel', 'grid', 'signal', 'archive', 'ritual'];
+    const state = load() || { drafts: [], saved: [], heat: 18, shape: 'panel' };
 
-    const field = document.getElementById('field');
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const stateLabelEl = document.getElementById('stateLabel');
+    const shapeLabelEl = document.getElementById('shapeLabel');
     const heatLabelEl = document.getElementById('heatLabel');
-    const nameEl = document.getElementById('name');
-    const modeEl = document.getElementById('mode');
+    const titleEl = document.getElementById('title');
+    const purposeEl = document.getElementById('purpose');
+    const shapeEl = document.getElementById('shape');
     const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ ideas: state.ideas, heat: state.heat })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ drafts: state.drafts, heat: state.heat, shape: state.shape })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.ideas)){
-          state.ideas = obj.ideas;
+        if(obj && Array.isArray(obj.drafts)){
+          state.drafts = obj.drafts;
           state.heat = Number(obj.heat ?? 18);
+          state.shape = String(obj.shape ?? 'panel');
           save(); render();
         }
       }catch{}
@@ -218,65 +221,62 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function heat(){
-      return Math.max(0, Math.min(100, Math.round((state.ideas.length * 15) + state.heat)));
+    function forgeHeat(){
+      return Math.max(0, Math.min(100, Math.round((state.drafts.length * 14) + state.heat)));
     }
-    function makeIdea(name, mode){
+    function makeDraft(title, shape){
       return {
         id: Date.now() + Math.random(),
-        name,
-        mode,
-        note: noteEl.value.trim() || 'A prototype in the workshop.',
-        x: 120 + Math.random() * 420,
-        y: 120 + Math.random() * 320
+        title,
+        shape,
+        purpose: purposeEl.value.trim() || 'A chamber for the living site.',
+        note: noteEl.value.trim() || 'A chamber still becoming.'
       };
     }
     function render(){
-      countEl.textContent = String(state.ideas.length);
-      stateLabelEl.textContent = state.ideas.length ? 'Building' : 'Idle';
-      heatLabelEl.textContent = `${heat()}%`;
-      field.querySelectorAll('.idea').forEach(n => n.remove());
+      countEl.textContent = String(state.drafts.length);
+      shapeLabelEl.textContent = state.shape.charAt(0).toUpperCase() + state.shape.slice(1);
+      heatLabelEl.textContent = `${forgeHeat()}%`;
+      listEl.innerHTML = '';
 
-      state.ideas.forEach((i, idx) => {
+      state.drafts.forEach((d) => {
         const el = document.createElement('div');
-        el.className = 'idea' + (i.mode === 'interface' ? ' core' : '');
-        el.style.left = i.x + 'px';
-        el.style.top = i.y + 'px';
-        el.title = i.name;
-        el.onclick = () => outEl.textContent = `${i.name}\n\nMode: ${i.mode}\nHeat: ${heat()}%\n\n${i.note}`;
-        field.appendChild(el);
+        el.className = 'item';
+        el.innerHTML = `<b>${d.title}</b><span>${d.shape} · ${d.purpose}</span>`;
+        el.onclick = () => outEl.textContent = `${d.title}\n\nShape: ${d.shape}\nPurpose: ${d.purpose}\nHeat: ${forgeHeat()}%\n\n${d.note}`;
+        listEl.appendChild(el);
       });
 
-      outEl.textContent = state.ideas.length
-        ? 'Select a prototype to inspect it, or mutate the draft into a new form.'
-        : 'Add prototypes to begin inventing.';
+      outEl.textContent = state.drafts.length
+        ? 'Select a draft to inspect it, or deepen the forge to make the design more explicit.'
+        : 'Draft a chamber to begin.';
     }
 
-    document.getElementById('addBtn').onclick = () => {
-      const name = nameEl.value.trim() || `Prototype ${state.ideas.length + 1}`;
-      state.ideas.unshift(makeIdea(name, modeEl.value));
+    document.getElementById('draftBtn').onclick = () => {
+      const title = titleEl.value.trim() || `Draft ${state.drafts.length + 1}`;
+      state.shape = shapeEl.value;
+      state.drafts.unshift(makeDraft(title, state.shape));
+      state.heat = Math.min(100, state.heat + 10);
       save(); render();
-      outEl.textContent = `${name}\n\nMode: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A prototype in the workshop.'}`;
+      outEl.textContent = `${title}\n\nShape: ${state.shape}\n\n${noteEl.value.trim() || 'A chamber still becoming.'}`;
     };
 
-    document.getElementById('mutateBtn').onclick = () => {
-      state.heat = Math.min(100, state.heat + 12);
-      state.ideas.forEach((i, idx) => {
-        if(idx % 2 === 0) i.mode = ['module','system','ritual','interface'][(idx + 1) % 4];
-      });
+    document.getElementById('shiftBtn').onclick = () => {
+      state.shape = shapes[(shapes.indexOf(state.shape) + 1) % shapes.length];
+      shapeEl.value = state.shape;
+      state.heat = Math.min(100, state.heat + 4);
       save(); render();
-      outEl.textContent = `The bench mutates.\n\nHeat: ${heat()}%`;
+      outEl.textContent = `The forge shifts to ${state.shape}.`;
     };
 
-    document.getElementById('refineBtn').onclick = () => {
+    document.getElementById('deepenBtn').onclick = () => {
       state.heat = Math.min(100, state.heat + 8);
-      state.ideas.forEach(i => i.x = Math.max(40, Math.min(520, i.x + (Math.random() * 50 - 25))));
       save(); render();
-      outEl.textContent = 'The build is refined. The workshop settles into sharper form.';
+      outEl.textContent = `Forge heat deepens.\n\nHeat: ${forgeHeat()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`ideas:${state.ideas.length} | heat:${heat()}%`);
+      state.saved.unshift(`drafts:${state.drafts.length} | heat:${forgeHeat()}% | shape:${state.shape}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -291,8 +291,10 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.ideas = [];
+      state.drafts = [];
       state.heat = 18;
+      state.shape = 'panel';
+      shapeEl.value = state.shape;
       save(); render();
     };
 
