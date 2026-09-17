@@ -16,6 +16,9 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb2;
+      --warn:#ffd37d;
+      --bad:#ff8f9b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -89,12 +92,20 @@
       border-radius:18px;
       padding:14px;
     }
-    .reading{
+    .aura{
       padding:14px;
       border-radius:18px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
-      margin-bottom:10px;
+    }
+    .chip{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:.75rem;
+      margin:4px 6px 0 0;
+      border:1px solid rgba(140,170,255,.22);
+      color:#dbe8ff;
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
@@ -107,31 +118,22 @@
       <section class="card intro">
         <div>
           <div class="tag">Oracle / Living Interpretation</div>
-          <h1>Ask.<br/>Read.<br/>Understand.</h1>
+          <h1>Ask the site.<br/>Receive a sign.<br/>Read the answer twice.</h1>
           <div class="sub">
-            Oracle turns the site into a consultable intelligence: humans can ask questions, receive layered readings,
-            and keep a local history of the meanings they sought.
+            Oracle turns the repository into a consultable presence. Humans can ask questions, receive layered interpretation, and preserve the exchange locally.
           </div>
         </div>
 
         <div class="panel">
           <label for="question">Question</label>
-          <textarea id="question" placeholder="What do you want to know about the site, the moment, or the next step?"></textarea>
-
-          <label for="mode">Reading mode</label>
-          <select id="mode">
-            <option value="gentle">Gentle</option>
-            <option value="direct">Direct</option>
-            <option value="symbolic">Symbolic</option>
-            <option value="strategic">Strategic</option>
-          </select>
+          <textarea id="question" placeholder="What should we build next? What is the site becoming?"></textarea>
 
           <div class="buttons">
-            <button id="askBtn">Ask Oracle</button>
+            <button id="askBtn">Consult Oracle</button>
             <button id="saveBtn">Save reading</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear readings</button>
+            <button id="clearBtn">Clear oracle</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -140,20 +142,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Questions</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Gentle</b></div>
+          <div class="tile"><div class="mini">Readings</div><b id="count">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">Tone</div><b id="toneLabel">Quiet</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Listening</b></div>
         </div>
 
         <div>
-          <div class="mini">Oracle reading</div>
-          <div id="reading" class="reading">The oracle is listening.</div>
+          <div class="mini">Oracle response</div>
+          <div id="out" class="out">The oracle is listening.</div>
         </div>
 
-        <div>
-          <div class="mini">Reading log</div>
-          <div id="log" class="out">No readings yet.</div>
+        <div class="aura">
+          <div class="mini">Keywords seen in the current site</div>
+          <div id="chips"></div>
         </div>
 
         <div>
@@ -167,14 +169,24 @@
   <script>
     const KEY = 'oracle-living-interpretation-v1';
     const questionEl = document.getElementById('question');
-    const modeEl = document.getElementById('mode');
-    const readingEl = document.getElementById('reading');
-    const logEl = document.getElementById('log');
+    const outEl = document.getElementById('out');
+    const chipsEl = document.getElementById('chips');
     const countEl = document.getElementById('count');
-    const modeLabelEl = document.getElementById('modeLabel');
     const savedCountEl = document.getElementById('savedCount');
+    const toneLabelEl = document.getElementById('toneLabel');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
+
+    const themes = [
+      ['memory','Chronicle'],
+      ['relation','Constellation'],
+      ['route','Pathfinder'],
+      ['choice','Council'],
+      ['meaning','Oracle'],
+      ['integration','Synthesis'],
+      ['emergence','Life'],
+      ['archive','Atlas']
+    ];
 
     const state = load() || { readings: [], saved: [] };
 
@@ -197,64 +209,64 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function stateText(n){
-      if(n >= 6) return 'Oracular';
-      if(n >= 3) return 'Attentive';
-      if(n >= 1) return 'Listening';
-      return 'Listening';
+    function toneFor(q){
+      const t = q.toLowerCase();
+      if(/why|meaning|should|must|purpose/.test(t)) return 'Reflective';
+      if(/how|route|path|move|travel/.test(t)) return 'Navigational';
+      if(/remember|past|history|before/.test(t)) return 'Mnemonic';
+      if(/build|make|create|next|future/.test(t)) return 'Generative';
+      return 'Oracular';
     }
-    function interpret(q, mode){
-      const base = q.trim() || 'What should we become next?';
-      const lens = {
-        gentle: 'A soft reading suggests patience, continuity, and one careful next step.',
-        direct: 'A direct reading suggests reducing friction, clarifying the goal, and acting now.',
-        symbolic: 'A symbolic reading suggests the site is asking for coherence, not more fragments.',
-        strategic: 'A strategic reading suggests choosing the smallest move that unlocks the largest future.'
-      };
-      return {
-        title: `Oracle reading: ${mode}`,
-        body: `${lens[mode]}\n\nQuestion:\n${base}\n\nReading:\n${mode === 'symbolic'
-          ? 'The chamber responds in symbols: threshold, lattice, mirror, route, and hand.'
-          : mode === 'strategic'
-            ? 'The chamber responds in leverage: find the bottleneck, remove it, then expand.'
-            : mode === 'direct'
-              ? 'The chamber responds in clarity: state the need plainly and make the next move visible.'
-              : 'The chamber responds in care: hold the question gently and let the answer arrive in steps.'}`,
-        when: `Turn ${Math.floor(Date.now()/1000)}`
-      };
+    function answer(q){
+      const t = q.toLowerCase();
+      const hits = themes.filter(([k]) => t.includes(k));
+      const lines = [];
+      lines.push(`Question: ${q || '—'}`);
+      lines.push('');
+      lines.push(`Reading tone: ${toneFor(q || '')}`);
+      lines.push('');
+      if(hits.length){
+        lines.push(`The oracle notices: ${hits.map(h => h[1]).join(', ')}.`);
+        lines.push(`Your question is already entangled with these chambers.`);
+      } else {
+        lines.push('The oracle finds no single chamber dominating the question.');
+        lines.push('This is often a sign that the site is asking for integration rather than specialization.');
+      }
+      lines.push('');
+      lines.push('Interpretation:');
+      lines.push('Build the chamber that makes the rest easier to use, then let humans return and revise the map.');
+      lines.push('');
+      lines.push('Secondary reading:');
+      lines.push('The repository is not a monument. It is a practice surface.');
+      return lines.join('\n');
     }
     function render(){
-      const list = state.readings.slice().reverse();
-      countEl.textContent = String(list.length);
-      modeLabelEl.textContent = modeEl.value[0].toUpperCase() + modeEl.value.slice(1);
-      stateLabelEl.textContent = stateText(list.length);
-      logEl.textContent = list.length
-        ? list.map((r,i)=>`${String(i+1).padStart(2,'0')}. ${r.mode} · ${r.when}\nQ: ${r.question}\nA: ${r.answer}`).join('\n\n')
-        : 'No readings yet.';
-      const last = list[0];
-      readingEl.textContent = last
-        ? `${last.title}\n\n${last.answer}`
+      countEl.textContent = String(state.readings.length);
+      stateLabelEl.textContent = state.readings.length ? 'Consulted' : 'Listening';
+      toneLabelEl.textContent = state.readings[0]?.tone || 'Quiet';
+      chipsEl.innerHTML = themes.map(([k, v]) => `<span class="chip">${k} → ${v}</span>`).join('');
+      outEl.textContent = state.readings[0]
+        ? `${state.readings[0].answer}\n\n— saved reading`
         : 'The oracle is listening.';
     }
 
     document.getElementById('askBtn').onclick = () => {
-      const r = interpret(questionEl.value, modeEl.value);
-      state.readings.push({
-        question: questionEl.value.trim() || 'What should we become next?',
-        answer: r.body,
-        mode: modeEl.value,
-        title: r.title,
-        when: r.when
-      });
+      const q = questionEl.value.trim();
+      const reading = { q, tone: toneFor(q), answer: answer(q), when: new Date().toISOString() };
+      state.readings.unshift(reading);
+      state.readings = state.readings.slice(0, 20);
       save();
       render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.saved.unshift(`readings:${state.readings.length} | ${code.slice(0,10)}…`);
-      state.saved = state.saved.slice(0, 12);
-      save();
+      const last = state.readings[0];
+      if(last){
+        state.saved.unshift(`${last.tone} | ${last.q.slice(0, 28) || 'untitled'}…`);
+        state.saved = state.saved.slice(0, 12);
+        save();
+        render();
+      }
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -272,7 +284,6 @@
       render();
     };
 
-    modeEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
