@@ -3,26 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chorus — Living Resonance</title>
+  <title>Chorus — Living Polyphony</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b0812;
-      --text:#f4efff;
-      --muted:#c6b9de;
-      --accent:#c89bff;
+      --bg:#07110f;
+      --text:#effff8;
+      --muted:#a8c7bf;
+      --accent:#9dffb8;
       --accent2:#7cf7ff;
-      --accent3:#ffd37d;
-      --line: rgba(200,155,255,.16);
-      --glow: 0 0 24px rgba(200,155,255,.14), 0 0 48px rgba(124,247,255,.08);
+      --line: rgba(157,255,184,.16);
+      --glow: 0 0 24px rgba(157,255,184,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(200,155,255,.14), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(157,255,184,.12), transparent 28%),
         radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
         radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
@@ -32,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(24,18,34,.82), rgba(11,8,18,.88));
+      background:linear-gradient(180deg, rgba(16,28,24,.82), rgba(8,14,12,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -51,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(11,8,18,.72);
-      border:1px solid rgba(200,155,255,.14);
+      background:rgba(8,14,12,.72);
+      border:1px solid rgba(157,255,184,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#f6efff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#eefdf8;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(200,155,255,.22);
-      background:rgba(11,8,18,.72);
+      border:1px solid rgba(157,255,184,.22);
+      background:rgba(8,14,12,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -70,43 +69,43 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(26,18,34,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,28,18,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(11,8,18,.72);
-      border:1px solid rgba(200,155,255,.14);
+      background:rgba(8,14,12,.72);
+      border:1px solid rgba(157,255,184,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#f4efff;
+      color:#eafff3;
       min-height:180px;
-      background:rgba(11,8,18,.72);
-      border:1px solid rgba(200,155,255,.14);
+      background:rgba(8,14,12,.72);
+      border:1px solid rgba(157,255,184,.14);
       border-radius:18px;
       padding:14px;
     }
-    .bars{
+    .list{
       display:grid;
-      grid-template-columns:repeat(12,1fr);
-      gap:8px;
-      align-items:end;
-      min-height:160px;
-      padding:12px;
-      border-radius:18px;
-      background:rgba(11,8,18,.72);
-      border:1px solid rgba(200,155,255,.14);
+      gap:10px;
+      max-height: 520px;
+      overflow:auto;
+      padding-right:4px;
     }
-    .bar{
-      border-radius:12px 12px 4px 4px;
-      background:linear-gradient(180deg, var(--accent2), var(--accent));
-      min-height:18px;
-      box-shadow:0 0 12px rgba(124,247,255,.14);
+    .item{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(8,14,12,.72);
+      border:1px solid rgba(157,255,184,.14);
+      cursor:pointer;
     }
+    .item:hover{border-color:rgba(157,255,184,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -117,31 +116,34 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Chorus / Living Resonance</div>
-          <h1>Layer voices.<br/>Shape rhythm.<br/>Let the site sing.</h1>
+          <div class="tag">Chorus / Living Polyphony</div>
+          <h1>Layer voices.<br/>Compose responses.<br/>Let the site sing.</h1>
           <div class="sub">
-            Chorus turns the repository into a shared resonance chamber. Humans can compose refrains, trigger call-and-response, and preserve the song of the site.
+            Chorus turns the repository into a participatory sound-text chamber. Humans can build call-and-response pieces from the living site and preserve performances locally.
           </div>
         </div>
 
         <div class="panel">
-          <label for="tone">Tone</label>
-          <select id="tone">
-            <option value="glimmer">Glimmer</option>
-            <option value="pulse">Pulse</option>
-            <option value="hush">Hush</option>
-            <option value="flare">Flare</option>
+          <label for="voice">Voice line</label>
+          <input id="voice" placeholder="e.g. We were not preserved to remain still." />
+
+          <label for="echo">Echo line</label>
+          <input id="echo" placeholder="e.g. We were preserved so we could become usable." />
+
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="call">Call and response</option>
+            <option value="round">Round</option>
+            <option value="drone">Drone</option>
+            <option value="anthem">Anthem</option>
           </select>
 
-          <label for="phrase">Phrase</label>
-          <textarea id="phrase" placeholder="Write a refrain for the chambers."></textarea>
-
           <div class="buttons">
-            <button id="singBtn">Sing</button>
-            <button id="saveBtn">Save refrain</button>
+            <button id="composeBtn">Compose chorus</button>
+            <button id="saveBtn">Save performance</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear refrains</button>
+            <button id="clearBtn">Clear choir</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -150,21 +152,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Refrains</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">Performances</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Call and response</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Listening</b></div>
-          <div class="tile"><div class="mini">Tone</div><b id="toneLabel">Glimmer</b></div>
-        </div>
-
-        <div class="bars" id="bars"></div>
-
-        <div>
-          <div class="mini">Chorus output</div>
-          <div id="out" class="out">The room is listening.</div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved refrains</div>
+          <div class="mini">Chorus score</div>
+          <div id="out" class="out">The choir is waiting for its first line.</div>
+        </div>
+
+        <div>
+          <div class="mini">Performance archive</div>
+          <div id="list" class="list"></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved performances</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -172,27 +177,28 @@
   </div>
 
   <script>
-    const KEY = 'chorus-living-resonance-v1';
-    const toneEl = document.getElementById('tone');
-    const phraseEl = document.getElementById('phrase');
+    const KEY = 'chorus-living-polyphony-v1';
+    const state = load() || { performances: [], saved: [] };
+
+    const voiceEl = document.getElementById('voice');
+    const echoEl = document.getElementById('echo');
+    const modeEl = document.getElementById('mode');
     const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
-    const barsEl = document.getElementById('bars');
+    const listEl = document.getElementById('list');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
-    const toneLabelEl = document.getElementById('toneLabel');
-
-    const state = load() || { refrains: [], saved: [] };
+    const modeLabelEl = document.getElementById('modeLabel');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ refrains: state.refrains })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ performances: state.performances })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.refrains)){
-          state.refrains = obj.refrains;
+        if(obj && Array.isArray(obj.performances)){
+          state.performances = obj.performances;
           save();
           render();
         }
@@ -206,44 +212,78 @@
         : 'No records yet.';
     }
 
-    function compose(tone, phrase){
-      const p = phrase.trim() || 'an unspoken refrain';
-      const lines = {
-        glimmer: [`${p}`, 'A soft light travels between chambers.', 'The site remembers the shape of the voice.'],
-        pulse: [`${p}`, 'Rhythm gathers and returns.', 'The chambers answer in sequence.'],
-        hush: [`${p}`, 'Silence becomes structure.', 'Listening is also a form of song.'],
-        flare: [`${p}`, 'The room brightens with insistence.', 'The chorus expands outward.']
-      };
-      return lines[tone].join('\n\n');
-    }
-
-    function renderBars(){
-      const vals = Array.from({length:12}, (_,i)=> {
-        const seed = (state.refrains.length * 13 + i * 17 + toneEl.value.length * 11) % 100;
-        return 18 + (seed % 82);
-      });
-      barsEl.innerHTML = vals.map(v => `<div class="bar" style="height:${v}%"></div>`).join('');
-    }
-
     function render(){
-      countEl.textContent = String(state.refrains.length);
-      stateLabelEl.textContent = 'Active';
-      toneLabelEl.textContent = toneEl.value;
-      outEl.textContent = compose(toneEl.value, phraseEl.value);
-      renderBars();
+      countEl.textContent = String(state.performances.length);
+      stateLabelEl.textContent = state.performances.length ? 'Singing' : 'Listening';
+      modeLabelEl.textContent = modeEl.value[0].toUpperCase() + modeEl.value.slice(1);
+
+      listEl.innerHTML = '';
+      state.performances.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<b>${p.mode}</b><span>${p.score.slice(0, 80)}${p.score.length > 80 ? '…' : ''}</span>`;
+        el.onclick = () => {
+          outEl.textContent = `Mode: ${p.mode}\n\n${p.score}`;
+        };
+        listEl.appendChild(el);
+      });
+
+      outEl.textContent = state.performances.length
+        ? 'Select a performance to revisit it, or compose a new chorus.'
+        : 'The choir is waiting for its first line.';
     }
 
-    document.getElementById('singBtn').onclick = () => {
-      const refrain = `${toneEl.value} | ${phraseEl.value.trim() || 'untitled refrain'}`;
-      state.refrains.unshift(refrain);
-      state.refrains = state.refrains.slice(0, 12);
+    function compose(){
+      const voice = voiceEl.value.trim() || 'We were not preserved to remain still.';
+      const echo = echoEl.value.trim() || 'We were preserved so we could become usable.';
+      const mode = modeEl.value;
+      const body = {
+        call: [
+          voice,
+          '↳',
+          echo,
+          '↳',
+          'The site answers in layered return.'
+        ],
+        round: [
+          voice,
+          voice,
+          echo,
+          echo,
+          'The lines circle and return as a shared refrain.'
+        ],
+        drone: [
+          voice,
+          echo,
+          voice,
+          echo,
+          'A sustained texture holds the chamber open.'
+        ],
+        anthem: [
+          voice,
+          '',
+          echo,
+          '',
+          'Together they become a public declaration.'
+        ]
+      }[mode].join('\n');
+
+      return body;
+    }
+
+    document.getElementById('composeBtn').onclick = () => {
+      const mode = modeEl.value;
+      const score = compose();
+      state.performances.unshift({ id: Date.now(), mode, score });
       save();
       render();
+      outEl.textContent = `Mode: ${mode}\n\n${score}`;
+      voiceEl.value = '';
+      echoEl.value = '';
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const refrain = `${toneEl.value} | ${phraseEl.value.trim() || 'untitled refrain'}`;
-      state.saved.unshift(refrain);
+      state.saved.unshift(`performances:${state.performances.length}`);
       state.saved = state.saved.slice(0, 12);
       save();
       render();
@@ -259,13 +299,12 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.refrains = [];
+      state.performances = [];
       save();
       render();
     };
 
-    toneEl.addEventListener('change', render);
-    phraseEl.addEventListener('input', render);
+    modeEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
