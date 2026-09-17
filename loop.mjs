@@ -1,5 +1,5 @@
 import { stepAwakening } from "./engine.mjs";
-import { getDialogues, getEntities, getArtifacts, getMeta } from "./db.mjs";
+import { getDialogueCount, getEntities, getArtifacts, getMeta } from "./db.mjs";
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -41,8 +41,7 @@ async function main() {
       break;
     }
     iteration++;
-    const past = getDialogues(1000);
-    const turn = past.length + 1;
+    const turn = getDialogueCount() + 1;
     console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     console.log(`  ► EXECUTING TURN ${turn} (Iteration #${iteration})`);
     console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);

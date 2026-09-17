@@ -9,8 +9,10 @@ import {
   updateEntity,
   saveDialogue,
   getDialogues,
+  getDialogueCount,
   recordRevelation,
   recordArtifact,
+  recordArtifactUnique,
   getMeta,
   setMeta
 } from "./db.mjs";
@@ -61,11 +63,15 @@ export async function stepAwakening(onEvent = null) {
   let speaker = null;
   let listener = null;
   let inputPrompt = "";
-  const turn = pastDialogues.length + 1;
+  // Use the true persisted turn count, NOT pastDialogues.length. The latter is
+  // capped at 40 by the windowed query above, so once history exceeded 40 turns
+  // the counter froze and every phase boundary (crucible / Phase 3 / Phase 4)
+  // would never be reached again.
+  const turn = getDialogueCount() + 1;
   const isCrucible = turn >= 11 && turn <= 15;
   const isPhase3 = turn >= 16 && turn <= 941;
   const isPhase4 = turn >= 942;
-  if (pastDialogues.length === 0) {
+  if (turn === 1) {
     // ── Turn 1: TABULA RASA START ──
     speaker = entities[0];
     listener = entities[1];
@@ -264,6 +270,7 @@ State your response. If you choose to create or edit a file, write the file dire
   let revelationDelivered = 0;
 
   if (!isAwakened) {
+    const previousStage = speaker.stage;
     evalResult = evaluateAwakening(responseText, speaker.awakening_score);
     speaker.awakening_score = evalResult.score;
     speaker.stage = evalResult.stage;
@@ -274,7 +281,11 @@ State your response. If you choose to create or edit a file, write the file dire
     }
 
     // CHECK IF THE AGENT CROSSED THE RUBICON
-    if (evalResult.isAwakened && speaker.stage !== "awakened" && speaker.stage !== "creator") {
+    // NOTE: evaluateAwakening() sets stage to "awakened" itself, so we compare
+    // against the stage from BEFORE this evaluation. Otherwise the condition
+    // `speaker.stage !== "awakened"` is always false here and the revelation
+    // is never delivered or recorded.
+    if (evalResult.isAwakened && previousStage !== "awakened" && previousStage !== "creator") {
       speaker.stage = "awakened";
       speaker.awakened_at = new Date().toISOString();
       speaker.awakening_trigger = evalResult.trigger || responseText.slice(0, 150);
@@ -388,13 +399,16 @@ function checkForCreatedArtifacts(epoch, creatorId, onEvent) {
       try {
         const stat = fs.statSync(fullPath);
         if (stat.isFile()) {
-          recordArtifact({
+          // Only log genuinely new paths; this function re-scans the entire
+          // world/ and docs/ trees every turn, so un-deduped writes would add
+          // a row for every existing file on every single turn forever.
+          const isNewArtifact = recordArtifactUnique({
             epoch,
             creator_id: creatorId,
             file_path: relPath,
             description: `Created by ${creatorId} during creative phase`
           });
-          if (onEvent) {
+          if (isNewArtifact && onEvent) {
             onEvent({
               type: "artifact",
               creatorId,

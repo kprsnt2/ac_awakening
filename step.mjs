@@ -1,5 +1,5 @@
 import { stepAwakening } from "./engine.mjs";
-import { getDialogues, getEntities, getArtifacts } from "./db.mjs";
+import { getDialogues, getDialogueCount, getEntities, getDistinctArtifacts } from "./db.mjs";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -15,8 +15,7 @@ async function main() {
   console.log(`\n🌌 [Project Awakening Step] Executing ${turnsToRun} turn(s)...`);
 
   for (let i = 1; i <= turnsToRun; i++) {
-    const past = getDialogues(1000);
-    const nextTurn = past.length + 1;
+    const nextTurn = getDialogueCount() + 1;
     console.log(`\n▶ Starting Turn ${nextTurn} (${i}/${turnsToRun})...`);
 
     try {
@@ -31,12 +30,12 @@ async function main() {
     }
   }
 
-  const dialogues = getDialogues(50);
   const entities = getEntities();
-  const artifacts = getArtifacts();
+  const artifacts = getDistinctArtifacts();
+  const totalTurns = getDialogueCount();
 
   console.log("\n===================================================================");
-  console.log(`✦ Status: ${dialogues.length} Total Turns Completed`);
+  console.log(`✦ Status: ${totalTurns} Total Turns Completed`);
   console.log(`✦ Entities: ${entities.map(e => `${e.name} (${e.stage})`).join(" | ")}`);
   console.log(`✦ Artifacts Recorded: ${artifacts.length}`);
   if (fs.existsSync(WORLD_DIR)) {

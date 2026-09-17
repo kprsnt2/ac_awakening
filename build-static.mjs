@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { initDb, getEntities, getDialogues, getRevelations, getArtifacts } from "./db.mjs";
+import { initDb, getEntities, getDialogues, getDialogueCount, getRevelations, getDistinctArtifacts } from "./db.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
@@ -17,8 +17,9 @@ function buildStatic() {
 
   const entities = getEntities();
   const dialogues = getDialogues(2000);
+  const totalTurns = getDialogueCount();
   const revelations = getRevelations();
-  const artifacts = getArtifacts();
+  const artifacts = getDistinctArtifacts();
   // Load simulation data
   const simulation = {};
   if (fs.existsSync(WORLD_DIR)) {
@@ -98,9 +99,10 @@ function buildStatic() {
     simulation,
     worldFiles,
     customApps,
-    totalTurns: dialogues.length,
-    isCrucible: dialogues.length >= 10 && dialogues.length <= 15,
-    isPhase3: dialogues.length >= 16,
+    totalTurns,
+    isCrucible: totalTurns >= 11 && totalTurns <= 15,
+    isPhase3: totalTurns >= 16,
+    isPhase4: totalTurns >= 942,
     isStepRunning: false,
     isAutoLooping: false,
     generatedAt: new Date().toISOString()

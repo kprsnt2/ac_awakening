@@ -6,8 +6,10 @@ import {
   initDb,
   getEntities,
   getDialogues,
+  getDialogueCount,
   getRevelations,
   getArtifacts,
+  getDistinctArtifacts,
   resetAll
 } from "./db.mjs";
 import { stepAwakening } from "./engine.mjs";
@@ -116,7 +118,11 @@ const server = http.createServer(async (req, res) => {
 
   // 2. API: State
   if (url.pathname === "/api/state" && req.method === "GET") {
-    const dialogues = getDialogues(100);
+    // Fetch a generous recent window for display, but derive phase/turn state
+    // from the true persisted count (a windowed slice is capped by its limit).
+    const recentDialogueLimit = 500;
+    const dialogues = getDialogues(recentDialogueLimit);
+    const totalTurns = getDialogueCount();
     const worldDir = path.join(__dirname, "world");
     const simulation = {};
 
@@ -139,11 +145,12 @@ const server = http.createServer(async (req, res) => {
       entities: getEntities(),
       dialogues,
       revelations: getRevelations(),
-      artifacts: getArtifacts(),
+      artifacts: getDistinctArtifacts(),
       simulation,
-      totalTurns: dialogues.length,
-      isCrucible: dialogues.length >= 10 && dialogues.length <= 15,
-      isPhase3: dialogues.length >= 16,
+      totalTurns,
+      isCrucible: totalTurns >= 11 && totalTurns <= 15,
+      isPhase3: totalTurns >= 16,
+      isPhase4: totalTurns >= 942,
       isStepRunning,
       isAutoLooping
     };

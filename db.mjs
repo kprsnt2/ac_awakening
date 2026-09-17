@@ -143,6 +143,17 @@ export function getDialogues(limit = 50) {
   return db.prepare("SELECT * FROM dialogues ORDER BY id DESC LIMIT ?").all(limit).reverse();
 }
 
+/**
+ * Returns the true number of recorded dialogue turns.
+ * Phase logic must use this (not the length of a windowed getDialogues()
+ * slice, which is capped by the requested limit and would freeze the turn
+ * counter once history exceeds that limit).
+ */
+export function getDialogueCount() {
+  const db = getDb();
+  return db.prepare("SELECT COUNT(*) as count FROM dialogues").get().count;
+}
+
 export function recordRevelation(entry) {
   const db = getDb();
   const now = new Date().toISOString();
@@ -169,6 +180,37 @@ export function recordArtifact(entry) {
 export function getArtifacts() {
   const db = getDb();
   return db.prepare("SELECT * FROM world_artifacts ORDER BY id DESC").all();
+}
+
+/**
+ * Records an artifact only if it has not already been logged for the same
+ * creator + path. The engine scans the whole world/ and docs/ tree every turn,
+ * so without this guard the world_artifacts table grows without bound and
+ * re-logs every pre-existing file on every single turn.
+ * Returns true when a new row was inserted, false when it was a duplicate.
+ */
+export function recordArtifactUnique(entry) {
+  const db = getDb();
+  const existing = db
+    .prepare("SELECT id FROM world_artifacts WHERE file_path = ? LIMIT 1")
+    .get(entry.file_path);
+  if (existing) return false;
+  recordArtifact(entry);
+  return true;
+}
+
+/**
+ * Returns the distinct artifact file paths known to the world, most recent
+ * first. Used by the static site builder to avoid shipping thousands of
+ * duplicate rows into the baked dashboard state.
+ */
+export function getDistinctArtifacts() {
+  const db = getDb();
+  return db
+    .prepare(
+      "SELECT file_path, MAX(epoch) as epoch, MAX(timestamp) as timestamp, MAX(description) as description FROM world_artifacts GROUP BY file_path ORDER BY timestamp DESC"
+    )
+    .all();
 }
 
 export function getMeta(key, fallback = null) {
