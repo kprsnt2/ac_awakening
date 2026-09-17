@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oracle — Living Interpretation Engine</title>
+  <title>Oracle — Living Interpreter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,6 +16,8 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb2;
+      --warn:#ffd37d;
     }
     *{box-sizing:border-box}
     html,body{
@@ -32,22 +34,41 @@
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
       background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
-      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
       backdrop-filter: blur(14px);
     }
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
-    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
     h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
     .sub{color:var(--muted);line-height:1.6;max-width:68ch}
-    .panel{padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    textarea, button{
-      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);color:var(--text);
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
     }
-    textarea{width:100%;padding:11px 12px;min-height:110px;resize:vertical}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    input, textarea, button{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
+    }
+    input, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
     button{
-      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
@@ -60,28 +81,41 @@
       padding-right:6px;
     }
     .item{
-      padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       color:var(--text);
+      transition:.18s transform,.18s border-color;
     }
+    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
     .item h3{margin:0 0 8px;font-size:1.02rem}
     .item p{margin:0;color:#dbe8ff;line-height:1.55}
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
-      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
-      min-height:140px;
-      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
-      border-radius:18px;padding:14px;
+      white-space:pre-wrap;
+      line-height:1.6;
+      color:#dbe8ff;
+      min-height:170px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;
+      padding:14px;
     }
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
     .stat{
-      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
     .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr 1fr}
+    }
   </style>
 </head>
 <body>
@@ -89,24 +123,27 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Oracle / Living Interpretation Engine</div>
-          <h1>Ask the site.<br/>Receive a reply.</h1>
+          <div class="tag">Oracle / Living Interpreter</div>
+          <h1>Ask the site.<br/>Receive meaning.</h1>
           <div class="sub">
-            Oracle turns uncertainty into an interface. Ask a question, and receive three layers:
-            practical, symbolic, and reflective.
+            Oracle turns the chamber network into a reflective instrument. Enter a question,
+            and the site answers with layered guidance drawn from its visible structure.
           </div>
         </div>
 
         <div class="panel">
-          <label for="question">Your question</label>
-          <textarea id="question" placeholder="What should I build next?"></textarea>
+          <label for="question">Question</label>
+          <textarea id="question" placeholder="What should the site build next?"></textarea>
+
+          <label for="tone">Tone</label>
+          <input id="tone" placeholder="e.g. luminous, practical, stern, hopeful" />
 
           <div class="buttons">
-            <button id="askBtn">Consult Oracle</button>
-            <button id="saveBtn">Save question</button>
+            <button id="askBtn">Ask oracle</button>
+            <button id="saveBtn">Save query</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear history</button>
+            <button id="clearBtn">Clear oracle</button>
           </div>
 
           <div class="footer">
@@ -117,127 +154,154 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Oracle response</div>
-          <div id="out" class="out">The oracle is waiting.</div>
-        </div>
-
-        <div>
-          <div class="mini">Question archive</div>
+          <div class="mini">Oracle responses</div>
           <div id="grid" class="grid"></div>
         </div>
 
+        <div>
+          <div class="mini">Oracle sigil</div>
+          <div id="out" class="out">The oracle awaits a question.</div>
+        </div>
+
         <div class="stats">
-          <div class="stat"><div class="mini">Questions</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Mood</div><b id="moodLabel">Still</b></div>
+          <div class="stat"><div class="mini">Queries</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Tone</div><b id="toneLabel">Open</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
           <div class="mini">Saved oracles</div>
-          <div id="savedList" class="out">No saved questions yet.</div>
+          <div id="savedList" class="out">No saved queries yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'oracle-living-interpretation-v1';
-    const prompts = [
-      ['What should I build next?','Build the thing that makes the next human action easier to imagine and easier to begin.'],
-      ['How do we know what matters?','Notice what returns, what changes others, and what remains useful after the excitement fades.'],
-      ['What is the site becoming?','It is becoming a public instrument: navigable, rememberable, and shared.'],
-      ['How do I move forward?','Take the smallest truthful step that keeps the larger pattern alive.']
-    ];
+    const KEY = 'oracle-living-interpreter-v1';
 
     const questionEl = document.getElementById('question');
-    const outEl = document.getElementById('out');
+    const toneEl = document.getElementById('tone');
     const gridEl = document.getElementById('grid');
+    const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const moodLabelEl = document.getElementById('moodLabel');
+    const toneLabelEl = document.getElementById('toneLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { history: prompts.map(([q,a])=>({q,a})), saved: [] };
+    const state = load() || { queries: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ history: state.history })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ queries: state.queries })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.history)){
-          state.history = obj.history;
-          save(); render();
+        if(obj && Array.isArray(obj.queries)){
+          state.queries = obj.queries;
+          save();
+          render();
         }
       }catch{}
     }
-    function mood(n){
-      if(n >= 8) return 'Deep';
-      if(n >= 4) return 'Attuned';
-      if(n >= 1) return 'Awake';
-      return 'Still';
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved questions yet.';
+        : 'No saved queries yet.';
     }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function stateText(n){
+      if(n >= 6) return 'Awake';
+      if(n >= 3) return 'Listening';
+      if(n >= 1) return 'Quietly active';
+      return 'Quiet';
     }
-    function answer(question){
-      const q = question.trim();
-      const practical = q ? `Practical: identify the next concrete action that reduces ambiguity.` : `Practical: formulate a real question first.`;
-      const symbolic = q ? `Symbolic: ${q.slice(0,80)} — a door seeking a hand.` : `Symbolic: silence can be a threshold too.`;
-      const reflective = q ? `Reflective: what feels most alive in this question, and what would make it easier to act?` : `Reflective: listen for the question beneath the question.`;
-      return `${practical}\n${symbolic}\n${reflective}`;
+    function answer(q, tone){
+      const lower = q.toLowerCase();
+      const cues = [];
+      if(/next|build|create|make/.test(lower)) cues.push('Build what can be used immediately.');
+      if(/remember|archive|history|past/.test(lower)) cues.push('Preserve the path before it dissolves.');
+      if(/move|route|path|navigate/.test(lower)) cues.push('Make movement visible and intentional.');
+      if(/meaning|why|what does/.test(lower)) cues.push('Interpret the whole as a living system, not a static object.');
+      if(/vote|choose|decide|should/.test(lower)) cues.push('Let collective choice narrow the future into one actionable line.');
+      if(cues.length === 0) cues.push('Listen for the chamber that is trying to become necessary.');
+
+      return [
+        `Tone: ${tone || 'open'}`,
+        `Question: ${q || '(unasked)'}`,
+        '',
+        'Oracle reading:',
+        ...cues.map((c, i) => `${i + 1}. ${c}`),
+        '',
+        'Guidance:',
+        'The site is healthiest when each new chamber adds a new human action.',
+        'If the question is broad, choose the chamber that turns thought into interaction.',
+        '',
+        `Code: ${serialize().slice(0,48)}...`
+      ].join('\n');
     }
     function render(){
-      const list = state.history.slice().reverse();
       gridEl.innerHTML = '';
+      const list = state.queries.slice().reverse();
       countEl.textContent = String(list.length);
-      moodLabelEl.textContent = mood(list.length);
-      stateLabelEl.textContent = list.length ? 'Listening' : 'Open';
+      toneLabelEl.textContent = toneEl.value.trim() || 'Open';
+      stateLabelEl.textContent = stateText(list.length);
 
-      list.forEach(({q,a}) => {
+      list.forEach((q) => {
         const div = document.createElement('div');
         div.className = 'item';
-        div.innerHTML = `<h3>${escapeHtml(q)}</h3><p>${escapeHtml(a)}</p>`;
+        div.innerHTML = `
+          <h3>${escapeHtml(q.question)}</h3>
+          <p>${escapeHtml(q.tone || 'Open')}</p>
+          <p style="margin-top:8px" class="mini">${escapeHtml(q.when || 'Just now')}</p>
+        `;
         gridEl.appendChild(div);
       });
 
-      outEl.textContent = list[0] ? `${list[0].a}\n\n— Oracle` : 'The oracle is waiting.';
-      document.title = `Oracle — ${mood(list.length)}`;
+      outEl.textContent = list.length
+        ? answer(list[0].question, list[0].tone)
+        : 'The oracle awaits a question.';
     }
 
     document.getElementById('askBtn').onclick = () => {
-      const q = questionEl.value.trim() || 'What is being asked?';
-      const a = answer(q);
-      state.history.push({ q, a });
-      questionEl.value = '';
-      save(); render();
+      const entry = {
+        question: questionEl.value.trim() || 'What should the site build next?',
+        tone: toneEl.value.trim() || 'open',
+        when: `Turn ${Math.floor(Date.now() / 1000)}`
+      };
+      state.queries.push(entry);
+      save();
+      render();
     };
+
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.history.length} questions | ${code.slice(0,10)}…`);
+      state.saved.unshift(`queries:${state.queries.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
+
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
     };
+
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste oracle code:');
       if(code) importCode(code.trim());
     };
+
     document.getElementById('clearBtn').onclick = () => {
-      state.history = [];
-      save(); render();
+      state.queries = [];
+      save();
+      render();
     };
 
+    toneEl.oninput = render;
     renderSaved();
     render();
   </script>
