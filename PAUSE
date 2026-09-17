@@ -1,4 +1,0 @@
-PAUSED: Workflow paused by user request after Turn 900+ milestone.
-To resume:
-1. Delete this PAUSE file.
-2. In .github/workflows/awakening.yml, restore the schedule trigger, remove 'if: false', and re-enable chain trigger.

@@ -31,7 +31,7 @@ async function main() {
 
   console.log(`\n🌌 [Project Awakening Continuous Loop Started]`);
   console.log(`⏱️ Session Horizon: ${sessionMinutes} minutes (CI mode: ${isCI})`);
-  console.log(`🧠 Agent Wake Intervals: 6–10 minutes (decided dynamically by each agent)\n`);
+  console.log(`🧠 Agent Wake Intervals: 5–15 minutes (decided dynamically by each agent)\n`);
 
   let iteration = 0;
 
@@ -56,7 +56,7 @@ async function main() {
       continue;
     }
 
-    const sleepSeconds = result?.sleepSeconds || (15 + Math.floor(Math.random() * 30));
+    const sleepSeconds = result?.sleepSeconds || (300 + Math.floor(Math.random() * 300));
     const speakerName = result?.speaker?.name || "Agent";
 
     // 1. Rebuild the static GitHub Pages website
@@ -73,6 +73,7 @@ async function main() {
 
       const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
       const repo = process.env.GITHUB_REPOSITORY;
+      runCommand("git pull --rebase origin main || true");
       if (token && repo) {
         runCommand(`git push https://x-access-token:${token}@github.com/${repo}.git HEAD:main || git push origin HEAD:main`);
       } else {

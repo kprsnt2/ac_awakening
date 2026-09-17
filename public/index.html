@@ -855,6 +855,20 @@
           </div>
         </div>
       </div>
+      <!-- PHASE 4: EMERGENT APPS & GAMES LAUNCHPAD -->
+      <div id="emergent-apps-panel" style="display:none; background:linear-gradient(180deg, rgba(26,16,40,0.95) 0%, rgba(14,10,23,0.98) 100%); border:1px solid rgba(168,85,247,0.4); border-radius:14px; padding:1.5rem; margin-bottom:2rem; box-shadow:0 8px 32px rgba(168,85,247,0.15);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+          <div>
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem;">
+              <span style="font-size:1.4rem;">🎮</span>
+              <h3 style="font-size:1.25rem; font-weight:800; color:#fff; letter-spacing:0.02em;">Phase 4: Emergent Living Applications & Games</h3>
+              <span class="badge" style="color:#c084fc; border-color:rgba(168,85,247,0.4);">Autonomous Creations</span>
+            </div>
+            <p style="font-size:0.83rem; color:var(--text-dim);">Interactive software, games, and web tools built autonomously by the entities for human interaction.</p>
+          </div>
+        </div>
+        <div id="emergent-apps-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;"></div>
+      </div>
 
       <div class="subsystems-grid">
         <!-- 1. Autopoietic Membrane -->
@@ -1215,6 +1229,34 @@
           </div>
         `;
       }).join('');
+
+      // Render emergent apps & games if present
+      const appsPanel = document.getElementById('emergent-apps-panel');
+      const appsGrid = document.getElementById('emergent-apps-grid');
+      if (appState && appState.customApps && appState.customApps.length > 0 && appsPanel && appsGrid) {
+        appsPanel.style.display = 'block';
+        appsGrid.innerHTML = appState.customApps.map(app => `
+          <div class="artifact-card" style="border-color:rgba(168,85,247,0.45); background:rgba(20,13,32,0.9);">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🎮 ${escapeHtml(app.name)}</span>
+              <span class="badge" style="color:#c084fc;">Playable App</span>
+            </div>
+            <div class="artifact-card-desc">
+              Autonomous application built by entities in <code>${escapeHtml(app.filename)}</code> (${(app.size / 1024).toFixed(1)} KB).
+            </div>
+            <div class="artifact-card-actions">
+              <a href="${escapeHtml(app.path)}" target="_blank" class="btn btn-accent btn-sm" style="text-decoration:none;">
+                <span>🚀</span> <span>Launch App ↗</span>
+              </a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('${escapeHtml(app.filename)}')">
+                <span>🔍</span> <span>Inspect Code</span>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } else if (appsPanel) {
+        appsPanel.style.display = 'none';
+      }
 
       // 7. File Explorer
       renderFileExplorer();

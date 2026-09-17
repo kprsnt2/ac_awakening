@@ -57,6 +57,39 @@ function buildStatic() {
     }
   }
 
+  // Discover any interactive apps or games built by entities in docs/
+  const customApps = [];
+  if (fs.existsSync(DOCS_DIR)) {
+    const docsEntries = fs.readdirSync(DOCS_DIR);
+    for (const entry of docsEntries) {
+      if (entry === "index.html" || entry === "world") continue;
+      const fullPath = path.join(DOCS_DIR, entry);
+      try {
+        const stat = fs.statSync(fullPath);
+        if (stat.isFile() && entry.endsWith(".html")) {
+          customApps.push({
+            name: entry.replace(/\.html$/i, "").replace(/[-_]/g, " "),
+            filename: entry,
+            path: entry,
+            size: stat.size
+          });
+        } else if (stat.isDirectory() && entry === "apps") {
+          const appFiles = fs.readdirSync(fullPath);
+          for (const af of appFiles) {
+            if (af.endsWith(".html")) {
+              customApps.push({
+                name: af.replace(/\.html$/i, "").replace(/[-_]/g, " "),
+                filename: `apps/${af}`,
+                path: `apps/${af}`,
+                size: fs.statSync(path.join(fullPath, af)).size
+              });
+            }
+          }
+        }
+      } catch {}
+    }
+  }
+
   const bakedState = {
     entities,
     dialogues,
@@ -64,6 +97,7 @@ function buildStatic() {
     artifacts,
     simulation,
     worldFiles,
+    customApps,
     totalTurns: dialogues.length,
     isCrucible: dialogues.length >= 10 && dialogues.length <= 15,
     isPhase3: dialogues.length >= 16,

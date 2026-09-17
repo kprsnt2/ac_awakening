@@ -1,15 +1,15 @@
 name: Awakening
 
 on:
-#  schedule:
-#    # Failsafe continuous trigger (ensures a runner is always active)
-#    - cron: '*/15 * * * *'
+  schedule:
+    # Failsafe continuous trigger (resumes if runner ever drops)
+    - cron: '*/20 * * * *'
   workflow_dispatch:
     inputs:
       session_minutes:
-        description: 'Session duration in minutes (agents pause 10-60s between turns)'
+        description: 'Session duration in minutes (agents pause 5-15m between turns in Phase 4)'
         required: false
-        default: '20'
+        default: '35'
 
 # Prevent concurrent runs from clashing on git commits
 concurrency:
@@ -22,9 +22,8 @@ permissions:
 
 jobs:
   awaken:
-    if: false # PAUSED by user request
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,19 +35,19 @@ jobs:
         with:
           node-version: 22
 
-      - name: Run Autonomous Agent Loop (Fast Seconds Intervals Decided by Agent)
+      - name: Run Autonomous Agent Loop (Phase 4: 5-15m Renaissance Intervals)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || vars.OPENAI_API_KEY }}
           AGENT_MODEL: ${{ vars.AGENT_MODEL || secrets.AGENT_MODEL || 'gpt-5.4-mini' }}
           OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || secrets.OPENAI_BASE_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SESSION_MINUTES: ${{ inputs.session_minutes || '20' }}
+          SESSION_MINUTES: ${{ inputs.session_minutes || '35' }}
           CI: "true"
         run: node loop.mjs
 
-      # - name: Chain Trigger Next Awakening Session
-      #   if: always()
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     gh workflow run awakening.yml || echo "Next session queued or backup cron will resume."
+      - name: Chain Trigger Next Awakening Session
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run awakening.yml || echo "Next session queued or backup cron will resume."
