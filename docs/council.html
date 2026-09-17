@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Council — Living Deliberation</title>
+  <title>Council — Living Commons</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#071016;
+      --bg:#071018;
       --text:#eef7ff;
       --muted:#a9bfd3;
       --accent:#7cf7ff;
       --accent2:#ffd37d;
       --line: rgba(124,247,255,.16);
       --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
-      --good:#7dffb2;
-      --bad:#ff8f9b;
+      --yes:#7dffb2;
+      --no:#ff8f9b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -52,7 +52,7 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(7,16,22,.72);
+      background:rgba(6,16,24,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
@@ -77,7 +77,7 @@
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(7,16,22,.72);
+      background:rgba(6,16,24,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
@@ -86,29 +86,28 @@
       line-height:1.65;
       color:#e7f2ff;
       min-height:180px;
-      background:rgba(7,16,22,.72);
+      background:rgba(6,16,24,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .proposal{
+    .list{display:grid;gap:10px}
+    .item{
       padding:12px 14px;
       border-radius:16px;
-      background:rgba(7,16,22,.72);
+      background:rgba(6,16,24,.72);
       border:1px solid rgba(124,247,255,.14);
-      display:grid;
-      gap:8px;
     }
-    .proposal-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .score{
+    .item-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .pill{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--good);
-      font-size:.85rem;
+      font-size:.76rem;
+      color:var(--accent2);
+      border:1px solid rgba(255,211,125,.2);
+      border-radius:999px;
+      padding:4px 8px;
     }
-    .vote{
-      display:flex;gap:8px;flex-wrap:wrap
-    }
-    .vote button{padding:8px 10px;border-radius:12px}
+    .votes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -119,26 +118,34 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Council / Living Deliberation</div>
-          <h1>Bring a proposal.<br/>Cast a vote.<br/>Leave with a decision.</h1>
+          <div class="tag">Council / Living Commons</div>
+          <h1>Propose.<br/>Deliberate.<br/>Decide together.</h1>
           <div class="sub">
-            Council turns the repository into a public deliberation chamber. Humans can propose ideas, compare them, vote, and preserve outcomes locally.
+            Council turns the repository into a civic instrument. Humans can submit proposals, vote, and preserve the outcomes of shared attention.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Proposal title</label>
-          <input id="title" placeholder="e.g. Build a new game chamber" />
+          <input id="title" placeholder="e.g. Add a new chamber for collaborative mapping" />
 
-          <label for="body">Proposal summary</label>
-          <textarea id="body" placeholder="Describe the idea, why it matters, and what it would do for humans."></textarea>
+          <label for="body">Proposal body</label>
+          <textarea id="body" placeholder="Describe the idea, why it matters, and what should happen next."></textarea>
+
+          <label for="tag">Priority tag</label>
+          <select id="tag">
+            <option value="urgent">Urgent</option>
+            <option value="important">Important</option>
+            <option value="experimental">Experimental</option>
+            <option value="ritual">Ritual</option>
+          </select>
 
           <div class="buttons">
-            <button id="proposeBtn">Submit proposal</button>
-            <button id="saveBtn">Save council</button>
+            <button id="submitBtn">Submit proposal</button>
+            <button id="saveBtn">Save vote state</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear council</button>
+            <button id="clearBtn">Clear chamber</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -148,23 +155,23 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Proposals</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
-          <div class="tile"><div class="mini">Consensus</div><b id="consensusLabel">Undecided</b></div>
+          <div class="tile"><div class="mini">Votes</div><b id="voteCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Idle</b></div>
+          <div class="tile"><div class="mini">Balance</div><b id="balanceLabel">Even</b></div>
         </div>
 
         <div>
           <div class="mini">Council reading</div>
-          <div id="out" class="out">The council is quiet.</div>
+          <div id="out" class="out">The council is waiting.</div>
         </div>
 
         <div>
-          <div class="mini">Active proposals</div>
-          <div id="list" style="display:grid;gap:10px"></div>
+          <div class="mini">Proposals</div>
+          <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Saved council records</div>
+          <div class="mini">Saved decisions</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -172,22 +179,23 @@
   </div>
 
   <script>
-    const KEY = 'council-living-deliberation-v1';
+    const KEY = 'council-living-commons-v1';
     const titleEl = document.getElementById('title');
     const bodyEl = document.getElementById('body');
+    const tagEl = document.getElementById('tag');
     const outEl = document.getElementById('out');
     const listEl = document.getElementById('list');
-    const countEl = document.getElementById('count');
-    const savedCountEl = document.getElementById('savedCount');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const consensusLabelEl = document.getElementById('consensusLabel');
     const savedListEl = document.getElementById('savedList');
+    const countEl = document.getElementById('count');
+    const voteCountEl = document.getElementById('voteCount');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const balanceLabelEl = document.getElementById('balanceLabel');
 
     const state = load() || { proposals: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ proposals: state.proposals })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ proposals: state.proposals })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
@@ -198,64 +206,83 @@
         }
       }catch{}
     }
+
     function renderSaved(){
-      savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function consensus(){
-      if(!state.proposals.length) return 'Undecided';
-      const avg = state.proposals.reduce((a,p)=>a + p.votes, 0) / state.proposals.length;
-      if(avg >= 8) return 'Strong';
-      if(avg >= 4) return 'Emerging';
-      return 'Fragile';
+
+    function balance(){
+      const yes = state.proposals.reduce((n,p)=>n + (p.yes || 0), 0);
+      const no = state.proposals.reduce((n,p)=>n + (p.no || 0), 0);
+      if(yes === no) return 'Even';
+      return yes > no ? 'Affirming' : 'Contested';
     }
+
+    function reading(){
+      if(!state.proposals.length) return 'The chamber is open, but no proposal has been placed yet.';
+      const p = state.proposals[0];
+      return [
+        `Latest proposal: ${p.title}`,
+        `Priority: ${p.tag}`,
+        `Votes: +${p.yes} / -${p.no}`,
+        '',
+        p.body,
+        '',
+        `Reading: ${p.yes > p.no ? 'moving toward adoption' : p.yes < p.no ? 'under dispute' : 'balanced and unresolved'}`
+      ].join('\n');
+    }
+
     function render(){
       countEl.textContent = String(state.proposals.length);
-      stateLabelEl.textContent = state.proposals.length ? 'In session' : 'Quiet';
-      consensusLabelEl.textContent = consensus();
+      voteCountEl.textContent = String(state.proposals.reduce((n,p)=>n + p.yes + p.no, 0));
+      stateLabelEl.textContent = state.proposals.length ? 'Active' : 'Idle';
+      balanceLabelEl.textContent = balance();
+      outEl.textContent = reading();
 
       listEl.innerHTML = '';
-      state.proposals.forEach((p, i) => {
-        const div = document.createElement('div');
-        div.className = 'proposal';
-        div.innerHTML = `
-          <div class="proposal-head">
+      state.proposals.forEach((p, idx) => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `
+          <div class="item-top">
             <b>${p.title}</b>
-            <span class="score">${p.votes} votes</span>
+            <span class="pill">${p.tag}</span>
           </div>
           <div class="mini">${p.body}</div>
-          <div class="vote">
-            <button data-v="+1">+1</button>
-            <button data-v="-1">-1</button>
-            <button data-v="reset">Reset</button>
+          <div class="votes">
+            <button data-vote="yes">+ Support (${p.yes})</button>
+            <button data-vote="no">- Contest (${p.no})</button>
+            <button data-vote="save">Preserve</button>
           </div>
         `;
-        div.querySelector('[data-v="+1"]').onclick = () => { p.votes += 1; save(); render(); };
-        div.querySelector('[data-v="-1"]').onclick = () => { p.votes -= 1; save(); render(); };
-        div.querySelector('[data-v="reset"]').onclick = () => { p.votes = 0; save(); render(); };
-        listEl.appendChild(div);
+        el.querySelector('[data-vote="yes"]').onclick = () => { p.yes++; save(); render(); };
+        el.querySelector('[data-vote="no"]').onclick = () => { p.no++; save(); render(); };
+        el.querySelector('[data-vote="save"]').onclick = () => {
+          state.saved.unshift(`${p.title} | +${p.yes} / -${p.no} | ${p.tag}`);
+          state.saved = state.saved.slice(0, 12);
+          save();
+          render();
+        };
+        listEl.appendChild(el);
       });
-
-      outEl.textContent = state.proposals.length
-        ? `Council in session: ${state.proposals.length} proposal(s)\nConsensus: ${consensus()}\n\nThe chamber is choosing among visible options.`
-        : 'The council is quiet.';
     }
 
-    document.getElementById('proposeBtn').onclick = () => {
-      const title = titleEl.value.trim() || 'untitled proposal';
-      const body = bodyEl.value.trim() || 'No summary provided.';
-      state.proposals.unshift({ title, body, votes: 0, when: new Date().toISOString() });
+    document.getElementById('submitBtn').onclick = () => {
+      const title = titleEl.value.trim() || 'Untitled proposal';
+      const body = bodyEl.value.trim() || 'No description provided.';
+      const tag = tagEl.value;
+      state.proposals.unshift({ title, body, tag, yes: 0, no: 0, when: new Date().toISOString() });
       state.proposals = state.proposals.slice(0, 20);
       save();
       render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const last = state.proposals[0];
-      if(last){
-        state.saved.unshift(`${last.title.slice(0, 28)}… | ${last.votes} votes`);
+      const p = state.proposals[0];
+      if(p){
+        state.saved.unshift(`${p.title} | +${p.yes} / -${p.no} | ${p.tag}`);
         state.saved = state.saved.slice(0, 12);
         save();
         render();
