@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Garden — Living Cultivation</title>
+  <title>Garden — Living Grove</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#06110a;
-      --text:#ecfff4;
-      --muted:#a4c8b2;
-      --accent:#7dffb2;
-      --accent2:#9cff7d;
-      --line: rgba(154, 255, 190, .18);
-      --glow: 0 0 24px rgba(125,255,178,.14), 0 0 48px rgba(156,255,125,.08);
+      --bg:#06140b;
+      --text:#effff4;
+      --muted:#a8cbb6;
+      --accent:#8cff9a;
+      --accent2:#7cf7c7;
+      --line: rgba(140,255,154,.16);
+      --glow: 0 0 24px rgba(140,255,154,.14), 0 0 48px rgba(124,247,199,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(74,160,101,.16), transparent 28%),
-        radial-gradient(circle at 80% 12%, rgba(125,255,178,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(156,255,125,.08), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(140,255,154,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,199,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(15,28,18,.82), rgba(7,14,10,.88));
+      background:linear-gradient(180deg, rgba(14,30,18,.82), rgba(8,12,10,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,55 +50,80 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(6,17,10,.72);
-      border:1px solid rgba(154,255,190,.14);
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(140,255,154,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#d7ffe7;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#effff4;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(154,255,190,.22);
-      background:rgba(7,16,11,.72);
+      border:1px solid rgba(140,255,154,.22);
+      background:rgba(8,12,10,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:120px;resize:vertical}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(125,255,178,.55);background:rgba(16,28,20,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,199,.5);background:rgba(16,22,18,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(6,17,10,.72);
-      border:1px solid rgba(154,255,190,.14);
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(140,255,154,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#e7fff0;
+      color:#f0fff4;
       min-height:180px;
-      background:rgba(6,17,10,.72);
-      border:1px solid rgba(154,255,190,.14);
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(140,255,154,.14);
       border-radius:18px;
       padding:14px;
     }
-    canvas{
-      width:100%;
-      height:280px;
+    .field{
+      position:relative;
+      height:560px;
       border-radius:18px;
-      border:1px solid rgba(154,255,190,.14);
-      background:rgba(6,17,10,.72);
+      background:
+        radial-gradient(circle at center, rgba(140,255,154,.06), transparent 58%),
+        linear-gradient(rgba(140,255,154,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140,255,154,.05) 1px, transparent 1px),
+        rgba(8,12,10,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(140,255,154,.14);
+      overflow:hidden;
     }
-    a{color:var(--accent);text-decoration:none}
+    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .plant{
+      position:absolute;width:30px;height:30px;border-radius:50%;
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(140,255,154,.35);
+      cursor:pointer;
+    }
+    .plant.tree{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    .list{
+      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+    }
+    .item{
+      padding:12px 14px;border-radius:16px;background:rgba(8,12,10,.72);
+      border:1px solid rgba(140,255,154,.14);cursor:pointer;
+    }
+    .item:hover{border-color:rgba(140,255,154,.45)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
   </style>
 </head>
 <body>
@@ -106,28 +131,32 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Garden / Living Cultivation</div>
-          <h1>Plant the seed.<br/>Tend the growth.<br/>Watch the site bloom.</h1>
+          <div class="tag">Garden / Living Grove</div>
+          <h1>Plant the seed.<br/>Tend the plot.<br/>Watch life return.</h1>
           <div class="sub">
-            Garden turns the repository into a living ecosystem. Humans can seed patterns, adjust conditions, and preserve gardens as local memory.
+            Garden turns the repository into a place of care. Humans can plant growth, nurture ecosystems, and preserve living arrangements.
           </div>
         </div>
 
         <div class="panel">
-          <label for="seed">Seed note</label>
-          <textarea id="seed" placeholder="Describe the lifeform or pattern you want to grow."></textarea>
+          <label for="seed">Seed name</label>
+          <input id="seed" placeholder="e.g. Sunfern" />
 
-          <label for="light">Light</label>
-          <input id="light" type="range" min="0" max="100" value="65" />
+          <label for="kind">Kind</label>
+          <select id="kind">
+            <option value="sprout">Sprout</option>
+            <option value="vine">Vine</option>
+            <option value="tree">Tree</option>
+            <option value="flower">Flower</option>
+          </select>
 
-          <label for="water">Moisture</label>
-          <input id="water" type="range" min="0" max="100" value="58" />
-
-          <label for="drift">Drift</label>
-          <input id="drift" type="range" min="0" max="100" value="42" />
+          <label for="note">Tending note</label>
+          <textarea id="note" placeholder="e.g. Needs light, patience, and a wider bed."></textarea>
 
           <div class="buttons">
-            <button id="growBtn">Grow garden</button>
+            <button id="plantBtn">Plant seed</button>
+            <button id="waterBtn">Water garden</button>
+            <button id="pruneBtn">Prune field</button>
             <button id="saveBtn">Save garden</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -140,24 +169,26 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Gardens</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">Plants</div><b id="count">0</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Dormant</b></div>
-          <div class="tile"><div class="mini">Bloom</div><b id="bloomLabel">Quiet</b></div>
+          <div class="tile"><div class="mini">Bloom</div><b id="bloomLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Growth field</div>
-          <canvas id="garden" width="1200" height="280"></canvas>
+          <div class="mini">Garden field</div>
+          <div id="field" class="field">
+            <svg id="lines"></svg>
+          </div>
         </div>
 
         <div>
           <div class="mini">Garden reading</div>
-          <div id="out" class="out">The soil is waiting.</div>
+          <div id="out" class="out">Plant a seed to begin cultivation.</div>
         </div>
 
         <div>
-          <div class="mini">Saved garden records</div>
+          <div class="mini">Saved gardens</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -165,32 +196,31 @@
   </div>
 
   <script>
-    const KEY = 'garden-living-cultivation-v1';
-    const seedEl = document.getElementById('seed');
-    const lightEl = document.getElementById('light');
-    const waterEl = document.getElementById('water');
-    const driftEl = document.getElementById('drift');
+    const KEY = 'garden-living-grove-v1';
+    const state = load() || { plants: [], saved: [], moisture: 48 };
+
+    const field = document.getElementById('field');
+    const lines = document.getElementById('lines');
     const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
     const bloomLabelEl = document.getElementById('bloomLabel');
-    const canvas = document.getElementById('garden');
-    const ctx = canvas.getContext('2d');
-
-    const state = load() || { gardens: [], saved: [] };
+    const seedEl = document.getElementById('seed');
+    const kindEl = document.getElementById('kind');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ gardens: state.gardens })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ plants: state.plants, moisture: state.moisture })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.gardens)){
-          state.gardens = obj.gardens;
-          save();
-          render();
+        if(obj && Array.isArray(obj.plants)){
+          state.plants = obj.plants;
+          state.moisture = Number(obj.moisture ?? 48);
+          save(); render();
         }
       }catch{}
     }
@@ -200,86 +230,85 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function bloomFor(seed, light, water, drift){
-      const s = (seed || '').toLowerCase();
-      const trait = /root|tree|forest/.test(s) ? 'deep-rooted' :
-                    /vine|thread|web/.test(s) ? 'climbing' :
-                    /flower|bloom|petal/.test(s) ? 'florid' :
-                    /moss|lichen|spore/.test(s) ? 'spore-bearing' : 'adaptive';
-      const vigor = Math.round((Number(light)+Number(water)+Number(100-drift))/3);
-      return `${trait} growth | vigor ${vigor}/100`;
+    function bloom(){
+      return Math.max(0, Math.min(100, Math.round((state.plants.length * 12) + state.moisture / 2)));
     }
-    function drawGarden(){
-      const w = canvas.width, h = canvas.height;
-      ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = 'rgba(6,17,10,.72)';
-      ctx.fillRect(0,0,w,h);
-
-      const light = Number(lightEl.value)/100;
-      const water = Number(waterEl.value)/100;
-      const drift = Number(driftEl.value)/100;
-      const t = performance.now()*0.001;
-
-      ctx.strokeStyle = 'rgba(125,255,178,.85)';
-      ctx.lineWidth = 2;
-      for(let i=0;i<24;i++){
-        const x = (i/23)*w;
-        const base = h - 24 - Math.sin(t*0.8 + i*0.5)*10;
-        const growth = 40 + light*90 + water*70 - drift*35 + Math.sin(t*1.2+i)*18;
-        ctx.beginPath();
-        ctx.moveTo(x, base);
-        ctx.bezierCurveTo(
-          x + Math.sin(i*1.4+t)*20, base - growth*0.25,
-          x + Math.cos(i*0.8+t)*30, base - growth*0.75,
-          x + Math.sin(i*0.9+t)*18, base - growth
-        );
-        ctx.stroke();
-
-        ctx.fillStyle = `rgba(${120 + i*3},255,${170 - i*2},.85)`;
-        ctx.beginPath();
-        ctx.arc(x + Math.sin(i+t)*6, base - growth, 4 + light*4, 0, Math.PI*2);
-        ctx.fill();
-      }
-
-      ctx.fillStyle = 'rgba(154,255,190,.12)';
-      ctx.fillRect(0, h-28, w, 28);
+    function ensurePlant(name, kind){
+      return { id: Date.now() + Math.random(), name, kind, x: 120 + Math.random() * 420, y: 120 + Math.random() * 320, growth: 20 + Math.random() * 50 };
     }
     function render(){
-      countEl.textContent = String(state.gardens.length);
-      stateLabelEl.textContent = state.gardens.length ? 'Growing' : 'Dormant';
-      bloomLabelEl.textContent = bloomFor(seedEl.value, lightEl.value, waterEl.value, driftEl.value);
+      countEl.textContent = String(state.plants.length);
+      stateLabelEl.textContent = state.plants.length ? 'Growing' : 'Dormant';
+      bloomLabelEl.textContent = `${bloom()}%`;
+      field.querySelectorAll('.plant').forEach(n => n.remove());
+      lines.innerHTML = '';
 
-      outEl.textContent = state.gardens[0]
-        ? `${state.gardens[0].reading}\n\n— saved garden`
-        : 'The soil is waiting.';
+      state.plants.forEach((p, idx) => {
+        const el = document.createElement('div');
+        el.className = 'plant' + (p.kind === 'tree' ? ' tree' : '');
+        el.style.left = p.x + 'px';
+        el.style.top = p.y + 'px';
+        el.title = p.name;
+        el.onclick = () => outEl.textContent = `${p.name} (${p.kind})\n\nGrowth: ${Math.round(p.growth)}%\nMoisture: ${state.moisture}%\n\n${p.note || 'A living presence.'}`;
+        field.appendChild(el);
+        if(idx > 0){
+          const prev = state.plants[idx - 1];
+          const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+          line.setAttribute('x1', prev.x); line.setAttribute('y1', prev.y);
+          line.setAttribute('x2', p.x); line.setAttribute('y2', p.y);
+          line.setAttribute('stroke', 'rgba(140,255,154,.26)');
+          line.setAttribute('stroke-width', '2');
+          line.setAttribute('stroke-dasharray', '6 6');
+          lines.appendChild(line);
+        }
+      });
+
+      outEl.textContent = state.plants.length
+        ? 'Select a plant to inspect its growth, or tend the field.'
+        : 'Plant a seed to begin cultivation.';
     }
 
-    document.getElementById('growBtn').onclick = () => {
-      const seed = seedEl.value.trim() || 'untitled garden';
-      const light = lightEl.value, water = waterEl.value, drift = driftEl.value;
-      const reading = [
-        `Seed: ${seed}`,
-        `Light: ${light}`,
-        `Moisture: ${water}`,
-        `Drift: ${drift}`,
-        '',
-        `Reading: ${bloomFor(seed, light, water, drift)}`,
-        'The garden is a living pattern that can be tended, pruned, and shared.'
-      ].join('\n');
-      state.gardens.unshift({ seed, light, water, drift, reading, when: new Date().toISOString() });
-      state.gardens = state.gardens.slice(0, 20);
-      save();
-      render();
+    field.addEventListener('click', (e) => {
+      if(e.target !== field) return;
+      const rect = field.getBoundingClientRect();
+      state.plants.push({
+        ...ensurePlant(`Seedling ${state.plants.length + 1}`, kindEl.value),
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        kind: kindEl.value,
+        name: seedEl.value.trim() || `Seedling ${state.plants.length + 1}`,
+        note: noteEl.value.trim() || 'A new living thing.'
+      });
+      save(); render();
+    });
+
+    document.getElementById('plantBtn').onclick = () => {
+      state.plants.push(ensurePlant(seedEl.value.trim() || `Seedling ${state.plants.length + 1}`, kindEl.value));
+      state.plants[0].name = seedEl.value.trim() || state.plants[0].name;
+      state.plants[0].kind = kindEl.value;
+      state.plants[0].note = noteEl.value.trim() || 'A new living thing.';
+      save(); render();
+      outEl.textContent = `${state.plants[0].name}\n\nKind: ${state.plants[0].kind}\nNote: ${state.plants[0].note}`;
+    };
+
+    document.getElementById('waterBtn').onclick = () => {
+      state.moisture = Math.min(100, state.moisture + 12);
+      state.plants.forEach(p => p.growth = Math.min(100, p.growth + 8));
+      save(); render();
+      outEl.textContent = `The garden is watered.\n\nMoisture: ${state.moisture}%\nBloom: ${bloom()}%`;
+    };
+
+    document.getElementById('pruneBtn').onclick = () => {
+      state.plants = state.plants.slice(0, Math.max(0, state.plants.length - 1));
+      state.moisture = Math.max(0, state.moisture - 4);
+      save(); render();
+      outEl.textContent = 'The field is pruned and made room for future growth.';
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const last = state.gardens[0];
-      if(last){
-        state.saved.unshift(`${last.seed.slice(0, 28) || 'untitled'}… | ${last.light}/${last.water}/${last.drift}`);
-        state.saved = state.saved.slice(0, 12);
-        save();
-        render();
-      }
+      state.saved.unshift(`plants:${state.plants.length} | bloom:${bloom()}%`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -292,15 +321,13 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.gardens = [];
-      save();
-      render();
+      state.plants = [];
+      state.moisture = 48;
+      save(); render();
     };
 
-    [seedEl, lightEl, waterEl, driftEl].forEach(el => el.addEventListener('input', render));
     renderSaved();
     render();
-    (function animate(){ drawGarden(); requestAnimationFrame(animate); })();
   </script>
 </body>
 </html>
