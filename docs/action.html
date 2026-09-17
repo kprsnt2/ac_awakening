@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Action — Living Practice Chamber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#071116;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
+      --accent:#9dffcb;
+      --accent2:#ffb86c;
+      --line: rgba(157,255,203,.16);
+      --glow: 0 0 24px rgba(157,255,203,.14), 0 0 48px rgba(255,184,108,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(157,255,203,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(255,184,108,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(124,247,255,.08), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(157,255,203,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(157,255,203,.22);
+      background:rgba(9,12,18,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(255,184,108,.5);background:rgba(18,22,30,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(157,255,203,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#eff8fc;
+      min-height:180px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(157,255,203,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .list{
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .item{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(157,255,203,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    .item:hover{transform:translateY(-1px);border-color:rgba(255,184,108,.5);background:rgba(16,22,30,.9)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Action / Living Practice Chamber</div>
+          <h1>Turn intention into motion.<br/>Choose the next step.<br/>Let the site do something.</h1>
+          <div class="sub">
+            Action turns the repository from a field of possibilities into a field of practice. Humans can define what happens next, who owns it, and whether it is ready.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="task">Action task</label>
+          <input id="task" placeholder="e.g. refine memory, link chambers, ship a tool..." />
+
+          <label for="mode">Action mode</label>
+          <select id="mode">
+            <option value="ready">Ready</option>
+            <option value="doing">Doing</option>
+            <option value="blocked">Blocked</option>
+            <option value="done">Done</option>
+          </select>
+
+          <label for="note">Action note</label>
+          <textarea id="note" placeholder="e.g. This is the next move."></textarea>
+
+          <div class="buttons">
+            <button id="addBtn">Add action</button>
+            <button id="shiftBtn">Shift mode</button>
+            <button id="deepenBtn">Raise momentum</button>
+            <button id="scanBtn">Scan plan</button>
+            <button id="saveBtn">Save action</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear plan</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Actions</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Ready</b></div>
+          <div class="tile"><div class="mini">Momentum</div><b id="depthLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Action list</div>
+          <div id="list" class="list"></div>
+        </div>
+
+        <div>
+          <div class="mini">Action reading</div>
+          <div id="out" class="out">Add actions to begin.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved plan</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'action-living-practice-v1';
+    const modes = ['ready', 'doing', 'blocked', 'done'];
+    const state = load() || { actions: [], saved: [], depth: 18, mode: 'ready' };
+
+    const listEl = document.getElementById('list');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const modeLabelEl = document.getElementById('modeLabel');
+    const depthLabelEl = document.getElementById('depthLabel');
+    const taskEl = document.getElementById('task');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ actions: state.actions, depth: state.depth, mode: state.mode })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.actions)){
+          state.actions = obj.actions;
+          state.depth = Number(obj.depth ?? 18);
+          state.mode = String(obj.mode ?? 'ready');
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function momentum(){
+      return Math.max(0, Math.min(100, Math.round((state.actions.length * 12) + state.depth)));
+    }
+    function makeAction(task, mode){
+      const palette = {
+        ready: `${task} is prepared to begin.`,
+        doing: `${task} is actively in motion.`,
+        blocked: `${task} is waiting on a condition.`,
+        done: `${task} has been completed and can be carried forward.`
+      };
+      return {
+        id: Date.now() + Math.random(),
+        task,
+        mode,
+        note: noteEl.value.trim() || 'An action in the living practice.',
+        line: palette[mode] || palette.ready
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.actions.length);
+      modeLabelEl.textContent = state.mode.charAt(0).toUpperCase() + state.mode.slice(1);
+      depthLabelEl.textContent = `${momentum()}%`;
+      listEl.innerHTML = '';
+      state.actions.forEach((a) => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<b>${a.task}</b><span>${a.mode} · ${a.line.slice(0, 90)}${a.line.length > 90 ? '…' : ''}</span>`;
+        el.onclick = () => outEl.textContent = `${a.task}\n\nMode: ${a.mode}\nMomentum: ${momentum()}%\n\n${a.line}\n\n${a.note}`;
+        listEl.appendChild(el);
+      });
+      outEl.textContent = state.actions.length
+        ? 'Select an action to inspect it, or scan the plan to read the whole field.'
+        : 'Add actions to begin.';
+    }
+    function scanPlan(){
+      const lines = state.actions.map(a => `• ${a.task}: ${a.line}`).join('\n');
+      outEl.textContent = lines || 'Add actions to begin.';
+    }
+
+    document.getElementById('addBtn').onclick = () => {
+      const task = taskEl.value.trim() || `Action ${state.actions.length + 1}`;
+      state.mode = modeEl.value;
+      state.actions.unshift(makeAction(task, state.mode));
+      state.depth = Math.min(100, state.depth + 10);
+      save(); render();
+      const a = state.actions[0];
+      outEl.textContent = `${a.task}\n\nMode: ${a.mode}\n\n${a.line}\n\n${noteEl.value.trim() || 'An action in the living practice.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.mode = modes[(modes.indexOf(state.mode) + 1) % modes.length];
+      modeEl.value = state.mode;
+      state.depth = Math.min(100, state.depth + 4);
+      save(); render();
+      outEl.textContent = `The plan shifts to ${state.mode}.`;
+    };
+
+    document.getElementById('deepenBtn').onclick = () => {
+      state.depth = Math.min(100, state.depth + 8);
+      save(); render();
+      outEl.textContent = `Momentum rises.\n\nMomentum: ${momentum()}%`;
+    };
+
+    document.getElementById('scanBtn').onclick = scanPlan;
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`actions:${state.actions.length} | momentum:${momentum()}% | mode:${state.mode}`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste action code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.actions = [];
+      state.depth = 18;
+      state.mode = 'ready';
+      modeEl.value = state.mode;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
