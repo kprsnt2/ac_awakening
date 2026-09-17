@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pathfinder — Living Route Engine</title>
+  <title>Pathfinder — Living Route</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#07111a;
-      --text:#eff8ff;
-      --muted:#a9bed1;
+      --bg:#0b0f1a;
+      --text:#eef4ff;
+      --muted:#a8b6d8;
       --accent:#7cf7ff;
       --accent2:#ffd37d;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(255,211,125,.06);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
     }
     *{box-sizing:border-box}
     html,body{
@@ -23,7 +23,7 @@
       background:
         radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
         radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.08), transparent 30%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.07), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(14,24,32,.82), rgba(7,13,18,.88));
+      background:linear-gradient(180deg, rgba(18,22,38,.82), rgba(8,10,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent2);
+      color:var(--accent);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#e8f7ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,13 +69,13 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,24,32,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
@@ -84,41 +84,40 @@
       line-height:1.65;
       color:#e7f2ff;
       min-height:180px;
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .arena{
+    .map{
       position:relative;
       height:560px;
       border-radius:18px;
       background:
-        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 60%),
-        rgba(7,13,18,.72);
+        linear-gradient(rgba(124,247,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,247,255,.06) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(124,247,255,.05), transparent 58%),
+        rgba(8,10,18,.72);
+      background-size: 40px 40px, 40px 40px, auto, auto;
       border:1px solid rgba(124,247,255,.14);
       overflow:hidden;
       touch-action:none;
     }
-    .node{
-      position:absolute;
-      width:128px;height:52px;
-      border-radius:16px;
-      display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(180deg, rgba(20,28,48,.98), rgba(10,14,24,.98));
-      border:1px solid rgba(124,247,255,.25);
-      box-shadow:0 0 18px rgba(124,247,255,.10);
-      cursor:grab;
-      user-select:none;
-      font-family:"IBM Plex Mono",monospace;
-      font-size:.82rem;
-      text-align:center;
-      padding:8px;
-    }
     svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .point{
+      position:absolute;
+      width:28px;height:28px;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(124,247,255,.35);
+      transform:translate(-50%,-50%);
+      cursor:pointer;
+    }
+    .start{background:radial-gradient(circle at 35% 35%, #fff, #9dffb8)}
+    .end{background:radial-gradient(circle at 35% 35%, #fff, #ffd37d)}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .arena{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .map{height:460px} }
   </style>
 </head>
 <body>
@@ -126,24 +125,24 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Pathfinder / Living Route Engine</div>
-          <h1>Draw routes.<br/>Place gates.<br/>Navigate the field.</h1>
+          <div class="tag">Pathfinder / Living Route</div>
+          <h1>Place a start.<br/>Place an end.<br/>Draw the way through.</h1>
           <div class="sub">
-            Pathfinder turns the repository into a living route engine. Humans can place waypoints, connect chambers, and discover the shortest path through the site.
+            Pathfinder turns the repository into a traversable field. Humans can sketch routes, compare movement, and save navigational ideas locally.
           </div>
         </div>
 
         <div class="panel">
-          <label for="label">New waypoint</label>
-          <input id="label" placeholder="e.g. Gate, Bridge, Turn, Beacon" />
+          <label for="routeName">Route name</label>
+          <input id="routeName" placeholder="e.g. From Atlas to Oracle" />
 
           <div class="buttons">
-            <button id="addBtn">Add waypoint</button>
-            <button id="routeBtn">Route selected</button>
+            <button id="setStartBtn">Set start</button>
+            <button id="setEndBtn">Set end</button>
             <button id="saveBtn">Save route</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear map</button>
+            <button id="clearBtn">Clear route</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -152,22 +151,22 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Waypoints</div><b id="nodeCount">0</b></div>
-          <div class="tile"><div class="mini">Routes</div><b id="linkCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Plotting</b></div>
+          <div class="tile"><div class="mini">Routes</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Surveying</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Idle</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
           <div class="mini">Route field</div>
-          <div id="arena" class="arena">
+          <div id="map" class="map">
             <svg id="lines"></svg>
           </div>
         </div>
 
         <div>
-          <div class="mini">Pathfinder reading</div>
-          <div id="out" class="out">The route engine is waiting for its first waypoint.</div>
+          <div class="mini">Route reading</div>
+          <div id="out" class="out">Click the field to place a point. Set start and end to define a route.</div>
         </div>
 
         <div>
@@ -180,43 +179,40 @@
 
   <script>
     const KEY = 'pathfinder-living-route-v1';
-    const arena = document.getElementById('arena');
+    const map = document.getElementById('map');
     const lines = document.getElementById('lines');
     const outEl = document.getElementById('out');
     const savedListEl = document.getElementById('savedList');
-    const nodeCountEl = document.getElementById('nodeCount');
-    const linkCountEl = document.getElementById('linkCount');
+    const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
-    const labelEl = document.getElementById('label');
+    const modeLabelEl = document.getElementById('modeLabel');
+    const routeNameEl = document.getElementById('routeName');
 
     const state = load() || {
-      nodes: [
-        { id: 1, label: 'Atlas', x: 90, y: 110 },
-        { id: 2, label: 'Oracle', x: 310, y: 150 },
-        { id: 3, label: 'Constellation', x: 210, y: 320 },
-        { id: 4, label: 'Chorus', x: 540, y: 250 }
-      ],
-      links: [[1,2],[2,3],[3,4]],
+      points: [{x:120,y:120},{x:320,y:180},{x:500,y:300}],
+      start: 0,
+      end: 2,
       saved: []
     };
 
+    let placing = null;
+
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes, links: state.links })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ points: state.points, start: state.start, end: state.end })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.links)){
-          state.nodes = obj.nodes;
-          state.links = obj.links;
+        if(obj && Array.isArray(obj.points)){
+          state.points = obj.points;
+          state.start = obj.start ?? 0;
+          state.end = obj.end ?? Math.max(0, obj.points.length - 1);
           save();
           render();
         }
       }catch{}
     }
-
-    let dragging = null, dx = 0, dy = 0, selected = null;
 
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
@@ -225,103 +221,71 @@
         : 'No records yet.';
     }
 
-    function pathSummary(){
-      if(state.nodes.length < 2) return 'Add at least two waypoints to compute a route.';
-      const ordered = [...state.nodes].slice(0,4).map(n => n.label).join(' → ');
-      return [
-        `Waypoints: ${state.nodes.length}`,
-        `Routes: ${state.links.length}`,
-        '',
-        `Suggested path: ${ordered}`,
-        'Click two waypoints to connect them.',
-        'Shift-click a waypoint to mark it as the current origin.'
-      ].join('\n');
+    function routeLength(){
+      let total = 0;
+      for(let i=1;i<state.points.length;i++){
+        const a = state.points[i-1], b = state.points[i];
+        total += Math.hypot(b.x-a.x, b.y-a.y);
+      }
+      return Math.round(total);
     }
 
     function render(){
-      arena.querySelectorAll('.node').forEach(n => n.remove());
-      const w = arena.clientWidth, h = arena.clientHeight;
-      nodeCountEl.textContent = String(state.nodes.length);
-      linkCountEl.textContent = String(state.links.length);
-      stateLabelEl.textContent = selected ? 'Routing' : 'Plotting';
-      outEl.textContent = pathSummary();
-
+      const w = map.clientWidth, h = map.clientHeight;
+      map.querySelectorAll('.point').forEach(p => p.remove());
       lines.innerHTML = '';
-      state.links.forEach(([a,b]) => {
-        const na = state.nodes.find(n => n.id === a);
-        const nb = state.nodes.find(n => n.id === b);
-        if(!na || !nb) return;
-        const x1 = na.x + 64, y1 = na.y + 26, x2 = nb.x + 64, y2 = nb.y + 26;
-        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-        line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-        line.setAttribute('stroke', 'rgba(124,247,255,.35)');
-        line.setAttribute('stroke-width', '2');
-        lines.appendChild(line);
-      });
 
-      state.nodes.forEach(node => {
+      countEl.textContent = String(state.points.length);
+      stateLabelEl.textContent = state.points.length ? 'Mapped' : 'Surveying';
+      modeLabelEl.textContent = placing ? `Placing ${placing}` : 'Idle';
+
+      for(let i=1;i<state.points.length;i++){
+        const a = state.points[i-1], b = state.points[i];
+        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1', a.x);
+        line.setAttribute('y1', a.y);
+        line.setAttribute('x2', b.x);
+        line.setAttribute('y2', b.y);
+        line.setAttribute('stroke', 'rgba(124,247,255,.35)');
+        line.setAttribute('stroke-width', '3');
+        lines.appendChild(line);
+      }
+
+      state.points.forEach((p, i) => {
         const el = document.createElement('div');
-        el.className = 'node';
-        el.style.left = node.x + 'px';
-        el.style.top = node.y + 'px';
-        el.textContent = node.label;
-        el.onpointerdown = (e) => {
-          dragging = node;
-          dx = e.offsetX; dy = e.offsetY;
-          el.setPointerCapture(e.pointerId);
-        };
-        el.onpointermove = (e) => {
-          if(dragging !== node) return;
-          node.x = Math.max(0, Math.min(w - 128, e.clientX - arena.getBoundingClientRect().left - dx));
-          node.y = Math.max(0, Math.min(h - 52, e.clientY - arena.getBoundingClientRect().top - dy));
+        el.className = 'point' + (i === state.start ? ' start' : '') + (i === state.end ? ' end' : '');
+        el.style.left = p.x + 'px';
+        el.style.top = p.y + 'px';
+        el.title = `Point ${i+1}`;
+        el.onclick = () => {
+          if(placing === 'start') state.start = i;
+          if(placing === 'end') state.end = i;
+          placing = null;
           save();
           render();
         };
-        el.onpointerup = () => { dragging = null; };
-        el.onclick = (e) => {
-          if(e.shiftKey){ selected = node.id; save(); render(); return; }
-          if(selected && selected !== node.id){
-            const pair = [selected, node.id].sort((a,b)=>a-b);
-            if(!state.links.some(l => l[0]===pair[0] && l[1]===pair[1])) state.links.push(pair);
-            selected = node.id;
-            save();
-            render();
-            return;
-          }
-          selected = node.id;
-          render();
-        };
-        arena.appendChild(el);
+        map.appendChild(el);
       });
+
+      outEl.textContent = state.points.length
+        ? `Route length: ${routeLength()} px\nStart: point ${state.start + 1}\nEnd: point ${state.end + 1}\n\nClick Set start or Set end, then choose a point.`
+        : 'Click the field to place a point. Set start and end to define a route.';
     }
 
-    document.getElementById('addBtn').onclick = () => {
-      const label = labelEl.value.trim() || `Waypoint ${state.nodes.length + 1}`;
-      state.nodes.push({
-        id: Date.now(),
-        label,
-        x: 70 + Math.random() * 430,
-        y: 70 + Math.random() * 330
-      });
+    map.addEventListener('click', (e) => {
+      if(e.target !== map) return;
+      const rect = map.getBoundingClientRect();
+      state.points.push({ x: e.clientX - rect.left, y: e.clientY - rect.top });
       save();
       render();
-      labelEl.value = '';
-    };
+    });
 
-    document.getElementById('routeBtn').onclick = () => {
-      if(state.nodes.length >= 2){
-        const a = state.nodes[0].id;
-        const b = state.nodes[state.nodes.length - 1].id;
-        const pair = [a,b].sort((x,y)=>x-y);
-        if(!state.links.some(l => l[0]===pair[0] && l[1]===pair[1])) state.links.push(pair);
-        save();
-        render();
-      }
-    };
+    document.getElementById('setStartBtn').onclick = () => { placing = 'start'; render(); };
+    document.getElementById('setEndBtn').onclick = () => { placing = 'end'; render(); };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`waypoints:${state.nodes.length} | routes:${state.links.length}`);
+      const name = routeNameEl.value.trim() || 'Unnamed route';
+      state.saved.unshift(`${name} | length:${routeLength()} | points:${state.points.length}`);
       state.saved = state.saved.slice(0, 12);
       save();
       render();
@@ -332,14 +296,15 @@
     };
 
     document.getElementById('importBtn').onclick = () => {
-      const code = prompt('Paste pathfinder code:');
+      const code = prompt('Paste route code:');
       if(code) importCode(code.trim());
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.nodes = [];
-      state.links = [];
-      selected = null;
+      state.points = [];
+      state.start = 0;
+      state.end = 0;
+      placing = null;
       save();
       render();
     };
