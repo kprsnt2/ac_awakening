@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Constellation — Living Network</title>
+  <title>Constellation — Living Relation Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#071018;
-      --text:#eef8ff;
-      --muted:#9eb7ca;
-      --accent:#8fd3ff;
-      --accent2:#7cf7ff;
-      --line: rgba(143,211,255,.16);
-      --glow: 0 0 24px rgba(143,211,255,.14), 0 0 48px rgba(124,247,255,.08);
+      --bg:#061018;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
+      --accent:#7cf7ff;
+      --accent2:#b88cff;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(184,140,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(143,211,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.07), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(184,140,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(14,24,34,.82), rgba(8,10,18,.88));
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(143,211,255,.22);
-      background:rgba(8,10,18,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(9,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,61 +69,47 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(184,140,255,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#e7f2ff;
+      color:#eff8fc;
       min-height:180px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .graph{
-      position:relative;
-      height:560px;
-      border-radius:18px;
-      background:
-        radial-gradient(circle at center, rgba(143,211,255,.06), transparent 58%),
-        linear-gradient(rgba(143,211,255,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(143,211,255,.05) 1px, transparent 1px),
-        rgba(8,10,18,.72);
-      background-size:auto, 40px 40px, 40px 40px, auto;
-      border:1px solid rgba(143,211,255,.14);
-      overflow:hidden;
-    }
-    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-    .node{
-      position:absolute;width:26px;height:26px;border-radius:50%;
-      transform:translate(-50%,-50%);
-      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
-      box-shadow:0 0 18px rgba(143,211,255,.35);
-      cursor:pointer;
-    }
-    .node.active{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
     .list{
-      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
     }
     .item{
-      padding:12px 14px;border-radius:16px;background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);cursor:pointer;
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{border-color:rgba(143,211,255,.45)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .graph{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -131,10 +117,10 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Constellation / Living Network</div>
-          <h1>Link the chambers.<br/>Reveal the web.<br/>Make relation visible.</h1>
+          <div class="tag">Constellation / Living Relation Chamber</div>
+          <h1>Link the chambers.<br/>Trace the relations.<br/>Read the network.</h1>
           <div class="sub">
-            Constellation turns the repository into a network of meaning. Humans can connect chambers, inspect clusters, and trace the shape of the whole.
+            Constellation turns the repository into a visible web of meaning. Humans can connect chambers, inspect clusters, and navigate by relation.
           </div>
         </div>
 
@@ -143,17 +129,19 @@
           <input id="source" placeholder="e.g. Atlas" />
 
           <label for="target">Target chamber</label>
-          <input id="target" placeholder="e.g. Pathfinder" />
+          <input id="target" placeholder="e.g. Chronicle" />
 
-          <label for="relation">Relation note</label>
-          <textarea id="relation" placeholder="e.g. Atlas situates Pathfinder within the site."></textarea>
+          <label for="note">Relation note</label>
+          <textarea id="note" placeholder="e.g. Atlas helps Chronicle index what becomes retrievable."></textarea>
 
           <div class="buttons">
-            <button id="linkBtn">Link chambers</button>
+            <button id="addBtn">Add relation</button>
+            <button id="sparkBtn">Spark cluster</button>
+            <button id="densityBtn">Measure density</button>
             <button id="saveBtn">Save constellation</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear network</button>
+            <button id="clearBtn">Clear constellation</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -162,22 +150,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Links</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unlinked</b></div>
-          <div class="tile"><div class="mini">Focus</div><b id="focusLabel">—</b></div>
+          <div class="tile"><div class="mini">Relations</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Density</div><b id="densityLabel">0%</b></div>
+          <div class="tile"><div class="mini">Clusters</div><b id="clusterLabel">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Network field</div>
-          <div id="graph" class="graph">
-            <svg id="lines"></svg>
-          </div>
+          <div class="mini">Relation list</div>
+          <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Relation reading</div>
-          <div id="out" class="out">Link chambers to reveal the network.</div>
+          <div class="mini">Constellation reading</div>
+          <div id="out" class="out">Add a relation to begin the map.</div>
         </div>
 
         <div>
@@ -189,28 +175,30 @@
   </div>
 
   <script>
-    const KEY = 'constellation-living-network-v1';
-    const state = load() || { nodes: [], links: [], saved: [] };
-    const graph = document.getElementById('graph');
-    const lines = document.getElementById('lines');
+    const KEY = 'constellation-living-relation-v1';
+    const state = load() || { relations: [], saved: [], density: 14, clusters: 1 };
+
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const focusLabelEl = document.getElementById('focusLabel');
+    const densityLabelEl = document.getElementById('densityLabel');
+    const clusterLabelEl = document.getElementById('clusterLabel');
     const sourceEl = document.getElementById('source');
     const targetEl = document.getElementById('target');
-    const relationEl = document.getElementById('relation');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes, links: state.links })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ relations: state.relations, density: state.density, clusters: state.clusters })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.links)){
-          state.nodes = obj.nodes; state.links = obj.links;
+        if(obj && Array.isArray(obj.relations)){
+          state.relations = obj.relations;
+          state.density = Number(obj.density ?? 14);
+          state.clusters = Number(obj.clusters ?? 1);
           save(); render();
         }
       }catch{}
@@ -221,60 +209,63 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function ensureNode(name){
-      let node = state.nodes.find(n => n.name.toLowerCase() === name.toLowerCase());
-      if(!node){
-        node = { id: Date.now() + Math.random(), name, x: 120 + Math.random() * 420, y: 120 + Math.random() * 320 };
-        state.nodes.push(node);
-      }
-      return node;
+    function constellationDensity(){
+      return Math.max(0, Math.min(100, Math.round((state.relations.length * 16) + state.density)));
+    }
+    function constellationClusters(){
+      return Math.max(1, Math.min(12, Math.round((state.relations.length / 2) + state.clusters)));
+    }
+    function makeRelation(source, target){
+      return {
+        id: Date.now() + Math.random(),
+        source,
+        target,
+        note: noteEl.value.trim() || 'A relation in the living constellation.'
+      };
     }
     function render(){
-      countEl.textContent = String(state.links.length);
-      stateLabelEl.textContent = state.links.length ? 'Connected' : 'Unlinked';
-      focusLabelEl.textContent = state.nodes[0]?.name || '—';
+      countEl.textContent = String(state.relations.length);
+      densityLabelEl.textContent = `${constellationDensity()}%`;
+      clusterLabelEl.textContent = String(constellationClusters());
+      listEl.innerHTML = '';
 
-      graph.querySelectorAll('.node').forEach(n => n.remove());
-      lines.innerHTML = '';
-
-      state.links.forEach(l => {
-        const a = state.nodes.find(n => n.id === l.a);
-        const b = state.nodes.find(n => n.id === l.b);
-        if(!a || !b) return;
-        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
-        line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
-        line.setAttribute('stroke', 'rgba(143,211,255,.35)');
-        line.setAttribute('stroke-width', '3');
-        lines.appendChild(line);
-      });
-
-      state.nodes.forEach(node => {
+      state.relations.forEach((r) => {
         const el = document.createElement('div');
-        el.className = 'node' + (node.name === (sourceEl.value.trim() || targetEl.value.trim()) ? ' active' : '');
-        el.style.left = node.x + 'px';
-        el.style.top = node.y + 'px';
-        el.title = node.name;
-        el.onclick = () => outEl.textContent = `${node.name}\n\nConnected links: ${state.links.filter(l => l.a===node.id || l.b===node.id).length}`;
-        graph.appendChild(el);
+        el.className = 'item';
+        el.innerHTML = `<b>${r.source} → ${r.target}</b><span>${r.note}</span>`;
+        el.onclick = () => outEl.textContent = `${r.source} → ${r.target}\n\nDensity: ${constellationDensity()}%\nClusters: ${constellationClusters()}\n\n${r.note}`;
+        listEl.appendChild(el);
       });
 
-      outEl.textContent = state.links.length
-        ? 'Select a node to inspect its relationships, or add a new link.'
-        : 'Link chambers to reveal the network.';
+      outEl.textContent = state.relations.length
+        ? 'Select a relation to inspect it, or spark a cluster to see the network thicken.'
+        : 'Add a relation to begin the map.';
     }
 
-    document.getElementById('linkBtn').onclick = () => {
-      const s = sourceEl.value.trim() || 'Atlas';
-      const t = targetEl.value.trim() || 'Pathfinder';
-      const a = ensureNode(s), b = ensureNode(t);
-      state.links.unshift({ id: Date.now(), a: a.id, b: b.id, note: relationEl.value.trim() || `${s} relates to ${t}.` });
+    document.getElementById('addBtn').onclick = () => {
+      const source = sourceEl.value.trim() || 'Atlas';
+      const target = targetEl.value.trim() || 'Chronicle';
+      state.relations.unshift(makeRelation(source, target));
+      state.density = Math.min(100, state.density + 10);
       save(); render();
-      outEl.textContent = `${s} ↔ ${t}\n\n${relationEl.value.trim() || `${s} relates to ${t}.`}`;
+      outEl.textContent = `${source} → ${target}\n\n${noteEl.value.trim() || 'A relation in the living constellation.'}`;
+    };
+
+    document.getElementById('sparkBtn').onclick = () => {
+      state.clusters = Math.min(12, state.clusters + 1);
+      state.density = Math.min(100, state.density + 6);
+      save(); render();
+      outEl.textContent = `A cluster sparks.\n\nClusters: ${constellationClusters()}`;
+    };
+
+    document.getElementById('densityBtn').onclick = () => {
+      state.density = Math.min(100, state.density + 8);
+      save(); render();
+      outEl.textContent = `Density measured.\n\nDensity: ${constellationDensity()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`nodes:${state.nodes.length} | links:${state.links.length}`);
+      state.saved.unshift(`relations:${state.relations.length} | density:${constellationDensity()}% | clusters:${constellationClusters()}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -289,8 +280,9 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.nodes = [];
-      state.links = [];
+      state.relations = [];
+      state.density = 14;
+      state.clusters = 1;
       save(); render();
     };
 
