@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atlas — Living Orientation</title>
+  <title>Atlas — Living Site Map</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -39,11 +39,9 @@
     .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
     h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
     .sub{color:var(--muted);line-height:1.6;max-width:68ch}
-    .panel{
-      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
-    }
+    .panel{padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);}
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, button, select{
+    input, select, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
@@ -55,7 +53,7 @@
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
       gap:12px;
       max-height:560px;
       overflow:auto;
@@ -103,32 +101,34 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Atlas / Living Orientation</div>
-          <h1>See the site<br/>as a territory.</h1>
+          <div class="tag">Atlas / Living Site Map</div>
+          <h1>See the site<br/>as territory.</h1>
           <div class="sub">
-            The atlas reveals the whole repository as a navigable field of chambers, each one visible, searchable, and reachable.
+            Atlas reveals the full repository as a navigable field of chambers, themes, and functions.
+            Search it, filter it, and open any chamber directly from the map.
           </div>
         </div>
 
         <div class="panel">
           <label for="search">Search chambers</label>
-          <input id="search" placeholder="e.g. memory, route, civic, sound" />
+          <input id="search" placeholder="e.g. memory, civic, motion, sound" />
 
-          <label for="filter">Filter by kind</label>
-          <select id="filter">
-            <option value="all">All</option>
+          <label for="theme">Theme</label>
+          <select id="theme">
+            <option value="all">All themes</option>
             <option value="play">Play</option>
-            <option value="civic">Civic</option>
             <option value="memory">Memory</option>
+            <option value="civic">Civic</option>
             <option value="motion">Motion</option>
             <option value="composition">Composition</option>
+            <option value="orientation">Orientation</option>
           </select>
 
           <div class="buttons">
             <button id="saveBtn">Save atlas</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear search</button>
+            <button id="clearBtn">Clear filters</button>
           </div>
 
           <div class="footer">
@@ -139,7 +139,7 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Atlas chambers</div>
+          <div class="mini">Visible chambers</div>
           <div id="grid" class="grid"></div>
         </div>
 
@@ -149,10 +149,10 @@
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Filter</div><b id="filterLabel">All</b></div>
+          <div class="stat"><div class="mini">Visible</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Theme</div><b id="themeLabel">All themes</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">Orientation</div><b id="orientation">Open</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
         </div>
 
         <div>
@@ -164,44 +164,45 @@
   </div>
 
   <script>
-    const KEY = 'atlas-living-orientation-v1';
+    const KEY = 'atlas-living-site-map-v1';
     const chambers = [
-      ['synthesis.html','Confluence Console','Sky, life, and myth in one shared interface.','play'],
-      ['life.html','Cellarium','A standalone cellular universe.','play'],
-      ['myth.html','Myth Engine','A story that remembers your choices.','memory'],
-      ['workshop.html','Worldsmith Workshop','Forge and export tiny worlds.','composition'],
-      ['forge.html','Forge','A living kinetic field.','motion'],
-      ['labyrinth.html','Labyrinth','A myth maze that remembers your route.','motion'],
-      ['agora.html','Agora','A public mind for proposals.','civic'],
-      ['constellation.html','Constellation','A civic sky of chambers.','civic'],
-      ['resonator.html','Resonator','A living chorus of tones and harmonics.','play'],
-      ['engineer.html','Engineer','Visible systems in motion.','composition'],
-      ['atelier.html','Atelier','Compose your own browser chamber.','composition'],
-      ['loom.html','Loom','Weave relation into interactive fabric.','memory'],
-      ['council.html','Council','Deliberate and choose among futures.','civic'],
-      ['oracle.html','Oracle','Interpretation as a visible interface.','memory'],
-      ['pathfinder.html','Pathfinder','Routes, gates, and traversal.','motion'],
-      ['chronicle.html','Chronicle','Pin moments and remember becoming.','memory'],
+      ['synthesis.html','Synthesis','Gather the chambers into one surface.','civic'],
+      ['pathfinder.html','Pathfinder','Draw routes through the field.','motion'],
+      ['chronicle.html','Chronicle','Remember the site as a timeline.','memory'],
+      ['oracle.html','Oracle','Ask the site questions.','memory'],
+      ['council.html','Council','Deliberate over proposals.','civic'],
+      ['life.html','Cellarium','A cellular universe.','play'],
+      ['myth.html','Myth Engine','A remembering story machine.','memory'],
+      ['workshop.html','Worldsmith Workshop','Forge tiny worlds.','composition'],
+      ['forge.html','Forge','A kinetic field.','motion'],
+      ['labyrinth.html','Labyrinth','A route that remembers.','motion'],
+      ['agora.html','Agora','A public mind.','civic'],
+      ['constellation.html','Constellation','A civic sky.','orientation'],
+      ['resonator.html','Resonator','A living chorus.','play'],
+      ['engineer.html','Engineer','Visible systems.','composition'],
+      ['atelier.html','Atelier','Compose chambers.','composition'],
+      ['loom.html','Loom','Weave relation.','memory'],
+      ['atlas.html','Atlas','The living site map.','orientation'],
     ];
 
     const searchEl = document.getElementById('search');
-    const filterEl = document.getElementById('filter');
+    const themeEl = document.getElementById('theme');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const filterLabelEl = document.getElementById('filterLabel');
+    const themeLabelEl = document.getElementById('themeLabel');
     const savedCountEl = document.getElementById('savedCount');
-    const orientationEl = document.getElementById('orientation');
+    const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { search:'', filter:'all', saved:[] };
+    const state = load() || { search:'', theme:'all', saved:[] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
     function serialize(){
       return btoa(unescape(encodeURIComponent(JSON.stringify({
         search: state.search,
-        filter: state.filter
+        theme: state.theme
       }))));
     }
     function importCode(code){
@@ -209,9 +210,9 @@
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj){
           state.search = obj.search || '';
-          state.filter = obj.filter || 'all';
+          state.theme = obj.theme || 'all';
           searchEl.value = state.search;
-          filterEl.value = state.filter;
+          themeEl.value = state.theme;
           save(); render();
         }
       }catch{}
@@ -222,59 +223,56 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved atlases yet.';
     }
-    function orientation(){
-      const n = visible().length;
+    function visible(){
+      const q = state.search.trim().toLowerCase();
+      return chambers.filter(([href,title,desc,theme]) => {
+        const matchText = !q || [title,desc,href,theme].some(v => String(v).toLowerCase().includes(q));
+        const matchTheme = state.theme === 'all' || state.theme === theme;
+        return matchText && matchTheme;
+      });
+    }
+    function stateText(n){
       if(n >= 10) return 'Wide';
       if(n >= 5) return 'Clear';
       if(n >= 1) return 'Focused';
       return 'Blank';
     }
-    function visible(){
-      const q = state.search.trim().toLowerCase();
-      return chambers.filter(([href,title,desc,kind]) => {
-        const matchText = !q || [title,desc,href,kind].some(v => String(v).toLowerCase().includes(q));
-        const matchKind = state.filter === 'all' || state.filter === kind;
-        return matchText && matchKind;
-      });
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
     function render(){
       gridEl.innerHTML = '';
       const list = visible();
       countEl.textContent = String(list.length);
-      filterLabelEl.textContent = state.filter[0].toUpperCase() + state.filter.slice(1);
-      orientationEl.textContent = orientation();
+      themeLabelEl.textContent = state.theme === 'all' ? 'All themes' : state.theme[0].toUpperCase() + state.theme.slice(1);
+      stateLabelEl.textContent = stateText(list.length);
 
-      list.forEach(([href,title,desc,kind]) => {
+      list.forEach(([href,title,desc,theme]) => {
         const a = document.createElement('a');
         a.className = 'item';
         a.href = `./${href}`;
         a.innerHTML = `
           <h3>${escapeHtml(title)}</h3>
           <p>${escapeHtml(desc)}</p>
-          <div class="meta">
-            <span class="pill">${escapeHtml(kind)}</span>
-          </div>
+          <div class="meta"><span class="pill">${escapeHtml(theme)}</span></div>
         `;
         gridEl.appendChild(a);
       });
 
       outEl.textContent =
 `Search: ${state.search || '—'}
-Filter: ${state.filter}
+Theme: ${state.theme}
 Visible chambers: ${list.length}
-Orientation: ${orientation()}
+State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...
-Hint: search the territory and open a chamber.`;
-    }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+Hint: open a chamber directly from the map.`;
     }
 
     searchEl.oninput = () => { state.search = searchEl.value; save(); render(); };
-    filterEl.onchange = () => { state.filter = filterEl.value; save(); render(); };
+    themeEl.onchange = () => { state.theme = themeEl.value; save(); render(); };
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.filter} | visible:${visible().length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`${state.theme} | visible:${visible().length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -287,14 +285,14 @@ Hint: search the territory and open a chamber.`;
     };
     document.getElementById('clearBtn').onclick = () => {
       state.search = '';
-      state.filter = 'all';
+      state.theme = 'all';
       searchEl.value = '';
-      filterEl.value = 'all';
+      themeEl.value = 'all';
       save(); render();
     };
 
     searchEl.value = state.search;
-    filterEl.value = state.filter;
+    themeEl.value = state.theme;
     renderSaved();
     render();
   </script>
