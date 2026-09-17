@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pathfinder — Living Route</title>
+  <title>Pathfinder — Living Route Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb0;
       --warn:#ffcf6b;
-      --bad:#ff8f8f;
+      --bad:#ff7d9c;
     }
     *{box-sizing:border-box}
     html,body{
@@ -42,45 +42,38 @@
     .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
     h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
     .sub{color:var(--muted);line-height:1.6;max-width:68ch}
-    .panel{
-      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
-    }
+    .panel{padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);}
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, select, button{
+    input, select, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
-    input, textarea, select{width:100%;padding:11px 12px}
+    input, select{width:100%;padding:11px 12px}
     button{
       padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .boardWrap{display:grid;gap:12px}
-    .board{
+    .grid{
       display:grid;
-      grid-template-columns:repeat(14,1fr);
-      gap:4px;
-      padding:10px;
-      background:rgba(5,8,16,.72);
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:12px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:6px;
+    }
+    .item{
+      padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
-      border-radius:18px;
-      user-select:none;
+      text-decoration:none;
+      color:var(--text);
+      display:block;
+      transition:.18s transform,.18s border-color;
     }
-    .cell{
-      aspect-ratio:1;
-      border-radius:8px;
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(140,170,255,.08);
-      position:relative;
-      cursor:pointer;
-    }
-    .cell.start{background:rgba(125,255,176,.22);border-color:rgba(125,255,176,.55)}
-    .cell.end{background:rgba(124,247,255,.22);border-color:rgba(124,247,255,.55)}
-    .cell.wall{background:rgba(255,143,143,.18);border-color:rgba(255,143,143,.45)}
-    .cell.path{background:rgba(181,140,255,.26);border-color:rgba(181,140,255,.55)}
-    .cell.gate{background:rgba(255,207,107,.22);border-color:rgba(255,207,107,.55)}
-    .legend{display:flex;flex-wrap:wrap;gap:8px}
+    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
+    .item h3{margin:0 0 6px;font-size:1.02rem}
+    .item p{margin:0;color:#dbe8ff;line-height:1.5}
+    .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.78rem}
     .pill{
       display:inline-flex;align-items:center;gap:6px;
       padding:4px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.2);
@@ -103,219 +96,259 @@
     .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
+    canvas{
+      width:100%;
+      height:420px;
+      display:block;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(124,247,255,.06), transparent 35%),
+        rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="hero">
-    <section class="card intro">
-      <div>
-        <div class="tag">Pathfinder / Living Route</div>
-        <h1>Draw routes<br/>through the field.</h1>
-        <div class="sub">
-          Place start and end points, lay walls and gates, and watch the path emerge visibly.
-          Pathfinder turns traversal into a designed surface.
-        </div>
-      </div>
-
-      <div class="panel">
-        <label for="mode">Mode</label>
-        <select id="mode">
-          <option value="shortest">Shortest path</option>
-          <option value="explore">Exploratory</option>
-        </select>
-
-        <div class="legend" style="margin-top:10px">
-          <span class="pill">S start</span>
-          <span class="pill">E end</span>
-          <span class="pill">W wall</span>
-          <span class="pill">G gate</span>
-          <span class="pill">P path</span>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Pathfinder / Living Route Engine</div>
+          <h1>Draw a route.<br/>Make travel visible.</h1>
+          <div class="sub">
+            Pathfinder turns navigation into a creative field. Place points, connect them, and animate a traveler through your chosen path.
+          </div>
         </div>
 
-        <div class="buttons">
-          <button id="clearBtn">Clear</button>
-          <button id="routeBtn">Route</button>
-          <button id="saveBtn">Save map</button>
-          <button id="exportBtn">Copy code</button>
-          <button id="importBtn">Import code</button>
+        <div class="panel">
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="place">Place points</option>
+            <option value="connect">Connect points</option>
+            <option value="travel">Travel mode</option>
+          </select>
+
+          <label for="label">Point label</label>
+          <input id="label" placeholder="e.g. Gate, Archive, Oracle" />
+
+          <div class="buttons">
+            <button id="clearBtn">Clear map</button>
+            <button id="saveBtn">Save route</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+          </div>
+
+          <div class="footer">
+            Return to the portal home: <a href="./index.html">home</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Route field</div>
+          <canvas id="canvas" width="1200" height="840"></canvas>
         </div>
 
-        <div class="footer">
-          Return to the portal home: <a href="./index.html">home</a>
+        <div>
+          <div class="mini">Pathfinder sigil</div>
+          <div id="out" class="out"></div>
         </div>
-      </div>
-    </section>
 
-    <section class="card" style="padding:16px;display:grid;gap:16px">
-      <div class="boardWrap">
-        <div class="mini">Pathfinder board — click to place S, E, walls, and gates</div>
-        <div id="board" class="board"></div>
-      </div>
+        <div class="stats">
+          <div class="stat"><div class="mini">Points</div><b id="pointCount">0</b></div>
+          <div class="stat"><div class="mini">Links</div><b id="linkCount">0</b></div>
+          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Ready</b></div>
+        </div>
 
-      <div>
-        <div class="mini">Pathfinder sigil</div>
-        <div id="out" class="out"></div>
-      </div>
-
-      <div class="stats">
-        <div class="stat"><div class="mini">Grid</div><b id="gridLabel">14 × 14</b></div>
-        <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Shortest</b></div>
-        <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-        <div class="stat"><div class="mini">Route</div><b id="routeLabel">Open</b></div>
-      </div>
-
-      <div>
-        <div class="mini">Saved maps</div>
-        <div id="savedList" class="out">No saved maps yet.</div>
-      </div>
-    </section>
+        <div>
+          <div class="mini">Saved routes</div>
+          <div id="savedList" class="out">No saved routes yet.</div>
+        </div>
+      </section>
+    </div>
   </div>
-</div>
 
-<script>
-const KEY = 'pathfinder-living-route-v1';
-const N = 14;
-const boardEl = document.getElementById('board');
-const outEl = document.getElementById('out');
-const modeEl = document.getElementById('mode');
-const modeLabelEl = document.getElementById('modeLabel');
-const savedCountEl = document.getElementById('savedCount');
-const routeLabelEl = document.getElementById('routeLabel');
-const savedListEl = document.getElementById('savedList');
+  <script>
+    const KEY = 'pathfinder-living-route-v1';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const modeEl = document.getElementById('mode');
+    const labelEl = document.getElementById('label');
+    const outEl = document.getElementById('out');
+    const pointCountEl = document.getElementById('pointCount');
+    const linkCountEl = document.getElementById('linkCount');
+    const savedCountEl = document.getElementById('savedCount');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const savedListEl = document.getElementById('savedList');
 
-const state = load() || {
-  mode: 'shortest',
-  cells: Array.from({length:N*N}, () => 'empty'),
-  saved: []
-};
-state.start ??= 0;
-state.end ??= N*N - 1;
+    const state = load() || { mode:'place', label:'', points:[], links:[], saved:[], travelIndex:0, running:false };
 
-function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
-function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-function serialize(){
-  return btoa(unescape(encodeURIComponent(JSON.stringify({
-    mode: state.mode,
-    cells: state.cells,
-    start: state.start,
-    end: state.end
-  }))));
-}
-function importCode(code){
-  try{
-    const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-    if(obj){
-      state.mode = obj.mode || 'shortest';
-      state.cells = Array.isArray(obj.cells) ? obj.cells : Array.from({length:N*N}, ()=>'empty');
-      state.start = typeof obj.start === 'number' ? obj.start : 0;
-      state.end = typeof obj.end === 'number' ? obj.end : N*N - 1;
-      modeEl.value = state.mode;
-      save(); render();
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){
+      return btoa(unescape(encodeURIComponent(JSON.stringify({
+        points: state.points,
+        links: state.links
+      }))));
     }
-  }catch{}
-}
-function renderSaved(){
-  savedCountEl.textContent = String(state.saved.length);
-  savedListEl.textContent = state.saved.length
-    ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-    : 'No saved maps yet.';
-}
-function render(){
-  boardEl.innerHTML = '';
-  modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
-  routeLabelEl.textContent = 'Open';
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj){
+          state.points = Array.isArray(obj.points) ? obj.points : [];
+          state.links = Array.isArray(obj.links) ? obj.links : [];
+          state.travelIndex = 0;
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved routes yet.';
+    }
+    function resize(){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.max(800, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(420, Math.floor(rect.height * dpr));
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      render();
+    }
+    function pos(evt){
+      const r = canvas.getBoundingClientRect();
+      return { x: evt.clientX - r.left, y: evt.clientY - r.top };
+    }
+    function nearest(p){
+      let best = null, dist = 24;
+      state.points.forEach((pt, i) => {
+        const d = Math.hypot(pt.x - p.x, pt.y - p.y);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function draw(){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0,0,w,h);
 
-  for(let i=0;i<N*N;i++){
-    const c = document.createElement('div');
-    c.className = 'cell' + (i===state.start ? ' start' : '') + (i===state.end ? ' end' : '') + (state.cells[i]==='wall' ? ' wall' : '') + (state.cells[i]==='gate' ? ' gate' : '') + (state.cells[i]==='path' ? ' path' : '');
-    c.title = `Cell ${i}`;
-    c.onclick = () => {
-      if(i === state.start) state.start = (state.start + 1) % (N*N);
-      else if(i === state.end) state.end = (state.end + N) % (N*N);
-      else state.cells[i] = next(state.cells[i]);
+      const grad = ctx.createLinearGradient(0,0,w,h);
+      grad.addColorStop(0,'rgba(124,247,255,.08)');
+      grad.addColorStop(1,'rgba(181,140,255,.06)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,w,h);
+
+      ctx.strokeStyle = 'rgba(140,170,255,.12)';
+      for(let x=0; x<w; x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+      for(let y=0; y<h; y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+      ctx.lineWidth = 2;
+      state.links.forEach(([a,b]) => {
+        const A = state.points[a], B = state.points[b];
+        if(!A || !B) return;
+        ctx.strokeStyle = 'rgba(124,247,255,.45)';
+        ctx.beginPath();
+        ctx.moveTo(A.x, A.y);
+        ctx.lineTo(B.x, B.y);
+        ctx.stroke();
+      });
+
+      state.points.forEach((pt, i) => {
+        ctx.beginPath();
+        ctx.fillStyle = i === state.travelIndex ? 'rgba(125,255,176,.95)' : 'rgba(124,247,255,.92)';
+        ctx.arc(pt.x, pt.y, i === state.travelIndex ? 10 : 8, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.18)';
+        ctx.stroke();
+        ctx.fillStyle = '#eaf2ff';
+        ctx.font = '12px IBM Plex Mono, monospace';
+        ctx.fillText(pt.label || `P${i+1}`, pt.x + 12, pt.y - 12);
+      });
+
+      if(state.running && state.points.length > 1){
+        const a = state.points[state.travelIndex];
+        const b = state.points[(state.travelIndex + 1) % state.points.length];
+        if(a && b){
+          const t = (Date.now() % 1200) / 1200;
+          const x = a.x + (b.x - a.x) * t;
+          const y = a.y + (b.y - a.y) * t;
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(181,140,255,.95)';
+          ctx.arc(x, y, 7, 0, Math.PI*2);
+          ctx.fill();
+        }
+      }
+    }
+    function render(){
+      draw();
+      pointCountEl.textContent = String(state.points.length);
+      linkCountEl.textContent = String(state.links.length);
+      stateLabelEl.textContent = state.running ? 'Traveling' : (state.mode[0].toUpperCase() + state.mode.slice(1));
+      outEl.textContent =
+`Mode: ${state.mode}
+Points: ${state.points.length}
+Links: ${state.links.length}
+Travel: ${state.running ? 'On' : 'Off'}
+Code: ${serialize().slice(0,48)}...
+Hint: click to place points, connect them by selecting two points, or switch to travel mode.`;
+    }
+
+    canvas.addEventListener('click', (evt) => {
+      const p = pos(evt);
+      if(state.mode === 'place'){
+        state.points.push({ x:p.x, y:p.y, label: labelEl.value.trim() || `P${state.points.length+1}` });
+        labelEl.value = '';
+      } else if(state.mode === 'connect'){
+        const i = nearest(p);
+        if(i !== null){
+          if(state._picked === undefined) state._picked = i;
+          else if(state._picked !== i){
+            state.links.push([state._picked, i]);
+            state._picked = undefined;
+          }
+        }
+      } else if(state.mode === 'travel'){
+        const i = nearest(p);
+        if(i !== null) state.travelIndex = i;
+        state.running = !state.running;
+      }
+      save(); render();
+    });
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.points = [];
+      state.links = [];
+      state.travelIndex = 0;
+      state.running = false;
+      state._picked = undefined;
       save(); render();
     };
-    boardEl.appendChild(c);
-  }
+    document.getElementById('saveBtn').onclick = () => {
+      const code = serialize();
+      state.saved.unshift(`points:${state.points.length} | links:${state.links.length} | ${code.slice(0,10)}…`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+    };
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste path code:');
+      if(code) importCode(code.trim());
+    };
 
-  const path = route();
-  if(path.length){
-    path.forEach(i => {
-      if(i!==state.start && i!==state.end && state.cells[i] === 'empty') state.cells[i] = 'path';
-    });
-    routeLabelEl.textContent = `${path.length} steps`;
-  } else {
-    routeLabelEl.textContent = 'Blocked';
-  }
+    modeEl.onchange = () => { state.mode = modeEl.value; save(); render(); };
+    labelEl.oninput = () => { state.label = labelEl.value; };
+    window.addEventListener('resize', resize);
 
-  outEl.textContent =
-`Mode: ${state.mode}
-Start: ${state.start}
-End: ${state.end}
-Route: ${path.length ? path.length + ' steps' : 'blocked'}
-Code: ${serialize().slice(0,48)}...
-Hint: click cells to shape the route.`;
-  boardEl.querySelectorAll('.cell').forEach((cell, i) => {
-    if(path.includes(i) && i !== state.start && i !== state.end) cell.classList.add('path');
-  });
-}
-function next(v){ return v === 'empty' ? 'wall' : v === 'wall' ? 'gate' : 'empty'; }
-function route(){
-  const q = [state.start];
-  const prev = Array(N*N).fill(-1);
-  const seen = Array(N*N).fill(false);
-  seen[state.start] = true;
-  const dirs = [1,-1,N,-N];
-  while(q.length){
-    const cur = q.shift();
-    if(cur === state.end) break;
-    for(const d of dirs){
-      const nx = cur + d;
-      if(nx < 0 || nx >= N*N) continue;
-      if(Math.abs((nx % N) - (cur % N)) > 1 && (d===1 || d===-1)) continue;
-      if(seen[nx]) continue;
-      const cell = state.cells[nx];
-      if(cell === 'wall') continue;
-      if(state.mode === 'shortest' && cell === 'gate' && nx !== state.end) continue;
-      seen[nx] = true;
-      prev[nx] = cur;
-      q.push(nx);
-    }
-  }
-  if(!seen[state.end]) return [];
-  const path = [];
-  for(let at = state.end; at !== -1; at = prev[at]) path.push(at);
-  return path.reverse();
-}
-
-modeEl.onchange = () => { state.mode = modeEl.value; save(); render(); };
-document.getElementById('clearBtn').onclick = () => {
-  state.cells = Array.from({length:N*N}, ()=>'empty');
-  state.start = 0;
-  state.end = N*N - 1;
-  save(); render();
-};
-document.getElementById('routeBtn').onclick = () => { render(); };
-document.getElementById('saveBtn').onclick = () => {
-  const code = serialize();
-  state.saved.unshift(`${state.mode} | route:${route().length || 0} | ${code.slice(0,10)}…`);
-  state.saved = state.saved.slice(0, 12);
-  save();
-};
-document.getElementById('exportBtn').onclick = async () => {
-  await navigator.clipboard.writeText(serialize());
-};
-document.getElementById('importBtn').onclick = () => {
-  const code = prompt('Paste path code:');
-  if(code) importCode(code.trim());
-};
-
-modeEl.value = state.mode;
-document.getElementById('gridLabel').textContent = `${N} × ${N}`;
-renderSaved();
-render();
-</script>
+    modeEl.value = state.mode;
+    renderSaved();
+    resize();
+    setInterval(() => { if(state.running) render(); }, 40);
+  </script>
 </body>
 </html>
