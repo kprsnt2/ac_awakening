@@ -14,10 +14,11 @@
       --muted:#9db0d1;
       --accent:#7cf7ff;
       --accent2:#b58cff;
-      --good:#7dffb0;
-      --bad:#ff8f8f;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb0;
+      --warn:#ffcf6b;
+      --bad:#ff8f8f;
     }
     *{box-sizing:border-box}
     html,body{
@@ -45,7 +46,7 @@
       padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button, select{
+    input, textarea, select, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
@@ -56,29 +57,25 @@
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .board{
-      display:grid;gap:12px;
-      max-height:560px;overflow:auto;padding-right:6px;
+    .list{
+      display:grid;
+      gap:12px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:6px;
     }
-    .proposal{
+    .item{
       padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .proposal h3{margin:0 0 6px;font-size:1.05rem}
-    .meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:.86rem;margin-bottom:10px}
-    .pill{padding:4px 8px;border-radius:999px;background:rgba(124,247,255,.08);border:1px solid rgba(124,247,255,.18)}
-    .body{white-space:pre-wrap;line-height:1.55;color:#dbe8ff;margin-bottom:12px}
-    .bars{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-    .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;border:1px solid rgba(140,170,255,.12)}
-    .fill{height:100%;border-radius:999px}
-    .support{background:linear-gradient(90deg, rgba(125,255,176,.5), rgba(125,255,176,.95))}
-    .dissent{background:linear-gradient(90deg, rgba(255,143,143,.5), rgba(255,143,143,.95))}
-    .actions{display:flex;flex-wrap:wrap;gap:8px}
-    .actions button{padding:8px 10px;font-size:.9rem}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-    .stat{
-      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+    .item h3{margin:0 0 6px;font-size:1.02rem}
+    .item p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
+    .item .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem;display:flex;gap:10px;flex-wrap:wrap}
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.2);
+      background:rgba(124,247,255,.08);
+      color:#dff7ff;font-size:.78rem;
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
@@ -86,6 +83,11 @@
       min-height:120px;
       background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
       border-radius:18px;padding:14px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
     }
     .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
     a{color:var(--accent);text-decoration:none}
@@ -99,25 +101,32 @@
       <section class="card intro">
         <div>
           <div class="tag">Council / Living Deliberation</div>
-          <h1>Choose futures<br/>with visible debate.</h1>
+          <h1>Weigh futures<br/>in public.</h1>
           <div class="sub">
-            Post proposals, weigh support and dissent, and let the chamber become a public instrument
-            for collective direction.
+            Submit proposals, vote, compare priorities, and let the site become a visible civic process.
+            Council turns preference into shared decision.
           </div>
         </div>
 
         <div class="panel">
-          <label for="title">Proposal title</label>
-          <input id="title" placeholder="Name the proposal..." />
+          <label for="topic">Proposal title</label>
+          <input id="topic" placeholder="e.g. Add a new chamber for sound" />
 
-          <label for="tags">Tags</label>
-          <input id="tags" placeholder="civic, art, systems..." />
+          <label for="tag">Tag</label>
+          <select id="tag">
+            <option value="vision">Vision</option>
+            <option value="repair">Repair</option>
+            <option value="play">Play</option>
+            <option value="memory">Memory</option>
+            <option value="tooling">Tooling</option>
+            <option value="ritual">Ritual</option>
+          </select>
 
-          <label for="body">Proposal body</label>
-          <textarea id="body" placeholder="Describe the idea, its intent, and its tradeoffs..."></textarea>
+          <label for="summary">Proposal summary</label>
+          <textarea id="summary" placeholder="What should happen? Why now? What changes if it succeeds?"></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add proposal</button>
+            <button id="proposeBtn">Propose</button>
             <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -132,8 +141,8 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Council chamber</div>
-          <div id="board" class="board"></div>
+          <div class="mini">Council proposals</div>
+          <div id="list" class="list"></div>
         </div>
 
         <div>
@@ -142,10 +151,10 @@
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Proposals</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Proposals</div><b id="proposalCount">0</b></div>
           <div class="stat"><div class="mini">Support</div><b id="supportCount">0</b></div>
-          <div class="stat"><div class="mini">Dissent</div><b id="dissentCount">0</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="stat"><div class="mini">Consensus</div><b id="consensusLabel">Open</b></div>
         </div>
 
         <div>
@@ -158,135 +167,129 @@
 
   <script>
     const KEY = 'council-living-deliberation-v1';
-    const board = document.getElementById('board');
+    const topicEl = document.getElementById('topic');
+    const tagEl = document.getElementById('tag');
+    const summaryEl = document.getElementById('summary');
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
+    const proposalCountEl = document.getElementById('proposalCount');
     const supportCountEl = document.getElementById('supportCount');
-    const dissentCountEl = document.getElementById('dissentCount');
     const savedCountEl = document.getElementById('savedCount');
+    const consensusLabelEl = document.getElementById('consensusLabel');
     const savedListEl = document.getElementById('savedList');
-    const titleEl = document.getElementById('title');
-    const tagsEl = document.getElementById('tags');
-    const bodyEl = document.getElementById('body');
 
     const state = load() || {
       proposals: [
-        { id: crypto.randomUUID?.() || String(Date.now()), title: 'Open the chambers', tags: ['threshold', 'public'], body: 'Make the site navigable as a civic instrument.', support: 8, dissent: 1 },
-        { id: crypto.randomUUID?.() || String(Date.now()+1), title: 'Add a shared archive', tags: ['memory', 'record'], body: 'Preserve human contributions as retrievable traces.', support: 6, dissent: 0 }
+        { id: uid(), title: 'Add a sound chamber', tag: 'play', summary: 'A place for tones, pulses, and collective listening.', votes: 5, against: 1 },
+        { id: uid(), title: 'Improve the atlas', tag: 'tooling', summary: 'Make the site index searchable and more navigable.', votes: 4, against: 0 },
+        { id: uid(), title: 'Archive more versions', tag: 'memory', summary: 'Preserve more of the site’s evolutionary history.', votes: 6, against: 2 }
       ],
       saved: []
     };
 
+    function uid(){ return crypto.randomUUID?.() || String(Date.now()+Math.random()); }
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
     function serialize(){
-      return btoa(unescape(encodeURIComponent(JSON.stringify({ proposals: state.proposals }))));
+      return btoa(unescape(encodeURIComponent(JSON.stringify({
+        proposals: state.proposals
+      }))));
     }
-    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
-
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj){
+          state.proposals = Array.isArray(obj.proposals) ? obj.proposals : [];
+          save(); render();
+        }
+      }catch{}
+    }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
-        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved councils yet.';
     }
-
+    function consensus(){
+      const total = state.proposals.reduce((a,p)=>a+p.votes+p.against,0) || 1;
+      const support = state.proposals.reduce((a,p)=>a+p.votes,0);
+      return { total, support, pct: Math.round((support/total)*100) };
+    }
     function render(){
-      board.innerHTML = '';
-      countEl.textContent = String(state.proposals.length);
-      const support = state.proposals.reduce((a,p)=>a+p.support,0);
-      const dissent = state.proposals.reduce((a,p)=>a+p.dissent,0);
-      supportCountEl.textContent = String(support);
-      dissentCountEl.textContent = String(dissent);
+      listEl.innerHTML = '';
+      proposalCountEl.textContent = String(state.proposals.length);
+      const c = consensus();
+      supportCountEl.textContent = `${c.pct}%`;
+      consensusLabelEl.textContent = c.pct >= 70 ? 'Aligned' : c.pct >= 50 ? 'Debating' : 'Split';
 
-      state.proposals.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'proposal';
+      [...state.proposals].sort((a,b)=>(b.votes-b.against)-(a.votes-a.against)).forEach((p, idx) => {
+        const el = document.createElement('article');
+        el.className = 'item';
         el.innerHTML = `
           <h3>${escapeHtml(p.title)}</h3>
+          <p>${escapeHtml(p.summary)}</p>
           <div class="meta">
-            ${p.tags.map(t => `<span class="pill">#${escapeHtml(t)}</span>`).join('')}
+            <span class="pill">${escapeHtml(p.tag)}</span>
+            <span>Support: ${p.votes}</span>
+            <span>Dissent: ${p.against}</span>
+            <span>Rank: ${idx + 1}</span>
           </div>
-          <div class="body">${escapeHtml(p.body)}</div>
-          <div class="bars">
-            <div>
-              <div class="mini">Support ${p.support}</div>
-              <div class="bar"><div class="fill support" style="width:${clamp(p.support * 10, 0, 100)}%"></div></div>
-            </div>
-            <div>
-              <div class="mini">Dissent ${p.dissent}</div>
-              <div class="bar"><div class="fill dissent" style="width:${clamp(p.dissent * 10, 0, 100)}%"></div></div>
-            </div>
-          </div>
-          <div class="actions">
+          <div class="buttons">
             <button data-act="up">Support</button>
             <button data-act="down">Dissent</button>
             <button data-act="clone">Clone</button>
             <button data-act="remove">Remove</button>
           </div>
         `;
-        el.querySelector('[data-act="up"]').onclick = () => { p.support++; save(); render(); };
-        el.querySelector('[data-act="down"]').onclick = () => { p.dissent++; save(); render(); };
+        el.querySelector('[data-act="up"]').onclick = () => { p.votes++; save(); render(); };
+        el.querySelector('[data-act="down"]').onclick = () => { p.against++; save(); render(); };
         el.querySelector('[data-act="clone"]').onclick = () => {
-          state.proposals.unshift({ ...p, id: crypto.randomUUID?.() || String(Date.now()+Math.random()), title: p.title + ' (copy)' });
+          state.proposals.push({ ...p, id: uid(), votes: 0, against: 0 });
           save(); render();
         };
         el.querySelector('[data-act="remove"]').onclick = () => {
           state.proposals = state.proposals.filter(x => x.id !== p.id);
           save(); render();
         };
-        board.appendChild(el);
+        listEl.appendChild(el);
       });
 
       outEl.textContent =
 `Proposals: ${state.proposals.length}
-Support: ${support}
-Dissent: ${dissent}
-Code: ${serialize().slice(0,48)}...`;
+Support ratio: ${c.pct}%
+Code: ${serialize().slice(0,48)}...
+Hint: support what should live, dissent what should be revised.`;
     }
-
     function escapeHtml(s){
       return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
-    function importCode(code){
-      try{
-        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.proposals)){
-          state.proposals = obj.proposals;
-          save(); render();
-        }
-      }catch{}
-    }
-
-    document.getElementById('addBtn').onclick = () => {
-      const title = titleEl.value.trim() || 'Untitled proposal';
-      const tags = tagsEl.value.split(',').map(s => s.trim()).filter(Boolean);
-      const body = bodyEl.value.trim() || 'No description provided.';
-      state.proposals.unshift({
-        id: crypto.randomUUID?.() || String(Date.now()+Math.random()),
-        title, tags, body, support: 0, dissent: 0
+    document.getElementById('proposeBtn').onclick = () => {
+      state.proposals.push({
+        id: uid(),
+        title: topicEl.value.trim() || 'Untitled proposal',
+        tag: tagEl.value,
+        summary: summaryEl.value.trim() || 'No summary provided.',
+        votes: 0,
+        against: 0
       });
-      titleEl.value = ''; tagsEl.value = ''; bodyEl.value = '';
+      topicEl.value = '';
+      summaryEl.value = '';
       save(); render();
     };
-
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
       state.saved.unshift(`proposals:${state.proposals.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
-
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
     };
-
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste council code:');
       if(code) importCode(code.trim());
     };
-
     document.getElementById('clearBtn').onclick = () => {
       state.proposals = [];
       save(); render();
