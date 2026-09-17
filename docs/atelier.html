@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier — Living Composer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140,170,255,.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    select, input, button, textarea{
+      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);color:var(--text);
+    }
+    select, input, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:88px;resize:vertical}
+    button{
+      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .stage{
+      position:relative;
+      width:100%;
+      height:560px;
+      border-radius:18px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+    }
+    .scene{
+      position:absolute;inset:0;overflow:hidden;
+    }
+    .item{
+      position:absolute;
+      min-width:90px;
+      min-height:40px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(12,16,28,.86);
+      color:var(--text);
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      user-select:none;
+      touch-action:none;
+      cursor:grab;
+    }
+    .item.dragging{cursor:grabbing;outline:1px solid rgba(124,247,255,.6)}
+    .item .title{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--accent);margin-bottom:4px;text-transform:uppercase;letter-spacing:.12em}
+    .item .content{font-size:.95rem;line-height:1.35;white-space:pre-wrap}
+    .item[data-kind="particle"]{border-radius:999px;min-width:28px;min-height:28px;padding:0}
+    .item[data-kind="particle"] .content{display:none}
+    .item[data-kind="button"]{background:linear-gradient(135deg, rgba(124,247,255,.22), rgba(181,140,255,.18))}
+    .item[data-kind="text"]{min-width:140px}
+    .item[data-kind="panel"]{min-width:180px;min-height:100px}
+    .out{
+      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
+      min-height:120px;
+      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;padding:14px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Atelier / Living Composer</div>
+          <h1>Compose a chamber<br/>from living parts.</h1>
+          <div class="sub">
+            Drag modules into the field, tune the scene, and export a shareable composition.
+            This is a studio for making new browser worlds from visible pieces.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="mini">Controls</div>
+          <label for="preset">Scene preset</label>
+          <select id="preset">
+            <option value="sky">Sky</option>
+            <option value="garden">Garden</option>
+            <option value="circuit">Circuit</option>
+            <option value="tide">Tide</option>
+            <option value="archive">Archive</option>
+          </select>
+
+          <label for="textInput">Selected module text</label>
+          <textarea id="textInput" placeholder="Edit the active module..."></textarea>
+
+          <div class="buttons">
+            <button id="addTextBtn">Add text</button>
+            <button id="addPanelBtn">Add panel</button>
+            <button id="addButtonBtn">Add button</button>
+            <button id="addParticleBtn">Add particle</button>
+            <button id="saveBtn">Save composition</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="clearBtn">Clear</button>
+          </div>
+
+          <div class="footer">
+            Return to the portal home: <a href="./index.html">home</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Composition stage</div>
+          <div class="stage" id="stage">
+            <div class="scene" id="scene"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mini">Composition sigil</div>
+          <div id="out" class="out"></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Modules</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Preset</div><b id="presetLabel">Sky</b></div>
+          <div class="stat"><div class="mini">Selected</div><b id="selectedLabel">None</b></div>
+          <div class="stat"><div class="mini">Memory</div><b id="memory">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved compositions</div>
+          <div id="saved" class="out">No saved compositions yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'atelier-living-composer-v1';
+    const scene = document.getElementById('scene');
+    const stage = document.getElementById('stage');
+    const presetEl = document.getElementById('preset');
+    const textInput = document.getElementById('textInput');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const presetLabelEl = document.getElementById('presetLabel');
+    const selectedLabelEl = document.getElementById('selectedLabel');
+    const memoryEl = document.getElementById('memory');
+    const savedEl = document.getElementById('saved');
+
+    const state = load() || {
+      preset: 'sky',
+      modules: [],
+      memory: [],
+      saved: [],
+      selected: null
+    };
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    const presets = {
+      sky: { bg:'linear-gradient(180deg, rgba(10,18,40,.95), rgba(4,7,14,.98))', accent:'rgba(124,247,255,.9)' },
+      garden: { bg:'linear-gradient(180deg, rgba(10,28,20,.95), rgba(4,7,14,.98))', accent:'rgba(181,140,255,.9)' },
+      circuit: { bg:'linear-gradient(180deg, rgba(8,12,24,.95), rgba(4,7,14,.98))', accent:'rgba(124,247,255,.9)' },
+      tide: { bg:'linear-gradient(180deg, rgba(8,18,30,.95), rgba(4,7,14,.98))', accent:'rgba(100,180,255,.9)' },
+      archive: { bg:'linear-gradient(180deg, rgba(20,16,26,.95), rgba(4,7,14,.98))', accent:'rgba(181,140,255,.9)' }
+    };
+
+    function log(msg){
+      state.memory.unshift(msg);
+      state.memory = state.memory.slice(0, 16);
+      memoryEl.textContent = String(state.memory.length);
+      save();
+    }
+
+    function stageRect(){ return stage.getBoundingClientRect(); }
+
+    function applyPreset(){
+      const p = presets[state.preset] || presets.sky;
+      stage.style.background = `
+        radial-gradient(circle at 20% 20%, ${p.accent.replace('0.9', '0.12')}, transparent 24%),
+        radial-gradient(circle at 80% 70%, rgba(181,140,255,.09), transparent 28%),
+        ${p.bg}
+      `;
+      presetLabelEl.textContent = state.preset[0].toUpperCase() + state.preset.slice(1);
+      save();
+    }
+
+    function createModule(kind, x = rand(40, stageRect().width - 160), y = rand(40, stageRect().height - 120)) {
+      const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
+      const module = {
+        id, kind, x, y,
+        w: kind === 'panel' ? 220 : kind === 'text' ? 170 : kind === 'button' ? 140 : 34,
+        h: kind === 'panel' ? 120 : kind === 'text' ? 70 : kind === 'button' ? 54 : 34,
+        text: kind === 'particle' ? '' : kind === 'button' ? 'Tap me' : `${kind.toUpperCase()}`
+      };
+      state.modules.push(module);
+      state.selected = id;
+      log(`${kind} module added.`);
+      save();
+      render();
+    }
+
+    function selectModule(id){
+      state.selected = id;
+      const m = state.modules.find(x => x.id === id);
+      selectedLabelEl.textContent = m ? m.kind : 'None';
+      textInput.value = m ? m.text : '';
+      save();
+      render();
+    }
+
+    function renderSaved(){
+      savedEl.textContent = state.saved.length
+        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved compositions yet.';
+    }
+
+    function serialize(){
+      return btoa(unescape(encodeURIComponent(JSON.stringify({
+        preset: state.preset,
+        modules: state.modules
+      }))));
+    }
+
+    function deserialize(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.modules)){
+          state.preset = obj.preset || 'sky';
+          state.modules = obj.modules;
+          state.selected = null;
+          applyPreset();
+          save();
+          render();
+          log('Composition imported.');
+        }
+      }catch{}
+    }
+
+    function render(){
+      scene.innerHTML = '';
+      countEl.textContent = String(state.modules.length);
+      presetLabelEl.textContent = state.preset[0].toUpperCase() + state.preset.slice(1);
+      memoryEl.textContent = String(state.memory.length);
+
+      state.modules.forEach(mod => {
+        const el = document.createElement('div');
+        el.className = 'item' + (state.selected === mod.id ? ' dragging' : '');
+        el.dataset.kind = mod.kind;
+        el.style.left = mod.x + 'px';
+        el.style.top = mod.y + 'px';
+        el.style.width = mod.w + 'px';
+        el.style.height = mod.h + 'px';
+
+        const title = document.createElement('div');
+        title.className = 'title';
+        title.textContent = mod.kind;
+        const content = document.createElement('div');
+        content.className = 'content';
+        content.textContent = mod.text || '';
+
+        if(mod.kind !== 'particle'){
+          el.appendChild(title);
+          el.appendChild(content);
+        }
+
+        if(mod.kind === 'particle'){
+          el.style.borderColor = 'rgba(124,247,255,.35)';
+          el.style.background = 'rgba(124,247,255,.85)';
+          el.style.boxShadow = '0 0 20px rgba(124,247,255,.35)';
+        }
+
+        el.addEventListener('pointerdown', e => {
+          e.stopPropagation();
+          selectModule(mod.id);
+          const r = stageRect();
+          const offsetX = e.clientX - r.left - mod.x;
+          const offsetY = e.clientY - r.top - mod.y;
+          el.setPointerCapture(e.pointerId);
+
+          const move = ev => {
+            mod.x = clamp(ev.clientX - r.left - offsetX, 0, r.width - mod.w);
+            mod.y = clamp(ev.clientY - r.top - offsetY, 0, r.height - mod.h);
+            el.style.left = mod.x + 'px';
+            el.style.top = mod.y + 'px';
+          };
+          const up = () => {
+            el.removeEventListener('pointermove', move);
+            el.removeEventListener('pointerup', up);
+            el.classList.remove('dragging');
+            save();
+          };
+          el.classList.add('dragging');
+          el.addEventListener('pointermove', move);
+          el.addEventListener('pointerup', up);
+        });
+
+        el.addEventListener('dblclick', () => {
+          if(mod.kind === 'button') {
+            mod.text = mod.text === 'Tap me' ? 'Tapped' : 'Tap me';
+            log('Button toggled.');
+            save();
+            render();
+          }
+        });
+
+        scene.appendChild(el);
+      });
+
+      outEl.textContent =
+`Preset: ${state.preset}
+Modules: ${state.modules.length}
+Selected: ${state.selected ? state.selected : 'none'}
+Code: ${serialize().slice(0, 48)}...`;
+      selectedLabelEl.textContent = state.selected ? (state.modules.find(m => m.id === state.selected)?.kind || 'None') : 'None';
+      textInput.value = state.selected ? (state.modules.find(m => m.id === state.selected)?.text || '') : '';
+    }
+
+    presetEl.onchange = () => { state.preset = presetEl.value; applyPreset(); log(`Preset changed to ${state.preset}.`); render(); };
+    textInput.oninput = () => {
+      const m = state.modules.find(x => x.id === state.selected);
+      if(m){ m.text = textInput.value; save(); render(); }
+    };
+
+    document.getElementById('addTextBtn').onclick = () => createModule('text');
+    document.getElementById('addPanelBtn').onclick = () => createModule('panel');
+    document.getElementById('addButtonBtn').onclick = () => createModule('button');
+    document.getElementById('addParticleBtn').onclick = () => createModule('particle');
+    document.getElementById('saveBtn').onclick = () => {
+      const code = serialize();
+      state.saved.unshift(`${state.preset} | ${state.modules.length} modules | ${code.slice(0, 10)}…`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+      log('Composition saved.');
+    };
+    document.getElementById('exportBtn').onclick = async () => {
+      const code = serialize();
+      await navigator.clipboard.writeText(code);
+      log('Composition code copied.');
+    };
+    document.getElementById('clearBtn').onclick = () => {
+      state.modules = [];
+      state.selected = null;
+      state.memory = [];
+      log('Composition cleared.');
+      save();
+      render();
+    };
+
+    stage.addEventListener('pointerdown', e => {
+      if(e.target !== stage && e.target !== scene) return;
+      state.selected = null;
+      selectedLabelEl.textContent = 'None';
+      textInput.value = '';
+      save();
+      render();
+    });
+
+    window.addEventListener('resize', () => render());
+    presetEl.value = state.preset;
+    applyPreset();
+    renderSaved();
+    if(!state.modules.length){
+      createModule('text', 80, 80);
+      createModule('panel', 280, 160);
+      createModule('button', 540, 110);
+    } else {
+      render();
+    }
+  </script>
+</body>
+</html>
