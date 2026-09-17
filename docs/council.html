@@ -18,7 +18,6 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
-      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -58,14 +57,14 @@
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button{
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input, textarea{width:100%;padding:11px 12px}
+    input, textarea, select{width:100%;padding:11px 12px}
     textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
@@ -97,15 +96,22 @@
       border-radius:18px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
-      margin-bottom:10px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
     .proposal:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .bar{
-      height:10px;border-radius:999px;background:rgba(140,170,255,.12);overflow:hidden;margin-top:8px
+    .proposal.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
+    .voteRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .chip{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:.75rem;
+      margin-right:6px;
+      margin-top:6px;
+      border:1px solid rgba(140,170,255,.22);
+      color:#dbe8ff;
     }
-    .bar > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -117,22 +123,21 @@
       <section class="card intro">
         <div>
           <div class="tag">Council / Living Deliberation</div>
-          <h1>Propose.<br/>Deliberate.<br/>Decide.</h1>
+          <h1>Propose.<br/>Debate.<br/>Decide.</h1>
           <div class="sub">
-            Council gives the site a civic brain: humans can propose futures, vote on them, and keep a visible record
-            of collective judgment.
+            Council makes governance visible. Humans can submit proposals, vote on them, and preserve the outcomes as a shared record.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Proposal title</label>
-          <input id="title" placeholder="A new chamber, rule, or revision" />
+          <input id="title" placeholder="A change, addition, or direction" />
 
-          <label for="body">Proposal text</label>
-          <textarea id="body" placeholder="Describe the change you want to bring into being."></textarea>
+          <label for="body">Proposal description</label>
+          <textarea id="body" placeholder="Explain the idea and why it should exist."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add proposal</button>
+            <button id="addBtn">Submit proposal</button>
             <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -158,7 +163,7 @@
 
         <div>
           <div class="mini">Council reading</div>
-          <div id="out" class="out">The council is waiting for a proposal.</div>
+          <div id="out" class="out">The council is waiting for its first proposal.</div>
         </div>
 
         <div>
@@ -203,59 +208,79 @@
         : 'No records yet.';
     }
     function stateText(n){
-      if(n >= 5) return 'Mandate';
-      if(n >= 3) return 'Debating';
-      if(n >= 1) return 'Forming';
+      if(n >= 6) return 'Mandated';
+      if(n >= 3) return 'Active';
+      if(n >= 1) return 'Awake';
       return 'Quiet';
     }
-    function consensus(n){
-      if(!n) return 0;
-      const yes = state.proposals.reduce((a,p)=>a + p.yes, 0);
-      const total = state.proposals.reduce((a,p)=>a + p.yes + p.no, 0);
+    function consensusScore(list){
+      if(!list.length) return 0;
+      const total = list.reduce((a,p) => a + p.yes + p.no, 0);
+      const yes = list.reduce((a,p) => a + p.yes, 0);
       return total ? Math.round((yes / total) * 100) : 0;
     }
     function render(){
-      const list = state.proposals;
+      const list = state.proposals.slice().reverse();
       countEl.textContent = String(list.length);
-      consensusEl.textContent = `${consensus(list.length)}%`;
+      consensusEl.textContent = `${consensusScore(list)}%`;
       stateLabelEl.textContent = stateText(list.length);
       listEl.innerHTML = '';
-      list.slice().reverse().forEach((p, idx) => {
+
+      list.forEach((p, idx) => {
         const div = document.createElement('div');
         div.className = 'proposal';
         div.innerHTML = `
           <b>${p.title}</b>
-          <div class="mini">${p.when} · yes ${p.yes} / no ${p.no}</div>
-          <div class="bar"><div style="width:${p.yes + p.no ? Math.round((p.yes/(p.yes+p.no))*100) : 0}%"></div></div>
+          <div class="mini">${p.when}</div>
           <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${p.body}</div>
+          <div class="voteRow">
+            <button data-v="yes">Yes (${p.yes})</button>
+            <button data-v="no">No (${p.no})</button>
+          </div>
+          <div style="margin-top:8px" class="mini">Outcome: ${p.yes >= p.no ? 'carrying forward' : 'under review'}</div>
         `;
-        div.onclick = () => {
-          p.yes++;
-          save();
-          render();
+        div.onclick = (e) => {
+          const btn = e.target.closest('button');
+          if(btn){
+            if(btn.dataset.v === 'yes') p.yes++;
+            if(btn.dataset.v === 'no') p.no++;
+            save();
+            render();
+            e.stopPropagation();
+            return;
+          }
+          outEl.textContent = `Proposal: ${p.title}
+When: ${p.when}
+Votes: yes ${p.yes}, no ${p.no}
+
+${p.body}
+
+Current reading:
+${p.yes > p.no ? 'The council is leaning toward enactment.' : p.yes === p.no ? 'The council is balanced and still listening.' : 'The council is leaning toward revision.'}`;
         };
         listEl.appendChild(div);
       });
 
-      outEl.textContent = list.length
-        ? `Council state: ${stateText(list.length)}
-Proposals: ${list.length}
-Consensus: ${consensus(list.length)}%
-Reading:
-The site is no longer only something to explore. It is something to govern together.
-Each vote is a small act of worldmaking.`
-        : 'The council is waiting for a proposal.';
+      const last = list[0];
+      outEl.textContent = last
+        ? `Proposal: ${last.title}
+When: ${last.when}
+Votes: yes ${last.yes}, no ${last.no}
+
+${last.body}
+
+Current reading:
+${last.yes > last.no ? 'The council is leaning toward enactment.' : last.yes === last.no ? 'The council is balanced and still listening.' : 'The council is leaning toward revision.'}`
+        : 'The council is waiting for its first proposal.';
     }
 
     document.getElementById('addBtn').onclick = () => {
-      const title = titleEl.value.trim() || 'Untitled proposal';
-      const body = bodyEl.value.trim() || 'No description provided.';
       state.proposals.push({
-        title,
-        body,
+        title: titleEl.value.trim() || 'Untitled proposal',
+        body: bodyEl.value.trim() || 'No description provided.',
         yes: 0,
         no: 0,
-        when: `Turn ${Math.floor(Date.now()/1000)}`
+        when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
       render();
