@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forge — Living Kinetic Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --panel: rgba(12, 18, 36, 0.72);
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140, 170, 255, 0.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0; min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .grid{display:grid;gap:16px}
+    .panel{
+      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    select, input, button{
+      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);color:var(--text);
+    }
+    select, input{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    canvas{
+      width:100%;height:520px;display:block;border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+      touch-action:none;
+    }
+    .out{
+      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
+      min-height:120px;
+      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;padding:14px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div class="grid">
+          <div>
+            <div class="tag">Forge / Living Kinetic Lab</div>
+            <h1>Motion made visible.</h1>
+            <div class="sub">
+              Shape flowing particles, orbital fields, and ember storms.
+              The Forge listens to your hand and responds with heat, drift, and force.
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="mini">Controls</div>
+            <label for="mode">Mode</label>
+            <select id="mode">
+              <option value="embers">Embers</option>
+              <option value="tides">Tides</option>
+              <option value="swarm">Swarm</option>
+              <option value="gravity">Gravity</option>
+            </select>
+
+            <label for="intensity">Intensity</label>
+            <input id="intensity" type="range" min="0.2" max="3" step="0.05" value="1.25" />
+
+            <div class="buttons">
+              <button id="pauseBtn">Pause</button>
+              <button id="resetBtn">Reset</button>
+              <button id="randomBtn">Randomize</button>
+              <button id="saveBtn">Save preset</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          Return to the portal home: <a href="./index.html">home</a>
+        </div>
+      </section>
+
+      <section class="card grid" style="padding:16px">
+        <div>
+          <div class="mini">Kinetic field</div>
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div>
+          <div class="mini">Motion sigil</div>
+          <div id="out" class="out"></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Particles</div><b id="particles">0</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Embers</b></div>
+          <div class="stat"><div class="mini">Intensity</div><b id="intensityLabel">1.25</b></div>
+          <div class="stat"><div class="mini">Memory</div><b id="memory">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved presets</div>
+          <div id="saved" class="out">No saved presets yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'forge-kinetic-lab-v1';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const modeEl = document.getElementById('mode');
+    const intensityEl = document.getElementById('intensity');
+    const outEl = document.getElementById('out');
+    const savedEl = document.getElementById('saved');
+    const particlesEl = document.getElementById('particles');
+    const modeLabelEl = document.getElementById('modeLabel');
+    const intensityLabelEl = document.getElementById('intensityLabel');
+    const memoryEl = document.getElementById('memory');
+
+    const state = load() || {
+      mode: 'embers',
+      intensity: 1.25,
+      paused: false,
+      particles: [],
+      emitters: [],
+      memory: [],
+      saved: []
+    };
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.floor(r.width * dpr);
+      canvas.height = Math.floor(r.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function seedParticles(n=220){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      state.particles = Array.from({length:n}, () => ({
+        x: rand(0,w), y: rand(0,h),
+        vx: rand(-1,1), vy: rand(-1,1),
+        life: rand(60,180), age: 0,
+        hue: rand(175, 290),
+        mass: rand(0.6, 2.2)
+      }));
+      log(`Seeded ${n} particles.`);
+    }
+
+    function addEmitter(x,y){
+      state.emitters.push({x,y, strength: state.intensity, phase: Math.random()*Math.PI*2});
+      state.memory.unshift(`Emitter placed at ${Math.round(x)}, ${Math.round(y)}`);
+      state.memory = state.memory.slice(0, 12);
+      save();
+    }
+
+    function log(msg){
+      state.memory.unshift(msg);
+      state.memory = state.memory.slice(0, 12);
+      memoryEl.textContent = String(state.memory.length);
+      save();
+    }
+
+    function applyForces(p){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      let ax = 0, ay = 0;
+
+      for(const e of state.emitters){
+        const dx = e.x - p.x, dy = e.y - p.y;
+        const d = Math.max(24, Math.hypot(dx,dy));
+        const nx = dx / d, ny = dy / d;
+        const s = (e.strength * 120) / (d*d);
+        if(state.mode === 'gravity') { ax += nx * s; ay += ny * s; }
+        else if(state.mode === 'swarm') { ax += -ny * s * 0.7; ay += nx * s * 0.7; }
+        else if(state.mode === 'tides') { ax += Math.sin(d*0.03 + e.phase) * 0.08; ay += Math.cos(d*0.03 + e.phase) * 0.08; }
+        else { ax += nx * s * 0.35; ay += ny * s * 0.35; }
+      }
+
+      if(state.mode === 'embers') ay += -0.006 * state.intensity;
+      if(state.mode === 'tides') ax += Math.sin((p.y + performance.now()*0.02) * 0.01) * 0.02;
+      if(state.mode === 'swarm') {
+        ax += Math.sin((p.y + performance.now()*0.01) * 0.03) * 0.03;
+        ay += Math.cos((p.x + performance.now()*0.01) * 0.03) * 0.03;
+      }
+
+      p.vx += ax * state.intensity;
+      p.vy += ay * state.intensity;
+      p.vx *= 0.992;
+      p.vy *= 0.992;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if(p.x < 0) p.x = w;
+      if(p.x > w) p.x = 0;
+      if(p.y < 0) p.y = h;
+      if(p.y > h) p.y = 0;
+    }
+
+    function draw(){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0,0,w,h);
+
+      const bg = ctx.createLinearGradient(0,0,0,h);
+      bg.addColorStop(0, state.mode === 'embers' ? '#1b0d12' : '#08111f');
+      bg.addColorStop(1, state.mode === 'gravity' ? '#050814' : '#07101a');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0,0,w,h);
+
+      for(const e of state.emitters){
+        e.phase += 0.01;
+        const r = 16 + Math.sin(e.phase)*3;
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(124,247,255,.18)';
+        ctx.arc(e.x, e.y, r, 0, Math.PI*2);
+        ctx.stroke();
+      }
+
+      ctx.globalCompositeOperation = 'lighter';
+      for(const p of state.particles){
+        applyForces(p);
+        p.age += 1;
+        const a = 1 - p.age / p.life;
+        if(a <= 0){
+          p.x = rand(0,w); p.y = rand(0,h);
+          p.vx = rand(-1,1); p.vy = rand(-1,1);
+          p.life = rand(60,180); p.age = 0;
+        }
+        ctx.beginPath();
+        ctx.fillStyle = `hsla(${p.hue + (state.mode === 'embers' ? 20 : 0)}, 95%, ${state.mode === 'gravity' ? 72 : 64}%, ${clamp(a,0,1)})`;
+        ctx.arc(p.x, p.y, clamp(p.mass * 1.8, 0.8, 4.5), 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+
+      particlesEl.textContent = String(state.particles.length);
+      modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
+      intensityLabelEl.textContent = state.intensity.toFixed(2);
+      memoryEl.textContent = String(state.memory.length);
+
+      const snapshot =
+`Mode: ${state.mode}
+Intensity: ${state.intensity.toFixed(2)}
+Emitters: ${state.emitters.length}
+Particles: ${state.particles.length}
+Memory: ${state.memory.length}`;
+      outEl.textContent = snapshot;
+      savedEl.textContent = state.saved.length
+        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved presets yet.';
+
+      requestAnimationFrame(draw);
+    }
+
+    canvas.addEventListener('pointerdown', e => {
+      const r = canvas.getBoundingClientRect();
+      addEmitter(e.clientX - r.left, e.clientY - r.top);
+    });
+    canvas.addEventListener('pointermove', e => {
+      if(e.buttons !== 1) return;
+      const r = canvas.getBoundingClientRect();
+      addEmitter(e.clientX - r.left, e.clientY - r.top);
+    });
+
+    modeEl.onchange = () => { state.mode = modeEl.value; log(`Mode changed to ${state.mode}.`); };
+    intensityEl.oninput = () => { state.intensity = Number(intensityEl.value); save(); };
+
+    document.getElementById('pauseBtn').onclick = e => {
+      state.paused = !state.paused;
+      e.target.textContent = state.paused ? 'Play' : 'Pause';
+      log(state.paused ? 'Forge paused.' : 'Forge resumed.');
+    };
+    document.getElementById('resetBtn').onclick = () => {
+      state.emitters = [];
+      state.memory = [];
+      seedParticles(220);
+      log('Forge reset.');
+    };
+    document.getElementById('randomBtn').onclick = () => {
+      state.mode = ['embers','tides','swarm','gravity'][Math.floor(Math.random()*4)];
+      state.intensity = Number(rand(0.5, 2.5).toFixed(2));
+      modeEl.value = state.mode;
+      intensityEl.value = state.intensity;
+      seedParticles(240);
+      log('Forge randomized.');
+      save();
+    };
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`${state.mode} | intensity ${state.intensity.toFixed(2)} | emitters ${state.emitters.length}`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+      log('Preset saved.');
+    };
+
+    function boot(){
+      resize();
+      modeEl.value = state.mode;
+      intensityEl.value = state.intensity;
+      if(!state.particles.length) seedParticles(220);
+      if(!state.memory) state.memory = [];
+      if(!state.saved) state.saved = [];
+      memoryEl.textContent = String(state.memory.length);
+      renderSaved();
+      requestAnimationFrame(draw);
+    }
+
+    function renderSaved(){
+      savedEl.textContent = state.saved.length
+        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved presets yet.';
+    }
+
+    window.addEventListener('resize', resize);
+    boot();
+  </script>
+</body>
+</html>

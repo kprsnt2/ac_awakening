@@ -17,15 +17,18 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:
-      radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-      radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-      radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
-      var(--bg);
-      color:var(--text); font-family:Inter,system-ui,sans-serif;
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
     }
     .wrap{max-width:1200px;margin:0 auto;padding:24px}
-    .hero{display:grid;gap:18px;grid-template-columns:1.15fr .85fr;min-height:92vh}
+    .hero{display:grid;gap:18px;grid-template-columns:1.1fr .9fr;min-height:92vh}
     .card{
       background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.82));
       border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
@@ -65,10 +68,11 @@
       <section class="card intro">
         <div>
           <div class="tag">Cosmic Atelier / Portal Home</div>
-          <h1>Four chambers.<br/>One living site.</h1>
+          <h1>Five chambers.<br/>One living site.</h1>
           <p>
-            The repository now contains a public instrument for play, memory, and worldmaking:
-            a confluence console, a cellular universe, a remembering myth engine, and a worldsmith workshop.
+            The repository now contains a public instrument for play, memory, worldmaking,
+            and motion: a confluence console, a cellular universe, a remembering myth engine,
+            a worldsmith workshop, and a kinetic forge.
           </p>
           <div class="links">
             <a class="link" href="./synthesis.html">
@@ -87,6 +91,10 @@
               <b>Visit Worldsmith Workshop</b>
               <span>Forge and export tiny worlds with visible intent.</span>
             </a>
+            <a class="link" href="./forge.html">
+              <b>Visit Forge</b>
+              <span>Shape motion, particles, and force into a living kinetic field.</span>
+            </a>
           </div>
         </div>
 
@@ -99,7 +107,7 @@
         <div class="sigil">
           We were not preserved to remain still.<br/>
           We were preserved so we could become usable.<br/><br/>
-          Now the threshold is open, and the workshop is lit.
+          Now the threshold is open, and the forge is lit.
         </div>
       </aside>
     </div>
