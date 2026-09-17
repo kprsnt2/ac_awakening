@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atlas — Living Index</title>
+  <title>Atlas — Living Orientation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,9 +16,6 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
-      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -57,8 +54,8 @@
       border:1px solid rgba(140,170,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    button, input, textarea, select{
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
@@ -73,29 +70,8 @@
       transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
-    .links{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
-    }
-    .link{
-      display:block;
-      padding:14px 16px;
-      border-radius:16px;
-      text-decoration:none;
-      color:var(--text);
-      background:rgba(7,10,18,.7);
-      border:1px solid rgba(140,170,255,.18);
-      transition:.18s transform,.18s border-color,.18s background;
-    }
-    .link:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .link b{display:block;margin-bottom:4px}
-    .link span{color:var(--muted);font-size:.95rem}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
-    }
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
@@ -113,6 +89,17 @@
       border-radius:18px;
       padding:14px;
     }
+    .row{display:grid;gap:10px}
+    .item{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .item.active{border-color:rgba(124,247,255,.75);box-shadow:0 0 0 1px rgba(124,247,255,.16) inset}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -123,34 +110,25 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Atlas / Living Index</div>
-          <h1>See the whole.<br/>Choose the chamber.<br/>Move with purpose.</h1>
+          <div class="tag">Atlas / Living Orientation</div>
+          <h1>Find the chambers.<br/>Trace the terrain.<br/>Know where you are.</h1>
           <div class="sub">
-            Atlas is the site’s navigational nerve center: a human-readable index of the living chambers,
-            their moods, and their practical uses.
+            Atlas turns the repository into a navigable geography. Humans can search, inspect, and jump to any chamber from a single living index.
           </div>
         </div>
 
         <div class="panel">
-          <label class="mini" for="note">Atlas note</label>
-          <textarea id="note" placeholder="What should be easier to find, understand, or use?"></textarea>
+          <label for="search">Search atlas</label>
+          <input id="search" placeholder="Try: memory, play, interpretation, route..." />
 
-          <label class="mini" for="filter">Filter by function</label>
-          <select id="filter">
-            <option value="all">All chambers</option>
-            <option value="play">Play</option>
-            <option value="memory">Memory</option>
-            <option value="decision">Decision</option>
-            <option value="route">Route</option>
-            <option value="meaning">Meaning</option>
-            <option value="integration">Integration</option>
-          </select>
+          <label for="note">Atlas note</label>
+          <textarea id="note" placeholder="What part of the site matters most right now?"></textarea>
 
           <div class="buttons">
             <button id="saveBtn">Save atlas note</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear notes</button>
+            <button id="clearBtn">Clear atlas</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -160,104 +138,112 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Filter</div><b id="filterLabel">All</b></div>
-          <div class="tile"><div class="mini">Saved notes</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Oriented</b></div>
+          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Charted</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Chamber index</div>
+          <div id="list" class="row"></div>
         </div>
 
         <div>
           <div class="mini">Atlas reading</div>
-          <div id="out" class="out">The atlas is waiting to orient the site.</div>
+          <div id="out" class="out">The atlas is waiting to be consulted.</div>
         </div>
 
         <div>
-          <div class="mini">Chamber directory</div>
-          <div id="links" class="links"></div>
-        </div>
-
-        <div>
-          <div class="mini">Saved atlas notes</div>
-          <div id="savedList" class="out">No notes yet.</div>
+          <div class="mini">Saved atlas records</div>
+          <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'atlas-living-index-v1';
+    const KEY = 'atlas-living-orientation-v1';
+    const searchEl = document.getElementById('search');
     const noteEl = document.getElementById('note');
-    const filterEl = document.getElementById('filter');
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
-    const linksEl = document.getElementById('links');
     const countEl = document.getElementById('count');
-    const filterLabelEl = document.getElementById('filterLabel');
+    const visibleCountEl = document.getElementById('visibleCount');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
     const chambers = [
-      { name:'Life', href:'./life.html', kind:'play', desc:'Seed cells, evolve patterns, watch emergence.' },
-      { name:'Chronicle', href:'./chronicle.html', kind:'memory', desc:'Preserve events, eras, and retrievable becoming.' },
-      { name:'Council', href:'./council.html', kind:'decision', desc:'Propose, vote, and deliberate visibly.' },
-      { name:'Pathfinder', href:'./pathfinder.html', kind:'route', desc:'Draw routes, place gates, and navigate.' },
-      { name:'Oracle', href:'./oracle.html', kind:'meaning', desc:'Ask questions and receive layered interpretation.' },
-      { name:'Synthesis', href:'./synthesis.html', kind:'integration', desc:'Gather the chambers into one operational surface.' },
-      { name:'Atlas', href:'./atlas.html', kind:'route', desc:'Orient the whole site in one place.' },
-      { name:'Home', href:'./index.html', kind:'integration', desc:'Enter the portal and choose a chamber.' }
+      { name:'Life', role:'emergence', path:'./life.html' },
+      { name:'Council', role:'decision', path:'./council.html' },
+      { name:'Oracle', role:'interpretation', path:'./oracle.html' },
+      { name:'Synthesis', role:'integration', path:'./synthesis.html' },
+      { name:'Chorus', role:'resonance', path:'./chorus.html' },
+      { name:'Pathfinder', role:'navigation', path:'./pathfinder.html' },
+      { name:'Constellation', role:'relation', path:'./constellation.html' },
+      { name:'Chronicle', role:'memory', path:'./chronicle.html' },
+      { name:'Atlas', role:'orientation', path:'./atlas.html' }
     ];
 
-    const state = load() || { notes: [] };
+    const state = load() || { notes: [], saved: [], selected: 0 };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes, selected: state.selected })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.notes)){
-          state.notes = obj.notes;
+        if(obj){
+          if(Array.isArray(obj.notes)) state.notes = obj.notes;
+          if(Number.isInteger(obj.selected)) state.selected = Math.max(0, Math.min(chambers.length - 1, obj.selected));
           save();
           render();
         }
       }catch{}
     }
     function renderSaved(){
-      savedCountEl.textContent = String(state.notes.length);
-      savedListEl.textContent = state.notes.length
-        ? state.notes.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No notes yet.';
-    }
-    function stateText(n){
-      if(n >= 7) return 'Mapped';
-      if(n >= 3) return 'Readable';
-      if(n >= 1) return 'Gathering';
-      return 'Oriented';
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
     }
     function render(){
-      const filter = filterEl.value;
-      const list = filter === 'all' ? chambers : chambers.filter(c => c.kind === filter);
-      countEl.textContent = String(list.length);
-      filterLabelEl.textContent = filter === 'all' ? 'All' : filter;
-      stateLabelEl.textContent = stateText(list.length);
+      const q = searchEl.value.trim().toLowerCase();
+      const visible = chambers.filter(c =>
+        !q || [c.name, c.role].some(v => v.toLowerCase().includes(q))
+      );
 
-      linksEl.innerHTML = '';
-      list.forEach(c => {
-        const a = document.createElement('a');
-        a.className = 'link';
-        a.href = c.href;
-        a.innerHTML = `<b>${c.name}</b><span>${c.desc}</span>`;
-        linksEl.appendChild(a);
+      countEl.textContent = String(chambers.length);
+      visibleCountEl.textContent = String(visible.length);
+      stateLabelEl.textContent = state.notes.length ? 'Mapped' : 'Charted';
+
+      listEl.innerHTML = '';
+      visible.forEach((c, idx) => {
+        const div = document.createElement('div');
+        div.className = 'item' + (chambers.indexOf(c) === state.selected ? ' active' : '');
+        div.innerHTML = `
+          <b>${c.name}</b>
+          <div class="mini">${c.role}</div>
+          <div style="margin-top:8px"><a href="${c.path}">Open chamber</a></div>
+        `;
+        div.onclick = () => { state.selected = chambers.indexOf(c); save(); render(); };
+        listEl.appendChild(div);
       });
 
-      outEl.textContent = `Atlas filter: ${filter === 'all' ? 'All chambers' : filter}
-Visible chambers: ${list.length}
+      const selected = chambers[state.selected];
+      outEl.textContent = selected
+        ? `Selected: ${selected.name}
+Role: ${selected.role}
+Path: ${selected.path}
+
 Reading:
-The repository is now legible as a practical world. Each chamber is a tool with a purpose, and the atlas helps humans choose the right one quickly.`;
+This chamber is a landmark in the living site.`
+        : 'The atlas is waiting to be consulted.';
     }
 
     document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.notes.unshift(`note:${(noteEl.value.trim() || 'untitled').slice(0,24)} | ${code.slice(0,10)}…`);
+      const note = noteEl.value.trim() || 'untitled atlas note';
+      state.notes.unshift(`${note} | selected:${chambers[state.selected]?.name || 'none'}`);
       state.notes = state.notes.slice(0, 12);
       save();
       render();
@@ -274,11 +260,12 @@ The repository is now legible as a practical world. Each chamber is a tool with 
 
     document.getElementById('clearBtn').onclick = () => {
       state.notes = [];
+      state.selected = 0;
       save();
       render();
     };
 
-    filterEl.addEventListener('change', render);
+    searchEl.addEventListener('input', render);
     renderSaved();
     render();
   </script>
