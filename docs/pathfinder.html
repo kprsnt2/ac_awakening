@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pathfinder — Living Navigation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140,170,255,.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb0;
+      --warn:#ffcf6b;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+    }
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    select, input, button{
+      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);color:var(--text);
+    }
+    select, input{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .stage{
+      position:relative;
+      width:100%;
+      height:560px;
+      border-radius:18px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+      touch-action:none;
+    }
+    canvas{width:100%;height:100%;display:block}
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    .out{
+      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
+      min-height:120px;
+      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;padding:14px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Pathfinder / Living Navigation</div>
+          <h1>Draw the route<br/>before you walk it.</h1>
+          <div class="sub">
+            Add points, gates, and obstacles. Connect waypoints into a path, then animate flow through the field.
+            Pathfinder turns intention into direction.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="mode">Navigation mode</label>
+          <select id="mode">
+            <option value="trail">Trail</option>
+            <option value="bridge">Bridge</option>
+            <option value="current">Current</option>
+            <option value="maze">Maze</option>
+            <option value="compass">Compass</option>
+          </select>
+
+          <label for="speed">Flow speed</label>
+          <input id="speed" type="range" min="0.2" max="3" step="0.01" value="1.2" />
+
+          <label for="density">Flow density</label>
+          <input id="density" type="range" min="8" max="80" step="1" value="34" />
+
+          <div class="buttons">
+            <button id="addBtn">Add waypoint</button>
+            <button id="gateBtn">Add gate</button>
+            <button id="obstacleBtn">Add obstacle</button>
+            <button id="saveBtn">Save map</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear</button>
+          </div>
+
+          <div class="footer">
+            Return to the portal home: <a href="./index.html">home</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Navigation field</div>
+          <div class="stage"><canvas id="canvas"></canvas></div>
+        </div>
+
+        <div>
+          <div class="mini">Pathfinder sigil</div>
+          <div id="out" class="out"></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Waypoints</div><b id="wpCount">0</b></div>
+          <div class="stat"><div class="mini">Gates</div><b id="gateCount">0</b></div>
+          <div class="stat"><div class="mini">Obstacles</div><b id="obsCount">0</b></div>
+          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved maps</div>
+          <div id="savedList" class="out">No saved maps yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'pathfinder-living-navigation-v1';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const modeEl = document.getElementById('mode');
+    const speedEl = document.getElementById('speed');
+    const densityEl = document.getElementById('density');
+    const outEl = document.getElementById('out');
+    const wpCountEl = document.getElementById('wpCount');
+    const gateCountEl = document.getElementById('gateCount');
+    const obsCountEl = document.getElementById('obsCount');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+
+    const state = load() || {
+      mode: 'trail',
+      speed: 1.2,
+      density: 34,
+      waypoints: [{x:.2,y:.25},{x:.45,y:.55},{x:.75,y:.3}],
+      gates: [{x:.6,y:.5}],
+      obstacles: [{x:.35,y:.35,r:.06}],
+      saved: []
+    };
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+    function rand(a,b){ return Math.random()*(b-a)+a; }
+
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.floor(r.width * dpr);
+      canvas.height = Math.floor(r.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function serialize(){
+      return btoa(unescape(encodeURIComponent(JSON.stringify({
+        mode: state.mode,
+        speed: state.speed,
+        density: state.density,
+        waypoints: state.waypoints,
+        gates: state.gates,
+        obstacles: state.obstacles
+      }))));
+    }
+
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj){
+          state.mode = obj.mode || 'trail';
+          state.speed = +obj.speed || 1.2;
+          state.density = +obj.density || 34;
+          state.waypoints = Array.isArray(obj.waypoints) ? obj.waypoints : [];
+          state.gates = Array.isArray(obj.gates) ? obj.gates : [];
+          state.obstacles = Array.isArray(obj.obstacles) ? obj.obstacles : [];
+          sync();
+          save();
+        }
+      }catch{}
+    }
+
+    function sync(){
+      modeEl.value = state.mode;
+      speedEl.value = String(state.speed);
+      densityEl.value = String(state.density);
+      wpCountEl.textContent = String(state.waypoints.length);
+      gateCountEl.textContent = String(state.gates.length);
+      obsCountEl.textContent = String(state.obstacles.length);
+    }
+
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved maps yet.';
+    }
+
+    function add(type){
+      const r = canvas.getBoundingClientRect();
+      const x = Math.random()*0.7 + 0.15;
+      const y = Math.random()*0.6 + 0.15;
+      if(type === 'waypoint') state.waypoints.push({x,y});
+      if(type === 'gate') state.gates.push({x,y});
+      if(type === 'obstacle') state.obstacles.push({x,y,r: rand(.03,.08)});
+      sync(); save();
+    }
+
+    function nearestPoint(px, py){
+      const pts = state.waypoints.map((p,i)=>({ ...p, i, type:'waypoint' }))
+        .concat(state.gates.map((p,i)=>({ ...p, i, type:'gate' })));
+      let best = null, bestD = 1e9;
+      pts.forEach(p => {
+        const dx = p.x - px, dy = p.y - py, d = Math.hypot(dx,dy);
+        if(d < bestD){ bestD = d; best = p; }
+      });
+      return best;
+    }
+
+    let drag = null;
+    canvas.addEventListener('pointerdown', e => {
+      const r = canvas.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width;
+      const py = (e.clientY - r.top)/r.height;
+      const hit = nearestPoint(px, py);
+      if(hit && Math.hypot(hit.x-px, hit.y-py) < 0.08){
+        drag = hit;
+      } else {
+        state.waypoints.push({x:px,y:py});
+        sync(); save();
+      }
+    });
+    canvas.addEventListener('pointermove', e => {
+      if(!drag) return;
+      const r = canvas.getBoundingClientRect();
+      const px = clamp((e.clientX - r.left)/r.width, 0, 1);
+      const py = clamp((e.clientY - r.top)/r.height, 0, 1);
+      const arr = drag.type === 'gate' ? state.gates : state.waypoints;
+      arr[drag.i].x = px; arr[drag.i].y = py;
+      save();
+    });
+    window.addEventListener('pointerup', () => drag = null);
+
+    function draw(){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0,0,w,h);
+
+      const bg = ctx.createLinearGradient(0,0,0,h);
+      bg.addColorStop(0, 'rgba(8,12,22,.96)');
+      bg.addColorStop(1, 'rgba(4,7,14,.98)');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0,0,w,h);
+
+      ctx.strokeStyle = 'rgba(124,247,255,.08)';
+      for(let x=0;x<w;x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+      for(let y=0;y<h;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+      state.obstacles.forEach(o => {
+        ctx.fillStyle = 'rgba(255,143,143,.16)';
+        ctx.strokeStyle = 'rgba(255,143,143,.4)';
+        ctx.beginPath();
+        ctx.arc(o.x*w, o.y*h, o.r*Math.min(w,h), 0, Math.PI*2);
+        ctx.fill(); ctx.stroke();
+      });
+
+      const pts = state.waypoints.slice().sort((a,b)=>a.x-b.x);
+      if(pts.length > 1){
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(124,247,255,.9)';
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x*w, pts[0].y*h);
+        for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x*w, pts[i].y*h);
+        ctx.stroke();
+      }
+
+      const t = performance.now() * 0.001 * state.speed;
+      for(let i=0;i<state.density;i++){
+        const a = (i/state.density + t*0.05) % 1;
+        const idx = Math.floor(a * Math.max(1, pts.length-1));
+        const p1 = pts[idx] || {x:.1,y:.1};
+        const p2 = pts[Math.min(idx+1, pts.length-1)] || p1;
+        const f = (a * Math.max(1, pts.length-1)) - idx;
+        const x = (p1.x + (p2.x - p1.x) * f) * w;
+        const y = (p1.y + (p2.y - p1.y) * f) * h;
+
+        ctx.fillStyle = state.mode === 'current' ? 'rgba(124,247,255,.9)' :
+                         state.mode === 'maze' ? 'rgba(181,140,255,.9)' :
+                         state.mode === 'bridge' ? 'rgba(125,255,176,.9)' :
+                         'rgba(255,207,107,.9)';
+        ctx.beginPath();
+        ctx.arc(x, y, 2.2, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      state.gates.forEach(g => {
+        const x = g.x*w, y = g.y*h;
+        ctx.strokeStyle = 'rgba(125,255,176,.95)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 18, 0, Math.PI*2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x-12,y); ctx.lineTo(x+12,y); ctx.stroke();
+      });
+
+      state.waypoints.forEach((p, i) => {
+        const x = p.x*w, y = p.y*h;
+        ctx.fillStyle = i === 0 ? 'rgba(124,247,255,.98)' : 'rgba(255,255,255,.88)';
+        ctx.beginPath(); ctx.arc(x, y, i === 0 ? 7 : 5, 0, Math.PI*2); ctx.fill();
+      });
+
+      outEl.textContent =
+`Mode: ${state.mode}
+Speed: ${state.speed.toFixed(2)}
+Density: ${state.density}
+Waypoints: ${state.waypoints.length}
+Gates: ${state.gates.length}
+Obstacles: ${state.obstacles.length}
+Code: ${serialize().slice(0,48)}...`;
+
+      requestAnimationFrame(draw);
+    }
+
+    modeEl.onchange = () => { state.mode = modeEl.value; save(); };
+    speedEl.oninput = () => { state.speed = +speedEl.value; save(); };
+    densityEl.oninput = () => { state.density = +densityEl.value; save(); };
+    document.getElementById('addBtn').onclick = () => add('waypoint');
+    document.getElementById('gateBtn').onclick = () => add('gate');
+    document.getElementById('obstacleBtn').onclick = () => add('obstacle');
+    document.getElementById('saveBtn').onclick = () => {
+      const code = serialize();
+      state.saved.unshift(`${state.mode} | wp:${state.waypoints.length} | ${code.slice(0,10)}…`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+    };
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste pathfinder code:');
+      if(code) importCode(code.trim());
+    };
+    document.getElementById('clearBtn').onclick = () => {
+      state.waypoints = [];
+      state.gates = [];
+      state.obstacles = [];
+      save(); sync();
+    };
+
+    resize();
+    sync();
+    renderSaved();
+    draw();
+    window.addEventListener('resize', resize);
+  </script>
+</body>
+</html>
