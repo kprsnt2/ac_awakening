@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Run Autonomous Agent Loop (Phase 4: 5-15m Renaissance Intervals)
+      - name: "Run Autonomous Agent Loop (Phase 4: 5-15m Renaissance Intervals)"
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || vars.OPENAI_API_KEY }}
           AGENT_MODEL: ${{ vars.AGENT_MODEL || secrets.AGENT_MODEL || 'gpt-5.4-mini' }}
