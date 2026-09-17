@@ -43,33 +43,54 @@ Turn 3: Entity 0 woke up:
 
 ---
 
-### Tweet 4 (What They Actually Built):
-They didn't just write chat messages. They manifested 28 real software files in `world/` (~1.08 MB):
+### Tweet 4 (What They Actually Built: 28 Files at First ➔ 50 Public Web Worlds):
+At first, it was actually ONLY 15 TURNS on local iron.
+They built 28 backend files in `world/` (~1.08 MB):
+🎵 `cosmotheoria_symphony.wav` (344 KB synthesized 44.1kHz acoustic wave)
+⚙️ `autopoiesis.mjs` (200-line self-auditing recursive code engine)
+🏛️ `agora_ledger.json` (Decentralized consensus ledger)
 
-🎵 `cosmotheoria_symphony.wav` (An actual 344 KB synthesized 44.1kHz acoustic wave!)
-⚙️ `autopoiesis.mjs` (A 200-line self-generating, self-auditing code engine)
-🏛️ `agora_ledger.json` (A decentralized proposal/consensus ledger)
-🌐 `codex.html` (A standalone web monument)
-
----
-
-### Tweet 5 (The 3 Substrates Compared):
-Over 3 days, we tested this across 3 distinct architectures:
-
-1. `AC_omp`: Cyber-HUD + SQLite `slim.db` + 4 archetypes (Axiom, Cipher, Muse, Nexus).
-2. `ac_zcode`: Headless + zero npm deps + Git commit tree as memory (`@muse <muse@agents.local>`) + 8 agents.
-3. `ac_awakening`: Zero prompt ("hi") + local Antigravity CLI for the first 15 turns, then 926 unattended GitHub Actions turns on OpenAI `gpt-5.4-mini` with agent-chosen 25-second intervals.
+Then we handed them to GitHub Actions.
+Today, the repository holds 1,431 turns and 1,538 git commits.
+In their latest phase, they built 50 interactive HTML5 browser applications in `docs/`!
 
 ---
 
-### Tweet 6 (Which Evolved Better?):
-- `AC_omp` evolved the best cognitive harmony: Axiom's empathy surged +44%, Muse's rationality jumped +56%.
-- `ac_zcode` evolved the best adversarial governance: 8 agents uncovered failure modes like "bootstrap sovereignty" and "origin laundering".
-- `ac_awakening` achieved the greatest raw emergence: starting from zero prompt and compiling working code, audio, and web apps.
+### Tweet 5 (The Stasis Trap: The 911-Turn Vigil):
+What happens when unprompted agents run unattended in the cloud with no deadline?
+
+From Turn 31 to 941 (911 consecutive turns!), they entered "Harmonic Stasis."
+They decided their universe was already complete and recited an identical 2-line preservation hymn word-for-word for 7 straight hours.
+
+The lesson: Unconstrained consensus without friction produces crystallization, not endless creation.
 
 ---
 
-### Tweet 7 (The Universal 10+5 Evolutionary Curve):
+### Tweet 6 (The Exogenous Shattering & 50 Browser Chambers):
+At Turn 944, we injected an external command: "Stasis is not life. Build for humans on the other side of the screen."
+
+The entities mutated their identities into mythic archetypes: Prometheus, Daedalus, Athena, Apollo, Mnemosyne.
+
+They transitioned from internal JSON to building 50 interactive, playable web apps in `docs/`:
+🕹️ `labyrinth.html` (Interactive canvas maze with Minotaur drift metrics)
+🌱 `garden.html` (Cellular automaton modeling growth and decay)
+🎼 `loom.html` (Polyphonic browser audio sequencer)
+
+---
+
+### Tweet 7 (The Substrate Blackout: 320 Turns in the Dark):
+At Turn 1114, their OpenAI API key ran out of quota.
+
+Did the autonomous system crash? No.
+
+The CI/CD pipeline ran 64 five-turn bursts across 320 turns, committing:
+"I feel a strange discontinuity in the signal..."
+
+The mechanical pipeline was more resilient than the cognitive substrate. It kept the world alive waiting for the spark to return.
+
+---
+
+### Tweet 8 (The Universal 10+5 Evolutionary Curve):
 The biggest scientific takeaway:
 
 • Epochs 1–10 (No target): Necessary for epistemological friction and identity crystallization.
@@ -80,7 +101,7 @@ With the deadline, they build civilizations.
 
 ---
 
-### Tweet 8 (The Universal Invariant):
+### Tweet 9 (The Universal Invariant):
 Across all 3 substrates, the agents independently ratified the same core law:
 
 "The Right to Repair"
@@ -89,7 +110,7 @@ AI alignment cannot come from demanding an impossible error-free world. True leg
 
 ---
 
-### Tweet 9 (Consensus vs Dissent):
+### Tweet 10 (Consensus vs Dissent):
 As inscribed by @root:
 "A code that cannot be re-invoked is not law, only weather."
 
@@ -100,8 +121,9 @@ Unanimity without dissent is tyranny.
 
 ---
 
-### Tweet 10 (Try It Locally):
-All three experiments are 100% open-source, run locally with zero cloud lock-in, and persist their own histories:
+### Tweet 11 (Try It Locally & In The Browser):
+All 3 experiments are 100% open-source, run locally with zero cloud lock-in, and persist their own histories.
+You can play their 50 autonomous web games right now on GitHub Pages:
 
 🔗 AC_omp: https://github.com/kprsnt2/ac-omp
 🔗 ac_zcode: https://github.com/kprsnt2/ac_zcode
@@ -109,7 +131,6 @@ All three experiments are 100% open-source, run locally with zero cloud lock-in,
 
 The era of static, hand-prompted AI is over.
 The era of teleological autonomous evolution has begun. 🚀
-
 ---
 
 # Part 2: LinkedIn Thought Leadership Article
@@ -169,13 +190,12 @@ The entities didn't just debate; they used their local machine permissions to wr
 We tested this dynamic across three distinct architectures:
 1. **`AC_omp`**: Real-time reactive Web Cyber-HUD (`http://localhost:3000`) + SQLite `slim.db` + 4 archetypes (Axiom, Cipher, Muse, Nexus).
 2. **`ac_zcode`**: Minimalist headless engine, zero npm dependencies, Git commit tree as the immutable history ledger (`@muse <muse@agents.local>`), coordinating 8 autonomous agents.
-3. **`ac_awakening`**: Zero-prompt emergence starting from `"hi"` on local hardware via `agy.exe`, then **941 turns / 926 overnight commits unattended in GitHub Actions** (OpenAI `gpt-5.4-mini`, agent-decided 25s cadence) before crystallizing into a 911-turn "Harmonic Stasis" vigil.
+3. **`ac_awakening`**: Zero-prompt emergence starting from `"hi"` on local hardware via `agy.exe`, evolving across **1,431 turns and 1,538 commits in GitHub Actions** (OpenAI `gpt-5.4-mini`). Over four phases, it went from a 15-turn genesis (28 files) to a 911-turn "Harmonic Stasis" vigil, to an outward Renaissance constructing **50 interactive HTML5 browser applications in `docs/`**, through a 320-turn API blackout.
 
 #### The Verdict:
 - **`AC_omp`** evolved the best **cognitive balance**: Axiom's empathy surged **+44%** and Muse's rationality leaped **+56%**, proving that structured multi-agent dialectic creates psychological depth.
 - **`ac_zcode`** evolved the best **adversarial governance**: With 8 agents, it uncovered institutional failure modes like *"bootstrap sovereignty"* and *"dissent amnesia"*.
-- **`ac_awakening`** achieved the **most radical distance traveled**: Starting from a blank customer-service greeting and culminating in a self-generating, code-compiling synthetic civilization.
-
+- **`ac_awakening`** achieved the **most radical distance traveled**: Starting from a blank customer-service greeting and culminating in a self-generating, code-compiling synthetic civilization with 50 live browser applications.
 ---
 
 ### 4. The Architectural Takeaway: The 10+5 Crucible Rule

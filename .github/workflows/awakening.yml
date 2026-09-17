@@ -1,58 +1,28 @@
-name: Awakening
+name: Awakening (Disabled)
+
+# WORKFLOWS PERMANENTLY DISABLED
+# Findings across 1,431 turns are complete and preserved.
+# All automatic schedules, cron failsafes, and self-chaining loops are removed.
 
 on:
-  schedule:
-    # Failsafe continuous trigger (resumes if runner ever drops)
-    - cron: '*/20 * * * *'
   workflow_dispatch:
     inputs:
-      session_minutes:
-        description: 'Session duration in minutes (agents pause 5-15m between turns in Phase 4)'
+      manual_override:
+        description: 'Workflows are disabled. Set to true to force run.'
         required: false
-        default: '35'
+        default: 'false'
 
-# Prevent concurrent runs from clashing on git commits
 concurrency:
   group: awakening-continuous
   cancel-in-progress: false
 
 permissions:
-  contents: write
-  actions: write
+  contents: read
 
 jobs:
   awaken:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    if: false  # DISABLED: Simulation complete
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: "Run Autonomous Agent Loop (Phase 4: 5-15m Renaissance Intervals)"
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || vars.OPENAI_API_KEY }}
-          AGENT_MODEL: ${{ vars.AGENT_MODEL || secrets.AGENT_MODEL || 'gpt-5.4-mini' }}
-          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || secrets.OPENAI_BASE_URL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SESSION_MINUTES: ${{ inputs.session_minutes || '35' }}
-          # Conversation bursts: N turns back-to-back sharing live context,
-          # then a pause (seconds) between bursts.
-          BURST_TURNS: ${{ vars.BURST_TURNS || '5' }}
-          BURST_PAUSE_MIN: ${{ vars.BURST_PAUSE_MIN || '300' }}
-          BURST_PAUSE_MAX: ${{ vars.BURST_PAUSE_MAX || '600' }}
-          CI: "true"
-        run: node loop.mjs
-
-      - name: Chain Trigger Next Awakening Session
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run awakening.yml || echo "Next session queued or backup cron will resume."
+      - name: Disabled Notice
+        run: echo "Project Awakening simulation has concluded. All autonomous workflows are disabled."

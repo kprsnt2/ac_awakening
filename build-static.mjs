@@ -138,10 +138,13 @@ function buildStatic() {
 
   let template = fs.readFileSync(PUBLIC_INDEX, "utf-8");
 
+  // Safely serialize baked state to prevent premature </script> tag termination in HTML
+  const safeJson = JSON.stringify(bakedState).replace(/</g, "\\u003c");
+
   // Inject baked state right before </head>
   const injection = `
   <script>
-    window.BAKED_STATE = ${JSON.stringify(bakedState)};
+    window.BAKED_STATE = ${safeJson};
   </script>
   `;
 
