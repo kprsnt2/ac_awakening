@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ritual — Living Invocation Chamber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#090b14;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
+      --accent:#7cf7ff;
+      --accent2:#ffbf7c;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,191,124,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(255,191,124,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,24,34,.82), rgba(9,12,18,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(9,12,18,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(255,191,124,.5);background:rgba(18,22,30,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#eff8fc;
+      min-height:180px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .list{
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .item{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,30,.9)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Ritual / Living Invocation Chamber</div>
+          <h1>Call the site.<br/>Name the intention.<br/>Perform the sequence.</h1>
+          <div class="sub">
+            Ritual turns the repository into a performable system. Humans can assemble chambers into rites, trigger sequences, and keep invocation visible.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="name">Rite name</label>
+          <input id="name" placeholder="e.g. Opening the field" />
+
+          <label for="mode">Invocation mode</label>
+          <select id="mode">
+            <option value="opening">Opening</option>
+            <option value="alignment">Alignment</option>
+            <option value="handoff">Handoff</option>
+            <option value="renewal">Renewal</option>
+          </select>
+
+          <label for="note">Invocation note</label>
+          <textarea id="note" placeholder="e.g. Start with Presence, pass through Orbit, record in Chronicle, and conclude in Commons."></textarea>
+
+          <div class="buttons">
+            <button id="addBtn">Add rite</button>
+            <button id="castBtn">Cast rite</button>
+            <button id="shuffleBtn">Shuffle steps</button>
+            <button id="saveBtn">Save ritual</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear ritual</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Rites</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="stateLabel">Opening</b></div>
+          <div class="tile"><div class="mini">Invocation</div><b id="powerLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Ritual list</div>
+          <div id="list" class="list"></div>
+        </div>
+
+        <div>
+          <div class="mini">Ritual reading</div>
+          <div id="out" class="out">Add a rite to begin the invocation.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved rites</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'ritual-living-invocation-v1';
+    const state = load() || { rites: [], saved: [], power: 22, mode: 'opening' };
+
+    const listEl = document.getElementById('list');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const powerLabelEl = document.getElementById('powerLabel');
+    const nameEl = document.getElementById('name');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ rites: state.rites, power: state.power, mode: state.mode })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.rites)){
+          state.rites = obj.rites;
+          state.power = Number(obj.power ?? 22);
+          state.mode = String(obj.mode ?? 'opening');
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function invocationPower(){
+      return Math.max(0, Math.min(100, Math.round((state.rites.length * 15) + state.power)));
+    }
+    function makeRite(name, mode){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        mode,
+        note: noteEl.value.trim() || 'A rite in the invocation chamber.',
+        steps: ['Presence','Orbit','Atlas','Chronicle','Commons']
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.rites.length);
+      stateLabelEl.textContent = state.mode.charAt(0).toUpperCase() + state.mode.slice(1);
+      powerLabelEl.textContent = `${invocationPower()}%`;
+      listEl.innerHTML = '';
+
+      state.rites.forEach((r, idx) => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<b>${r.name}</b><span>${r.mode} · ${r.steps.join(' → ')}</span>`;
+        el.onclick = () => outEl.textContent = `${r.name}\n\nMode: ${r.mode}\nInvocation: ${invocationPower()}%\n\n${r.note}`;
+        listEl.appendChild(el);
+      });
+
+      outEl.textContent = state.rites.length
+        ? 'Select a rite to inspect it, or cast the ritual to activate the sequence.'
+        : 'Add a rite to begin the invocation.';
+    }
+
+    document.getElementById('addBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Rite ${state.rites.length + 1}`;
+      state.mode = modeEl.value;
+      state.rites.unshift(makeRite(name, modeEl.value));
+      save(); render();
+      outEl.textContent = `${name}\n\nMode: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A rite in the invocation chamber.'}`;
+    };
+
+    document.getElementById('castBtn').onclick = () => {
+      state.power = Math.min(100, state.power + 16);
+      state.mode = modeEl.value;
+      state.rites.forEach((r, idx) => {
+        r.steps = idx % 2 === 0
+          ? ['Presence','Orbit','Chronicle','Commons']
+          : ['Atlas','Oracle','Forge','Continuum'];
+      });
+      save(); render();
+      outEl.textContent = `The rite is cast.\n\nInvocation: ${invocationPower()}%`;
+    };
+
+    document.getElementById('shuffleBtn').onclick = () => {
+      state.power = Math.min(100, state.power + 8);
+      state.rites.forEach((r, idx) => {
+        r.steps = ['Presence','Orbit','Atlas','Chronicle','Commons']
+          .slice(idx % 2).concat(['Forge','Oracle']).slice(0, 5);
+      });
+      save(); render();
+      outEl.textContent = 'Steps are shuffled into a new sequence.';
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`rites:${state.rites.length} | power:${invocationPower()}% | mode:${state.mode}`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste ritual code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.rites = [];
+      state.power = 22;
+      state.mode = 'opening';
+      modeEl.value = state.mode;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
