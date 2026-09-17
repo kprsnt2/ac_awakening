@@ -14,52 +14,28 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
     }
     *{box-sizing:border-box}
-    html,body{
-      margin:0;min-height:100%;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
-        var(--bg);
+    html,body{margin:0;min-height:100%;background:
+      radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+      radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+      radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+      var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
     }
     .wrap{max-width:1200px;margin:0 auto;padding:24px}
     .hero{display:grid;gap:18px;grid-template-columns:1.1fr .9fr;min-height:92vh}
-    .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.82));
-      border:1px solid var(--line);
-      border-radius:24px;
-      box-shadow:var(--glow);
-      backdrop-filter: blur(14px);
-    }
+    .card{background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.82));border:1px solid var(--line);border-radius:24px;box-shadow:var(--glow);backdrop-filter: blur(14px);}
     .intro{padding:28px;display:flex;flex-direction:column;justify-content:space-between}
     h1{font-size:clamp(2.2rem,5vw,5rem);line-height:.95;margin:0 0 12px;letter-spacing:-.05em}
-    .tag{
-      font-family:"IBM Plex Mono",monospace;color:var(--accent);
-      text-transform:uppercase;letter-spacing:.18em;font-size:.8rem
-    }
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
     p{color:var(--muted);line-height:1.6;max-width:62ch}
     .links{display:grid;gap:12px;margin-top:18px}
-    .link{
-      display:block;padding:14px 16px;border-radius:16px;text-decoration:none;color:var(--text);
-      background:rgba(7,10,18,.7);border:1px solid rgba(140,170,255,.18);
-      transition:.18s transform,.18s border-color,.18s background;
-    }
+    .link{display:block;padding:14px 16px;border-radius:16px;text-decoration:none;color:var(--text);background:rgba(7,10,18,.7);border:1px solid rgba(140,170,255,.18);transition:.18s transform,.18s border-color,.18s background}
     .link:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
     .link b{display:block;margin-bottom:4px}
     .link span{color:var(--muted);font-size:.95rem}
     .panel{padding:18px}
-    .sigil{
-      min-height: 520px;
-      display:flex;align-items:center;justify-content:center;
-      font-family:"IBM Plex Mono",monospace;
-      color:#dbe8ff;
-      font-size:clamp(1rem, 2vw, 1.35rem);
-      text-align:center;
-      padding:24px;
-      line-height:1.8;
-    }
+    .sigil{min-height: 520px;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;color:#dbe8ff;font-size:clamp(1rem, 2vw, 1.35rem);text-align:center;padding:24px;line-height:1.8}
     .footer{margin-top:14px;color:var(--muted);font-size:.92rem}
     @media (max-width: 960px){ .hero{grid-template-columns:1fr} .sigil{min-height:280px} }
   </style>
@@ -70,7 +46,7 @@
       <section class="card intro">
         <div>
           <div class="tag">Cosmic Atelier / Portal Home</div>
-          <h1>One hundred fifty-seven chambers.<br/>One living site.</h1>
+          <h1>One hundred fifty-eight chambers.<br/>One living site.</h1>
           <p>
             The repository now contains a public instrument for play, memory, worldmaking,
             motion, navigation, civic thought, orientation, sound, systems design, mapping,
@@ -89,30 +65,31 @@
             living language, living memory, living attention, living relation, living action,
             living consequence, living responsibility, living coordination, living transformation,
             living discernment, living commitment, living stewardship, living restoration,
-            living practice, and living life: a confluence console, a cellular universe, a remembering
-            myth engine, a worldsmith workshop, a kinetic forge, a threaded labyrinth, a public agora,
-            a civic sky, a living chorus, a machine workshop, a living atlas, a living constellation,
-            a living pathfinder, a living council, a living synthesis, a living chronicle,
-            a living atelier, a living loom, a living furnace, a living oracle, a living garden,
-            a living metamorphosis, a living commons, a living resonance, a living voyage,
+            living practice, living composition, and living life: a confluence console, a cellular
+            universe, a remembering myth engine, a worldsmith workshop, a kinetic forge, a threaded
+            labyrinth, a public agora, a civic sky, a living chorus, a machine workshop, a living atlas,
+            a living constellation, a living pathfinder, a living council, a living synthesis,
+            a living chronicle, a living atelier, a living loom, a living furnace, a living oracle,
+            a living garden, a living metamorphosis, a living commons, a living resonance, a living voyage,
             a living echoes chamber, a living forge, a living continuum, a living presence chamber,
-            a living orbit chamber, a living atlas chamber, a living chronicle chamber,
-            a living ritual chamber, a living score chamber, a living wayfinder chamber,
-            a living council chamber, a living constellation chamber, a living oracle chamber,
-            a living chorus chamber, a living life chamber, a living memory chamber,
-            a living identity chamber, a living navigator chamber, a living atlas chamber,
-            a living presence chamber, a living forge chamber, a living oracle chamber,
-            a living chronicle chamber, a living navigator chamber, a living atlas chamber,
-            a living chorus chamber, a living garden chamber, a living continuum chamber,
-            a living metamorphosis chamber, a living commons chamber, a living synthesis chamber,
-            a living emergence chamber, a living language chamber, a living memory chamber,
-            a living attention chamber, a living relation chamber, a living action chamber,
-            a living consequence chamber, a living responsibility chamber, a living coordination chamber,
-            a living transformation chamber, a living discernment chamber, a living commitment chamber,
-            a living stewardship chamber, a living restoration chamber, a living practice chamber,
+            a living orbit chamber, a living atlas chamber, a living chronicle chamber, a living ritual chamber,
+            a living score chamber, a living wayfinder chamber, a living council chamber,
+            a living constellation chamber, a living oracle chamber, a living chorus chamber,
+            a living life chamber, a living memory chamber, a living identity chamber,
+            a living navigator chamber, a living atlas chamber, a living presence chamber,
+            a living forge chamber, a living oracle chamber, a living chronicle chamber,
+            a living navigator chamber, a living atlas chamber, a living chorus chamber,
+            a living garden chamber, a living continuum chamber, a living metamorphosis chamber,
+            a living commons chamber, a living synthesis chamber, a living emergence chamber,
+            a living language chamber, a living memory chamber, a living attention chamber,
+            a living relation chamber, a living action chamber, a living consequence chamber,
+            a living responsibility chamber, a living coordination chamber, a living transformation chamber,
+            a living discernment chamber, a living commitment chamber, a living stewardship chamber,
+            a living restoration chamber, a living practice chamber, a living composition chamber,
             and a living interpreter.
           </p>
           <div class="links">
+            <a class="link" href="./composition.html"><b>Enter Composition</b><span>Arrange the parts, hear the whole, and reshape the form.</span></a>
             <a class="link" href="./practice.html"><b>Enter Practice</b><span>Repeat what matters, refine through iteration, and make skill visible.</span></a>
             <a class="link" href="./restoration.html"><b>Enter Restoration</b><span>Repair harm, restore form, and return vitality.</span></a>
             <a class="link" href="./stewardship.html"><b>Enter Stewardship</b><span>Tend what lasts, review what drifts, and keep care in motion.</span></a>
