@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presence — Living Presence Chamber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07110f;
+      --text:#f2fff8;
+      --muted:#b2d5c2;
+      --accent:#9bffb8;
+      --accent2:#7cf7ff;
+      --line: rgba(155,255,184,.16);
+      --glow: 0 0 24px rgba(155,255,184,.14), 0 0 48px rgba(124,247,255,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(155,255,184,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(12,24,18,.82), rgba(8,12,10,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(155,255,184,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#f1fff7;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(155,255,184,.22);
+      background:rgba(8,12,10,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(14,20,16,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(155,255,184,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#effff4;
+      min-height:180px;
+      background:rgba(8,12,10,.72);
+      border:1px solid rgba(155,255,184,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .field{
+      position:relative;
+      height:560px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(155,255,184,.06), transparent 58%),
+        linear-gradient(rgba(155,255,184,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(155,255,184,.05) 1px, transparent 1px),
+        rgba(8,12,10,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(155,255,184,.14);
+      overflow:hidden;
+    }
+    .presence{
+      position:absolute;
+      width:34px;height:34px;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(155,255,184,.32);
+      cursor:pointer;
+    }
+    .presence.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    .halo{
+      position:absolute;
+      width:86px;height:86px;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      border:1px solid rgba(124,247,255,.28);
+      pointer-events:none;
+      box-shadow:0 0 24px rgba(124,247,255,.10);
+    }
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Presence / Living Presence Chamber</div>
+          <h1>Stand inside the site.<br/>Focus the field.<br/>Make the moment inhabited.</h1>
+          <div class="sub">
+            Presence turns the repository into an embodied field. Humans can mark what is near, what is active, and what deserves attention now.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="name">Presence name</label>
+          <input id="name" placeholder="e.g. Near the Forge" />
+
+          <label for="mode">Attention mode</label>
+          <select id="mode">
+            <option value="focus">Focus</option>
+            <option value="glance">Glance</option>
+            <option value="watch">Watch</option>
+            <option value="hold">Hold</option>
+          </select>
+
+          <label for="note">Presence note</label>
+          <textarea id="note" placeholder="e.g. Keep Echoes and Continuum active while the rest recede softly."></textarea>
+
+          <div class="buttons">
+            <button id="addBtn">Set presence</button>
+            <button id="shiftBtn">Shift attention</button>
+            <button id="pulseBtn">Pulse field</button>
+            <button id="saveBtn">Save presence</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear presence</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Presence points</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Absent</b></div>
+          <div class="tile"><div class="mini">Intensity</div><b id="intensityLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Presence field</div>
+          <div id="field" class="field"></div>
+        </div>
+
+        <div>
+          <div class="mini">Presence reading</div>
+          <div id="out" class="out">Set a presence to begin inhabiting the field.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved presences</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'presence-living-presence-v1';
+    const state = load() || { points: [], saved: [], intensity: 22 };
+
+    const field = document.getElementById('field');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const intensityLabelEl = document.getElementById('intensityLabel');
+    const nameEl = document.getElementById('name');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ points: state.points, intensity: state.intensity })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.points)){
+          state.points = obj.points;
+          state.intensity = Number(obj.intensity ?? 22);
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function intensity(){
+      return Math.max(0, Math.min(100, Math.round((state.points.length * 14) + state.intensity)));
+    }
+    function makePoint(name, mode){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        mode,
+        note: noteEl.value.trim() || 'A presence in the field.',
+        x: 120 + Math.random() * 420,
+        y: 120 + Math.random() * 320
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.points.length);
+      stateLabelEl.textContent = state.points.length ? 'Present' : 'Absent';
+      intensityLabelEl.textContent = `${intensity()}%`;
+      field.querySelectorAll('.presence,.halo').forEach(n => n.remove());
+
+      state.points.forEach((p, idx) => {
+        const halo = document.createElement('div');
+        halo.className = 'halo';
+        halo.style.left = p.x + 'px';
+        halo.style.top = p.y + 'px';
+        halo.style.opacity = idx === 0 ? '1' : '.45';
+        field.appendChild(halo);
+
+        const el = document.createElement('div');
+        el.className = 'presence' + (p.mode === 'focus' ? ' core' : '');
+        el.style.left = p.x + 'px';
+        el.style.top = p.y + 'px';
+        el.title = p.name;
+        el.onclick = () => outEl.textContent = `${p.name}\n\nMode: ${p.mode}\nIntensity: ${intensity()}%\n\n${p.note}`;
+        field.appendChild(el);
+      });
+
+      outEl.textContent = state.points.length
+        ? 'Select a presence to inspect it, or shift attention to redistribute the field.'
+        : 'Set a presence to begin inhabiting the field.';
+    }
+
+    document.getElementById('addBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Presence ${state.points.length + 1}`;
+      state.points.unshift(makePoint(name, modeEl.value));
+      save(); render();
+      outEl.textContent = `${name}\n\nMode: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A presence in the field.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.intensity = Math.min(100, state.intensity + 10);
+      state.points.reverse();
+      save(); render();
+      outEl.textContent = 'Attention shifts and the field reorders around the current center.';
+    };
+
+    document.getElementById('pulseBtn').onclick = () => {
+      state.intensity = Math.min(100, state.intensity + 14);
+      state.points.forEach((p, i) => {
+        if(modeEl.value === 'hold') p.x += Math.random() * 20 - 10;
+        else if(modeEl.value === 'watch' && i % 2 === 0) p.y += 18;
+      });
+      save(); render();
+      outEl.textContent = `The field pulses.\n\nIntensity: ${intensity()}%`;
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`points:${state.points.length} | intensity:${intensity()}%`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste presence code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.points = [];
+      state.intensity = 22;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
