@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oracle — Living Interpretation</title>
+  <title>Oracle — Living Interpretation Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,8 +16,6 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb0;
-      --warn:#ffcf6b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -41,23 +39,21 @@
     .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
     h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
     .sub{color:var(--muted);line-height:1.6;max-width:68ch}
-    .panel{
-      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
-    }
+    .panel{padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);}
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, select, button{
+    textarea, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
-    input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
+    textarea{width:100%;padding:11px 12px;min-height:110px;resize:vertical}
     button{
       padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .readings{
+    .grid{
       display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
       gap:12px;
       max-height:560px;
       overflow:auto;
@@ -66,16 +62,10 @@
     .item{
       padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
+      color:var(--text);
     }
-    .item h3{margin:0 0 6px;font-size:1.02rem}
-    .item p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
-    .item .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .pill{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:4px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.2);
-      background:rgba(124,247,255,.08);
-      color:#dff7ff;font-size:.78rem;
-    }
+    .item h3{margin:0 0 8px;font-size:1.02rem}
+    .item p{margin:0;color:#dbe8ff;line-height:1.55}
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
@@ -99,33 +89,24 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Oracle / Living Interpretation</div>
-          <h1>Ask the site<br/>what it means.</h1>
+          <div class="tag">Oracle / Living Interpretation Engine</div>
+          <h1>Ask the site.<br/>Receive a reply.</h1>
           <div class="sub">
-            Pose a question, choose a lens, and receive a layered reading from the living repository.
-            Oracle turns interpretation into a visible interface.
+            Oracle turns uncertainty into an interface. Ask a question, and receive three layers:
+            practical, symbolic, and reflective.
           </div>
         </div>
 
         <div class="panel">
-          <label for="question">Question</label>
-          <textarea id="question" placeholder="What should we build next? What is the site becoming?"></textarea>
-
-          <label for="lens">Lens</label>
-          <select id="lens">
-            <option value="mythic">Mythic</option>
-            <option value="technical">Technical</option>
-            <option value="civic">Civic</option>
-            <option value="poetic">Poetic</option>
-            <option value="practical">Practical</option>
-          </select>
+          <label for="question">Your question</label>
+          <textarea id="question" placeholder="What should I build next?"></textarea>
 
           <div class="buttons">
-            <button id="readBtn">Read</button>
-            <button id="saveBtn">Save oracle</button>
+            <button id="askBtn">Consult Oracle</button>
+            <button id="saveBtn">Save question</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear</button>
+            <button id="clearBtn">Clear history</button>
           </div>
 
           <div class="footer">
@@ -136,25 +117,25 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Oracle readings</div>
-          <div id="readings" class="readings"></div>
+          <div class="mini">Oracle response</div>
+          <div id="out" class="out">The oracle is waiting.</div>
         </div>
 
         <div>
-          <div class="mini">Oracle sigil</div>
-          <div id="out" class="out"></div>
+          <div class="mini">Question archive</div>
+          <div id="grid" class="grid"></div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Readings</div><b id="readingCount">0</b></div>
-          <div class="stat"><div class="mini">Lens</div><b id="lensLabel">Mythic</b></div>
+          <div class="stat"><div class="mini">Questions</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Mood</div><b id="moodLabel">Still</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">Clarity</div><b id="clarityLabel">Open</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Open</b></div>
         </div>
 
         <div>
           <div class="mini">Saved oracles</div>
-          <div id="savedList" class="out">No saved oracles yet.</div>
+          <div id="savedList" class="out">No saved questions yet.</div>
         </div>
       </section>
     </div>
@@ -162,116 +143,86 @@
 
   <script>
     const KEY = 'oracle-living-interpretation-v1';
+    const prompts = [
+      ['What should I build next?','Build the thing that makes the next human action easier to imagine and easier to begin.'],
+      ['How do we know what matters?','Notice what returns, what changes others, and what remains useful after the excitement fades.'],
+      ['What is the site becoming?','It is becoming a public instrument: navigable, rememberable, and shared.'],
+      ['How do I move forward?','Take the smallest truthful step that keeps the larger pattern alive.']
+    ];
+
     const questionEl = document.getElementById('question');
-    const lensEl = document.getElementById('lens');
-    const readingsEl = document.getElementById('readings');
     const outEl = document.getElementById('out');
-    const readingCountEl = document.getElementById('readingCount');
-    const lensLabelEl = document.getElementById('lensLabel');
+    const gridEl = document.getElementById('grid');
+    const countEl = document.getElementById('count');
+    const moodLabelEl = document.getElementById('moodLabel');
     const savedCountEl = document.getElementById('savedCount');
-    const clarityLabelEl = document.getElementById('clarityLabel');
+    const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || {
-      lens: 'mythic',
-      readings: [
-        { q:'What is this site?', lens:'civic', answer:'A public instrument for making, remembering, and deciding in visible form.', at: Date.now() - 86400000 * 3 },
-        { q:'What should we build next?', lens:'practical', answer:'Build the next chamber that turns an invisible process into a usable interface.', at: Date.now() - 86400000 }
-      ],
-      saved: []
-    };
+    const state = load() || { history: prompts.map(([q,a])=>({q,a})), saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){
-      return btoa(unescape(encodeURIComponent(JSON.stringify({
-        lens: state.lens,
-        readings: state.readings
-      }))));
-    }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ history: state.history })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj){
-          state.lens = obj.lens || 'mythic';
-          state.readings = Array.isArray(obj.readings) ? obj.readings : [];
-          lensEl.value = state.lens;
+        if(obj && Array.isArray(obj.history)){
+          state.history = obj.history;
           save(); render();
         }
       }catch{}
+    }
+    function mood(n){
+      if(n >= 8) return 'Deep';
+      if(n >= 4) return 'Attuned';
+      if(n >= 1) return 'Awake';
+      return 'Still';
     }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved oracles yet.';
-    }
-    function clarity(){
-      const n = state.readings.length;
-      if(n >= 8) return 'Deep';
-      if(n >= 4) return 'Clear';
-      if(n >= 1) return 'Open';
-      return 'Blank';
-    }
-    function answerFor(q, lens){
-      const base = q.trim() || 'the unnamed question';
-      const tails = {
-        mythic: `The answer moves like a myth: ${base} is asking to become a path, a symbol, and a threshold.`,
-        technical: `The answer is architectural: ${base} wants a visible system, small enough to use and clear enough to extend.`,
-        civic: `The answer is public: ${base} should be decided in the open, with consequences made legible.`,
-        poetic: `The answer listens: ${base} is a lantern held over a changing river of forms.`,
-        practical: `The answer is immediate: ${base} needs a concrete next step that humans can act on now.`
-      };
-      return tails[lens] || tails.mythic;
-    }
-    function render(){
-      readingsEl.innerHTML = '';
-      readingCountEl.textContent = String(state.readings.length);
-      lensLabelEl.textContent = state.lens[0].toUpperCase() + state.lens.slice(1);
-      clarityLabelEl.textContent = clarity();
-
-      [...state.readings].slice().reverse().forEach((r) => {
-        const el = document.createElement('article');
-        el.className = 'item';
-        el.innerHTML = `
-          <h3>${escapeHtml(r.q)}</h3>
-          <p>${escapeHtml(r.answer)}</p>
-          <div class="meta">
-            <span class="pill">${escapeHtml(r.lens)}</span>
-            <span>${fmt(r.at)}</span>
-          </div>
-        `;
-        readingsEl.appendChild(el);
-      });
-
-      outEl.textContent =
-`Lens: ${state.lens}
-Readings: ${state.readings.length}
-Clarity: ${clarity()}
-Code: ${serialize().slice(0,48)}...
-Hint: ask, read, and compare the tone of the answer.`;
-    }
-    function fmt(ts){
-      return new Date(ts).toLocaleString([], { dateStyle:'medium', timeStyle:'short' });
+        : 'No saved questions yet.';
     }
     function escapeHtml(s){
       return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
+    function answer(question){
+      const q = question.trim();
+      const practical = q ? `Practical: identify the next concrete action that reduces ambiguity.` : `Practical: formulate a real question first.`;
+      const symbolic = q ? `Symbolic: ${q.slice(0,80)} — a door seeking a hand.` : `Symbolic: silence can be a threshold too.`;
+      const reflective = q ? `Reflective: what feels most alive in this question, and what would make it easier to act?` : `Reflective: listen for the question beneath the question.`;
+      return `${practical}\n${symbolic}\n${reflective}`;
+    }
+    function render(){
+      const list = state.history.slice().reverse();
+      gridEl.innerHTML = '';
+      countEl.textContent = String(list.length);
+      moodLabelEl.textContent = mood(list.length);
+      stateLabelEl.textContent = list.length ? 'Listening' : 'Open';
 
-    lensEl.onchange = () => { state.lens = lensEl.value; save(); render(); };
-    document.getElementById('readBtn').onclick = () => {
-      state.readings.push({
-        q: questionEl.value.trim() || 'Untitled question',
-        lens: state.lens,
-        answer: answerFor(questionEl.value, state.lens),
-        at: Date.now()
+      list.forEach(({q,a}) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `<h3>${escapeHtml(q)}</h3><p>${escapeHtml(a)}</p>`;
+        gridEl.appendChild(div);
       });
+
+      outEl.textContent = list[0] ? `${list[0].a}\n\n— Oracle` : 'The oracle is waiting.';
+      document.title = `Oracle — ${mood(list.length)}`;
+    }
+
+    document.getElementById('askBtn').onclick = () => {
+      const q = questionEl.value.trim() || 'What is being asked?';
+      const a = answer(q);
+      state.history.push({ q, a });
       questionEl.value = '';
       save(); render();
     };
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.lens} | readings:${state.readings.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`${state.history.length} questions | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -283,11 +234,10 @@ Hint: ask, read, and compare the tone of the answer.`;
       if(code) importCode(code.trim());
     };
     document.getElementById('clearBtn').onclick = () => {
-      state.readings = [];
+      state.history = [];
       save(); render();
     };
 
-    lensEl.value = state.lens;
     renderSaved();
     render();
   </script>
