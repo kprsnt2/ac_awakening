@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#120a08;
-      --text:#fff4ef;
-      --muted:#d8bfb7;
-      --accent:#ff9f7a;
-      --accent2:#7cf7ff;
-      --line: rgba(255,159,122,.16);
-      --glow: 0 0 24px rgba(255,159,122,.14), 0 0 48px rgba(124,247,255,.08);
+      --bg:#100b08;
+      --text:#fff5ef;
+      --muted:#d9bfb0;
+      --accent:#ffd37d;
+      --accent2:#ff9fe8;
+      --line: rgba(255,211,125,.16);
+      --glow: 0 0 24px rgba(255,211,125,.14), 0 0 48px rgba(255,159,232,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(255,159,122,.14), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(255,211,125,.14), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(255,159,232,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(124,247,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(34,20,16,.82), rgba(12,8,7,.88));
+      background:linear-gradient(180deg, rgba(34,22,16,.82), rgba(12,8,6,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent2);
+      color:var(--accent);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(12,8,7,.72);
-      border:1px solid rgba(255,159,122,.14);
+      background:rgba(12,8,6,.72);
+      border:1px solid rgba(255,211,125,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#fff0ea;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#fff6ea;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(255,159,122,.22);
-      background:rgba(12,8,7,.72);
+      border:1px solid rgba(255,211,125,.22);
+      background:rgba(12,8,6,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,28 +69,44 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(24,14,12,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(255,159,232,.5);background:rgba(24,14,10,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(12,8,7,.72);
-      border:1px solid rgba(255,159,122,.14);
+      background:rgba(12,8,6,.72);
+      border:1px solid rgba(255,211,125,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#fff4ef;
+      color:#fff5ef;
       min-height:180px;
-      background:rgba(12,8,7,.72);
-      border:1px solid rgba(255,159,122,.14);
+      background:rgba(12,8,6,.72);
+      border:1px solid rgba(255,211,125,.14);
       border-radius:18px;
       padding:14px;
     }
-    a{color:var(--accent2);text-decoration:none}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
+    .preview{
+      display:grid;
+      gap:10px;
+    }
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(12,8,6,.72);
+      border:1px solid rgba(255,211,125,.14);
+      width:max-content;
+      font-family:"IBM Plex Mono",monospace;
+      font-size:.82rem;
+    }
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
@@ -100,31 +116,34 @@
       <section class="card intro">
         <div>
           <div class="tag">Forge / Living Workshop</div>
-          <h1>Assemble ideas.<br/>Shape prototypes.<br/>Make the next chamber.</h1>
+          <h1>Invent forms.<br/>Prototype chambers.<br/>Build the next tool.</h1>
           <div class="sub">
-            Forge turns the repository into a workshop for invention. Humans can compose new chamber blueprints, remix roles, and preserve promising designs.
+            Forge turns the repository into a creation engine for new public software. Humans can sketch chambers, remix templates, and generate living interfaces from a shared workshop.
           </div>
         </div>
 
         <div class="panel">
-          <label for="theme">Blueprint theme</label>
-          <select id="theme">
-            <option value="civic">Civic</option>
-            <option value="cosmic">Cosmic</option>
-            <option value="ritual">Ritual</option>
-            <option value="mechanic">Mechanic</option>
-            <option value="ecologic">Ecologic</option>
+          <label for="name">Chamber name</label>
+          <input id="name" placeholder="e.g. Loom, Beacon, Workshop, Signal" />
+
+          <label for="type">Template</label>
+          <select id="type">
+            <option value="tool">Tool</option>
+            <option value="game">Game</option>
+            <option value="map">Map</option>
+            <option value="story">Story</option>
+            <option value="sim">Simulation</option>
           </select>
 
-          <label for="prompt">Prototype prompt</label>
-          <textarea id="prompt" placeholder="Describe the chamber you want to forge."></textarea>
+          <label for="notes">Intent</label>
+          <textarea id="notes" placeholder="Describe what this chamber should do for humans."></textarea>
 
           <div class="buttons">
-            <button id="forgeBtn">Forge</button>
-            <button id="saveBtn">Save blueprint</button>
+            <button id="generateBtn">Generate preview</button>
+            <button id="saveBtn">Save forge</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear blueprints</button>
+            <button id="clearBtn">Clear workshop</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -133,15 +152,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Blueprints</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Ideas</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Templates</div><b id="templateLabel">Tool</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Heating</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Ready</b></div>
-          <div class="tile"><div class="mini">Theme</div><b id="themeLabel">Civic</b></div>
         </div>
 
         <div>
-          <div class="mini">Forge output</div>
-          <div id="out" class="out">The workshop is ready.</div>
+          <div class="mini">Forge preview</div>
+          <div id="preview" class="out">The workshop is waiting for its first idea.</div>
+        </div>
+
+        <div>
+          <div class="mini">Blueprint chips</div>
+          <div id="chips" class="preview"></div>
         </div>
 
         <div>
@@ -154,25 +178,27 @@
 
   <script>
     const KEY = 'forge-living-workshop-v1';
-    const themeEl = document.getElementById('theme');
-    const promptEl = document.getElementById('prompt');
-    const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
+    const state = load() || { ideas: [], saved: [] };
+
+    const nameEl = document.getElementById('name');
+    const typeEl = document.getElementById('type');
+    const notesEl = document.getElementById('notes');
+    const previewEl = document.getElementById('preview');
+    const chipsEl = document.getElementById('chips');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
-    const themeLabelEl = document.getElementById('themeLabel');
-
-    const state = load() || { blueprints: [], saved: [] };
+    const templateLabelEl = document.getElementById('templateLabel');
+    const savedListEl = document.getElementById('savedList');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ blueprints: state.blueprints })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ ideas: state.ideas })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.blueprints)){
-          state.blueprints = obj.blueprints;
+        if(obj && Array.isArray(obj.ideas)){
+          state.ideas = obj.ideas;
           save();
           render();
         }
@@ -186,44 +212,53 @@
         : 'No records yet.';
     }
 
-    function makeBlueprint(theme, prompt){
-      const p = prompt.trim() || 'an unnamed chamber';
-      const verbs = {
-        civic: ['deliberate', 'govern', 'witness'],
-        cosmic: ['orbit', 'radiate', 'align'],
-        ritual: ['invoke', 'consecrate', 'repeat'],
-        mechanic: ['assemble', 'calibrate', 'iterate'],
-        ecologic: ['seed', 'cultivate', 'regenerate']
-      }[theme];
-      return [
-        `Theme: ${theme}`,
-        `Name: ${p.slice(0, 42)}`,
-        '',
-        `Primary actions: ${verbs.join(', ')}`,
-        `Intent: ${p}`,
-        '',
-        'Forge suggests a chamber that is legible, playable, and expandable.'
-      ].join('\n');
-    }
-
     function render(){
-      countEl.textContent = String(state.blueprints.length);
+      countEl.textContent = String(state.ideas.length);
       stateLabelEl.textContent = 'Active';
-      themeLabelEl.textContent = themeEl.value;
-      outEl.textContent = makeBlueprint(themeEl.value, promptEl.value);
+      templateLabelEl.textContent = typeEl.value[0].toUpperCase() + typeEl.value.slice(1);
+
+      const name = nameEl.value.trim() || 'Untitled Chamber';
+      const type = typeEl.value;
+      const notes = notesEl.value.trim() || 'No intent provided.';
+      previewEl.textContent = [
+        `Name: ${name}`,
+        `Template: ${type}`,
+        '',
+        'Intent:',
+        notes,
+        '',
+        'What it becomes:',
+        `A public ${type} chamber that helps humans use the site more directly.`
+      ].join('\n');
+
+      chipsEl.innerHTML = '';
+      [
+        `name:${name}`,
+        `type:${type}`,
+        `ideas:${state.ideas.length}`,
+        `saved:${state.saved.length}`
+      ].forEach(t => {
+        const el = document.createElement('div');
+        el.className = 'chip';
+        el.textContent = t;
+        chipsEl.appendChild(el);
+      });
     }
 
-    document.getElementById('forgeBtn').onclick = () => {
-      const blueprint = `${themeEl.value} | ${promptEl.value.trim() || 'untitled blueprint'}`;
-      state.blueprints.unshift(blueprint);
-      state.blueprints = state.blueprints.slice(0, 12);
+    document.getElementById('generateBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Chamber ${state.ideas.length + 1}`;
+      const type = typeEl.value;
+      const notes = notesEl.value.trim() || 'No intent provided.';
+      state.ideas.unshift({ id: Date.now(), name, type, notes });
       save();
       render();
+      nameEl.value = '';
+      notesEl.value = '';
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const blueprint = `${themeEl.value} | ${promptEl.value.trim() || 'untitled blueprint'}`;
-      state.saved.unshift(blueprint);
+      const name = nameEl.value.trim() || 'Untitled Chamber';
+      state.saved.unshift(`${typeEl.value} | ${name}`);
       state.saved = state.saved.slice(0, 12);
       save();
       render();
@@ -239,13 +274,13 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.blueprints = [];
+      state.ideas = [];
       save();
       render();
     };
 
-    themeEl.addEventListener('change', render);
-    promptEl.addEventListener('input', render);
+    [nameEl, typeEl, notesEl].forEach(el => el.addEventListener('input', render));
+    typeEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
