@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agora — Public Mind</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140, 170, 255, 0.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1.02fr .98fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    input, textarea, button{
+      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);color:var(--text);
+    }
+    input, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:92px;resize:vertical}
+    button{
+      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .list{
+      display:grid;gap:12px;
+      max-height: 520px; overflow:auto; padding-right:4px;
+    }
+    .item{
+      padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .item h3{margin:0 0 6px;font-size:1.02rem}
+    .meta{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem}
+    .votes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .pill{
+      padding:7px 10px;border-radius:999px;background:rgba(13,18,32,.9);
+      border:1px solid rgba(140,170,255,.14);font-size:.84rem;color:#dce8ff;
+    }
+    canvas{
+      width:100%;height:260px;display:block;border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+    }
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Agora / Public Mind</div>
+          <h1>Think together.<br/>Decide together.</h1>
+          <div class="sub">
+            A civic chamber for proposals, reactions, and shared memory.
+            Post a question, weigh it, and watch the public mind take shape.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="mini">New proposal</div>
+          <label for="title">Title</label>
+          <input id="title" placeholder="e.g. Should the site host a communal archive?" />
+          <label for="body">Proposal</label>
+          <textarea id="body" placeholder="Write the question, claim, or idea..."></textarea>
+          <div class="buttons">
+            <button id="postBtn">Post</button>
+            <button id="clearBtn">Clear form</button>
+            <button id="archiveBtn">Archive board</button>
+          </div>
+          <div class="footer">
+            Return to the portal home: <a href="./index.html">home</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Consensus field</div>
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Topics</div><b id="topics">0</b></div>
+          <div class="stat"><div class="mini">Agreement</div><b id="agreement">0%</b></div>
+          <div class="stat"><div class="mini">Tension</div><b id="tension">0%</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Board</div>
+          <div id="board" class="list"></div>
+        </div>
+
+        <div>
+          <div class="mini">Archive</div>
+          <div id="archive" class="list"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'agora-public-mind-v1';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const titleEl = document.getElementById('title');
+    const bodyEl = document.getElementById('body');
+    const boardEl = document.getElementById('board');
+    const archiveEl = document.getElementById('archive');
+    const topicsEl = document.getElementById('topics');
+    const agreementEl = document.getElementById('agreement');
+    const tensionEl = document.getElementById('tension');
+
+    const state = load() || {
+      topics: [
+        { title: 'What should the next chamber be?', body: 'A public space for play, memory, or collective making?', agree: 12, challenge: 3, remix: 5, defer: 1, age: Date.now() },
+        { title: 'Should the archive be editable?', body: 'Can memory remain alive without becoming unstable?', agree: 9, challenge: 4, remix: 7, defer: 2, age: Date.now() }
+      ],
+      archive: [],
+      resonance: 0.5,
+      motion: 0.4
+    };
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); render(); }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.floor(r.width * dpr);
+      canvas.height = Math.floor(r.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function score(topic){
+      const total = topic.agree + topic.challenge + topic.remix + topic.defer;
+      const agreement = total ? topic.agree / total : 0;
+      const tension = total ? (topic.challenge + topic.remix * 0.5) / total : 0;
+      return { agreement, tension, total };
+    }
+
+    function renderBoard(){
+      boardEl.innerHTML = '';
+      state.topics
+        .slice()
+        .sort((a,b) => {
+          const sa = score(a), sb = score(b);
+          return (sb.agreement + sb.total*0.01) - (sa.agreement + sa.total*0.01);
+        })
+        .forEach((topic, i) => {
+          const s = score(topic);
+          const item = document.createElement('div');
+          item.className = 'item';
+          item.innerHTML = `
+            <h3>${topic.title}</h3>
+            <div class="meta">${new Date(topic.age).toLocaleString()}</div>
+            <p style="color:var(--muted);line-height:1.5">${topic.body}</p>
+            <div class="votes">
+              <div class="pill">Affirm ${topic.agree}</div>
+              <div class="pill">Challenge ${topic.challenge}</div>
+              <div class="pill">Remix ${topic.remix}</div>
+              <div class="pill">Defer ${topic.defer}</div>
+            </div>
+            <div class="buttons">
+              <button data-v="agree">Affirm</button>
+              <button data-v="challenge">Challenge</button>
+              <button data-v="remix">Remix</button>
+              <button data-v="defer">Defer</button>
+            </div>
+          `;
+          item.querySelectorAll('button').forEach(btn => {
+            btn.onclick = () => {
+              topic[btn.dataset.v]++;
+              state.resonance = clamp(state.resonance + (btn.dataset.v === 'agree' ? 0.04 : btn.dataset.v === 'challenge' ? -0.03 : 0.01), 0, 1);
+              state.motion = clamp(state.motion + (btn.dataset.v === 'remix' ? 0.04 : 0.01), 0, 1);
+              save();
+            };
+          });
+          boardEl.appendChild(item);
+        });
+    }
+
+    function renderArchive(){
+      archiveEl.innerHTML = state.archive.length
+        ? state.archive.map(t => `
+          <div class="item">
+            <h3>${t.title}</h3>
+            <div class="meta">${t.body.slice(0, 120)}</div>
+          </div>
+        `).join('')
+        : '<div class="item"><div class="meta">No archived debates yet.</div></div>';
+    }
+
+    function renderStats(){
+      const total = state.topics.length || 1;
+      const avgA = state.topics.reduce((s,t) => s + score(t).agreement, 0) / total;
+      const avgT = state.topics.reduce((s,t) => s + score(t).tension, 0) / total;
+      topicsEl.textContent = String(state.topics.length);
+      agreementEl.textContent = `${Math.round(avgA * 100)}%`;
+      tensionEl.textContent = `${Math.round(avgT * 100)}%`;
+    }
+
+    function draw(){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0,0,w,h);
+      const bg = ctx.createLinearGradient(0,0,w,h);
+      bg.addColorStop(0, `rgba(8,16,32,1)`);
+      bg.addColorStop(1, `rgba(${20 + state.motion*40}, 8, ${30 + state.resonance*40}, 1)`);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0,0,w,h);
+
+      const cx = w/2, cy = h/2;
+      state.topics.forEach((t, i) => {
+        const s = score(t);
+        const r = 26 + i*18 + s.total*0.8;
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(${s.agreement*255}, ${200 - s.tension*120}, 255, ${0.18 + s.total*0.002})`;
+        ctx.lineWidth = 2;
+        ctx.arc(cx + Math.cos(i*1.7 + performance.now()*0.0003) * (40 + i*10), cy + Math.sin(i*1.3 + performance.now()*0.0004) * (24 + i*8), r, 0, Math.PI*2);
+        ctx.stroke();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    function render(){
+      save();
+      renderBoard();
+      renderArchive();
+      renderStats();
+    }
+
+    document.getElementById('postBtn').onclick = () => {
+      const title = titleEl.value.trim();
+      const body = bodyEl.value.trim();
+      if(!title && !body) return;
+      state.topics.unshift({
+        title: title || 'Untitled proposal',
+        body: body || 'No details provided.',
+        agree: 1, challenge: 0, remix: 0, defer: 0,
+        age: Date.now()
+      });
+      titleEl.value = '';
+      bodyEl.value = '';
+      render();
+    };
+    document.getElementById('clearBtn').onclick = () => {
+      titleEl.value = '';
+      bodyEl.value = '';
+    };
+    document.getElementById('archiveBtn').onclick = () => {
+      state.archive = state.topics.concat(state.archive).slice(0, 24);
+      state.topics = [];
+      render();
+    };
+
+    window.addEventListener('resize', resize);
+    resize();
+    render();
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
