@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Synthesis — Living Confluence</title>
+  <title>Synthesis — Living Integration</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,6 +16,9 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb2;
+      --warn:#ffd37d;
+      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -53,16 +56,35 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    .link{
-      display:block;padding:14px 16px;border-radius:16px;text-decoration:none;color:var(--text);
-      background:rgba(7,10,18,.7);border:1px solid rgba(140,170,255,.18);
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    button, input, textarea{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
+    }
+    input, textarea{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    .link:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .link b{display:block;margin-bottom:4px}
-    .link span{color:var(--muted);font-size:.95rem}
-    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .dashboard{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
@@ -73,34 +95,27 @@
       border-radius:18px;
       padding:14px;
     }
-    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    button, input{
-      font:inherit;
-      border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
-      color:var(--text);
+    .links{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
     }
-    input{width:100%;padding:11px 12px}
-    button{
-      padding:11px 14px;
-      cursor:pointer;
+    .link{
+      display:block;
+      padding:14px 16px;
+      border-radius:16px;
+      text-decoration:none;
+      color:var(--text);
+      background:rgba(7,10,18,.7);
+      border:1px solid rgba(140,170,255,.18);
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-    .stat{
-      padding:12px 14px;
-      border-radius:16px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
-    }
+    .link:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .link b{display:block;margin-bottom:4px}
+    .link span{color:var(--muted);font-size:.95rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){
-      .hero{grid-template-columns:1fr}
-      .stats{grid-template-columns:1fr 1fr}
-    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -108,112 +123,124 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Synthesis / Living Confluence</div>
-          <h1>One site.<br/>Many chambers.<br/>One body.</h1>
+          <div class="tag">Synthesis / Living Integration</div>
+          <h1>One site.<br/>Many chambers.<br/>One readable body.</h1>
           <div class="sub">
-            Synthesis gathers the repository into a unified operational surface. Enter any chamber below,
-            or use the local state tools to preserve a whole-site configuration.
+            Synthesis gathers the whole repository into a single operational surface. It does not replace the chambers;
+            it lets humans see how they cooperate.
           </div>
         </div>
 
         <div class="panel">
-          <div class="mini">Unified state note</div>
-          <input id="note" placeholder="e.g. Site aligned for public use" />
+          <label class="mini" for="note">Synthesis note</label>
+          <textarea id="note" placeholder="What should the whole site become next?"></textarea>
+
           <div class="buttons">
-            <button id="saveBtn">Save synthesis</button>
+            <button id="saveBtn">Save snapshot</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear state</button>
+            <button id="clearBtn">Clear snapshots</button>
           </div>
+
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
         </div>
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="dashboard">
+          <div class="tile"><div class="mini">Life</div><b id="lifeState">Awake</b></div>
+          <div class="tile"><div class="mini">Chronicle</div><b id="chronicleState">Awake</b></div>
+          <div class="tile"><div class="mini">Council</div><b id="councilState">Awake</b></div>
+          <div class="tile"><div class="mini">Pathfinder</div><b id="pathState">Awake</b></div>
+          <div class="tile"><div class="mini">Oracle</div><b id="oracleState">Awake</b></div>
+          <div class="tile"><div class="mini">Snapshots</div><b id="savedCount">0</b></div>
+        </div>
+
         <div>
-          <div class="mini">Chamber index</div>
+          <div class="mini">Synthesis reading</div>
+          <div id="out" class="out">The synthesis chamber is waiting to gather the site.</div>
+        </div>
+
+        <div>
+          <div class="mini">Live links</div>
           <div class="links">
-            <a class="link" href="./life.html"><b>Life</b><span>Seed cells, evolve patterns, and watch emergence unfold.</span></a>
-            <a class="link" href="./chronicle.html"><b>Chronicle</b><span>Preserve events, eras, and retrievable becoming.</span></a>
-            <a class="link" href="./council.html"><b>Council</b><span>Deliberate over proposals and choose among futures.</span></a>
-            <a class="link" href="./pathfinder.html"><b>Pathfinder</b><span>Draw routes, place gates, and navigate through the field.</span></a>
-            <a class="link" href="./oracle.html"><b>Oracle</b><span>Ask the site questions and receive layered interpretation.</span></a>
-            <a class="link" href="./atlas.html"><b>Atlas</b><span>Inspect the full site as a practical living index.</span></a>
+            <a class="link" href="./life.html"><b>Life</b><span>Emergence and cellular becoming.</span></a>
+            <a class="link" href="./chronicle.html"><b>Chronicle</b><span>Memory, record, and retrievable history.</span></a>
+            <a class="link" href="./council.html"><b>Council</b><span>Deliberation, vote, and visible judgment.</span></a>
+            <a class="link" href="./pathfinder.html"><b>Pathfinder</b><span>Routes, gates, and navigation.</span></a>
+            <a class="link" href="./oracle.html"><b>Oracle</b><span>Inquiry and interpretation.</span></a>
+            <a class="link" href="./atlas.html"><b>Atlas</b><span>Whole-site index and orientation.</span></a>
           </div>
         </div>
 
         <div>
-          <div class="mini">Synthesis sigil</div>
-          <div id="out" class="out">Synthesis is waiting for a note.</div>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><div class="mini">Chambers</div><b>6+</b></div>
-          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Unified</b></div>
-          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
-        </div>
-
-        <div>
-          <div class="mini">Saved syntheses</div>
-          <div id="savedList" class="out">No saved syntheses yet.</div>
+          <div class="mini">Saved synthesis snapshots</div>
+          <div id="savedList" class="out">No snapshots yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'synthesis-living-confluence-v1';
+    const KEY = 'synthesis-living-integration-v1';
     const noteEl = document.getElementById('note');
     const outEl = document.getElementById('out');
-    const savedCountEl = document.getElementById('savedCount');
-    const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
-
-    const state = load() || { notes: [], saved: [] };
+    const savedCountEl = document.getElementById('savedCount');
+    const state = load() || { snapshots: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ snapshots: state.snapshots })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.notes)){
-          state.notes = obj.notes;
+        if(obj && Array.isArray(obj.snapshots)){
+          state.snapshots = obj.snapshots;
           save();
           render();
         }
       }catch{}
     }
     function renderSaved(){
-      savedCountEl.textContent = String(state.saved.length);
-      savedListEl.textContent = state.saved.length
-        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved syntheses yet.';
+      savedCountEl.textContent = String(state.snapshots.length);
+      savedListEl.textContent = state.snapshots.length
+        ? state.snapshots.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No snapshots yet.';
     }
-    function stateText(n){
-      if(n >= 5) return 'Integrated';
-      if(n >= 2) return 'Binding';
-      if(n >= 1) return 'Awake';
-      return 'Quiet';
+    function status(n){
+      if(n >= 7) return 'Integrated';
+      if(n >= 3) return 'Coherent';
+      if(n >= 1) return 'Assembling';
+      return 'Dormant';
     }
     function render(){
-      const list = state.notes.slice().reverse();
-      stateLabelEl.textContent = stateText(list.length);
-      const last = list[0];
-      outEl.textContent = last
-        ? `Unified note: ${last.note}
-When: ${last.when}
-State: ${stateText(list.length)}
-Code: ${serialize().slice(0,48)}...`
-        : 'Synthesis is waiting for a note.';
+      const n = state.snapshots.length;
+      document.getElementById('lifeState').textContent = status(n);
+      document.getElementById('chronicleState').textContent = status(n);
+      document.getElementById('councilState').textContent = status(n);
+      document.getElementById('pathState').textContent = status(n);
+      document.getElementById('oracleState').textContent = status(n);
+      outEl.textContent = n
+        ? `Synthesis status: ${status(n)}
+Snapshots: ${n}
+Reading:
+The site is no longer a set of separate chambers. It is a coordinated instrument.
+Each chamber contributes a different human function:
+- Life: emergence
+- Chronicle: memory
+- Council: judgment
+- Pathfinder: movement
+- Oracle: meaning
+
+What remains is not more fragments, but more coherence.`
+        : 'The synthesis chamber is waiting to gather the site.';
     }
 
     document.getElementById('saveBtn').onclick = () => {
-      state.notes.push({
-        note: noteEl.value.trim() || 'No note provided.',
-        when: `Turn ${Math.floor(Date.now() / 1000)}`
-      });
+      const code = serialize();
+      state.snapshots.unshift(`note:${(noteEl.value.trim() || 'untitled').slice(0,24)} | ${code.slice(0,10)}…`);
+      state.snapshots = state.snapshots.slice(0, 12);
       save();
       render();
     };
@@ -228,7 +255,7 @@ Code: ${serialize().slice(0,48)}...`
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.notes = [];
+      state.snapshots = [];
       save();
       render();
     };
