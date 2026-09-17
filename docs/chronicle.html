@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chronicle — Living Record</title>
+  <title>Chronicle — Living Memory</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,8 +16,6 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
     }
     *{box-sizing:border-box}
     html,body{
@@ -55,6 +53,7 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
@@ -72,26 +71,17 @@
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:12px;
-      max-height:560px;
-      overflow:auto;
-      padding-right:6px;
-    }
-    .item{
+    .timeline{display:grid;gap:12px}
+    .entry{
       padding:14px;
       border-radius:18px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
-      color:var(--text);
-      transition:.18s transform,.18s border-color;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
-    .item h3{margin:0 0 8px;font-size:1.02rem}
-    .item p{margin:0;color:#dbe8ff;line-height:1.55}
-    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    .entry:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .entry b{display:block;margin-bottom:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
@@ -102,20 +92,17 @@
       border-radius:18px;
       padding:14px;
     }
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-    .stat{
-      padding:12px 14px;
-      border-radius:16px;
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){
-      .hero{grid-template-columns:1fr}
-      .stats{grid-template-columns:1fr 1fr}
-    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -123,153 +110,156 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Chronicle / Living Record</div>
-          <h1>Remember.<br/>Record.<br/>Retrieve.</h1>
+          <div class="tag">Chronicle / Living Memory</div>
+          <h1>Remember.<br/>Record.<br/>Return.</h1>
           <div class="sub">
-            Chronicle turns the repository into a visible memory field. Add entries, tag them, and watch
-            the site become a retrievable history rather than a static archive.
+            Chronicle turns the site into a memory instrument. Humans can add events, browse the timeline, and preserve
+            the story of what the repository has become.
           </div>
         </div>
 
         <div class="panel">
-          <label for="title">Entry title</label>
-          <input id="title" placeholder="e.g. The Council Opens" />
+          <label for="title">Event title</label>
+          <input id="title" placeholder="A milestone, change, or discovery" />
+
+          <label for="body">Event description</label>
+          <textarea id="body" placeholder="Describe what happened and why it matters."></textarea>
 
           <label for="tag">Tag</label>
-          <input id="tag" placeholder="e.g. council, life, synthesis" />
-
-          <label for="body">Entry</label>
-          <textarea id="body" placeholder="What happened? What changed? What should be remembered?"></textarea>
+          <select id="tag">
+            <option value="milestone">Milestone</option>
+            <option value="discovery">Discovery</option>
+            <option value="revision">Revision</option>
+            <option value="reflection">Reflection</option>
+          </select>
 
           <div class="buttons">
-            <button id="addBtn">Add entry</button>
+            <button id="addBtn">Add event</button>
             <button id="saveBtn">Save chronicle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear chronicle</button>
           </div>
 
-          <div class="footer">
-            Return to the portal home: <a href="./index.html">home</a>
-          </div>
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
         </div>
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div>
-          <div class="mini">Chronicle shelf</div>
-          <div id="grid" class="grid"></div>
+        <div class="grid">
+          <div class="tile"><div class="mini">Events</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Latest tag</div><b id="tagLabel">None</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
-          <div class="mini">Chronicle sigil</div>
-          <div id="out" class="out">The chronicle is waiting for an entry.</div>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><div class="mini">Entries</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Quiet</b></div>
-          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Dormant</b></div>
+          <div class="mini">Timeline</div>
+          <div id="timeline" class="timeline"></div>
         </div>
 
         <div>
-          <div class="mini">Saved chronicles</div>
-          <div id="savedList" class="out">No saved chronicles yet.</div>
+          <div class="mini">Chronicle reading</div>
+          <div id="out" class="out">The chronicle is waiting for an event.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved records</div>
+          <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'chronicle-living-record-v1';
+    const KEY = 'chronicle-living-memory-v1';
     const titleEl = document.getElementById('title');
-    const tagEl = document.getElementById('tag');
     const bodyEl = document.getElementById('body');
-    const gridEl = document.getElementById('grid');
+    const tagEl = document.getElementById('tag');
+    const timelineEl = document.getElementById('timeline');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const modeLabelEl = document.getElementById('modeLabel');
+    const tagLabelEl = document.getElementById('tagLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { entries: [], saved: [] };
+    const state = load() || { events: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ events: state.events })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.entries)){
-          state.entries = obj.entries;
+        if(obj && Array.isArray(obj.events)){
+          state.events = obj.events;
           save();
           render();
         }
       }catch{}
     }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved chronicles yet.';
+        : 'No records yet.';
     }
     function stateText(n){
-      if(n >= 8) return 'Abundant';
-      if(n >= 4) return 'Growing';
-      if(n >= 1) return 'Awake';
-      return 'Dormant';
+      if(n >= 6) return 'Historic';
+      if(n >= 3) return 'Growing';
+      if(n >= 1) return 'Beginning';
+      return 'Quiet';
     }
     function render(){
-      gridEl.innerHTML = '';
-      const list = state.entries.slice().reverse();
+      const list = state.events.slice().reverse();
       countEl.textContent = String(list.length);
-      modeLabelEl.textContent = list.length ? 'Narrating' : 'Quiet';
+      tagLabelEl.textContent = list[0]?.tag || 'None';
       stateLabelEl.textContent = stateText(list.length);
+      timelineEl.innerHTML = '';
 
-      list.forEach((e) => {
+      list.forEach(ev => {
         const div = document.createElement('div');
-        div.className = 'item';
+        div.className = 'entry';
         div.innerHTML = `
-          <h3>${escapeHtml(e.title)}</h3>
-          <p class="mini">${escapeHtml(e.tag || 'untagged')}</p>
-          <p style="margin-top:8px">${escapeHtml(e.when || 'Just now')}</p>
+          <b>${ev.title}</b>
+          <div class="mini">${ev.tag} · ${ev.when}</div>
+          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${ev.body}</div>
         `;
         div.onclick = () => {
-          outEl.textContent = `Title: ${e.title}
-Tag: ${e.tag}
-When: ${e.when}
-Entry:
-${e.body}
+          outEl.textContent = `Event: ${ev.title}
+Tag: ${ev.tag}
+When: ${ev.when}
+
+${ev.body}
 
 State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`;
         };
-        gridEl.appendChild(div);
+        timelineEl.appendChild(div);
       });
 
       const last = list[0];
       outEl.textContent = last
-        ? `Title: ${last.title}
+        ? `Event: ${last.title}
 Tag: ${last.tag}
 When: ${last.when}
-Entry:
+
 ${last.body}
 
 State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`
-        : 'The chronicle is waiting for an entry.';
+        : 'The chronicle is waiting for an event.';
     }
 
     document.getElementById('addBtn').onclick = () => {
-      state.entries.push({
-        title: titleEl.value.trim() || 'Untitled entry',
-        tag: tagEl.value.trim() || 'untagged',
-        body: bodyEl.value.trim() || 'No text provided.',
+      const title = titleEl.value.trim() || 'Untitled event';
+      const body = bodyEl.value.trim() || 'No description provided.';
+      const tag = tagEl.value;
+      state.events.push({
+        title,
+        body,
+        tag,
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
@@ -278,7 +268,7 @@ Code: ${serialize().slice(0,48)}...`
 
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`entries:${state.entries.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`events:${state.events.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -293,7 +283,7 @@ Code: ${serialize().slice(0,48)}...`
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.entries = [];
+      state.events = [];
       save();
       render();
     };
