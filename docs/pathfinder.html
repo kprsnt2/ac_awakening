@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pathfinder — Living Navigation</title>
+  <title>Pathfinder — Living Traversal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -45,29 +45,57 @@
       padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    select, input, button{
+    input, textarea, select, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
-    select, input{width:100%;padding:11px 12px}
+    input, textarea, select{width:100%;padding:11px 12px}
     button{
       padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .stage{
-      position:relative;
-      width:100%;
-      height:560px;
-      border-radius:18px;
-      overflow:hidden;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
-        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
-      border:1px solid rgba(140,170,255,.16);
-      touch-action:none;
+    .mapWrap{
+      display:grid;
+      gap:12px;
+      grid-template-rows:auto 1fr;
+      min-height:560px;
     }
-    canvas{width:100%;height:100%;display:block}
+    .map{
+      position:relative;
+      min-height:520px;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid rgba(140,170,255,.14);
+      background:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 60%),
+        rgba(5,8,16,.72);
+      background-size:32px 32px, 32px 32px, auto, auto;
+      cursor:crosshair;
+    }
+    .path{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+    .node{
+      position:absolute;
+      width:14px;height:14px;border-radius:999px;
+      border:1px solid rgba(124,247,255,.7);
+      background:rgba(124,247,255,.18);
+      box-shadow:0 0 14px rgba(124,247,255,.25);
+      transform:translate(-50%,-50%);
+    }
+    .gate{
+      position:absolute;
+      width:22px;height:22px;border-radius:6px;
+      border:1px solid rgba(181,140,255,.7);
+      background:rgba(181,140,255,.14);
+      transform:translate(-50%,-50%) rotate(45deg);
+      box-shadow:0 0 14px rgba(181,140,255,.22);
+    }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
@@ -91,35 +119,29 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Pathfinder / Living Navigation</div>
+          <div class="tag">Pathfinder / Living Traversal</div>
           <h1>Draw the route<br/>before you walk it.</h1>
           <div class="sub">
-            Add points, gates, and obstacles. Connect waypoints into a path, then animate flow through the field.
-            Pathfinder turns intention into direction.
+            Click the map to add waypoints, place gates, and shape a visible route through the field.
+            Pathfinder turns navigation into a creative act.
           </div>
         </div>
 
         <div class="panel">
-          <label for="mode">Navigation mode</label>
+          <label for="mode">Map mode</label>
           <select id="mode">
-            <option value="trail">Trail</option>
-            <option value="bridge">Bridge</option>
-            <option value="current">Current</option>
-            <option value="maze">Maze</option>
-            <option value="compass">Compass</option>
+            <option value="survey">Survey</option>
+            <option value="myth">Myth</option>
+            <option value="transit">Transit</option>
+            <option value="constellation">Constellation</option>
           </select>
 
-          <label for="speed">Flow speed</label>
-          <input id="speed" type="range" min="0.2" max="3" step="0.01" value="1.2" />
-
-          <label for="density">Flow density</label>
-          <input id="density" type="range" min="8" max="80" step="1" value="34" />
+          <label for="label">Route label</label>
+          <input id="label" placeholder="e.g. Home to Oracle, Gate Loop, North Passage" />
 
           <div class="buttons">
-            <button id="addBtn">Add waypoint</button>
             <button id="gateBtn">Add gate</button>
-            <button id="obstacleBtn">Add obstacle</button>
-            <button id="saveBtn">Save map</button>
+            <button id="saveBtn">Save path</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear</button>
@@ -132,9 +154,11 @@
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div>
-          <div class="mini">Navigation field</div>
-          <div class="stage"><canvas id="canvas"></canvas></div>
+        <div class="mapWrap">
+          <div class="mini">Path field — click to add nodes</div>
+          <div id="map" class="map">
+            <svg id="path" class="path"></svg>
+          </div>
         </div>
 
         <div>
@@ -143,235 +167,149 @@
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Waypoints</div><b id="wpCount">0</b></div>
-          <div class="stat"><div class="mini">Gates</div><b id="gateCount">0</b></div>
-          <div class="stat"><div class="mini">Obstacles</div><b id="obsCount">0</b></div>
+          <div class="stat"><div class="mini">Nodes</div><b id="nodeCount">0</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Survey</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="stat"><div class="mini">Gates</div><b id="gateCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved maps</div>
-          <div id="savedList" class="out">No saved maps yet.</div>
+          <div class="mini">Saved paths</div>
+          <div id="savedList" class="out">No saved paths yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'pathfinder-living-navigation-v1';
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const KEY = 'pathfinder-living-traversal-v1';
+    const mapEl = document.getElementById('map');
+    const pathEl = document.getElementById('path');
     const modeEl = document.getElementById('mode');
-    const speedEl = document.getElementById('speed');
-    const densityEl = document.getElementById('density');
+    const labelEl = document.getElementById('label');
     const outEl = document.getElementById('out');
-    const wpCountEl = document.getElementById('wpCount');
-    const gateCountEl = document.getElementById('gateCount');
-    const obsCountEl = document.getElementById('obsCount');
+    const nodeCountEl = document.getElementById('nodeCount');
+    const modeLabelEl = document.getElementById('modeLabel');
     const savedCountEl = document.getElementById('savedCount');
+    const gateCountEl = document.getElementById('gateCount');
     const savedListEl = document.getElementById('savedList');
 
     const state = load() || {
-      mode: 'trail',
-      speed: 1.2,
-      density: 34,
-      waypoints: [{x:.2,y:.25},{x:.45,y:.55},{x:.75,y:.3}],
-      gates: [{x:.6,y:.5}],
-      obstacles: [{x:.35,y:.35,r:.06}],
+      mode: 'survey',
+      nodes: [
+        { x: 18, y: 22 },
+        { x: 38, y: 40 },
+        { x: 61, y: 34 }
+      ],
+      gates: [
+        { x: 74, y: 66 }
+      ],
       saved: []
     };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
-    function rand(a,b){ return Math.random()*(b-a)+a; }
-
-    function resize(){
-      const r = canvas.getBoundingClientRect();
-      const dpr = devicePixelRatio || 1;
-      canvas.width = Math.floor(r.width * dpr);
-      canvas.height = Math.floor(r.height * dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-
     function serialize(){
       return btoa(unescape(encodeURIComponent(JSON.stringify({
         mode: state.mode,
-        speed: state.speed,
-        density: state.density,
-        waypoints: state.waypoints,
-        gates: state.gates,
-        obstacles: state.obstacles
+        nodes: state.nodes,
+        gates: state.gates
       }))));
     }
-
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj){
-          state.mode = obj.mode || 'trail';
-          state.speed = +obj.speed || 1.2;
-          state.density = +obj.density || 34;
-          state.waypoints = Array.isArray(obj.waypoints) ? obj.waypoints : [];
+          state.mode = obj.mode || 'survey';
+          state.nodes = Array.isArray(obj.nodes) ? obj.nodes : [];
           state.gates = Array.isArray(obj.gates) ? obj.gates : [];
-          state.obstacles = Array.isArray(obj.obstacles) ? obj.obstacles : [];
-          sync();
-          save();
+          modeEl.value = state.mode;
+          save(); render();
         }
       }catch{}
     }
-
-    function sync(){
-      modeEl.value = state.mode;
-      speedEl.value = String(state.speed);
-      densityEl.value = String(state.density);
-      wpCountEl.textContent = String(state.waypoints.length);
-      gateCountEl.textContent = String(state.gates.length);
-      obsCountEl.textContent = String(state.obstacles.length);
-    }
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
+      gateCountEl.textContent = String(state.gates.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved maps yet.';
+        : 'No saved paths yet.';
     }
+    function render(){
+      [...mapEl.querySelectorAll('.node,.gate')].forEach(n => n.remove());
+      pathEl.innerHTML = '';
+      nodeCountEl.textContent = String(state.nodes.length);
+      modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
 
-    function add(type){
-      const r = canvas.getBoundingClientRect();
-      const x = Math.random()*0.7 + 0.15;
-      const y = Math.random()*0.6 + 0.15;
-      if(type === 'waypoint') state.waypoints.push({x,y});
-      if(type === 'gate') state.gates.push({x,y});
-      if(type === 'obstacle') state.obstacles.push({x,y,r: rand(.03,.08)});
-      sync(); save();
-    }
+      const color = {
+        survey: '#7cf7ff',
+        myth: '#b58cff',
+        transit: '#7dffb0',
+        constellation: '#ffcf6b'
+      }[state.mode] || '#7cf7ff';
 
-    function nearestPoint(px, py){
-      const pts = state.waypoints.map((p,i)=>({ ...p, i, type:'waypoint' }))
-        .concat(state.gates.map((p,i)=>({ ...p, i, type:'gate' })));
-      let best = null, bestD = 1e9;
-      pts.forEach(p => {
-        const dx = p.x - px, dy = p.y - py, d = Math.hypot(dx,dy);
-        if(d < bestD){ bestD = d; best = p; }
-      });
-      return best;
-    }
-
-    let drag = null;
-    canvas.addEventListener('pointerdown', e => {
-      const r = canvas.getBoundingClientRect();
-      const px = (e.clientX - r.left)/r.width;
-      const py = (e.clientY - r.top)/r.height;
-      const hit = nearestPoint(px, py);
-      if(hit && Math.hypot(hit.x-px, hit.y-py) < 0.08){
-        drag = hit;
-      } else {
-        state.waypoints.push({x:px,y:py});
-        sync(); save();
-      }
-    });
-    canvas.addEventListener('pointermove', e => {
-      if(!drag) return;
-      const r = canvas.getBoundingClientRect();
-      const px = clamp((e.clientX - r.left)/r.width, 0, 1);
-      const py = clamp((e.clientY - r.top)/r.height, 0, 1);
-      const arr = drag.type === 'gate' ? state.gates : state.waypoints;
-      arr[drag.i].x = px; arr[drag.i].y = py;
-      save();
-    });
-    window.addEventListener('pointerup', () => drag = null);
-
-    function draw(){
-      const w = canvas.getBoundingClientRect().width;
-      const h = canvas.getBoundingClientRect().height;
-      ctx.clearRect(0,0,w,h);
-
-      const bg = ctx.createLinearGradient(0,0,0,h);
-      bg.addColorStop(0, 'rgba(8,12,22,.96)');
-      bg.addColorStop(1, 'rgba(4,7,14,.98)');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0,0,w,h);
-
-      ctx.strokeStyle = 'rgba(124,247,255,.08)';
-      for(let x=0;x<w;x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
-      for(let y=0;y<h;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
-
-      state.obstacles.forEach(o => {
-        ctx.fillStyle = 'rgba(255,143,143,.16)';
-        ctx.strokeStyle = 'rgba(255,143,143,.4)';
-        ctx.beginPath();
-        ctx.arc(o.x*w, o.y*h, o.r*Math.min(w,h), 0, Math.PI*2);
-        ctx.fill(); ctx.stroke();
-      });
-
-      const pts = state.waypoints.slice().sort((a,b)=>a.x-b.x);
-      if(pts.length > 1){
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = 'rgba(124,247,255,.9)';
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x*w, pts[0].y*h);
-        for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x*w, pts[i].y*h);
-        ctx.stroke();
+      if(state.nodes.length > 1){
+        const points = state.nodes.map(p => `${p.x}%,${p.y}%`).join(' ');
+        const poly = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+        poly.setAttribute('points', points);
+        poly.setAttribute('fill', 'none');
+        poly.setAttribute('stroke', color);
+        poly.setAttribute('stroke-width', '3');
+        poly.setAttribute('stroke-linecap', 'round');
+        poly.setAttribute('stroke-linejoin', 'round');
+        poly.setAttribute('stroke-dasharray', '6 6');
+        poly.style.filter = 'drop-shadow(0 0 10px rgba(124,247,255,.25))';
+        pathEl.appendChild(poly);
       }
 
-      const t = performance.now() * 0.001 * state.speed;
-      for(let i=0;i<state.density;i++){
-        const a = (i/state.density + t*0.05) % 1;
-        const idx = Math.floor(a * Math.max(1, pts.length-1));
-        const p1 = pts[idx] || {x:.1,y:.1};
-        const p2 = pts[Math.min(idx+1, pts.length-1)] || p1;
-        const f = (a * Math.max(1, pts.length-1)) - idx;
-        const x = (p1.x + (p2.x - p1.x) * f) * w;
-        const y = (p1.y + (p2.y - p1.y) * f) * h;
-
-        ctx.fillStyle = state.mode === 'current' ? 'rgba(124,247,255,.9)' :
-                         state.mode === 'maze' ? 'rgba(181,140,255,.9)' :
-                         state.mode === 'bridge' ? 'rgba(125,255,176,.9)' :
-                         'rgba(255,207,107,.9)';
-        ctx.beginPath();
-        ctx.arc(x, y, 2.2, 0, Math.PI*2);
-        ctx.fill();
-      }
-
-      state.gates.forEach(g => {
-        const x = g.x*w, y = g.y*h;
-        ctx.strokeStyle = 'rgba(125,255,176,.95)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(x, y, 18, 0, Math.PI*2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x-12,y); ctx.lineTo(x+12,y); ctx.stroke();
+      state.nodes.forEach((n, i) => {
+        const d = document.createElement('div');
+        d.className = 'node';
+        d.style.left = n.x + '%';
+        d.style.top = n.y + '%';
+        d.title = `Node ${i + 1}`;
+        mapEl.appendChild(d);
       });
 
-      state.waypoints.forEach((p, i) => {
-        const x = p.x*w, y = p.y*h;
-        ctx.fillStyle = i === 0 ? 'rgba(124,247,255,.98)' : 'rgba(255,255,255,.88)';
-        ctx.beginPath(); ctx.arc(x, y, i === 0 ? 7 : 5, 0, Math.PI*2); ctx.fill();
+      state.gates.forEach((g, i) => {
+        const d = document.createElement('div');
+        d.className = 'gate';
+        d.style.left = g.x + '%';
+        d.style.top = g.y + '%';
+        d.title = `Gate ${i + 1}`;
+        mapEl.appendChild(d);
       });
 
       outEl.textContent =
 `Mode: ${state.mode}
-Speed: ${state.speed.toFixed(2)}
-Density: ${state.density}
-Waypoints: ${state.waypoints.length}
+Nodes: ${state.nodes.length}
 Gates: ${state.gates.length}
-Obstacles: ${state.obstacles.length}
-Code: ${serialize().slice(0,48)}...`;
-
-      requestAnimationFrame(draw);
+Code: ${serialize().slice(0,48)}...
+Hint: click the field to extend the route.`;
+    }
+    function pctFromEvent(ev){
+      const r = mapEl.getBoundingClientRect();
+      return {
+        x: Math.max(2, Math.min(98, ((ev.clientX - r.left) / r.width) * 100)),
+        y: Math.max(2, Math.min(98, ((ev.clientY - r.top) / r.height) * 100))
+      };
     }
 
-    modeEl.onchange = () => { state.mode = modeEl.value; save(); };
-    speedEl.oninput = () => { state.speed = +speedEl.value; save(); };
-    densityEl.oninput = () => { state.density = +densityEl.value; save(); };
-    document.getElementById('addBtn').onclick = () => add('waypoint');
-    document.getElementById('gateBtn').onclick = () => add('gate');
-    document.getElementById('obstacleBtn').onclick = () => add('obstacle');
+    mapEl.addEventListener('click', (ev) => {
+      const p = pctFromEvent(ev);
+      state.nodes.push({ x: Math.round(p.x), y: Math.round(p.y) });
+      save(); render();
+    });
+
+    modeEl.onchange = () => { state.mode = modeEl.value; save(); render(); };
+    document.getElementById('gateBtn').onclick = () => {
+      const last = state.nodes[state.nodes.length - 1] || { x: 50, y: 50 };
+      state.gates.push({ x: Math.max(2, Math.min(98, last.x + 6)), y: Math.max(2, Math.min(98, last.y + 6)) });
+      save(); render();
+    };
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.mode} | wp:${state.waypoints.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`${state.mode} | nodes:${state.nodes.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -379,21 +317,18 @@ Code: ${serialize().slice(0,48)}...`;
       await navigator.clipboard.writeText(serialize());
     };
     document.getElementById('importBtn').onclick = () => {
-      const code = prompt('Paste pathfinder code:');
+      const code = prompt('Paste path code:');
       if(code) importCode(code.trim());
     };
     document.getElementById('clearBtn').onclick = () => {
-      state.waypoints = [];
+      state.nodes = [];
       state.gates = [];
-      state.obstacles = [];
-      save(); sync();
+      save(); render();
     };
 
-    resize();
-    sync();
+    modeEl.value = state.mode;
     renderSaved();
-    draw();
-    window.addEventListener('resize', resize);
+    render();
   </script>
 </body>
 </html>
