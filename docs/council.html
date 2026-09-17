@@ -9,24 +9,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050816;
-      --text:#eaf2ff;
-      --muted:#9db0d1;
+      --bg:#071016;
+      --text:#eef7ff;
+      --muted:#a9bfd3;
       --accent:#7cf7ff;
-      --accent2:#b58cff;
-      --line: rgba(140,170,255,.18);
-      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --accent2:#ffd37d;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
       --good:#7dffb2;
-      --warn:#ffd37d;
       --bad:#ff8f9b;
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(92,119,255,.14), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.08), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -34,7 +33,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      background:linear-gradient(180deg, rgba(18,28,40,.82), rgba(8,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -43,7 +42,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -53,16 +52,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(7,16,22,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#dff4ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(7,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -72,40 +71,44 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,24,32,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(7,16,22,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#dbe8ff;
+      color:#e7f2ff;
       min-height:180px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(7,16,22,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
     .proposal{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
-      cursor:pointer;
-      transition:.18s transform,.18s border-color,.18s background;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(7,16,22,.72);
+      border:1px solid rgba(124,247,255,.14);
+      display:grid;
+      gap:8px;
     }
-    .proposal:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .proposal.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
-    .bar{
-      height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px
+    .proposal-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .score{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--good);
+      font-size:.85rem;
     }
-    .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .vote{
+      display:flex;gap:8px;flex-wrap:wrap
+    }
+    .vote button{padding:8px 10px;border-radius:12px}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -117,32 +120,21 @@
       <section class="card intro">
         <div>
           <div class="tag">Council / Living Deliberation</div>
-          <h1>Submit the proposal.<br/>Cast the vote.<br/>Preserve the decision.</h1>
+          <h1>Bring a proposal.<br/>Cast a vote.<br/>Leave with a decision.</h1>
           <div class="sub">
-            Council turns the repository into a civic instrument. Humans can propose priorities, vote, and keep a local record of what the site should become next.
+            Council turns the repository into a public deliberation chamber. Humans can propose ideas, compare them, vote, and preserve outcomes locally.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Proposal title</label>
-          <input id="title" placeholder="What should the site do next?" />
+          <input id="title" placeholder="e.g. Build a new game chamber" />
 
-          <label for="category">Category</label>
-          <select id="category">
-            <option value="integration">Integration</option>
-            <option value="play">Play</option>
-            <option value="memory">Memory</option>
-            <option value="route">Route</option>
-            <option value="meaning">Meaning</option>
-            <option value="tooling">Tooling</option>
-          </select>
-
-          <label for="body">Proposal text</label>
-          <textarea id="body" placeholder="Describe the change, feature, or direction."></textarea>
+          <label for="body">Proposal summary</label>
+          <textarea id="body" placeholder="Describe the idea, why it matters, and what it would do for humans."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add proposal</button>
-            <button id="voteBtn">Vote selected</button>
+            <button id="proposeBtn">Submit proposal</button>
             <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -156,19 +148,19 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Proposals</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Votes cast</div><b id="votesLabel">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
+          <div class="tile"><div class="mini">Consensus</div><b id="consensusLabel">Undecided</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Council reading</div>
+          <div id="out" class="out">The council is quiet.</div>
         </div>
 
         <div>
           <div class="mini">Active proposals</div>
           <div id="list" style="display:grid;gap:10px"></div>
-        </div>
-
-        <div>
-          <div class="mini">Council reading</div>
-          <div id="out" class="out">The council is waiting for its first proposal.</div>
         </div>
 
         <div>
@@ -182,17 +174,16 @@
   <script>
     const KEY = 'council-living-deliberation-v1';
     const titleEl = document.getElementById('title');
-    const categoryEl = document.getElementById('category');
     const bodyEl = document.getElementById('body');
-    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
+    const listEl = document.getElementById('list');
     const countEl = document.getElementById('count');
-    const votesLabelEl = document.getElementById('votesLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
+    const consensusLabelEl = document.getElementById('consensusLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { proposals: [], selected: 0, saved: [] };
+    const state = load() || { proposals: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
@@ -202,7 +193,6 @@
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj && Array.isArray(obj.proposals)){
           state.proposals = obj.proposals;
-          state.selected = 0;
           save();
           render();
         }
@@ -214,68 +204,62 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function stateText(n){
-      if(n >= 5) return 'Decisive';
-      if(n >= 2) return 'Active';
-      if(n >= 1) return 'Forming';
-      return 'Quiet';
+    function consensus(){
+      if(!state.proposals.length) return 'Undecided';
+      const avg = state.proposals.reduce((a,p)=>a + p.votes, 0) / state.proposals.length;
+      if(avg >= 8) return 'Strong';
+      if(avg >= 4) return 'Emerging';
+      return 'Fragile';
     }
     function render(){
       countEl.textContent = String(state.proposals.length);
-      const votes = state.proposals.reduce((a,p)=>a + p.votes, 0);
-      votesLabelEl.textContent = String(votes);
-      stateLabelEl.textContent = stateText(state.proposals.length);
+      stateLabelEl.textContent = state.proposals.length ? 'In session' : 'Quiet';
+      consensusLabelEl.textContent = consensus();
 
       listEl.innerHTML = '';
-      state.proposals.forEach((p, idx) => {
+      state.proposals.forEach((p, i) => {
         const div = document.createElement('div');
-        div.className = 'proposal' + (idx === state.selected ? ' active' : '');
+        div.className = 'proposal';
         div.innerHTML = `
-          <b>${p.title}</b>
-          <div class="mini">${p.category} · ${p.votes} vote${p.votes === 1 ? '' : 's'}</div>
-          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${p.body}</div>
-          <div class="bar"><div class="fill" style="width:${Math.min(100, 18 + p.votes * 16)}%"></div></div>
+          <div class="proposal-head">
+            <b>${p.title}</b>
+            <span class="score">${p.votes} votes</span>
+          </div>
+          <div class="mini">${p.body}</div>
+          <div class="vote">
+            <button data-v="+1">+1</button>
+            <button data-v="-1">-1</button>
+            <button data-v="reset">Reset</button>
+          </div>
         `;
-        div.onclick = () => { state.selected = idx; render(); };
+        div.querySelector('[data-v="+1"]').onclick = () => { p.votes += 1; save(); render(); };
+        div.querySelector('[data-v="-1"]').onclick = () => { p.votes -= 1; save(); render(); };
+        div.querySelector('[data-v="reset"]').onclick = () => { p.votes = 0; save(); render(); };
         listEl.appendChild(div);
       });
 
-      const p = state.proposals[state.selected];
-      outEl.textContent = p
-        ? `${p.title}
-Category: ${p.category}
-Votes: ${p.votes}
-
-${p.body}
-
-Reading:
-This proposal is currently selected. Council can strengthen or replace it through visible choice.`
-        : 'The council is waiting for its first proposal.';
+      outEl.textContent = state.proposals.length
+        ? `Council in session: ${state.proposals.length} proposal(s)\nConsensus: ${consensus()}\n\nThe chamber is choosing among visible options.`
+        : 'The council is quiet.';
     }
 
-    document.getElementById('addBtn').onclick = () => {
-      state.proposals.unshift({
-        title: titleEl.value.trim() || 'Untitled proposal',
-        category: categoryEl.value,
-        body: bodyEl.value.trim() || 'No details provided.',
-        votes: 0
-      });
-      state.selected = 0;
+    document.getElementById('proposeBtn').onclick = () => {
+      const title = titleEl.value.trim() || 'untitled proposal';
+      const body = bodyEl.value.trim() || 'No summary provided.';
+      state.proposals.unshift({ title, body, votes: 0, when: new Date().toISOString() });
+      state.proposals = state.proposals.slice(0, 20);
       save();
       render();
-    };
-
-    document.getElementById('voteBtn').onclick = () => {
-      const p = state.proposals[state.selected];
-      if(p){ p.votes += 1; save(); render(); }
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.saved.unshift(`proposals:${state.proposals.length} | ${code.slice(0,10)}…`);
-      state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      const last = state.proposals[0];
+      if(last){
+        state.saved.unshift(`${last.title.slice(0, 28)}… | ${last.votes} votes`);
+        state.saved = state.saved.slice(0, 12);
+        save();
+        render();
+      }
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -289,7 +273,6 @@ This proposal is currently selected. Council can strengthen or replace it throug
 
     document.getElementById('clearBtn').onclick = () => {
       state.proposals = [];
-      state.selected = 0;
       save();
       render();
     };
