@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Continuum — Living Continuity Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07121a;
+      --text:#f2fbff;
+      --muted:#a8c4d5;
+      --accent:#7cf7ff;
+      --accent2:#9bffb8;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(155,255,184,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(155,255,184,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1600px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(14,24,34,.82), rgba(8,12,18,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{
+      font-family:"IBM Plex Mono",monospace;
+      color:var(--accent2);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+    }
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#effbff;font-size:.92rem}
+    input, textarea, button, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(8,12,18,.72);
+      color:var(--text);
+    }
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(155,255,184,.5);background:rgba(16,22,30,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .tile{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+    }
+    .tile b{display:block;font-size:1.1rem;margin-top:6px}
+    .out{
+      white-space:pre-wrap;
+      line-height:1.65;
+      color:#eefcff;
+      min-height:180px;
+      background:rgba(8,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      border-radius:18px;
+      padding:14px;
+    }
+    .field{
+      position:relative;
+      height:560px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 58%),
+        linear-gradient(rgba(124,247,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,247,255,.05) 1px, transparent 1px),
+        rgba(8,12,18,.72);
+      background-size:auto, 40px 40px, 40px 40px, auto;
+      border:1px solid rgba(124,247,255,.14);
+      overflow:hidden;
+    }
+    .step{
+      position:absolute;
+      width:34px;height:34px;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
+      box-shadow:0 0 18px rgba(124,247,255,.32);
+      cursor:pointer;
+    }
+    .step.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
+    .linkline{
+      position:absolute;
+      height:3px;
+      background:rgba(124,247,255,.35);
+      transform-origin:left center;
+      pointer-events:none;
+      box-shadow:0 0 12px rgba(124,247,255,.18);
+    }
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Continuum / Living Continuity Engine</div>
+          <h1>Carry the next step.<br/>Bridge the chambers.<br/>Keep the passage alive.</h1>
+          <div class="sub">
+            Continuum turns the repository into a continuity engine. Humans can stitch chambers into sequences, define handoffs, and preserve an unfolding path through the site.
+          </div>
+        </div>
+
+        <div class="panel">
+          <label for="name">Sequence name</label>
+          <input id="name" placeholder="e.g. Memory to Movement" />
+
+          <label for="mode">Continuity mode</label>
+          <select id="mode">
+            <option value="flow">Flow</option>
+            <option value="handoff">Handoff</option>
+            <option value="thread">Thread</option>
+            <option value="spiral">Spiral</option>
+          </select>
+
+          <label for="note">Continuity note</label>
+          <textarea id="note" placeholder="e.g. Echoes hands off to Voyage, then returns through Resonance and Forge."></textarea>
+
+          <div class="buttons">
+            <button id="addBtn">Add step</button>
+            <button id="linkBtn">Link passage</button>
+            <button id="shiftBtn">Shift continuity</button>
+            <button id="saveBtn">Save sequence</button>
+            <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear sequence</button>
+          </div>
+
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div class="grid">
+          <div class="tile"><div class="mini">Steps</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Dormant</b></div>
+          <div class="tile"><div class="mini">Continuity</div><b id="continuityLabel">0%</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Continuity field</div>
+          <div id="field" class="field"></div>
+        </div>
+
+        <div>
+          <div class="mini">Continuity reading</div>
+          <div id="out" class="out">Add steps to begin the passage.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved sequences</div>
+          <div id="savedList" class="out">No records yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'continuum-living-continuity-v1';
+    const state = load() || { steps: [], saved: [], continuity: 20 };
+
+    const field = document.getElementById('field');
+    const outEl = document.getElementById('out');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const continuityLabelEl = document.getElementById('continuityLabel');
+    const nameEl = document.getElementById('name');
+    const modeEl = document.getElementById('mode');
+    const noteEl = document.getElementById('note');
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ steps: state.steps, continuity: state.continuity })))) }
+    function importCode(code){
+      try{
+        const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
+        if(obj && Array.isArray(obj.steps)){
+          state.steps = obj.steps;
+          state.continuity = Number(obj.continuity ?? 20);
+          save(); render();
+        }
+      }catch{}
+    }
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
+    }
+    function continuity(){
+      return Math.max(0, Math.min(100, Math.round((state.steps.length * 12) + state.continuity)));
+    }
+    function makeStep(name, mode){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        mode,
+        note: noteEl.value.trim() || 'A step in the passage.',
+        x: 120 + Math.random() * 420,
+        y: 120 + Math.random() * 320
+      };
+    }
+    function render(){
+      countEl.textContent = String(state.steps.length);
+      stateLabelEl.textContent = state.steps.length ? 'Flowing' : 'Dormant';
+      continuityLabelEl.textContent = `${continuity()}%`;
+      field.querySelectorAll('.step,.linkline').forEach(n => n.remove());
+
+      state.steps.forEach((s, idx) => {
+        const el = document.createElement('div');
+        el.className = 'step' + (s.mode === 'spiral' ? ' core' : '');
+        el.style.left = s.x + 'px';
+        el.style.top = s.y + 'px';
+        el.title = s.name;
+        el.onclick = () => outEl.textContent = `${s.name}\n\nMode: ${s.mode}\nContinuity: ${continuity()}%\n\n${s.note}`;
+        field.appendChild(el);
+
+        const next = state.steps[idx + 1];
+        if(next){
+          const dx = next.x - s.x;
+          const dy = next.y - s.y;
+          const len = Math.hypot(dx, dy);
+          const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+          const line = document.createElement('div');
+          line.className = 'linkline';
+          line.style.left = s.x + 'px';
+          line.style.top = s.y + 'px';
+          line.style.width = len + 'px';
+          line.style.transform = `rotate(${angle}deg)`;
+          field.appendChild(line);
+        }
+      });
+
+      outEl.textContent = state.steps.length
+        ? 'Select a step to inspect it, or link the passage into a longer continuity.'
+        : 'Add steps to begin the passage.';
+    }
+
+    document.getElementById('addBtn').onclick = () => {
+      const name = nameEl.value.trim() || `Step ${state.steps.length + 1}`;
+      state.steps.unshift(makeStep(name, modeEl.value));
+      save(); render();
+      outEl.textContent = `${name}\n\nMode: ${modeEl.value}\nNote: ${noteEl.value.trim() || 'A step in the passage.'}`;
+    };
+
+    document.getElementById('linkBtn').onclick = () => {
+      state.continuity = Math.min(100, state.continuity + 12);
+      state.steps.forEach((s, i) => {
+        if(modeEl.value === 'spiral') {
+          s.x += Math.random() * 40 - 20;
+          s.y += Math.random() * 40 - 20;
+        } else if(modeEl.value === 'thread' && i % 2 === 0) {
+          s.y += 24;
+        }
+      });
+      save(); render();
+      outEl.textContent = `The passage links forward.\n\nContinuity: ${continuity()}%`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.continuity = Math.max(0, state.continuity - 8);
+      state.steps.reverse();
+      save(); render();
+      outEl.textContent = 'The sequence shifts and the flow reverses.';
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`steps:${state.steps.length} | continuity:${continuity()}%`);
+      state.saved = state.saved.slice(0, 12);
+      save(); render();
+    };
+
+    document.getElementById('exportBtn').onclick = async () => {
+      await navigator.clipboard.writeText(serialize());
+    };
+
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste continuity code:');
+      if(code) importCode(code.trim());
+    };
+
+    document.getElementById('clearBtn').onclick = () => {
+      state.steps = [];
+      state.continuity = 20;
+      save(); render();
+    };
+
+    renderSaved();
+    render();
+  </script>
+</body>
+</html>
