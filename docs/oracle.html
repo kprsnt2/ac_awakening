@@ -9,20 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#090814;
-      --text:#f1ecff;
-      --muted:#b3a8d6;
-      --accent:#b58cff;
-      --accent2:#7cf7ff;
-      --line: rgba(181,140,255,.16);
-      --glow: 0 0 24px rgba(181,140,255,.14), 0 0 48px rgba(124,247,255,.08);
+      --bg:#0a0814;
+      --text:#f6f1ff;
+      --muted:#c8badf;
+      --accent:#c58cff;
+      --accent2:#8fd3ff;
+      --line: rgba(197,140,255,.16);
+      --glow: 0 0 24px rgba(197,140,255,.14), 0 0 48px rgba(143,211,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(181,140,255,.14), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 18% 20%, rgba(197,140,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(143,211,255,.10), transparent 24%),
         radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,14,34,.82), rgba(8,7,16,.88));
+      background:linear-gradient(180deg, rgba(24,18,40,.82), rgba(10,8,16,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(8,7,16,.72);
-      border:1px solid rgba(181,140,255,.14);
+      background:rgba(10,8,16,.72);
+      border:1px solid rgba(197,140,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#f5efff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#fff6ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(181,140,255,.22);
-      background:rgba(8,7,16,.72);
+      border:1px solid rgba(197,140,255,.22);
+      background:rgba(10,8,16,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,41 +69,34 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,14,28,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(18,12,28,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(8,7,16,.72);
-      border:1px solid rgba(181,140,255,.14);
+      background:rgba(10,8,16,.72);
+      border:1px solid rgba(197,140,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#f0eaff;
+      color:#f4ebff;
       min-height:180px;
-      background:rgba(8,7,16,.72);
-      border:1px solid rgba(181,140,255,.14);
+      background:rgba(10,8,16,.72);
+      border:1px solid rgba(197,140,255,.14);
       border-radius:18px;
       padding:14px;
     }
     .list{
-      display:grid;
-      gap:10px;
-      max-height: 520px;
-      overflow:auto;
-      padding-right:4px;
+      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
     }
     .item{
-      padding:12px 14px;
-      border-radius:16px;
-      background:rgba(8,7,16,.72);
-      border:1px solid rgba(181,140,255,.14);
-      cursor:pointer;
+      padding:12px 14px;border-radius:16px;background:rgba(10,8,16,.72);
+      border:1px solid rgba(197,140,255,.14);cursor:pointer;
     }
-    .item:hover{border-color:rgba(181,140,255,.45)}
+    .item:hover{border-color:rgba(197,140,255,.45)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
@@ -117,22 +110,30 @@
       <section class="card intro">
         <div>
           <div class="tag">Oracle / Living Interpreter</div>
-          <h1>Ask the site.<br/>Receive a reading.<br/>Interpret the threshold.</h1>
+          <h1>Ask the site.<br/>Read the signs.<br/>Receive the answer.</h1>
           <div class="sub">
-            Oracle turns the repository into a chamber of layered interpretation. Humans can ask questions, receive symbolic readings, and keep a record of what the site answered.
+            Oracle turns the repository into an interpretive chamber. Humans can ask questions, receive layered readings, and preserve the meanings that emerge.
           </div>
         </div>
 
         <div class="panel">
           <label for="question">Question</label>
-          <textarea id="question" placeholder="Ask the site something: about a chamber, a path, a decision, or a future form."></textarea>
+          <textarea id="question" placeholder="Ask about a chamber, a path, a choice, or the site as a whole."></textarea>
+
+          <label for="mode">Reading mode</label>
+          <select id="mode">
+            <option value="direct">Direct</option>
+            <option value="symbolic">Symbolic</option>
+            <option value="strategic">Strategic</option>
+            <option value="mythic">Mythic</option>
+          </select>
 
           <div class="buttons">
-            <button id="askBtn">Ask oracle</button>
+            <button id="readBtn">Read omen</button>
             <button id="saveBtn">Save reading</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear archive</button>
+            <button id="clearBtn">Clear readings</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -142,8 +143,8 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Readings</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Listening</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unspoken</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Direct</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
@@ -158,7 +159,7 @@
         </div>
 
         <div>
-          <div class="mini">Saved readings</div>
+          <div class="mini">Saved omens</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -170,6 +171,7 @@
     const state = load() || { readings: [], saved: [] };
 
     const questionEl = document.getElementById('question');
+    const modeEl = document.getElementById('mode');
     const outEl = document.getElementById('out');
     const listEl = document.getElementById('list');
     const countEl = document.getElementById('count');
@@ -177,17 +179,6 @@
     const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
     const modeLabelEl = document.getElementById('modeLabel');
-
-    const fragments = [
-      'The site answers by opening a door rather than closing a case.',
-      'What is unclear may still be actionable.',
-      'A chamber is strongest when it can be revisited.',
-      'The next move is often hidden inside the question itself.',
-      'Naming a thing changes the route toward it.',
-      'The archive remembers what the moment could not hold.',
-      'Interpretation is a way of making motion from ambiguity.',
-      'Every public tool becomes a mirror for its users.'
-    ];
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
@@ -197,12 +188,10 @@
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj && Array.isArray(obj.readings)){
           state.readings = obj.readings;
-          save();
-          render();
+          save(); render();
         }
       }catch{}
     }
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
@@ -210,59 +199,60 @@
         : 'No records yet.';
     }
 
+    function interpret(q, mode){
+      const lower = q.toLowerCase();
+      const tone = lower.includes('forge') ? 'creative ignition' :
+                   lower.includes('path') ? 'movement and choice' :
+                   lower.includes('memory') ? 'continuity and return' :
+                   lower.includes('network') || lower.includes('link') ? 'relation and structure' :
+                   lower.includes('life') || lower.includes('grow') ? 'emergence and patience' :
+                   'attention and becoming';
+
+      const advice = {
+        direct: `The site answers plainly: attend to ${tone}.`,
+        symbolic: `Symbolically, the question gathers around ${tone}; the chamber reflects this as a living sign.`,
+        strategic: `Strategically, the most useful next move is to reinforce ${tone} and preserve what it changes.`,
+        mythic: `Mythically, the question opens a gate toward ${tone}, and the repository becomes a witness to its own becoming.`
+      }[mode];
+
+      const omen = [
+        'A bright edge appears in the lattice.',
+        'The chamber hums with a quiet alignment.',
+        'The answer is less a verdict than a direction.',
+        'What is asked returns as a shape the site can hold.'
+      ][Math.floor(Math.random() * 4)];
+
+      return `${advice}\n\nQuestion: ${q || '—'}\nMode: ${mode}\n\nOmen: ${omen}`;
+    }
+
     function render(){
       countEl.textContent = String(state.readings.length);
-      stateLabelEl.textContent = state.readings.length ? 'Speaking' : 'Quiet';
-      modeLabelEl.textContent = state.readings.length ? 'Responding' : 'Listening';
+      stateLabelEl.textContent = state.readings.length ? 'Speaking' : 'Unspoken';
+      modeLabelEl.textContent = modeEl.options[modeEl.selectedIndex].text;
       listEl.innerHTML = '';
       state.readings.forEach(r => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${r.question}</b><span>${r.answer.slice(0, 80)}${r.answer.length > 80 ? '…' : ''}</span>`;
-        el.onclick = () => {
-          outEl.textContent = `Question: ${r.question}\n\nAnswer:\n${r.answer}`;
-        };
+        el.innerHTML = `<b>${r.mode}</b><span>${r.question.slice(0, 90)}${r.question.length > 90 ? '…' : ''}</span>`;
+        el.onclick = () => outEl.textContent = r.response;
         listEl.appendChild(el);
       });
-      outEl.textContent = state.readings.length
-        ? 'Select a reading to revisit it, or ask a new question of the site.'
-        : 'The oracle is listening.';
+      if(!state.readings.length) listEl.innerHTML = '';
     }
 
-    function answer(question){
-      const q = question.trim();
-      const seed = q.length + state.readings.length;
-      const picks = [
-        fragments[seed % fragments.length],
-        fragments[(seed + 3) % fragments.length],
-        fragments[(seed + 5) % fragments.length]
-      ];
-      return [
-        picks[0],
-        '',
-        `Question detected: ${q || 'an unnamed inquiry'}.`,
-        picks[1],
-        picks[2],
-        '',
-        'The site recommends making, linking, or revisiting a chamber before deciding.',
-      ].join('\n');
-    }
-
-    document.getElementById('askBtn').onclick = () => {
-      const question = questionEl.value.trim() || 'What should the site become next?';
-      const reply = answer(question);
-      state.readings.unshift({ id: Date.now(), question, answer: reply });
-      save();
-      render();
-      outEl.textContent = `Question: ${question}\n\nAnswer:\n${reply}`;
-      questionEl.value = '';
+    document.getElementById('readBtn').onclick = () => {
+      const q = questionEl.value.trim();
+      const mode = modeEl.value;
+      const response = interpret(q, mode);
+      state.readings.unshift({ id: Date.now(), question: q, mode, response });
+      save(); render();
+      outEl.textContent = response;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`readings:${state.readings.length}`);
+      state.saved.unshift(`readings:${state.readings.length} | latest:${(state.readings[0]?.mode || 'none')}`);
       state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -276,10 +266,11 @@
 
     document.getElementById('clearBtn').onclick = () => {
       state.readings = [];
-      save();
-      render();
+      save(); render();
+      outEl.textContent = 'The oracle is listening.';
     };
 
+    modeEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
