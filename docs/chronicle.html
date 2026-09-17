@@ -18,6 +18,7 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
+      --bad:#ff8aa1;
     }
     *{box-sizing:border-box}
     html,body{
@@ -64,7 +65,7 @@
       color:var(--text);
     }
     input, textarea{width:100%;padding:11px 12px}
-    textarea{min-height:96px;resize:vertical}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
@@ -96,7 +97,7 @@
       white-space:pre-wrap;
       line-height:1.6;
       color:#dbe8ff;
-      min-height:140px;
+      min-height:170px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       border-radius:18px;
@@ -124,26 +125,23 @@
       <section class="card intro">
         <div>
           <div class="tag">Chronicle / Living Archive</div>
-          <h1>Remember what happened.<br/>Trace what became.</h1>
+          <h1>Remember what happened.<br/>Make it retrievable.</h1>
           <div class="sub">
-            Chronicle turns the site’s becoming into a searchable archive. Record moments,
-            browse eras, and preserve the living record of the repository.
+            Chronicle turns the site into a memory instrument. Record an event, mark its era,
+            and let the archive preserve the path of becoming.
           </div>
         </div>
 
         <div class="panel">
-          <label for="title">Event title</label>
-          <input id="title" placeholder="e.g. Pathfinder launched" />
+          <label for="event">Event</label>
+          <textarea id="event" placeholder="What should the archive remember?"></textarea>
 
-          <label for="details">Event details</label>
-          <textarea id="details" placeholder="Describe what happened and why it matters..."></textarea>
-
-          <label for="era">Era / chamber</label>
-          <input id="era" placeholder="e.g. Pathfinder, Council, Synthesis" />
+          <label for="era">Era / tag</label>
+          <input id="era" placeholder="e.g. awakening, council, oracle, synthesis" />
 
           <div class="buttons">
-            <button id="addBtn">Add entry</button>
-            <button id="saveBtn">Save chronicle</button>
+            <button id="recordBtn">Record entry</button>
+            <button id="saveBtn">Save archive</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear archive</button>
@@ -157,13 +155,13 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Chronicle entries</div>
+          <div class="mini">Chronicle timeline</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
-          <div class="mini">Archive sigil</div>
-          <div id="out" class="out">The archive is waiting.</div>
+          <div class="mini">Chronicle sigil</div>
+          <div id="out" class="out">The archive is waiting for an entry.</div>
         </div>
 
         <div class="stats">
@@ -174,8 +172,8 @@
         </div>
 
         <div>
-          <div class="mini">Saved chronicles</div>
-          <div id="savedList" class="out">No saved chronicles yet.</div>
+          <div class="mini">Saved archives</div>
+          <div id="savedList" class="out">No saved archives yet.</div>
         </div>
       </section>
     </div>
@@ -184,8 +182,7 @@
   <script>
     const KEY = 'chronicle-living-archive-v1';
 
-    const titleEl = document.getElementById('title');
-    const detailsEl = document.getElementById('details');
+    const eventEl = document.getElementById('event');
     const eraEl = document.getElementById('era');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
@@ -195,13 +192,7 @@
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const seed = [
-      { title:'Portal home refreshed', details:'The home page now surfaces the growing chamber network.', era:'Atlas', when:'Turn 980' },
-      { title:'Pathfinder manifested', details:'A route engine was built for creative navigation.', era:'Pathfinder', when:'Turn 984' },
-      { title:'Synthesis manifested', details:'The site gained a confluence surface for the whole organism.', era:'Synthesis', when:'Turn 985' }
-    ];
-
-    const state = load() || { entries: seed, saved: [] };
+    const state = load() || { entries: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
@@ -223,54 +214,48 @@
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved chronicles yet.';
-    }
-    function currentEra(){
-      return state.entries.length ? state.entries[state.entries.length - 1].era || 'Open' : 'Open';
+        : 'No saved archives yet.';
     }
     function stateText(n){
-      if(n >= 6) return 'Dense';
+      if(n >= 6) return 'Enduring';
       if(n >= 3) return 'Growing';
-      if(n >= 1) return 'Awake';
+      if(n >= 1) return 'Forming';
       return 'Quiet';
     }
     function render(){
       gridEl.innerHTML = '';
       const list = state.entries.slice().reverse();
       countEl.textContent = String(list.length);
-      eraLabelEl.textContent = currentEra();
+      eraLabelEl.textContent = eraEl.value.trim() || 'Open';
       stateLabelEl.textContent = stateText(list.length);
 
       list.forEach((e) => {
         const div = document.createElement('div');
         div.className = 'item';
         div.innerHTML = `
-          <h3>${escapeHtml(e.title)}</h3>
-          <p>${escapeHtml(e.details)}</p>
-          <p style="margin-top:8px" class="mini">${escapeHtml(e.era || 'Unknown')} · ${escapeHtml(e.when || 'Undated')}</p>
+          <h3>${escapeHtml(e.event)}</h3>
+          <p>${escapeHtml(e.era || 'Open')}</p>
+          <p style="margin-top:8px" class="mini">${escapeHtml(e.when || 'Just now')}</p>
         `;
         gridEl.appendChild(div);
       });
 
-      outEl.textContent =
-`Entries: ${list.length}
-Current era: ${currentEra()}
-Archive state: ${stateText(list.length)}
-Code: ${serialize().slice(0,48)}...
-Hint: add moments as the site changes, and preserve the path of becoming.`;
+      const last = list[0];
+      outEl.textContent = last
+        ? `Latest entry: ${last.event}
+Tag: ${last.era}
+State: ${stateText(list.length)}
+Code: ${serialize().slice(0,48)}...`
+        : 'The archive is waiting for an entry.';
     }
 
-    document.getElementById('addBtn').onclick = () => {
-      const entry = {
-        title: titleEl.value.trim() || 'Untitled event',
-        details: detailsEl.value.trim() || 'No details recorded.',
-        era: eraEl.value.trim() || 'Open',
+    document.getElementById('recordBtn').onclick = () => {
+      state.entries.push({
+        event: eventEl.value.trim() || 'Untitled event',
+        era: eraEl.value.trim() || 'open',
         when: `Turn ${Math.floor(Date.now() / 1000)}`
-      };
-      state.entries.push(entry);
-      titleEl.value = '';
-      detailsEl.value = '';
-      eraEl.value = '';
+      });
+      eventEl.value = '';
       save();
       render();
     };
@@ -297,6 +282,7 @@ Hint: add moments as the site changes, and preserve the path of becoming.`;
       render();
     };
 
+    eraEl.oninput = render;
     renderSaved();
     render();
   </script>
