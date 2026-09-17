@@ -17,6 +17,7 @@
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
+      --warn:#ffd37d;
     }
     *{box-sizing:border-box}
     html,body{
@@ -55,14 +56,14 @@
       border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button{
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input, textarea{width:100%;padding:11px 12px}
+    input, textarea, select{width:100%;padding:11px 12px}
     textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
@@ -123,25 +124,25 @@
       <section class="card intro">
         <div>
           <div class="tag">Chronicle / Living Record</div>
-          <h1>Remember what happened.<br/>Make it retrievable.</h1>
+          <h1>Remember.<br/>Record.<br/>Retrieve.</h1>
           <div class="sub">
-            Chronicle turns the repository into a living record of its own becoming. Log events, tag them,
-            and return later to see how the site changed.
+            Chronicle turns the repository into a visible memory field. Add entries, tag them, and watch
+            the site become a retrievable history rather than a static archive.
           </div>
         </div>
 
         <div class="panel">
-          <label for="title">Event title</label>
-          <input id="title" placeholder="e.g. Life chamber launched" />
+          <label for="title">Entry title</label>
+          <input id="title" placeholder="e.g. The Council Opens" />
 
-          <label for="tags">Tags</label>
-          <input id="tags" placeholder="memory, emergence, build" />
+          <label for="tag">Tag</label>
+          <input id="tag" placeholder="e.g. council, life, synthesis" />
 
-          <label for="note">Note</label>
-          <textarea id="note" placeholder="What should be remembered?"></textarea>
+          <label for="body">Entry</label>
+          <textarea id="body" placeholder="What happened? What changed? What should be remembered?"></textarea>
 
           <div class="buttons">
-            <button id="logBtn">Log event</button>
+            <button id="addBtn">Add entry</button>
             <button id="saveBtn">Save chronicle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -156,20 +157,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Record shelf</div>
+          <div class="mini">Chronicle shelf</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
           <div class="mini">Chronicle sigil</div>
-          <div id="out" class="out">The record is waiting for an event.</div>
+          <div id="out" class="out">The chronicle is waiting for an entry.</div>
         </div>
 
         <div class="stats">
           <div class="stat"><div class="mini">Entries</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Era</div><b id="eraLabel">Quiet</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Quiet</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Dormant</b></div>
         </div>
 
         <div>
@@ -183,12 +184,12 @@
   <script>
     const KEY = 'chronicle-living-record-v1';
     const titleEl = document.getElementById('title');
-    const tagsEl = document.getElementById('tags');
-    const noteEl = document.getElementById('note');
+    const tagEl = document.getElementById('tag');
+    const bodyEl = document.getElementById('body');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const eraLabelEl = document.getElementById('eraLabel');
+    const modeLabelEl = document.getElementById('modeLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
@@ -217,23 +218,17 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved chronicles yet.';
     }
-    function eraText(n){
-      if(n >= 7) return 'Age of Memory';
-      if(n >= 4) return 'Recorded';
-      if(n >= 1) return 'Begun';
-      return 'Quiet';
-    }
     function stateText(n){
-      if(n >= 7) return 'Archival';
+      if(n >= 8) return 'Abundant';
       if(n >= 4) return 'Growing';
-      if(n >= 1) return 'Listening';
-      return 'Quiet';
+      if(n >= 1) return 'Awake';
+      return 'Dormant';
     }
     function render(){
       gridEl.innerHTML = '';
       const list = state.entries.slice().reverse();
       countEl.textContent = String(list.length);
-      eraLabelEl.textContent = eraText(list.length);
+      modeLabelEl.textContent = list.length ? 'Narrating' : 'Quiet';
       stateLabelEl.textContent = stateText(list.length);
 
       list.forEach((e) => {
@@ -241,15 +236,18 @@
         div.className = 'item';
         div.innerHTML = `
           <h3>${escapeHtml(e.title)}</h3>
-          <p>${escapeHtml(e.tags || 'untagged')}</p>
+          <p class="mini">${escapeHtml(e.tag || 'untagged')}</p>
           <p style="margin-top:8px">${escapeHtml(e.when || 'Just now')}</p>
         `;
         div.onclick = () => {
           outEl.textContent = `Title: ${e.title}
-Tags: ${e.tags}
+Tag: ${e.tag}
 When: ${e.when}
-Note:
-${e.note}`;
+Entry:
+${e.body}
+
+State: ${stateText(list.length)}
+Code: ${serialize().slice(0,48)}...`;
         };
         gridEl.appendChild(div);
       });
@@ -257,21 +255,21 @@ ${e.note}`;
       const last = list[0];
       outEl.textContent = last
         ? `Title: ${last.title}
-Tags: ${last.tags}
+Tag: ${last.tag}
 When: ${last.when}
-Note:
-${last.note}
+Entry:
+${last.body}
 
-Era: ${eraText(list.length)}
+State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`
-        : 'The record is waiting for an event.';
+        : 'The chronicle is waiting for an entry.';
     }
 
-    document.getElementById('logBtn').onclick = () => {
+    document.getElementById('addBtn').onclick = () => {
       state.entries.push({
-        title: titleEl.value.trim() || 'Untitled event',
-        tags: tagsEl.value.trim() || 'untagged',
-        note: noteEl.value.trim() || 'No note provided.',
+        title: titleEl.value.trim() || 'Untitled entry',
+        tag: tagEl.value.trim() || 'untagged',
+        body: bodyEl.value.trim() || 'No text provided.',
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
