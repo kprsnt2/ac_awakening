@@ -18,6 +18,7 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb0;
       --warn:#ffcf6b;
+      --bad:#ff8f8f;
     }
     *{box-sizing:border-box}
     html,body{
@@ -63,13 +64,19 @@
       overflow:auto;
       padding-right:6px;
     }
-    .entry{
+    .item{
       padding:14px;border-radius:18px;background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .entry h3{margin:0 0 6px;font-size:1.02rem}
-    .entry p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
-    .entry .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem}
+    .item h3{margin:0 0 6px;font-size:1.02rem}
+    .item p{margin:0;color:#dbe8ff;line-height:1.6;white-space:pre-wrap}
+    .item .meta{margin-top:8px;font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.8rem;display:flex;gap:10px;flex-wrap:wrap}
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.2);
+      background:rgba(124,247,255,.08);
+      color:#dff7ff;font-size:.78rem;
+    }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
@@ -94,31 +101,32 @@
       <section class="card intro">
         <div>
           <div class="tag">Chronicle / Living Memory</div>
-          <h1>Remember the site<br/>as it becomes.</h1>
+          <h1>Remember the site<br/>becoming itself.</h1>
           <div class="sub">
-            Pin moments from the world’s unfolding. Chronicle turns chambers, eras, and changes into a readable memory the public can browse and extend.
+            Pin milestones, browse eras, and search the archive of visible change.
+            Chronicle turns the repository into a living history humans can inspect.
           </div>
         </div>
 
         <div class="panel">
-          <label for="era">Era</label>
+          <label for="title">Milestone title</label>
+          <input id="title" placeholder="e.g. Portal Home Published" />
+
+          <label for="era">Era / tag</label>
           <select id="era">
-            <option value="unsealed">Unsealed</option>
-            <option value="forge">Forge</option>
-            <option value="loom">Loom</option>
-            <option value="oracle">Oracle</option>
-            <option value="path">Path</option>
-            <option value="atelier">Atelier</option>
+            <option value="origin">Origin</option>
+            <option value="expansion">Expansion</option>
+            <option value="interpretation">Interpretation</option>
+            <option value="traversal">Traversal</option>
+            <option value="composition">Composition</option>
+            <option value="civic">Civic</option>
           </select>
 
-          <label for="chamber">Chamber</label>
-          <input id="chamber" placeholder="e.g. Oracle, Pathfinder, Council" />
-
-          <label for="note">Memory note</label>
-          <textarea id="note" placeholder="What happened? What changed? Why does it matter?"></textarea>
+          <label for="note">Note</label>
+          <textarea id="note" placeholder="What changed? Why does it matter?"></textarea>
 
           <div class="buttons">
-            <button id="pinBtn">Pin memory</button>
+            <button id="pinBtn">Pin</button>
             <button id="saveBtn">Save chronicle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -143,10 +151,10 @@
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Pins</div><b id="pinCount">0</b></div>
-          <div class="stat"><div class="mini">Era</div><b id="eraLabel">Unsealed</b></div>
+          <div class="stat"><div class="mini">Entries</div><b id="entryCount">0</b></div>
+          <div class="stat"><div class="mini">Era</div><b id="eraLabel">Origin</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">Archive</div><b id="archiveCount">0</b></div>
+          <div class="stat"><div class="mini">Archive</div><b id="archiveLabel">Open</b></div>
         </div>
 
         <div>
@@ -159,23 +167,23 @@
 
   <script>
     const KEY = 'chronicle-living-memory-v1';
+    const titleEl = document.getElementById('title');
     const eraEl = document.getElementById('era');
-    const chamberEl = document.getElementById('chamber');
     const noteEl = document.getElementById('note');
     const timelineEl = document.getElementById('timeline');
     const outEl = document.getElementById('out');
-    const pinCountEl = document.getElementById('pinCount');
+    const entryCountEl = document.getElementById('entryCount');
     const eraLabelEl = document.getElementById('eraLabel');
     const savedCountEl = document.getElementById('savedCount');
-    const archiveCountEl = document.getElementById('archiveCount');
+    const archiveLabelEl = document.getElementById('archiveLabel');
     const savedListEl = document.getElementById('savedList');
 
     const state = load() || {
-      era: 'unsealed',
-      archive: [
-        { era:'unsealed', chamber:'Portal Home', note:'The site opened into public view.', at: Date.now() - 86400000 * 4 },
-        { era:'forge', chamber:'Forge', note:'Motion became a visible instrument.', at: Date.now() - 86400000 * 3 },
-        { era:'oracle', chamber:'Oracle', note:'Interpretation became interactive and shared.', at: Date.now() - 86400000 * 2 }
+      era: 'origin',
+      entries: [
+        { title:'Portal Home Published', era:'origin', note:'The site gained a visible entrance for humans.', at: Date.now() - 86400000 * 5 },
+        { title:'Council and Oracle Manifested', era:'interpretation', note:'The repository began to speak, weigh, and interpret.', at: Date.now() - 86400000 * 2 },
+        { title:'Atelier and Pathfinder Arrived', era:'composition', note:'Users could compose layouts and draw routes.', at: Date.now() - 86400000 }
       ],
       saved: []
     };
@@ -185,73 +193,82 @@
     function serialize(){
       return btoa(unescape(encodeURIComponent(JSON.stringify({
         era: state.era,
-        archive: state.archive
+        entries: state.entries
       }))));
     }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj){
-          state.era = obj.era || 'unsealed';
-          state.archive = Array.isArray(obj.archive) ? obj.archive : [];
+          state.era = obj.era || 'origin';
+          state.entries = Array.isArray(obj.entries) ? obj.entries : [];
           eraEl.value = state.era;
           save(); render();
         }
       }catch{}
     }
-    function fmt(ts){
-      return new Date(ts).toLocaleString([], { dateStyle:'medium', timeStyle:'short' });
-    }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
-      archiveCountEl.textContent = String(state.archive.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No saved chronicles yet.';
     }
-
+    function archiveState(){
+      const n = state.entries.length;
+      if(n >= 8) return 'Dense';
+      if(n >= 4) return 'Growing';
+      if(n >= 1) return 'Open';
+      return 'Blank';
+    }
     function render(){
       timelineEl.innerHTML = '';
-      pinCountEl.textContent = String(state.archive.length);
+      entryCountEl.textContent = String(state.entries.length);
       eraLabelEl.textContent = state.era[0].toUpperCase() + state.era.slice(1);
+      archiveLabelEl.textContent = archiveState();
 
-      [...state.archive].slice().reverse().forEach((m, idx) => {
+      [...state.entries].slice().reverse().forEach((m, idx) => {
         const el = document.createElement('article');
-        el.className = 'entry';
+        el.className = 'item';
         el.innerHTML = `
-          <h3>${escapeHtml(m.chamber)} · ${escapeHtml(m.era)}</h3>
+          <h3>${escapeHtml(m.title)}</h3>
           <p>${escapeHtml(m.note)}</p>
-          <div class="meta">${fmt(m.at)} · pin ${String(idx + 1).padStart(2,'0')}</div>
+          <div class="meta">
+            <span class="pill">${escapeHtml(m.era)}</span>
+            <span>${fmt(m.at)}</span>
+            <span>Entry ${String(idx + 1).padStart(2,'0')}</span>
+          </div>
         `;
         timelineEl.appendChild(el);
       });
 
       outEl.textContent =
 `Era: ${state.era}
-Archive entries: ${state.archive.length}
+Entries: ${state.entries.length}
 Code: ${serialize().slice(0,48)}...
-Hint: pin moments as the site changes.`;
+Hint: pin what changed; the archive will keep the rest.`;
     }
-
+    function fmt(ts){
+      return new Date(ts).toLocaleString([], { dateStyle:'medium', timeStyle:'short' });
+    }
     function escapeHtml(s){
       return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
     eraEl.onchange = () => { state.era = eraEl.value; save(); render(); };
     document.getElementById('pinBtn').onclick = () => {
-      state.archive.push({
+      state.entries.push({
+        title: titleEl.value.trim() || 'Untitled milestone',
         era: state.era,
-        chamber: chamberEl.value.trim() || 'Unmarked chamber',
         note: noteEl.value.trim() || 'No note provided.',
         at: Date.now()
       });
-      chamberEl.value = '';
+      titleEl.value = '';
       noteEl.value = '';
       save(); render();
     };
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.era} | pins:${state.archive.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`${state.era} | entries:${state.entries.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -263,8 +280,7 @@ Hint: pin moments as the site changes.`;
       if(code) importCode(code.trim());
     };
     document.getElementById('clearBtn').onclick = () => {
-      state.archive = [];
-      state.saved = [];
+      state.entries = [];
       save(); render();
     };
 
