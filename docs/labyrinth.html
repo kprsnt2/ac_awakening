@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Labyrinth — Threaded Myth Maze</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140, 170, 255, 0.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1.02fr .98fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    select, button, input{
+      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);color:var(--text);
+    }
+    select, input{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    canvas{
+      width:100%;height:520px;display:block;border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+      touch-action:none;
+    }
+    .out{
+      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
+      min-height:124px;
+      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;padding:14px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Labyrinth / Threaded Myth Maze</div>
+          <h1>Find your way<br/>by changing the way.</h1>
+          <div class="sub">
+            Walk the maze, leave breadcrumbs, and let the labyrinth remember your route.
+            Each chamber is a choice, and each choice redraws the path ahead.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="mini">Controls</div>
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="guide">Guide</option>
+            <option value="wander">Wander</option>
+            <option value="oracle">Oracle</option>
+          </select>
+
+          <label for="size">Maze size</label>
+          <input id="size" type="range" min="7" max="17" step="2" value="11" />
+
+          <div class="buttons">
+            <button id="newBtn">New maze</button>
+            <button id="stepBtn">Step</button>
+            <button id="breadcrumbBtn">Leave breadcrumb</button>
+            <button id="saveBtn">Save maze</button>
+          </div>
+        </div>
+
+        <div class="footer">
+          Return to the portal home: <a href="./index.html">home</a>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Maze field</div>
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div>
+          <div class="mini">Room text</div>
+          <div id="out" class="out"></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Position</div><b id="pos">0,0</b></div>
+          <div class="stat"><div class="mini">Visited</div><b id="visited">0</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Guide</b></div>
+          <div class="stat"><div class="mini">Memory</div><b id="memory">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved labyrinths</div>
+          <div id="saved" class="out">No saved labyrinths yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'labyrinth-threaded-maze-v1';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const modeEl = document.getElementById('mode');
+    const sizeEl = document.getElementById('size');
+    const outEl = document.getElementById('out');
+    const posEl = document.getElementById('pos');
+    const visitedEl = document.getElementById('visited');
+    const modeLabelEl = document.getElementById('modeLabel');
+    const memoryEl = document.getElementById('memory');
+    const savedEl = document.getElementById('saved');
+
+    const rooms = [
+      "A quiet chamber of stone and breathing light.",
+      "A corridor where footsteps arrive before the body.",
+      "A room of mirrors that remember only the brave.",
+      "A threshold lined with thread and ash.",
+      "A hidden alcove where the maze listens back.",
+      "A turning hall where choices become architecture.",
+      "A luminous node where exits are felt, not seen."
+    ];
+
+    const state = load() || {
+      mode: 'guide',
+      size: 11,
+      maze: [],
+      x: 0,
+      y: 0,
+      visited: {},
+      breadcrumbs: [],
+      memory: [],
+      saved: []
+    };
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function rand(n){ return Math.floor(Math.random() * n); }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+    function key(x,y){ return `${x},${y}`; }
+
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.floor(r.width * dpr);
+      canvas.height = Math.floor(r.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function generateMaze(size){
+      const grid = Array.from({length:size}, () =>
+        Array.from({length:size}, () => ({n:1,e:1,s:1,w:1, v:0}))
+      );
+      const stack = [[0,0]];
+      grid[0][0].v = 1;
+      while(stack.length){
+        const [x,y] = stack[stack.length - 1];
+        const dirs = [];
+        if(y > 0 && !grid[y-1][x].v) dirs.push(['n', x, y-1]);
+        if(x < size-1 && !grid[y][x+1].v) dirs.push(['e', x+1, y]);
+        if(y < size-1 && !grid[y+1][x].v) dirs.push(['s', x, y+1]);
+        if(x > 0 && !grid[y][x-1].v) dirs.push(['w', x-1, y]);
+        if(dirs.length){
+          const [d,nx,ny] = dirs[rand(dirs.length)];
+          const opposite = {n:'s', e:'w', s:'n', w:'e'};
+          grid[y][x][d] = 0;
+          grid[ny][nx][opposite[d]] = 0;
+          grid[ny][nx].v = 1;
+          stack.push([nx,ny]);
+        } else stack.pop();
+      }
+      return grid;
+    }
+
+    function roomText(){
+      const room = rooms[(state.x + state.y + state.visited[key(state.x,state.y)] || 0) % rooms.length];
+      const modeText = {
+        guide: "The maze offers clearer edges, as if it wants to be understood.",
+        wander: "The maze shifts softly, rewarding curiosity over certainty.",
+        oracle: "The maze reveals an echo: the next turn is already half-remembered."
+      }[state.mode];
+      return `${room}\n\n${modeText}\n\nBreadcrumbs: ${state.breadcrumbs.length}\nVisited rooms: ${Object.keys(state.visited).length}`;
+    }
+
+    function draw(){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = '#050814';
+      ctx.fillRect(0,0,w,h);
+
+      const n = state.size;
+      const cell = Math.min(w, h) * 0.82 / n;
+      const ox = (w - cell * n) / 2;
+      const oy = (h - cell * n) / 2;
+
+      ctx.lineWidth = 2;
+      for(let y=0;y<n;y++){
+        for(let x=0;x<n;x++){
+          const r = state.maze[y][x];
+          const px = ox + x*cell, py = oy + y*cell;
+
+          if(state.visited[key(x,y)]){
+            ctx.fillStyle = 'rgba(124,247,255,.06)';
+            ctx.fillRect(px+2, py+2, cell-4, cell-4);
+          }
+
+          ctx.strokeStyle = 'rgba(140,170,255,.22)';
+          if(r.n) { ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px+cell,py); ctx.stroke(); }
+          if(r.e) { ctx.beginPath(); ctx.moveTo(px+cell,py); ctx.lineTo(px+cell,py+cell); ctx.stroke(); }
+          if(r.s) { ctx.beginPath(); ctx.moveTo(px,py+cell); ctx.lineTo(px+cell,py+cell); ctx.stroke(); }
+          if(r.w) { ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,py+cell); ctx.stroke(); }
+        }
+      }
+
+      for(let i=0;i<state.breadcrumbs.length;i++){
+        const b = state.breadcrumbs[i];
+        const px = ox + b.x*cell + cell/2;
+        const py = oy + b.y*cell + cell/2;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(181,140,255,${0.25 + i / Math.max(1,state.breadcrumbs.length) * 0.45})`;
+        ctx.arc(px, py, 4 + (i % 3), 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      const cx = ox + state.x*cell + cell/2;
+      const cy = oy + state.y*cell + cell/2;
+      ctx.beginPath();
+      ctx.fillStyle = state.mode === 'oracle' ? 'rgba(181,140,255,.95)' : 'rgba(124,247,255,.95)';
+      ctx.arc(cx, cy, cell * 0.18, 0, Math.PI*2);
+      ctx.fill();
+
+      posEl.textContent = `${state.x},${state.y}`;
+      visitedEl.textContent = String(Object.keys(state.visited).length);
+      modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
+      memoryEl.textContent = String(state.memory.length);
+      outEl.textContent = roomText();
+
+      requestAnimationFrame(draw);
+    }
+
+    function move(dx,dy){
+      const r = state.maze[state.y][state.x];
+      const nx = clamp(state.x + dx, 0, state.size - 1);
+      const ny = clamp(state.y + dy, 0, state.size - 1);
+      if(dx === -1 && !r.w) state.x = nx;
+      if(dx === 1 && !r.e) state.x = nx;
+      if(dy === -1 && !r.n) state.y = ny;
+      if(dy === 1 && !r.s) state.y = ny;
+
+      state.visited[key(state.x,state.y)] = (state.visited[key(state.x,state.y)] || 0) + 1;
+      state.memory.unshift(`Entered ${state.x},${state.y}`);
+      state.memory = state.memory.slice(0, 16);
+      save();
+    }
+
+    function stepRandom(){
+      const dirs = [];
+      const r = state.maze[state.y][state.x];
+      if(!r.n) dirs.push([0,-1]);
+      if(!r.e) dirs.push([1,0]);
+      if(!r.s) dirs.push([0,1]);
+      if(!r.w) dirs.push([-1,0]);
+      if(!dirs.length) return;
+      const [dx,dy] = state.mode === 'guide' ? dirs[0] : state.mode === 'oracle' ? dirs[dirs.length - 1] : dirs[rand(dirs.length)];
+      move(dx,dy);
+    }
+
+    function renderSaved(){
+      savedEl.textContent = state.saved.length
+        ? state.saved.map((s,i) => `${String(i+1).padStart(2,'0')}. size ${s.size}, mode ${s.mode}, breadcrumbs ${s.breadcrumbs}`).join('\n')
+        : 'No saved labyrinths yet.';
+    }
+
+    function newMaze(){
+      state.size = Number(sizeEl.value);
+      state.maze = generateMaze(state.size);
+      state.x = 0; state.y = 0;
+      state.visited = { [key(0,0)]: 1 };
+      state.breadcrumbs = [];
+      state.memory.unshift(`New maze generated (${state.size}x${state.size}).`);
+      state.memory = state.memory.slice(0, 16);
+      save();
+    }
+
+    modeEl.onchange = () => { state.mode = modeEl.value; save(); };
+    sizeEl.oninput = () => { state.size = Number(sizeEl.value); };
+
+    document.getElementById('newBtn').onclick = newMaze;
+    document.getElementById('stepBtn').onclick = stepRandom;
+    document.getElementById('breadcrumbBtn').onclick = () => {
+      state.breadcrumbs.push({x: state.x, y: state.y});
+      state.memory.unshift(`Breadcrumb left at ${state.x},${state.y}`);
+      state.memory = state.memory.slice(0, 16);
+      save();
+    };
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift({
+        size: state.size,
+        mode: state.mode,
+        breadcrumbs: state.breadcrumbs.length
+      });
+      state.saved = state.saved.slice(0, 12);
+      save();
+    };
+
+    window.addEventListener('keydown', e => {
+      if(e.key === 'ArrowUp') move(0,-1);
+      if(e.key === 'ArrowRight') move(1,0);
+      if(e.key === 'ArrowDown') move(0,1);
+      if(e.key === 'ArrowLeft') move(-1,0);
+      if(e.key === ' ') { e.preventDefault(); stepRandom(); }
+    });
+
+    window.addEventListener('resize', resize);
+
+    if(!state.maze.length || !state.size) newMaze();
+    modeEl.value = state.mode;
+    sizeEl.value = state.size;
+    resize();
+    renderSaved();
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
