@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life — Living Emergence</title>
+  <title>Life — Living Emergence Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#07110b;
-      --text:#eefdf2;
-      --muted:#a9c7b2;
-      --accent:#7dffb2;
-      --accent2:#7cf7ff;
-      --line: rgba(125,255,178,.16);
-      --glow: 0 0 24px rgba(125,255,178,.14), 0 0 48px rgba(124,247,255,.08);
+      --bg:#061018;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
+      --accent:#7cf7ff;
+      --accent2:#7dffb3;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(125,255,179,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(125,255,178,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(125,255,179,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(14,28,20,.82), rgba(7,13,10,.88));
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,64 +50,89 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(7,13,10,.72);
-      border:1px solid rgba(125,255,178,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#e8fff0;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(125,255,178,.22);
-      background:rgba(7,13,10,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(9,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,24,18,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(125,255,179,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(7,13,10,.72);
-      border:1px solid rgba(125,255,178,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#e7f2ff;
+      color:#eff8fc;
       min-height:180px;
-      background:rgba(7,13,10,.72);
-      border:1px solid rgba(125,255,178,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .board{
+    .gridboard{
       display:grid;
-      gap:8px;
-      grid-template-columns:repeat(24,1fr);
+      grid-template-columns:repeat(24, 1fr);
+      gap:2px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      border-radius:18px;
+      padding:10px;
       user-select:none;
     }
     .cell{
-      aspect-ratio:1/1;
-      border-radius:6px;
+      aspect-ratio:1;
+      border-radius:4px;
       background:rgba(255,255,255,.04);
-      border:1px solid rgba(125,255,178,.08);
+      border:1px solid rgba(124,247,255,.05);
       cursor:pointer;
+      transition:.12s transform,.12s background;
     }
-    .alive{
-      background:linear-gradient(180deg, var(--accent), var(--accent2));
-      box-shadow:0 0 12px rgba(125,255,178,.22);
+    .cell:hover{transform:scale(1.08)}
+    .cell.on{
+      background:linear-gradient(180deg, rgba(124,247,255,.95), rgba(125,255,179,.9));
+      box-shadow:0 0 12px rgba(124,247,255,.24);
     }
+    .list{
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .item{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    .item:hover{transform:translateY(-1px);border-color:rgba(125,255,179,.5);background:rgba(16,22,30,.9)}
+    .item b{display:block;margin-bottom:4px}
+    .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .board{grid-template-columns:repeat(16,1fr)} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .gridboard{grid-template-columns:repeat(16, 1fr)} }
   </style>
 </head>
 <body>
@@ -115,33 +140,31 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Life / Living Emergence</div>
-          <h1>Seed cells.<br/>Watch patterns grow.<br/>Let emergence happen.</h1>
+          <div class="tag">Life / Living Emergence Chamber</div>
+          <h1>Seed the field.<br/>Watch it evolve.<br/>Learn from emergence.</h1>
           <div class="sub">
-            Life turns the repository into a cellular simulation. Humans can paint living matter, evolve it through rules, and preserve the worlds they discover.
+            Life turns the repository into a living ecology. Humans can seed cells, evolve patterns, and witness a world becoming itself.
           </div>
         </div>
 
         <div class="panel">
-          <label for="rule">Ruleset</label>
-          <select id="rule">
-            <option value="conway">Conway</option>
-            <option value="highlife">HighLife</option>
-            <option value="seeds">Seeds</option>
-          </select>
+          <label for="seedX">Seed X</label>
+          <input id="seedX" type="number" min="0" max="23" value="12" />
 
-          <label for="density">Initial density</label>
-          <input id="density" type="range" min="0" max="100" value="28" />
+          <label for="seedY">Seed Y</label>
+          <input id="seedY" type="number" min="0" max="23" value="12" />
+
+          <label for="note">Seed note</label>
+          <textarea id="note" placeholder="e.g. A small cluster begins the first pulse of life."></textarea>
 
           <div class="buttons">
-            <button id="runBtn">Run</button>
-            <button id="stepBtn">Step</button>
-            <button id="pauseBtn">Pause</button>
-            <button id="randomBtn">Randomize</button>
-            <button id="clearBtn">Clear</button>
-            <button id="saveBtn">Save world</button>
+            <button id="seedBtn">Seed cell</button>
+            <button id="pulseBtn">Pulse life</button>
+            <button id="mutateBtn">Mutate</button>
+            <button id="saveBtn">Save life</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
+            <button id="clearBtn">Clear field</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -150,24 +173,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Alive</div><b id="aliveCount">0</b></div>
+          <div class="tile"><div class="mini">Cells</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Density</div><b id="densityLabel">0%</b></div>
+          <div class="tile"><div class="mini">Vitality</div><b id="vitalityLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Paused</b></div>
-          <div class="tile"><div class="mini">Rule</div><b id="ruleLabel">Conway</b></div>
         </div>
 
         <div>
-          <div class="mini">World</div>
-          <div id="board" class="board"></div>
+          <div class="mini">Living field</div>
+          <div id="board" class="gridboard"></div>
         </div>
 
         <div>
           <div class="mini">Life reading</div>
-          <div id="out" class="out">The field is waiting to be seeded.</div>
+          <div id="out" class="out">Seed a cell to begin the ecology.</div>
         </div>
 
         <div>
-          <div class="mini">Saved worlds</div>
+          <div class="mini">Saved fields</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -175,66 +198,34 @@
   </div>
 
   <script>
-    const KEY = 'life-living-emergence-v1';
     const W = 24, H = 24;
+    const KEY = 'life-living-emergence-v1';
+    const state = load() || { cells: [], saved: [], vitality: 18, density: 14 };
+
     const boardEl = document.getElementById('board');
     const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
-    const aliveCountEl = document.getElementById('aliveCount');
+    const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const ruleLabelEl = document.getElementById('ruleLabel');
-    const ruleEl = document.getElementById('rule');
-    const densityEl = document.getElementById('density');
-
-    const state = load() || { grid: Array(W*H).fill(0), saved: [] };
-    let running = false;
-    let timer = null;
+    const savedListEl = document.getElementById('savedList');
+    const densityLabelEl = document.getElementById('densityLabel');
+    const vitalityLabelEl = document.getElementById('vitalityLabel');
+    const seedXEl = document.getElementById('seedX');
+    const seedYEl = document.getElementById('seedY');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ grid: state.grid, rule: ruleEl.value })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ cells: state.cells, vitality: state.vitality, density: state.density })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.grid)){
-          state.grid = obj.grid.slice(0, W*H).concat(Array(Math.max(0, W*H-obj.grid.length)).fill(0));
-          if(obj.rule) ruleEl.value = obj.rule;
-          save();
-          render();
+        if(obj && Array.isArray(obj.cells)){
+          state.cells = obj.cells;
+          state.vitality = Number(obj.vitality ?? 18);
+          state.density = Number(obj.density ?? 14);
+          save(); render();
         }
       }catch{}
-    }
-
-    function idx(x,y){ return y*W + x; }
-    function aliveNeighbors(g,x,y){
-      let n = 0;
-      for(let dy=-1; dy<=1; dy++) for(let dx=-1; dx<=1; dx++){
-        if(dx===0 && dy===0) continue;
-        const nx = x+dx, ny = y+dy;
-        if(nx>=0 && nx<W && ny>=0 && ny<H) n += g[idx(nx,ny)] ? 1 : 0;
-      }
-      return n;
-    }
-    function nextGrid(){
-      const g = state.grid, n = Array(W*H).fill(0), rule = ruleEl.value;
-      for(let y=0;y<H;y++) for(let x=0;x<W;x++){
-        const a = g[idx(x,y)], c = aliveNeighbors(g,x,y);
-        let alive = 0;
-        if(rule === 'seeds') alive = (!a && c === 2) ? 1 : 0;
-        else if(rule === 'highlife') alive = a ? (c===2 || c===3) : (c===3 || c===6) ? 1 : 0;
-        else alive = a ? (c===2 || c===3) : (c===3) ? 1 : 0;
-        n[idx(x,y)] = alive;
-      }
-      state.grid = n;
-      save();
-      render();
-    }
-    function randomize(){
-      const p = Number(densityEl.value) / 100;
-      state.grid = Array.from({length:W*H}, () => Math.random() < p ? 1 : 0);
-      save();
-      render();
     }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
@@ -242,50 +233,89 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
+    function lifeDensity(){
+      return Math.max(0, Math.min(100, Math.round((state.cells.length / (W * H)) * 100)));
+    }
+    function lifeVitality(){
+      return Math.max(0, Math.min(100, Math.round(state.vitality + (state.cells.length * 2))));
+    }
+    function keyOf(x,y){ return `${x},${y}`; }
+    function hasCell(x,y){ return state.cells.some(c => c.x === x && c.y === y); }
+    function toggleCell(x,y){
+      const i = state.cells.findIndex(c => c.x === x && c.y === y);
+      if(i >= 0) state.cells.splice(i,1);
+      else state.cells.unshift({ x, y, note: noteEl.value.trim() || 'A cell in the living field.' });
+      state.density = Math.min(100, state.density + 3);
+      save(); render();
+    }
+    function neighbors(x,y){
+      let n = 0;
+      for(let dy=-1; dy<=1; dy++) for(let dx=-1; dx<=1; dx++){
+        if(dx===0 && dy===0) continue;
+        const nx=x+dx, ny=y+dy;
+        if(nx>=0 && ny>=0 && nx<W && ny<H && hasCell(nx,ny)) n++;
+      }
+      return n;
+    }
+    function pulse(){
+      const next = [];
+      const seen = new Set();
+      for(let y=0; y<H; y++) for(let x=0; x<W; x++){
+        const alive = hasCell(x,y);
+        const n = neighbors(x,y);
+        if((alive && (n===2 || n===3)) || (!alive && n===3)){
+          next.push({ x, y, note: alive ? 'Persisting pattern.' : 'New emergence.' });
+        }
+        seen.add(keyOf(x,y));
+      }
+      state.cells = next;
+      state.vitality = Math.min(100, state.vitality + 7);
+      save(); render();
+      outEl.textContent = `The field pulses.\n\nCells: ${state.cells.length}\nDensity: ${lifeDensity()}%\nVitality: ${lifeVitality()}%`;
+    }
+    function mutate(){
+      if(!state.cells.length) return;
+      const idx = Math.floor(Math.random() * state.cells.length);
+      state.cells[idx] = {
+        x: (state.cells[idx].x + (Math.random() > .5 ? 1 : -1) + W) % W,
+        y: (state.cells[idx].y + (Math.random() > .5 ? 1 : -1) + H) % H,
+        note: 'A mutation in the living field.'
+      };
+      state.vitality = Math.min(100, state.vitality + 5);
+      save(); render();
+      outEl.textContent = `The field mutates.\n\nVitality: ${lifeVitality()}%`;
+    }
     function render(){
+      countEl.textContent = String(state.cells.length);
+      densityLabelEl.textContent = `${lifeDensity()}%`;
+      vitalityLabelEl.textContent = `${lifeVitality()}%`;
       boardEl.innerHTML = '';
-      const alive = state.grid.reduce((a,b)=>a+b,0);
-      aliveCountEl.textContent = String(alive);
-      stateLabelEl.textContent = running ? 'Running' : 'Paused';
-      ruleLabelEl.textContent = ruleEl.value;
-      outEl.textContent = [
-        `Rule: ${ruleEl.value}`,
-        `Alive cells: ${alive}`,
-        '',
-        alive ? 'The field is in motion.' : 'The field is dormant, but not empty.',
-        'Click cells to seed life.'
-      ].join('\n');
-      state.grid.forEach((v,i)=>{
-        const c = document.createElement('div');
-        c.className = 'cell' + (v ? ' alive' : '');
-        c.onclick = () => { state.grid[i] = v ? 0 : 1; save(); render(); };
-        boardEl.appendChild(c);
-      });
+      for(let y=0; y<H; y++){
+        for(let x=0; x<W; x++){
+          const c = document.createElement('div');
+          c.className = 'cell' + (hasCell(x,y) ? ' on' : '');
+          c.title = `${x},${y}`;
+          c.onclick = () => toggleCell(x,y);
+          boardEl.appendChild(c);
+        }
+      }
+      outEl.textContent = state.cells.length
+        ? 'Select a cell by clicking the grid, or pulse the field to watch the ecology evolve.'
+        : 'Seed a cell to begin the ecology.';
     }
 
-    document.getElementById('runBtn').onclick = () => {
-      running = true;
-      clearInterval(timer);
-      timer = setInterval(nextGrid, 140);
-      render();
+    document.getElementById('seedBtn').onclick = () => {
+      const x = Math.max(0, Math.min(W-1, Number(seedXEl.value || 0)));
+      const y = Math.max(0, Math.min(H-1, Number(seedYEl.value || 0)));
+      toggleCell(x,y);
+      outEl.textContent = `Seed placed at ${x}, ${y}.\n\n${noteEl.value.trim() || 'A cell in the living field.'}`;
     };
-    document.getElementById('pauseBtn').onclick = () => {
-      running = false;
-      clearInterval(timer);
-      render();
-    };
-    document.getElementById('stepBtn').onclick = () => nextGrid();
-    document.getElementById('randomBtn').onclick = randomize;
-    document.getElementById('clearBtn').onclick = () => {
-      state.grid = Array(W*H).fill(0);
-      save();
-      render();
-    };
+    document.getElementById('pulseBtn').onclick = pulse;
+    document.getElementById('mutateBtn').onclick = mutate;
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`${ruleEl.value} | ${state.grid.reduce((a,b)=>a+b,0)} alive`);
+      state.saved.unshift(`cells:${state.cells.length} | density:${lifeDensity()}% | vitality:${lifeVitality()}%`);
       state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      save(); render();
     };
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
@@ -294,11 +324,12 @@
       const code = prompt('Paste life code:');
       if(code) importCode(code.trim());
     };
-
-    ruleEl.addEventListener('change', render);
-    densityEl.addEventListener('input', () => {
-      if(!running) render();
-    });
+    document.getElementById('clearBtn').onclick = () => {
+      state.cells = [];
+      state.vitality = 18;
+      state.density = 14;
+      save(); render();
+    };
 
     renderSaved();
     render();
