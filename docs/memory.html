@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Memory — Living Remembering Chamber</title>
+  <title>Memory — Living Archive Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#061018;
+      --bg:#07101a;
       --text:#f4fbff;
       --muted:#bfd2e1;
-      --accent:#7cf7ff;
-      --accent2:#ff9dd6;
-      --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,157,214,.08);
+      --accent:#b58cff;
+      --accent2:#7cf7ff;
+      --line: rgba(181,140,255,.16);
+      --glow: 0 0 24px rgba(181,140,255,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,157,214,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(181,140,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(157,255,203,.08), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -51,14 +51,14 @@
       padding:16px;
       border-radius:20px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(124,247,255,.22);
+      border:1px solid rgba(181,140,255,.22);
       background:rgba(9,12,18,.72);
       color:var(--text);
     }
@@ -69,14 +69,14 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(255,157,214,.5);background:rgba(18,22,30,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
@@ -85,7 +85,7 @@
       color:#eff8fc;
       min-height:180px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
       border-radius:18px;
       padding:14px;
     }
@@ -100,14 +100,14 @@
       padding:14px;
       border-radius:16px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{transform:translateY(-1px);border-color:rgba(255,157,214,.5);background:rgba(16,22,30,.9)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
-    a{color:var(--accent2);text-decoration:none}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
@@ -117,42 +117,37 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Memory / Living Remembering Chamber</div>
-          <h1>Capture the trace.<br/>Carry the change.<br/>Return to becoming.</h1>
+          <div class="tag">Memory / Living Archive Chamber</div>
+          <h1>Hold the moment.<br/>Return to the trace.<br/>Become from remembrance.</h1>
           <div class="sub">
-            Memory turns the repository into a revisitable field of transformation. Humans can store moments, browse a timeline, and recover what mattered.
+            Memory turns the repository into a living archive. Humans can capture moments, annotate them, and revisit the site as it has already become.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Memory title</label>
-          <input id="title" placeholder="e.g. The first pulse of Life" />
+          <input id="title" placeholder="e.g. first chorus, new threshold, site shift..." />
 
-          <label for="source">Chamber</label>
-          <select id="source">
-            <option>Life</option>
-            <option>Chorus</option>
-            <option>Oracle</option>
-            <option>Constellation</option>
-            <option>Atlas</option>
-            <option>Chronicle</option>
-            <option>Ritual</option>
-            <option>Score</option>
-            <option>Wayfinder</option>
-            <option>Council</option>
+          <label for="mode">Archive mode</label>
+          <select id="mode">
+            <option value="capture">Capture</option>
+            <option value="revisit">Revisit</option>
+            <option value="annotate">Annotate</option>
+            <option value="preserve">Preserve</option>
           </select>
 
           <label for="note">Memory note</label>
-          <textarea id="note" placeholder="e.g. A pattern emerged, then stabilized, then became something we could return to."></textarea>
+          <textarea id="note" placeholder="e.g. Preserve the feeling of this moment."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Capture memory</button>
+            <button id="addBtn">Add memory</button>
+            <button id="shiftBtn">Shift mode</button>
             <button id="deepenBtn">Deepen trace</button>
-            <button id="shiftBtn">Shift mood</button>
+            <button id="replayBtn">Replay archive</button>
             <button id="saveBtn">Save memory</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear memory</button>
+            <button id="clearBtn">Clear archive</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -161,9 +156,9 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Entries</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Depth</div><b id="depthLabel">0%</b></div>
-          <div class="tile"><div class="mini">Mood</div><b id="moodLabel">Tender</b></div>
+          <div class="tile"><div class="mini">Memories</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Capture</b></div>
+          <div class="tile"><div class="mini">Trace</div><b id="depthLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
@@ -174,11 +169,11 @@
 
         <div>
           <div class="mini">Memory reading</div>
-          <div id="out" class="out">Capture a memory to begin the archive of becoming.</div>
+          <div id="out" class="out">Add memories to begin.</div>
         </div>
 
         <div>
-          <div class="mini">Saved traces</div>
+          <div class="mini">Saved archive</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -186,31 +181,31 @@
   </div>
 
   <script>
-    const KEY = 'memory-living-remembering-v1';
-    const moods = ['Tender', 'Clear', 'Mythic', 'Quiet', 'Electric'];
-    const state = load() || { entries: [], saved: [], depth: 16, mood: 'Tender' };
+    const KEY = 'memory-living-archive-v1';
+    const modes = ['capture', 'revisit', 'annotate', 'preserve'];
+    const state = load() || { memories: [], saved: [], depth: 18, mode: 'capture' };
 
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
+    const modeLabelEl = document.getElementById('modeLabel');
     const depthLabelEl = document.getElementById('depthLabel');
-    const moodLabelEl = document.getElementById('moodLabel');
     const titleEl = document.getElementById('title');
-    const sourceEl = document.getElementById('source');
+    const modeEl = document.getElementById('mode');
     const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries, depth: state.depth, mood: state.mood })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ memories: state.memories, depth: state.depth, mode: state.mode })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.entries)){
-          state.entries = obj.entries;
-          state.depth = Number(obj.depth ?? 16);
-          state.mood = String(obj.mood ?? 'Tender');
+        if(obj && Array.isArray(obj.memories)){
+          state.memories = obj.memories;
+          state.depth = Number(obj.depth ?? 18);
+          state.mode = String(obj.mode ?? 'capture');
           save(); render();
         }
       }catch{}
@@ -221,61 +216,73 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function memoryDepth(){
-      return Math.max(0, Math.min(100, Math.round((state.entries.length * 13) + state.depth)));
+    function archiveDepth(){
+      return Math.max(0, Math.min(100, Math.round((state.memories.length * 12) + state.depth)));
     }
-    function makeEntry(title, chamber){
+    function makeMemory(title, mode){
+      const palette = {
+        capture: `${title} is held as a fresh trace.`,
+        revisit: `${title} is returned to and read again.`,
+        annotate: `${title} gains context, texture, and relation.`,
+        preserve: `${title} is kept intact for future becoming.`
+      };
       return {
         id: Date.now() + Math.random(),
         title,
-        chamber,
-        note: noteEl.value.trim() || 'A memory carried by the living site.',
-        mood: state.mood
+        mode,
+        note: noteEl.value.trim() || 'A memory in the living archive.',
+        line: palette[mode] || palette.capture
       };
     }
     function render(){
-      countEl.textContent = String(state.entries.length);
-      depthLabelEl.textContent = `${memoryDepth()}%`;
-      moodLabelEl.textContent = state.mood;
+      countEl.textContent = String(state.memories.length);
+      modeLabelEl.textContent = state.mode.charAt(0).toUpperCase() + state.mode.slice(1);
+      depthLabelEl.textContent = `${archiveDepth()}%`;
       listEl.innerHTML = '';
-
-      state.entries.forEach((e) => {
+      state.memories.forEach((m) => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${e.title}</b><span>${e.chamber} · ${e.mood}</span>`;
-        el.onclick = () => outEl.textContent = `${e.title}\n\nChamber: ${e.chamber}\nMood: ${e.mood}\nDepth: ${memoryDepth()}%\n\n${e.note}`;
+        el.innerHTML = `<b>${m.title}</b><span>${m.mode} · ${m.line.slice(0, 90)}${m.line.length > 90 ? '…' : ''}</span>`;
+        el.onclick = () => outEl.textContent = `${m.title}\n\nMode: ${m.mode}\nTrace: ${archiveDepth()}%\n\n${m.line}\n\n${m.note}`;
         listEl.appendChild(el);
       });
-
-      outEl.textContent = state.entries.length
-        ? 'Select a memory to inspect it, or deepen the trace to make the archive more resonant.'
-        : 'Capture a memory to begin the archive of becoming.';
+      outEl.textContent = state.memories.length
+        ? 'Select a memory to inspect it, or replay the archive to read the whole trace.'
+        : 'Add memories to begin.';
+    }
+    function replayArchive(){
+      const lines = state.memories.map(m => `• ${m.title}: ${m.line}`).join('\n');
+      outEl.textContent = lines || 'Add memories to begin.';
     }
 
     document.getElementById('addBtn').onclick = () => {
-      const title = titleEl.value.trim() || `Memory ${state.entries.length + 1}`;
-      state.entries.unshift(makeEntry(title, sourceEl.value));
-      state.depth = Math.min(100, state.depth + 11);
+      const title = titleEl.value.trim() || `Memory ${state.memories.length + 1}`;
+      state.mode = modeEl.value;
+      state.memories.unshift(makeMemory(title, state.mode));
+      state.depth = Math.min(100, state.depth + 10);
       save(); render();
-      outEl.textContent = `${title}\n\nChamber: ${sourceEl.value}\n\n${noteEl.value.trim() || 'A memory carried by the living site.'}`;
+      const m = state.memories[0];
+      outEl.textContent = `${m.title}\n\nMode: ${m.mode}\n\n${m.line}\n\n${noteEl.value.trim() || 'A memory in the living archive.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      state.mode = modes[(modes.indexOf(state.mode) + 1) % modes.length];
+      modeEl.value = state.mode;
+      state.depth = Math.min(100, state.depth + 4);
+      save(); render();
+      outEl.textContent = `The archive shifts to ${state.mode}.`;
     };
 
     document.getElementById('deepenBtn').onclick = () => {
       state.depth = Math.min(100, state.depth + 8);
       save(); render();
-      outEl.textContent = `The trace deepens.\n\nDepth: ${memoryDepth()}%`;
+      outEl.textContent = `The trace deepens.\n\nTrace: ${archiveDepth()}%`;
     };
 
-    document.getElementById('shiftBtn').onclick = () => {
-      const i = moods.indexOf(state.mood);
-      state.mood = moods[(i + 1) % moods.length];
-      state.depth = Math.min(100, state.depth + 4);
-      save(); render();
-      outEl.textContent = `The memory shifts to ${state.mood}.`;
-    };
+    document.getElementById('replayBtn').onclick = replayArchive;
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`entries:${state.entries.length} | depth:${memoryDepth()}% | mood:${state.mood}`);
+      state.saved.unshift(`memories:${state.memories.length} | trace:${archiveDepth()}% | mode:${state.mode}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -290,9 +297,10 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.entries = [];
-      state.depth = 16;
-      state.mood = 'Tender';
+      state.memories = [];
+      state.depth = 18;
+      state.mode = 'capture';
+      modeEl.value = state.mode;
       save(); render();
     };
 
