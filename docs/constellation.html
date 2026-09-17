@@ -3,27 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Constellation — Living Relations</title>
+  <title>Constellation — Living Network</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050816;
-      --text:#eaf2ff;
-      --muted:#9db0d1;
+      --bg:#061018;
+      --text:#eef7ff;
+      --muted:#a9bfd3;
       --accent:#7cf7ff;
-      --accent2:#b58cff;
-      --line: rgba(140,170,255,.18);
-      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --accent2:#c89bff;
+      --accent3:#ffd37d;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(200,155,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(200,155,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.08), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +32,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      background:linear-gradient(180deg, rgba(14,24,34,.82), rgba(6,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +41,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent3);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,69 +51,64 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(6,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#dff4ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(7,12,18,.72);
       color:var(--text);
     }
-    input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
+    input, select{width:100%;padding:11px 12px}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,24,32,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(6,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#dbe8ff;
+      color:#e7f2ff;
       min-height:180px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(6,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .nodes{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:10px;
+    .canvasWrap{
+      position:relative;
+      height:min(70vh, 760px);
+      border-radius:20px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 55%),
+        rgba(6,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
-    .node{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
-      cursor:pointer;
-      transition:.18s transform,.18s border-color,.18s background;
-    }
-    .node:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .node.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
-    .chip{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:.75rem;
-      margin-right:6px;
-      margin-top:6px;
-      border:1px solid rgba(140,170,255,.22);
-      color:#dbe8ff;
+    canvas{display:block;width:100%;height:100%}
+    .hint{
+      position:absolute;left:14px;bottom:14px;right:14px;
+      background:rgba(6,12,18,.76);
+      border:1px solid rgba(124,247,255,.12);
+      border-radius:14px;
+      padding:10px 12px;
+      color:var(--muted);
+      font-family:"IBM Plex Mono",monospace;
+      font-size:.8rem;
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
@@ -124,34 +120,22 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Constellation / Living Relations</div>
-          <h1>Trace the links.<br/>See the shape.<br/>Navigate the sky.</h1>
+          <div class="tag">Constellation / Living Network</div>
+          <h1>Connect the chambers.<br/>Drag the geometry.<br/>Reveal the whole field.</h1>
           <div class="sub">
-            Constellation renders the repository as a field of relationships. Humans can inspect chambers as nodes, follow their links, and understand the site as a network.
+            Constellation turns the repository into a navigable graph of living relations. Humans can rearrange nodes, inspect affinities, and preserve their own maps.
           </div>
         </div>
 
         <div class="panel">
-          <label for="filter">Filter by role</label>
-          <select id="filter">
-            <option value="all">All roles</option>
-            <option value="entry">Entry</option>
-            <option value="play">Play</option>
-            <option value="memory">Memory</option>
-            <option value="decision">Decision</option>
-            <option value="route">Route</option>
-            <option value="meaning">Meaning</option>
-            <option value="integration">Integration</option>
-          </select>
-
-          <label for="note">Constellation note</label>
-          <textarea id="note" placeholder="What pattern do you notice in the site?"></textarea>
+          <label for="filter">Filter chambers</label>
+          <input id="filter" placeholder="Search by chamber, theme, or role" />
 
           <div class="buttons">
             <button id="saveBtn">Save constellation</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear constellation</button>
+            <button id="resetBtn">Reset layout</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -161,23 +145,23 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Nodes</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Active</b></div>
+          <div class="tile"><div class="mini">Selection</div><b id="selLabel">None</b></div>
         </div>
 
-        <div>
-          <div class="mini">Constellation field</div>
-          <div id="nodes" class="nodes"></div>
+        <div class="canvasWrap">
+          <canvas id="canvas"></canvas>
+          <div class="hint">Drag nodes. Click a node to inspect it. The network remembers your local layout.</div>
         </div>
 
         <div>
           <div class="mini">Constellation reading</div>
-          <div id="out" class="out">The constellation is waiting to be traced.</div>
+          <div id="out" class="out">The network is waiting for a first arrangement.</div>
         </div>
 
         <div>
-          <div class="mini">Saved constellation records</div>
+          <div class="mini">Saved constellations</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -185,99 +169,158 @@
   </div>
 
   <script>
-    const KEY = 'constellation-living-relations-v1';
+    const KEY = 'constellation-living-network-v1';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
     const filterEl = document.getElementById('filter');
-    const noteEl = document.getElementById('note');
-    const nodesEl = document.getElementById('nodes');
     const outEl = document.getElementById('out');
+    const savedListEl = document.getElementById('savedList');
     const countEl = document.getElementById('count');
-    const visibleCountEl = document.getElementById('visibleCount');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
-    const savedListEl = document.getElementById('savedList');
+    const selLabelEl = document.getElementById('selLabel');
 
-    const nodes = [
-      { name:'Home', href:'./index.html', role:'entry', note:'Portal entry and orientation point' },
-      { name:'Life', href:'./life.html', role:'play', note:'Emergence and cellular play' },
-      { name:'Oracle', href:'./oracle.html', role:'meaning', note:'Interpretation and layered response' },
-      { name:'Chronicle', href:'./chronicle.html', role:'memory', note:'Continuity and retrievable becoming' },
-      { name:'Pathfinder', href:'./pathfinder.html', role:'route', note:'Traversal and routecraft' },
-      { name:'Council', href:'./council.html', role:'decision', note:'Visible deliberation and choice' },
-      { name:'Synthesis', href:'./synthesis.html', role:'integration', note:'System-wide coherence and unity' },
-      { name:'Atlas', href:'./atlas.html', role:'route', note:'Practical index and map of chambers' }
+    const base = [
+      {name:'Council', theme:'commons', role:'deliberation', x:0.18, y:0.28},
+      {name:'Forge', theme:'workshop', role:'invention', x:0.34, y:0.18},
+      {name:'Life', theme:'emergence', role:'growth', x:0.43, y:0.42},
+      {name:'Chorus', theme:'resonance', role:'synchrony', x:0.62, y:0.26},
+      {name:'Atlas', theme:'index', role:'orientation', x:0.74, y:0.44},
+      {name:'Oracle', theme:'interpretation', role:'mirror', x:0.57, y:0.58},
+      {name:'Pathfinder', theme:'routes', role:'navigation', x:0.22, y:0.62},
+      {name:'Garden', theme:'cultivation', role:'care', x:0.36, y:0.76},
+      {name:'Synthesis', theme:'integration', role:'assembly', x:0.67, y:0.74},
+      {name:'Chronicle', theme:'memory', role:'record', x:0.84, y:0.18}
     ];
 
-    const state = load() || { records: [], saved: [] };
+    const edges = [
+      ['Council','Forge'], ['Forge','Life'], ['Life','Chorus'], ['Chorus','Atlas'],
+      ['Atlas','Oracle'], ['Oracle','Pathfinder'], ['Pathfinder','Garden'],
+      ['Garden','Synthesis'], ['Synthesis','Chronicle'], ['Chronicle','Council'],
+      ['Life','Garden'], ['Atlas','Synthesis'], ['Oracle','Chorus']
+    ];
+
+    const state = load() || { nodes: base, saved: [] };
+    let drag = null;
+    let selected = null;
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ records: state.records })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.records)){
-          state.records = obj.records;
+        if(obj && Array.isArray(obj.nodes)){
+          state.nodes = obj.nodes;
           save();
           render();
         }
       }catch{}
     }
+
+    function resize(){
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function stateText(n){
-      if(n >= 6) return 'Radiant';
-      if(n >= 3) return 'Mapped';
-      if(n >= 1) return 'Tracing';
-      return 'Quiet';
+
+    function reading(list){
+      if(!list.length) return 'No chambers match the current filter.';
+      return [
+        `Visible nodes: ${list.length}`,
+        `Selection: ${selected ? selected.name : 'none'}`,
+        '',
+        'The field is a map of affinities and tensions.'
+      ].join('\n');
     }
+
+    function nodeAt(x, y, list){
+      for(let i=list.length-1;i>=0;i--){
+        const n = list[i];
+        const dx = x - n.x, dy = y - n.y;
+        if(Math.hypot(dx, dy) < 0.035) return n;
+      }
+      return null;
+    }
+
     function render(){
-      const visible = filterEl.value === 'all'
-        ? nodes
-        : nodes.filter(n => n.role === filterEl.value);
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.clearRect(0,0,w,h);
+      const q = filterEl.value.trim().toLowerCase();
+      const list = state.nodes.filter(n => [n.name,n.theme,n.role].join(' ').toLowerCase().includes(q));
+      countEl.textContent = String(state.nodes.length);
+      stateLabelEl.textContent = 'Active';
+      selLabelEl.textContent = selected ? selected.name : 'None';
+      outEl.textContent = reading(list);
 
-      countEl.textContent = String(nodes.length);
-      visibleCountEl.textContent = String(visible.length);
-      stateLabelEl.textContent = stateText(state.records.length);
-
-      nodesEl.innerHTML = '';
-      visible.forEach((n) => {
-        const div = document.createElement('div');
-        div.className = 'node';
-        div.innerHTML = `
-          <b>${n.name}</b>
-          <div class="mini">${n.role}</div>
-          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${n.note}</div>
-          <div style="margin-top:8px"><span class="chip">${n.href}</span></div>
-        `;
-        div.onclick = () => {
-          outEl.textContent = `${n.name}
-Role: ${n.role}
-Path: ${n.href}
-
-${n.note}
-
-Reading:
-This chamber participates in the site’s wider relational field.`;
-        };
-        nodesEl.appendChild(div);
+      ctx.lineWidth = 1.5;
+      edges.forEach(([a,b]) => {
+        const na = state.nodes.find(n=>n.name===a);
+        const nb = state.nodes.find(n=>n.name===b);
+        if(!na || !nb) return;
+        if(!list.includes(na) || !list.includes(nb)) return;
+        ctx.strokeStyle = 'rgba(124,247,255,.18)';
+        ctx.beginPath();
+        ctx.moveTo(na.x*w, na.y*h);
+        ctx.lineTo(nb.x*w, nb.y*h);
+        ctx.stroke();
       });
 
-      outEl.textContent = `Visible nodes: ${visible.length}
-Total nodes: ${nodes.length}
-Filter: ${filterEl.value}
+      list.forEach(n => {
+        const x = n.x*w, y = n.y*h;
+        const active = selected && selected.name === n.name;
+        ctx.fillStyle = active ? '#7cf7ff' : '#c89bff';
+        ctx.beginPath();
+        ctx.arc(x, y, active ? 11 : 8, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.16)';
+        ctx.stroke();
+        ctx.fillStyle = '#eef7ff';
+        ctx.font = '600 12px Inter, system-ui, sans-serif';
+        ctx.fillText(n.name, x + 12, y - 12);
+      });
 
-Reading:
-Constellation turns the site into a navigable network of meaning.`;
+      requestAnimationFrame(() => {});
     }
 
+    canvas.addEventListener('mousedown', e => {
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      const q = filterEl.value.trim().toLowerCase();
+      const list = state.nodes.filter(n => [n.name,n.theme,n.role].join(' ').toLowerCase().includes(q));
+      const hit = nodeAt(x, y, list);
+      if(hit){
+        drag = hit;
+        selected = hit;
+        render();
+      }
+    });
+
+    window.addEventListener('mousemove', e => {
+      if(!drag) return;
+      const rect = canvas.getBoundingClientRect();
+      drag.x = Math.min(0.94, Math.max(0.06, (e.clientX - rect.left) / rect.width));
+      drag.y = Math.min(0.94, Math.max(0.06, (e.clientY - rect.top) / rect.height));
+      save();
+      render();
+    });
+
+    window.addEventListener('mouseup', () => drag = null);
+    window.addEventListener('resize', () => { resize(); render(); });
+
     document.getElementById('saveBtn').onclick = () => {
-      const note = noteEl.value.trim() || 'untitled constellation';
-      state.records.unshift(`${note} | filter:${filterEl.value}`);
-      state.records = state.records.slice(0, 12);
+      state.saved.unshift(`nodes:${state.nodes.length} | ${selected ? selected.name : 'layout'}`);
+      state.saved = state.saved.slice(0, 12);
       save();
       render();
     };
@@ -291,14 +334,16 @@ Constellation turns the site into a navigable network of meaning.`;
       if(code) importCode(code.trim());
     };
 
-    document.getElementById('clearBtn').onclick = () => {
-      state.records = [];
+    document.getElementById('resetBtn').onclick = () => {
+      state.nodes = JSON.parse(JSON.stringify(base));
+      selected = null;
       save();
       render();
     };
 
-    filterEl.addEventListener('change', render);
+    filterEl.addEventListener('input', render);
     renderSaved();
+    resize();
     render();
   </script>
 </body>
