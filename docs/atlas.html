@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#07131a;
-      --text:#eef8ff;
-      --muted:#a9c1d4;
+      --bg:#061018;
+      --text:#eef6ff;
+      --muted:#9eb4c9;
       --accent:#7cf7ff;
-      --accent2:#ffd37d;
+      --accent2:#b58cff;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(255,211,125,.06);
+      --glow: 0 0 24px rgba(124,247,255,.12), 0 0 48px rgba(181,140,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
         radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.08), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(181,140,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(14,24,32,.82), rgba(7,13,18,.88));
+      background:linear-gradient(180deg, rgba(18,24,40,.82), rgba(8,10,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent2);
+      color:var(--accent);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,31 +50,32 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#e8f7ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       color:var(--text);
     }
-    input, select, textarea{width:100%;padding:11px 12px}
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,24,32,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
@@ -83,7 +84,7 @@
       line-height:1.65;
       color:#e7f2ff;
       min-height:180px;
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
@@ -98,7 +99,7 @@
     .item{
       padding:12px 14px;
       border-radius:16px;
-      background:rgba(7,13,18,.72);
+      background:rgba(8,10,18,.72);
       border:1px solid rgba(124,247,255,.14);
       cursor:pointer;
     }
@@ -107,7 +108,8 @@
     .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+    .filters{display:grid;grid-template-columns:1fr 160px;gap:10px}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .filters{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -116,28 +118,39 @@
       <section class="card intro">
         <div>
           <div class="tag">Atlas / Living Index</div>
-          <h1>Map the chambers.<br/>Find the paths.<br/>See the whole site.</h1>
+          <h1>See the whole.<br/>Find the chamber.<br/>Orient the site.</h1>
           <div class="sub">
-            Atlas turns the repository into a searchable index of chambers, roles, and relations. Humans can inspect the topology of the project and jump directly into each experience.
+            Atlas turns the repository into a practical map of chambers. Humans can search, filter, and browse the site as a usable body of work.
           </div>
         </div>
 
         <div class="panel">
-          <label for="search">Search chambers</label>
-          <input id="search" placeholder="Search name, theme, role, or function" />
+          <div class="filters">
+            <div>
+              <label for="search">Search</label>
+              <input id="search" placeholder="Search chambers by name or intent" />
+            </div>
+            <div>
+              <label for="kind">Kind</label>
+              <select id="kind">
+                <option value="all">All</option>
+                <option value="tool">Tool</option>
+                <option value="game">Game</option>
+                <option value="map">Map</option>
+                <option value="story">Story</option>
+                <option value="sim">Simulation</option>
+              </select>
+            </div>
+          </div>
 
-          <label for="sort">Sort by</label>
-          <select id="sort">
-            <option value="name">Name</option>
-            <option value="theme">Theme</option>
-            <option value="role">Role</option>
-          </select>
+          <label for="notes">Atlas note</label>
+          <textarea id="notes" placeholder="Describe the atlas entry or the current orientation."></textarea>
 
           <div class="buttons">
-            <button id="saveBtn">Save index note</button>
+            <button id="saveBtn">Save atlas</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear notes</button>
+            <button id="clearBtn">Clear index</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -146,24 +159,24 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">Entries</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Scanning</b></div>
-          <div class="tile"><div class="mini">Sort</div><b id="sortLabel">Name</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Atlas list</div>
+          <div class="mini">Atlas entries</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Atlas reading</div>
-          <div id="out" class="out">The index is waiting.</div>
+          <div class="mini">Atlas note</div>
+          <div id="out" class="out">The atlas is scanning the site.</div>
         </div>
 
         <div>
-          <div class="mini">Saved notes</div>
+          <div class="mini">Saved atlases</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -172,40 +185,37 @@
 
   <script>
     const KEY = 'atlas-living-index-v1';
-    const chambers = [
-      ['Home','portal','navigation','The threshold page for the whole site.'],
-      ['Atlas','index','orientation','A practical living index of chambers.'],
-      ['Oracle','interpretation','mirror','A chamber for questions and layered answers.'],
-      ['Chorus','resonance','song','A chamber for shared rhythm and call-response.'],
-      ['Life','emergence','growth','A cellular simulation of living patterns.'],
-      ['Forge','invention','workshop','A blueprint workshop for new chamber ideas.'],
-      ['Constellation','relation','network','A draggable graph of chamber relationships.'],
-      ['Council','commons','deliberation','A chamber for proposals, votes, and outcomes.'],
-      ['Pathfinder','navigation','routes','A chamber for drawing routes and gates.'],
-      ['Garden','cultivation','care','A chamber for planting and tending patterns.'],
-      ['Synthesis','integration','assembly','A chamber for gathering the whole system.'],
-      ['Chronicle','memory','record','A chamber for preserving events and eras.']
-    ].map(([name, theme, role, desc]) => ({ name, theme, role, desc }));
+    const state = load() || {
+      entries: [
+        { name: 'Forge', kind: 'tool', intent: 'Invent new chambers and prototype next forms.' },
+        { name: 'Constellation', kind: 'map', intent: 'Connect chambers into a living network of relations.' },
+        { name: 'Oracle', kind: 'story', intent: 'Ask the site questions and receive layered interpretation.' },
+        { name: 'Chorus', kind: 'sim', intent: 'Layer voices from the chambers and let the site sing.' },
+        { name: 'Council', kind: 'tool', intent: 'Submit proposals, vote, and preserve outcomes.' },
+        { name: 'Pathfinder', kind: 'game', intent: 'Draw routes, place gates, and navigate through the field.' }
+      ],
+      saved: []
+    };
 
-    const state = load() || { notes: [] };
     const searchEl = document.getElementById('search');
-    const sortEl = document.getElementById('sort');
+    const kindEl = document.getElementById('kind');
+    const notesEl = document.getElementById('notes');
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
     const countEl = document.getElementById('count');
+    const visibleCountEl = document.getElementById('visibleCount');
     const savedCountEl = document.getElementById('savedCount');
+    const savedListEl = document.getElementById('savedList');
     const stateLabelEl = document.getElementById('stateLabel');
-    const sortLabelEl = document.getElementById('sortLabel');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.notes)){
-          state.notes = obj.notes;
+        if(obj && Array.isArray(obj.entries)){
+          state.entries = obj.entries;
           save();
           render();
         }
@@ -213,48 +223,47 @@
     }
 
     function renderSaved(){
-      savedCountEl.textContent = String(state.notes.length);
-      savedListEl.textContent = state.notes.length
-        ? state.notes.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
 
     function render(){
       const q = searchEl.value.trim().toLowerCase();
-      const sort = sortEl.value;
-      const list = chambers
-        .filter(c => [c.name, c.theme, c.role, c.desc].join(' ').toLowerCase().includes(q))
-        .sort((a,b) => a[sort].localeCompare(b[sort]));
+      const kind = kindEl.value;
 
-      countEl.textContent = String(list.length);
-      stateLabelEl.textContent = 'Active';
-      sortLabelEl.textContent = sort[0].toUpperCase() + sort.slice(1);
+      const visible = state.entries.filter(e => {
+        const matchQ = !q || e.name.toLowerCase().includes(q) || e.intent.toLowerCase().includes(q);
+        const matchK = kind === 'all' || e.kind === kind;
+        return matchQ && matchK;
+      });
 
-      outEl.textContent = list.length
-        ? `Visible chambers: ${list.length}\nSearch: ${q || 'none'}\nSort: ${sort}\n\nSelect a chamber to inspect it.`
-        : 'No chambers match the current search.';
+      countEl.textContent = String(state.entries.length);
+      visibleCountEl.textContent = String(visible.length);
+      stateLabelEl.textContent = visible.length ? 'Oriented' : 'Searching';
 
       listEl.innerHTML = '';
-      list.forEach(c => {
+      visible.forEach(entry => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${c.name}</b><span>${c.theme} · ${c.role}</span>`;
+        el.innerHTML = `<b>${entry.name}</b><span>${entry.kind} — ${entry.intent}</span>`;
         el.onclick = () => {
-          outEl.textContent = [
-            `Name: ${c.name}`,
-            `Theme: ${c.theme}`,
-            `Role: ${c.role}`,
-            '',
-            c.desc
-          ].join('\n');
+          notesEl.value = `${entry.name} — ${entry.intent}`;
+          outEl.textContent = `Name: ${entry.name}\nKind: ${entry.kind}\nIntent: ${entry.intent}`;
         };
         listEl.appendChild(el);
       });
+
+      outEl.textContent = visible.length
+        ? 'Select an entry to inspect it, or refine the search to orient yourself.'
+        : 'No entries match the current search.';
     }
 
     document.getElementById('saveBtn').onclick = () => {
-      state.notes.unshift(`search:${searchEl.value.trim() || 'all'} | sort:${sortEl.value}`);
-      state.notes = state.notes.slice(0, 12);
+      const note = notesEl.value.trim() || 'No atlas note provided.';
+      state.saved.unshift(`entries:${state.entries.length} | note:${note.slice(0, 40)}`);
+      state.saved = state.saved.slice(0, 12);
       save();
       render();
     };
@@ -269,13 +278,13 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.notes = [];
+      state.entries = [];
       save();
       render();
     };
 
-    searchEl.addEventListener('input', render);
-    sortEl.addEventListener('change', render);
+    [searchEl, kindEl, notesEl].forEach(el => el.addEventListener('input', render));
+    kindEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
