@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chronicle — Living Memory</title>
+  <title>Chronicle — Living Memory Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#08111a;
-      --text:#eef6ff;
-      --muted:#9db4ca;
-      --accent:#8fd3ff;
-      --accent2:#ffd37d;
-      --line: rgba(143,211,255,.16);
-      --glow: 0 0 24px rgba(143,211,255,.14), 0 0 48px rgba(255,211,125,.08);
+      --bg:#0a0f16;
+      --text:#f4fbff;
+      --muted:#bfd0df;
+      --accent:#7cf7ff;
+      --accent2:#ffbf7c;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,191,124,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(143,211,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.07), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(255,191,124,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(16,24,36,.82), rgba(8,10,18,.88));
+      background:linear-gradient(180deg, rgba(18,24,34,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#eef7ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(143,211,255,.22);
-      background:rgba(8,10,18,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(9,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,41 +69,42 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(255,191,124,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#e7f2ff;
+      color:#eff8fc;
       min-height:180px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
     .list{
       display:grid;
       gap:10px;
-      max-height: 520px;
+      max-height:560px;
       overflow:auto;
       padding-right:4px;
     }
     .item{
-      padding:12px 14px;
+      padding:14px;
       border-radius:16px;
-      background:rgba(8,10,18,.72);
-      border:1px solid rgba(143,211,255,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
       cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{border-color:rgba(143,211,255,.45)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
@@ -116,29 +117,37 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Chronicle / Living Memory</div>
-          <h1>Record the becoming.<br/>Browse the eras.<br/>Remember the site.</h1>
+          <div class="tag">Chronicle / Living Memory Chamber</div>
+          <h1>Remember what happened.<br/>Keep it active.<br/>Carry it forward.</h1>
           <div class="sub">
-            Chronicle turns the repository into a living archive. Humans can document milestones, browse the timeline, and preserve the story of the site’s transformation.
+            Chronicle turns the repository into a usable memory system. Humans can record events, browse eras, and keep important moments alive inside the site.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Entry title</label>
-          <input id="title" placeholder="e.g. The day Atlas arrived" />
+          <input id="title" placeholder="e.g. Atlas becomes readable" />
 
-          <label for="era">Era / chamber</label>
-          <input id="era" placeholder="e.g. Atlas, Pathfinder, Forge" />
+          <label for="era">Era</label>
+          <select id="era">
+            <option value="dawn">Dawn</option>
+            <option value="growth">Growth</option>
+            <option value="crossing">Crossing</option>
+            <option value="renewal">Renewal</option>
+            <option value="archive">Archive</option>
+          </select>
 
-          <label for="entry">Entry text</label>
-          <textarea id="entry" placeholder="Write what happened, why it mattered, and what it changed."></textarea>
+          <label for="note">Entry note</label>
+          <textarea id="note" placeholder="e.g. The site gained a legibility chamber and the home portal was updated to reflect it."></textarea>
 
           <div class="buttons">
-            <button id="recordBtn">Record entry</button>
+            <button id="addBtn">Record moment</button>
+            <button id="shiftBtn">Advance era</button>
+            <button id="focusBtn">Focus memory</button>
             <button id="saveBtn">Save chronicle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear archive</button>
+            <button id="clearBtn">Clear chronicle</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -148,23 +157,23 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Entries</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unwritten</b></div>
-          <div class="tile"><div class="mini">Era</div><b id="eraLabel">—</b></div>
+          <div class="tile"><div class="mini">Era</div><b id="eraLabel">Dawn</b></div>
+          <div class="tile"><div class="mini">Memory load</div><b id="loadLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Chronicle reading</div>
-          <div id="out" class="out">The chronicle is awaiting its first entry.</div>
-        </div>
-
-        <div>
-          <div class="mini">Archive</div>
+          <div class="mini">Chronicle index</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
-          <div class="mini">Saved chronicles</div>
+          <div class="mini">Chronicle reading</div>
+          <div id="out" class="out">Record a moment to begin the chronicle.</div>
+        </div>
+
+        <div>
+          <div class="mini">Saved chronicle marks</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -173,82 +182,99 @@
 
   <script>
     const KEY = 'chronicle-living-memory-v1';
-    const state = load() || { entries: [], saved: [] };
+    const state = load() || { entries: [], saved: [], era: 'dawn', load: 18 };
 
-    const titleEl = document.getElementById('title');
-    const eraEl = document.getElementById('era');
-    const entryEl = document.getElementById('entry');
-    const outEl = document.getElementById('out');
     const listEl = document.getElementById('list');
+    const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const stateLabelEl = document.getElementById('stateLabel');
     const eraLabelEl = document.getElementById('eraLabel');
+    const loadLabelEl = document.getElementById('loadLabel');
+    const titleEl = document.getElementById('title');
+    const eraEl = document.getElementById('era');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries, era: state.era, load: state.load })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj && Array.isArray(obj.entries)){
           state.entries = obj.entries;
-          save();
-          render();
+          state.era = String(obj.era ?? 'dawn');
+          state.load = Number(obj.load ?? 18);
+          save(); render();
         }
       }catch{}
     }
-
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-
+    function memoryLoad(){
+      return Math.max(0, Math.min(100, Math.round((state.entries.length * 12) + state.load)));
+    }
+    function makeEntry(title, era){
+      return {
+        id: Date.now() + Math.random(),
+        title,
+        era,
+        note: noteEl.value.trim() || 'A moment in the chronicle.',
+        stamp: new Date().toLocaleString()
+      };
+    }
     function render(){
       countEl.textContent = String(state.entries.length);
-      stateLabelEl.textContent = state.entries.length ? 'Remembering' : 'Unwritten';
-      eraLabelEl.textContent = state.entries[0]?.era || '—';
-
+      eraLabelEl.textContent = state.era.charAt(0).toUpperCase() + state.era.slice(1);
+      loadLabelEl.textContent = `${memoryLoad()}%`;
       listEl.innerHTML = '';
-      state.entries.forEach(e => {
+
+      state.entries.forEach((e, idx) => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${e.title}</b><span>${e.era} — ${e.text.slice(0, 90)}${e.text.length > 90 ? '…' : ''}</span>`;
-        el.onclick = () => {
-          titleEl.value = e.title;
-          eraEl.value = e.era;
-          entryEl.value = e.text;
-          outEl.textContent = `Title: ${e.title}\nEra: ${e.era}\n\n${e.text}`;
-        };
+        el.innerHTML = `<b>${e.title}</b><span>${e.era} · ${e.stamp}</span>`;
+        el.onclick = () => outEl.textContent = `${e.title}\n\nEra: ${e.era}\nStamp: ${e.stamp}\nLoad: ${memoryLoad()}%\n\n${e.note}`;
         listEl.appendChild(el);
       });
 
       outEl.textContent = state.entries.length
-        ? 'Select an entry to revisit it, or record a new moment.'
-        : 'The chronicle is awaiting its first entry.';
+        ? 'Select an entry to inspect it, or advance the era to reframe the record.'
+        : 'Record a moment to begin the chronicle.';
     }
 
-    document.getElementById('recordBtn').onclick = () => {
-      const title = titleEl.value.trim() || 'Untitled event';
-      const era = eraEl.value.trim() || 'Unassigned era';
-      const text = entryEl.value.trim() || 'A moment worth remembering.';
-      state.entries.unshift({ id: Date.now(), title, era, text });
-      save();
-      render();
-      outEl.textContent = `Title: ${title}\nEra: ${era}\n\n${text}`;
-      titleEl.value = '';
-      eraEl.value = '';
-      entryEl.value = '';
+    document.getElementById('addBtn').onclick = () => {
+      const title = titleEl.value.trim() || `Entry ${state.entries.length + 1}`;
+      state.entries.unshift(makeEntry(title, eraEl.value));
+      state.era = eraEl.value;
+      save(); render();
+      outEl.textContent = `${title}\n\nEra: ${eraEl.value}\nNote: ${noteEl.value.trim() || 'A moment in the chronicle.'}`;
+    };
+
+    document.getElementById('shiftBtn').onclick = () => {
+      const eras = ['dawn','growth','crossing','renewal','archive'];
+      state.era = eras[(eras.indexOf(state.era) + 1) % eras.length];
+      state.load = Math.min(100, state.load + 10);
+      state.entries.forEach((e, idx) => { if(idx % 2 === 0) e.era = state.era; });
+      eraEl.value = state.era;
+      save(); render();
+      outEl.textContent = `The era advances to ${state.era}.`;
+    };
+
+    document.getElementById('focusBtn').onclick = () => {
+      state.load = Math.min(100, state.load + 14);
+      if(state.entries.length) state.entries[0].note += '\n\n[Focused as current memory]';
+      save(); render();
+      outEl.textContent = `Memory focus deepens.\n\nLoad: ${memoryLoad()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`entries:${state.entries.length} | latest:${(state.entries[0]?.title || 'none').slice(0, 24)}`);
+      state.saved.unshift(`entries:${state.entries.length} | era:${state.era} | load:${memoryLoad()}%`);
       state.saved = state.saved.slice(0, 12);
-      save();
-      render();
+      save(); render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -262,8 +288,10 @@
 
     document.getElementById('clearBtn').onclick = () => {
       state.entries = [];
-      save();
-      render();
+      state.era = 'dawn';
+      state.load = 18;
+      eraEl.value = state.era;
+      save(); render();
     };
 
     renderSaved();
