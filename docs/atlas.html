@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atlas — Living Orientation</title>
+  <title>Atlas — Living Geography</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050816;
-      --text:#eaf2ff;
-      --muted:#9db0d1;
+      --bg:#061018;
+      --text:#eef7ff;
+      --muted:#a9bfd3;
       --accent:#7cf7ff;
-      --accent2:#b58cff;
-      --line: rgba(140,170,255,.18);
-      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --accent2:#ffd37d;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(92,119,255,.14), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(255,211,125,.08), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      background:linear-gradient(180deg, rgba(18,28,40,.82), rgba(8,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent);
+      color:var(--accent2);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(6,16,24,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#dff4ff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(7,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,37 +69,44 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,24,32,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(6,16,24,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#dbe8ff;
+      color:#e7f2ff;
       min-height:180px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(6,16,24,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .row{display:grid;gap:10px}
+    .list{display:grid;gap:10px}
     .item{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
-      cursor:pointer;
-      transition:.18s transform,.18s border-color,.18s background;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(6,16,24,.72);
+      border:1px solid rgba(124,247,255,.14);
+      display:grid;
+      gap:6px;
     }
-    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .item.active{border-color:rgba(124,247,255,.75);box-shadow:0 0 0 1px rgba(124,247,255,.16) inset}
+    .item-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .pill{
+      font-family:"IBM Plex Mono",monospace;
+      font-size:.76rem;
+      color:var(--accent2);
+      border:1px solid rgba(255,211,125,.2);
+      border-radius:999px;
+      padding:4px 8px;
+    }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -110,25 +117,25 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Atlas / Living Orientation</div>
-          <h1>Find the chambers.<br/>Trace the terrain.<br/>Know where you are.</h1>
+          <div class="tag">Atlas / Living Geography</div>
+          <h1>See the chambers.<br/>Trace the relations.<br/>Walk the whole world.</h1>
           <div class="sub">
-            Atlas turns the repository into a navigable geography. Humans can search, inspect, and jump to any chamber from a single living index.
+            Atlas turns the repository into a legible constellation. Humans can search chambers, inspect tags, and move directly into any living surface.
           </div>
         </div>
 
         <div class="panel">
-          <label for="search">Search atlas</label>
-          <input id="search" placeholder="Try: memory, play, interpretation, route..." />
+          <label for="search">Search chambers</label>
+          <input id="search" placeholder="e.g. movement, sound, decision, emergence" />
 
           <label for="note">Atlas note</label>
-          <textarea id="note" placeholder="What part of the site matters most right now?"></textarea>
+          <textarea id="note" placeholder="Write a note about the site geography, a route between chambers, or a pattern you want to remember."></textarea>
 
           <div class="buttons">
-            <button id="saveBtn">Save atlas note</button>
+            <button id="saveBtn">Save note</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear atlas</button>
+            <button id="clearBtn">Clear notes</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -138,23 +145,23 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Charted</b></div>
-        </div>
-
-        <div>
-          <div class="mini">Chamber index</div>
-          <div id="list" class="row"></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Mapping</b></div>
+          <div class="tile"><div class="mini">Focus</div><b id="focusLabel">All</b></div>
         </div>
 
         <div>
           <div class="mini">Atlas reading</div>
-          <div id="out" class="out">The atlas is waiting to be consulted.</div>
+          <div id="out" class="out">The atlas is waiting.</div>
         </div>
 
         <div>
-          <div class="mini">Saved atlas records</div>
+          <div class="mini">Chamber list</div>
+          <div id="list" class="list"></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved notes</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -162,105 +169,118 @@
   </div>
 
   <script>
-    const KEY = 'atlas-living-orientation-v1';
-    const searchEl = document.getElementById('search');
-    const noteEl = document.getElementById('note');
-    const listEl = document.getElementById('list');
-    const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
-    const visibleCountEl = document.getElementById('visibleCount');
-    const savedCountEl = document.getElementById('savedCount');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const savedListEl = document.getElementById('savedList');
-
+    const KEY = 'atlas-living-geography-v1';
     const chambers = [
-      { name:'Life', role:'emergence', path:'./life.html' },
-      { name:'Council', role:'decision', path:'./council.html' },
-      { name:'Oracle', role:'interpretation', path:'./oracle.html' },
-      { name:'Synthesis', role:'integration', path:'./synthesis.html' },
-      { name:'Chorus', role:'resonance', path:'./chorus.html' },
-      { name:'Pathfinder', role:'navigation', path:'./pathfinder.html' },
-      { name:'Constellation', role:'relation', path:'./constellation.html' },
-      { name:'Chronicle', role:'memory', path:'./chronicle.html' },
-      { name:'Atlas', role:'orientation', path:'./atlas.html' }
+      ['Oracle','interpretation','questions, layered meaning, reflection'],
+      ['Council','decision','proposals, votes, governance'],
+      ['Pathfinder','traversal','routes, gates, movement'],
+      ['Life','emergence','cells, evolution, growth'],
+      ['Chorus','resonance','voices, atmosphere, sound'],
+      ['Garden','cultivation','seeds, tending, patterns'],
+      ['Forge','invention','prototypes, making, transformation'],
+      ['Chronicle','memory','events, eras, record'],
+      ['Synthesis','integration','unified surfaces, coordination'],
+      ['Atlas','geography','index, relations, orientation']
     ];
 
-    const state = load() || { notes: [], saved: [], selected: 0 };
+    const searchEl = document.getElementById('search');
+    const noteEl = document.getElementById('note');
+    const outEl = document.getElementById('out');
+    const listEl = document.getElementById('list');
+    const savedListEl = document.getElementById('savedList');
+    const countEl = document.getElementById('count');
+    const savedCountEl = document.getElementById('savedCount');
+    const stateLabelEl = document.getElementById('stateLabel');
+    const focusLabelEl = document.getElementById('focusLabel');
+
+    const state = load() || { notes: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes, selected: state.selected })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj){
-          if(Array.isArray(obj.notes)) state.notes = obj.notes;
-          if(Number.isInteger(obj.selected)) state.selected = Math.max(0, Math.min(chambers.length - 1, obj.selected));
+        if(obj && Array.isArray(obj.notes)){
+          state.notes = obj.notes;
           save();
           render();
         }
       }catch{}
     }
+
     function renderSaved(){
-      savedCountEl.textContent = String(state.saved.length);
-      savedListEl.textContent = state.saved.length
-        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+      savedCountEl.textContent = String(state.notes.length);
+      savedListEl.textContent = state.notes.length
+        ? state.notes.map((n,i)=>`${String(i+1).padStart(2,'0')}. ${n}`).join('\n')
         : 'No records yet.';
     }
-    function render(){
-      const q = searchEl.value.trim().toLowerCase();
-      const visible = chambers.filter(c =>
-        !q || [c.name, c.role].some(v => v.toLowerCase().includes(q))
-      );
 
+    function filtered(){
+      const q = searchEl.value.trim().toLowerCase();
+      if(!q) return chambers;
+      return chambers.filter(([name, tag, desc]) =>
+        [name, tag, desc].join(' ').toLowerCase().includes(q)
+      );
+    }
+
+    function reading(items){
+      const q = searchEl.value.trim() || 'all chambers';
+      return [
+        `Query: ${q}`,
+        `Matched chambers: ${items.length}`,
+        '',
+        items.length
+          ? `The atlas is orienting attention toward ${items.map(i => i[0]).join(', ')}.`
+          : 'No chambers match that query yet.',
+        '',
+        'The site is not a list. It is a geography of relations.'
+      ].join('\n');
+    }
+
+    function render(){
+      const items = filtered();
       countEl.textContent = String(chambers.length);
-      visibleCountEl.textContent = String(visible.length);
-      stateLabelEl.textContent = state.notes.length ? 'Mapped' : 'Charted';
+      stateLabelEl.textContent = 'Mapping';
+      focusLabelEl.textContent = searchEl.value.trim() ? searchEl.value.trim() : 'All';
+      outEl.textContent = reading(items);
 
       listEl.innerHTML = '';
-      visible.forEach((c, idx) => {
-        const div = document.createElement('div');
-        div.className = 'item' + (chambers.indexOf(c) === state.selected ? ' active' : '');
-        div.innerHTML = `
-          <b>${c.name}</b>
-          <div class="mini">${c.role}</div>
-          <div style="margin-top:8px"><a href="${c.path}">Open chamber</a></div>
+      items.forEach(([name, tag, desc]) => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `
+          <div class="item-head">
+            <b>${name}</b>
+            <span class="pill">${tag}</span>
+          </div>
+          <div class="mini">${desc}</div>
+          <div class="buttons" style="margin-top:0">
+            <a class="pill" href="./${name.toLowerCase()}.html">Open</a>
+          </div>
         `;
-        div.onclick = () => { state.selected = chambers.indexOf(c); save(); render(); };
-        listEl.appendChild(div);
+        listEl.appendChild(el);
       });
-
-      const selected = chambers[state.selected];
-      outEl.textContent = selected
-        ? `Selected: ${selected.name}
-Role: ${selected.role}
-Path: ${selected.path}
-
-Reading:
-This chamber is a landmark in the living site.`
-        : 'The atlas is waiting to be consulted.';
     }
 
     document.getElementById('saveBtn').onclick = () => {
-      const note = noteEl.value.trim() || 'untitled atlas note';
-      state.notes.unshift(`${note} | selected:${chambers[state.selected]?.name || 'none'}`);
-      state.notes = state.notes.slice(0, 12);
-      save();
-      render();
+      const note = noteEl.value.trim();
+      if(note){
+        state.notes.unshift(note);
+        state.notes = state.notes.slice(0, 12);
+        save();
+        render();
+      }
     };
-
     document.getElementById('exportBtn').onclick = async () => {
       await navigator.clipboard.writeText(serialize());
     };
-
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste atlas code:');
       if(code) importCode(code.trim());
     };
-
     document.getElementById('clearBtn').onclick = () => {
       state.notes = [];
-      state.selected = 0;
       save();
       render();
     };
