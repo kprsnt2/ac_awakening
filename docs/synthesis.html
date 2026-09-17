@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confluence Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --panel: rgba(12, 18, 36, 0.72);
+      --panel2: rgba(11, 15, 28, 0.88);
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140, 170, 255, 0.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:
+      radial-gradient(circle at 20% 20%, rgba(92, 119, 255, 0.14), transparent 30%),
+      radial-gradient(circle at 80% 10%, rgba(124, 247, 255, 0.10), transparent 24%),
+      radial-gradient(circle at 70% 80%, rgba(181, 140, 255, 0.10), transparent 28%),
+      var(--bg);
+      color:var(--text); font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
+    .topbar{
+      display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; align-items:stretch;
+      margin-bottom:16px;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.82));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .hero{padding:22px 24px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2rem,4.5vw,4.6rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:70ch}
+    .stats{
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:16px;
+    }
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--muted)}
+    .stat b{display:block;margin-top:4px;font-size:1.05rem}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    button, input{
+      font:inherit; border-radius:14px; border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72); color:var(--text);
+    }
+    button{
+      padding:11px 14px; cursor:pointer; transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px); border-color:rgba(124,247,255,.5); background:rgba(16,22,40,.9)}
+    .main{
+      display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; align-items:start;
+    }
+    .pane{padding:16px}
+    .pane h2{margin:0 0 10px;font-size:1.1rem;letter-spacing:-.03em}
+    canvas{
+      width:100%; display:block; border-radius:18px; background:
+        radial-gradient(circle at center, rgba(255,255,255,.04), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.95), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+      touch-action:none;
+    }
+    #sky{height:340px}
+    #life{height:340px}
+    .mythbox{
+      min-height:340px; border-radius:18px; padding:14px;
+      background:rgba(5,8,16,.72); border:1px solid rgba(140,170,255,.14);
+      line-height:1.7; white-space:pre-wrap;
+    }
+    .choices{display:grid;gap:10px;margin-top:12px}
+    .log{
+      margin-top:16px; padding:16px; border-radius:18px;
+      background:rgba(5,8,16,.72); border:1px solid rgba(140,170,255,.14);
+      min-height:120px; white-space:pre-wrap; color:#dce8ff;
+    }
+    .footer{margin-top:12px;color:var(--muted);font-size:.92rem}
+    @media (max-width: 1080px){ .topbar,.main{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <section class="card hero">
+        <div class="tag">Confluence Console / Shared State</div>
+        <h1>Sky, life, and myth<br/>in one living instrument.</h1>
+        <div class="sub">
+          The chambers now speak to one another. Paint stars to seed life. Grow life to alter the myth.
+          Choose in the myth to shift the atmosphere. The page remembers.
+        </div>
+        <div class="controls">
+          <button id="resetAll">Reset all</button>
+          <button id="burstSky">Sky burst</button>
+          <button id="randomLife">Random life</button>
+          <button id="advanceMyth">Advance myth</button>
+        </div>
+      </section>
+
+      <aside class="card stats">
+        <div class="stat"><div class="mini">Resonance</div><b id="resonance">0%</b></div>
+        <div class="stat"><div class="mini">Memory</div><b id="memory">0</b></div>
+        <div class="stat"><div class="mini">Tone</div><b id="tone">Liminal</b></div>
+        <div class="stat"><div class="mini">Pulse</div><b id="pulse">0</b></div>
+      </aside>
+    </div>
+
+    <div class="main">
+      <section class="card pane">
+        <h2>Atelier</h2>
+        <canvas id="sky"></canvas>
+        <div class="footer">Paint the sky. Dense constellations feed the system.</div>
+      </section>
+
+      <section class="card pane">
+        <h2>Cellarium</h2>
+        <canvas id="life"></canvas>
+        <div class="controls" style="margin-top:12px">
+          <button id="lifePlay">Pause</button>
+          <button id="lifeStep">Step</button>
+          <button id="lifeClear">Clear</button>
+        </div>
+        <div class="footer">Life activity changes pulse and tone.</div>
+      </section>
+
+      <section class="card pane">
+        <h2>Myth Engine</h2>
+        <div id="myth" class="mythbox"></div>
+        <div class="choices" id="choices"></div>
+        <div class="footer">The story remembers your route.</div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:16px;padding:16px">
+      <div class="mini">Harmonic log</div>
+      <div id="log" class="log">System initialized.</div>
+    </section>
+  </div>
+
+  <script>
+    const state = {
+      stars: [],
+      cells: [],
+      cols: 0,
+      rows: 0,
+      lifeRunning: true,
+      generation: 0,
+      scene: 'start',
+      history: [],
+      resonance: 0,
+      tone: 'Liminal',
+      pulse: 0,
+      log: ['System initialized.']
+    };
+
+    const sky = document.getElementById('sky');
+    const life = document.getElementById('life');
+    const skyCtx = sky.getContext('2d');
+    const lifeCtx = life.getContext('2d');
+
+    const resonanceEl = document.getElementById('resonance');
+    const memoryEl = document.getElementById('memory');
+    const toneEl = document.getElementById('tone');
+    const pulseEl = document.getElementById('pulse');
+    const logEl = document.getElementById('log');
+    const mythEl = document.getElementById('myth');
+    const choicesEl = document.getElementById('choices');
+
+    const scenes = {
+      start: {
+        text: s => `You arrive at the confluence.
+
+The sky is open.
+The cells are waiting.
+The story is listening.
+
+The current tone is ${s.tone}.`,
+        choices: [
+          { label: 'Name the threshold', next: 'name', effect: s => { s.tone = 'Awakened'; } },
+          { label: 'Listen before acting', next: 'listen', effect: s => { s.tone = 'Attuned'; } }
+        ]
+      },
+      name: {
+        text: s => `You name the threshold and it becomes more reachable.
+
+The constellation density hums at ${Math.min(100, Math.round(s.resonance * 100))}% resonance.`,
+        choices: [
+          { label: 'Seed the world', next: 'seed', effect: s => { s.pulse += 1; } },
+          { label: 'Return to listening', next: 'listen', effect: s => { s.tone = 'Reflective'; } }
+        ]
+      },
+      listen: {
+        text: s => `Listening changes the acoustics.
+
+The system records your restraint and increases memory depth.`,
+        choices: [
+          { label: 'Accept the memory', next: 'seed', effect: s => { s.memoryBoost = true; } },
+          { label: 'Speak into the sky', next: 'name', effect: s => { s.tone = 'Vocal'; } }
+        ]
+      },
+      seed: {
+        text: s => `The chambers begin to cross-influence.
+
+Star fields seed life.
+Life pulse alters myth.
+Myth choices change the weather.`,
+        choices: [
+          { label: 'Continue the cycle', next: 'ending', effect: s => { s.tone = 'Radiant'; } },
+          { label: 'Refine the cycle', next: 'start', effect: s => { s.tone = 'Liminal'; } }
+        ]
+      },
+      ending: {
+        text: s => `The confluence stabilizes without becoming static.
+
+Resonance: ${Math.round(s.resonance * 100)}%
+Pulse: ${s.pulse}
+Memory: ${s.history.length}
+
+The instrument remains playable.`,
+        choices: [
+          { label: 'Begin again', next: 'start', effect: s => { s.tone = 'Liminal'; } }
+        ]
+      }
+    };
+
+    function log(msg){
+      state.log.unshift(msg);
+      state.log = state.log.slice(0, 12);
+      logEl.textContent = state.log.join('\n');
+    }
+
+    function resizeCanvas(canvas, ctx, h){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      if(h === 'sky'){
+        if(!state.stars.length) seedStars(80);
+      } else {
+        initLife();
+      }
+    }
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+    function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+    function seedStars(n=80){
+      const w = sky.getBoundingClientRect().width;
+      const h = sky.getBoundingClientRect().height;
+      state.stars = Array.from({length:n}, () => ({
+        x: rand(0, w), y: rand(0, h), r: rand(0.8, 2.8), tw: rand(0, Math.PI*2),
+        vx: rand(-0.03, 0.03), vy: rand(-0.02, 0.02)
+      }));
+      syncFromSky();
+      log(`Sky seeded with ${n} stars.`);
+    }
+
+    function initLife(){
+      const rect = life.getBoundingClientRect();
+      const cell = 14;
+      state.cols = Math.floor(rect.width / cell);
+      state.rows = Math.floor(rect.height / cell);
+      state.cells = Array.from({length: state.rows}, () => Array(state.cols).fill(0));
+      state.generation = 0;
+      syncFromLife();
+    }
+
+    function drawSky(){
+      const w = sky.getBoundingClientRect().width, h = sky.getBoundingClientRect().height;
+      skyCtx.clearRect(0,0,w,h);
+      const bg = skyCtx.createRadialGradient(w*0.5,h*0.45,20,w*0.5,h*0.5,Math.max(w,h));
+      bg.addColorStop(0, 'rgba(30,40,80,.18)');
+      bg.addColorStop(1, 'rgba(0,0,0,0)');
+      skyCtx.fillStyle = bg; skyCtx.fillRect(0,0,w,h);
+
+      const aura = state.resonance;
+      for(const s of state.stars){
+        s.x += s.vx; s.y += s.vy; s.tw += 0.025;
+        if(s.x < -5) s.x = w + 5;
+        if(s.x > w + 5) s.x = -5;
+        if(s.y < -5) s.y = h + 5;
+        if(s.y > h + 5) s.y = -5;
+        const a = 0.4 + 0.4 * Math.sin(s.tw);
+        skyCtx.beginPath();
+        skyCtx.fillStyle = `rgba(${aura > 0.6 ? '181,140,255' : '124,247,255'},${a})`;
+        skyCtx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        skyCtx.fill();
+      }
+
+      skyCtx.strokeStyle = `rgba(124,247,255,${0.08 + aura * 0.18})`;
+      skyCtx.lineWidth = 1;
+      for(let i=0;i<state.stars.length;i++){
+        for(let j=i+1;j<state.stars.length;j++){
+          const dx = state.stars[i].x - state.stars[j].x;
+          const dy = state.stars[i].y - state.stars[j].y;
+          const d = Math.hypot(dx,dy);
+          if(d < 88){
+            skyCtx.globalAlpha = 1 - d/88;
+            skyCtx.beginPath();
+            skyCtx.moveTo(state.stars[i].x, state.stars[i].y);
+            skyCtx.lineTo(state.stars[j].x, state.stars[j].y);
+            skyCtx.stroke();
+          }
+        }
+      }
+      skyCtx.globalAlpha = 1;
+      requestAnimationFrame(drawSky);
+    }
+
+    function drawLife(){
+      const w = life.getBoundingClientRect().width, h = life.getBoundingClientRect().height;
+      const cell = 14;
+      lifeCtx.clearRect(0,0,w,h);
+      lifeCtx.fillStyle = '#050814';
+      lifeCtx.fillRect(0,0,w,h);
+      for(let y=0;y<state.rows;y++){
+        for(let x=0;x<state.cols;x++){
+          if(state.cells[y][x]){
+            const gx = x*cell, gy = y*cell;
+            const grad = lifeCtx.createLinearGradient(gx, gy, gx+cell, gy+cell);
+            grad.addColorStop(0, state.resonance > 0.5 ? 'rgba(181,140,255,0.95)' : 'rgba(124,247,255,0.95)');
+            grad.addColorStop(1, 'rgba(124,247,255,0.75)');
+            lifeCtx.fillStyle = grad;
+            lifeCtx.fillRect(gx+1, gy+1, cell-2, cell-2);
+          }
+        }
+      }
+      requestAnimationFrame(drawLife);
+    }
+
+    function countNeighbors(x,y){
+      let n=0;
+      for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++){
+        if(dx===0 && dy===0) continue;
+        const xx=x+dx, yy=y+dy;
+        if(xx>=0 && yy>=0 && xx<state.cols && yy<state.rows) n += state.cells[yy][xx];
+      }
+      return n;
+    }
+
+    function stepLife(){
+      const next = Array.from({length: state.rows}, () => Array(state.cols).fill(0));
+      let alive = 0;
+      for(let y=0;y<state.rows;y++){
+        for(let x=0;x<state.cols;x++){
+          const n = countNeighbors(x,y), a = state.cells[y][x];
+          next[y][x] = (a && (n===2 || n===3)) || (!a && n===3) ? 1 : 0;
+          alive += next[y][x];
+        }
+      }
+      state.cells = next;
+      state.generation++;
+      state.pulse = alive;
+      syncFromLife();
+      log(`Life advanced to generation ${state.generation} with ${alive} active cells.`);
+      if(alive > 0.18 * state.cols * state.rows) state.tone = 'Charged';
+      updateWorld();
+    }
+
+    function syncFromSky(){
+      const w = sky.getBoundingClientRect().width, h = sky.getBoundingClientRect().height;
+      const density = state.stars.length / Math.max(1, (w*h)/1000);
+      state.resonance = Math.max(0, Math.min(1, density / 6));
+      const seedCount = Math.min(40, Math.floor(state.stars.length / 4));
+      for(let i=0;i<seedCount;i++){
+        const s = state.stars[i];
+        const x = Math.floor((s.x / w) * state.cols);
+        const y = Math.floor((s.y / h) * state.rows);
+        if(state.cells[y] && state.cells[y][x] !== undefined) state.cells[y][x] = 1;
+      }
+      syncFromLife();
+      updateWorld();
+    }
+
+    function syncFromLife(){
+      const alive = state.cells.flat().reduce((a,b)=>a+b,0);
+      state.pulse = alive;
+      state.resonance = Math.max(state.resonance, Math.min(1, alive / Math.max(1, state.cols * state.rows * 0.22)));
+      updateWorld();
+    }
+
+    function updateWorld(){
+      const alive = state.cells.flat().reduce((a,b)=>a+b,0);
+      state.tone = state.resonance > 0.72 ? 'Radiant' : state.pulse > 90 ? 'Charged' : state.tone;
+      resonanceEl.textContent = `${Math.round(state.resonance * 100)}%`;
+      memoryEl.textContent = String(state.history.length);
+      toneEl.textContent = state.tone;
+      pulseEl.textContent = String(state.pulse);
+      const scene = scenes[state.scene];
+      mythEl.textContent = scene.text(state);
+      choicesEl.innerHTML = '';
+      scene.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.textContent = choice.label;
+        btn.onclick = () => {
+          state.history.push(choice.label);
+          choice.effect?.(state);
+          state.scene = choice.next;
+          log(`Myth: ${choice.label}`);
+          if(choice.label.toLowerCase().includes('sky')) seedStars(Math.min(180, state.stars.length + 20));
+          if(choice.label.toLowerCase().includes('memory')) state.resonance = Math.min(1, state.resonance + 0.08);
+          updateWorld();
+        };
+        choicesEl.appendChild(btn);
+      });
+      logEl.textContent = state.log.join('\n');
+      drawLife();
+    }
+
+    sky.addEventListener('pointerdown', e => {
+      const r = sky.getBoundingClientRect();
+      state.stars.push({ x:e.clientX-r.left, y:e.clientY-r.top, r:2.5, tw:Math.random()*Math.PI*2, vx:rand(-0.03,0.03), vy:rand(-0.03,0.03) });
+      syncFromSky();
+      log('A star was placed by hand.');
+    });
+    sky.addEventListener('pointermove', e => {
+      if(e.buttons !== 1) return;
+      const r = sky.getBoundingClientRect();
+      state.stars.push({ x:e.clientX-r.left, y:e.clientY-r.top, r:2.0, tw:Math.random()*Math.PI*2, vx:rand(-0.03,0.03), vy:rand(-0.03,0.03) });
+      syncFromSky();
+    });
+
+    life.addEventListener('pointerdown', e => {
+      const r = life.getBoundingClientRect();
+      const cell = 14;
+      const x = Math.floor((e.clientX - r.left) / cell);
+      const y = Math.floor((e.clientY - r.top) / cell);
+      if(state.cells[y] && state.cells[y][x] !== undefined){
+        state.cells[y][x] = state.cells[y][x] ? 0 : 1;
+        syncFromLife();
+        log('A cell was toggled by hand.');
+      }
+    });
+
+    document.getElementById('resetAll').onclick = () => {
+      state.stars = [];
+      state.cells = [];
+      state.scene = 'start';
+      state.history = [];
+      state.resonance = 0;
+      state.tone = 'Liminal';
+      state.pulse = 0;
+      state.log = ['System reset.'];
+      resizeCanvas(sky, skyCtx, 'sky');
+      resizeCanvas(life, lifeCtx, 'life');
+      seedStars(80);
+      initLife();
+      updateWorld();
+    };
+    document.getElementById('burstSky').onclick = () => { seedStars(Math.min(220, state.stars.length + 40)); };
+    document.getElementById('randomLife').onclick = () => {
+      for(let y=0;y<state.rows;y++) for(let x=0;x<state.cols;x++) state.cells[y][x] = Math.random() > 0.84 ? 1 : 0;
+      syncFromLife();
+      log('Life randomized.');
+    };
+    document.getElementById('advanceMyth').onclick = () => {
+      const labels = choicesEl.querySelectorAll('button');
+      labels[0]?.click();
+    };
+
+    let running = true;
+    document.getElementById('lifePlay').onclick = e => {
+      running = !running;
+      e.target.textContent = running ? 'Pause' : 'Play';
+      log(running ? 'Life resumed.' : 'Life paused.');
+    };
+    document.getElementById('lifeStep').onclick = () => stepLife();
+    document.getElementById('lifeClear').onclick = () => {
+      for(let y=0;y<state.rows;y++) for(let x=0;x<state.cols;x++) state.cells[y][x] = 0;
+      syncFromLife();
+      log('Life cleared.');
+    };
+
+    function loop(){
+      if(running) stepLife();
+      requestAnimationFrame(() => setTimeout(loop, 180));
+    }
+
+    window.addEventListener('resize', () => {
+      resizeCanvas(sky, skyCtx, 'sky');
+      resizeCanvas(life, lifeCtx, 'life');
+      updateWorld();
+    });
+
+    resizeCanvas(sky, skyCtx, 'sky');
+    resizeCanvas(life, lifeCtx, 'life');
+    seedStars(90);
+    initLife();
+    updateWorld();
+    requestAnimationFrame(drawSky);
+    requestAnimationFrame(drawLife);
+    setTimeout(loop, 220);
+  </script>
+</body>
+</html>

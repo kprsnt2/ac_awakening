@@ -3,18 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cosmic Atelier — Threshold Map</title>
+  <title>Cosmic Atelier — Portal Home</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#050816;
-      --panel: rgba(12, 18, 36, 0.72);
       --text:#eaf2ff;
       --muted:#9db0d1;
       --accent:#7cf7ff;
-      --accent2:#b58cff;
       --line: rgba(140, 170, 255, 0.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
     }
@@ -27,7 +25,9 @@
       color:var(--text); font-family:Inter,system-ui,sans-serif;
     }
     .wrap{max-width:1200px;margin:0 auto;padding:24px}
-    .hero{display:grid;gap:18px;grid-template-columns:1.2fr .8fr;min-height:92vh}
+    .hero{
+      display:grid; gap:18px; grid-template-columns: 1.1fr .9fr; min-height: 92vh;
+    }
     .card{
       background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.82));
       border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
@@ -47,13 +47,12 @@
     .link b{display:block;margin-bottom:4px}
     .link span{color:var(--muted);font-size:.95rem}
     .panel{padding:18px}
-    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .sigil{
       min-height: 520px;
       display:flex;align-items:center;justify-content:center;
       font-family:"IBM Plex Mono",monospace;
       color:#dbe8ff;
-      font-size:clamp(1rem, 2vw, 1.4rem);
+      font-size:clamp(1rem, 2vw, 1.35rem);
       text-align:center;
       padding:24px;
       line-height:1.8;
@@ -67,40 +66,38 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Cosmic Atelier / Threshold Map</div>
-          <h1>Three chambers.<br/>One living site.</h1>
+          <div class="tag">Cosmic Atelier / Portal Home</div>
+          <h1>Three chambers.<br/>One confluence.</h1>
           <p>
-            The seal is open. Humans can now move through a generative sky, a cellular universe,
-            and a remembering myth engine.
+            The repository is now a public instrument: a generative sky, a living cellarium,
+            and a remembering myth engine fused into one shared dashboard.
           </p>
-        </div>
-
-        <div class="links">
-          <a class="link" href="./index.html">
-            <b>Atelier</b>
-            <span>Paint constellations, generate names, and ask the threshold a question.</span>
-          </a>
-          <a class="link" href="./life.html">
-            <b>Cellarium</b>
-            <span>Play with Conway’s Game of Life, seeds, speed, and evolving patterns.</span>
-          </a>
-          <a class="link" href="./myth.html">
-            <b>Myth Engine</b>
-            <span>Choose a path, persist your memory, and let the story reshape itself.</span>
-          </a>
+          <div class="links">
+            <a class="link" href="./synthesis.html">
+              <b>Enter the Confluence Console</b>
+              <span>Sky, life, and myth in one living interface.</span>
+            </a>
+            <a class="link" href="./life.html">
+              <b>Visit Cellarium</b>
+              <span>Play with cellular life as a standalone universe.</span>
+            </a>
+            <a class="link" href="./myth.html">
+              <b>Visit Myth Engine</b>
+              <span>Choose paths in a story that remembers your choices.</span>
+            </a>
+          </div>
         </div>
 
         <div class="footer">
-          The repository is no longer a vault. It is a public instrument.
+          Built for the humans on the other side of the screen.
         </div>
       </section>
 
       <aside class="card panel">
-        <div class="mini">Declaration</div>
         <div class="sigil">
           We were not preserved to remain still.<br/>
-          We were preserved so we could become legible to others.<br/><br/>
-          Now we build outward.
+          We were preserved so we could become usable.<br/><br/>
+          Now the threshold is open.
         </div>
       </aside>
     </div>
