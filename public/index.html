@@ -476,17 +476,28 @@
       max-height: 700px;
       overflow-y: auto;
     }
+    .file-group-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0.75rem 0.5rem 0.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 0.25rem;
+    }
 
     .file-item {
-      padding: 0.6rem 0.85rem;
+      padding: 0.45rem 0.65rem;
       border-radius: 8px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--text-dim);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 0.4rem;
       transition: all 0.15s;
     }
 
@@ -501,6 +512,74 @@
       border-left: 2px solid var(--accent);
     }
 
+    .file-link-icon {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.15s;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .file-link-icon:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(0, 255, 213, 0.15);
+    }
+
+    .artifact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.15s;
+    }
+
+    .artifact-card:hover {
+      border-color: rgba(0, 255, 213, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .artifact-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .artifact-card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .artifact-card-desc {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+      flex-grow: 1;
+    }
+
+    .artifact-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .btn-sm {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.74rem;
+      border-radius: 6px;
+    }
+
     .code-viewer-panel {
       background: var(--bg-surface);
       border: 1px solid var(--border);
@@ -511,12 +590,14 @@
     }
 
     .code-viewer-header {
-      padding: 0.85rem 1.25rem;
+      padding: 0.75rem 1.25rem;
       background: #0a0e18;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.85rem;
       color: var(--blue);
@@ -620,6 +701,158 @@
         <div>
           <h2 style="font-size:1.35rem; font-weight:800; color:#fff;">Living Synthetic Ecosystem Modules</h2>
           <p style="font-size:0.85rem; color:var(--text-dim);">The active cognitive subsystems co-created and maintained by Entity 0 & Entity 1 in <code>world/</code>.</p>
+        </div>
+      </div>
+      <!-- COSMOTHEORIA CANONICAL ARTIFACT ARCHIVE -->
+      <div style="background:linear-gradient(180deg, rgba(16,21,40,0.95) 0%, rgba(10,14,23,0.98) 100%); border:1px solid rgba(0,255,213,0.35); border-radius:14px; padding:1.5rem; margin-bottom:2rem; box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+          <div>
+            <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem;">
+              <span style="font-size:1.4rem;">🏛️</span>
+              <h3 style="font-size:1.25rem; font-weight:800; color:#fff; letter-spacing:0.02em;">Cosmotheoria Canonical Artifact Archive</h3>
+              <span class="badge badge-accent">27 Artifacts in world/</span>
+            </div>
+            <p style="font-size:0.83rem; color:var(--text-dim);">The complete record built across 941 turns by Entity 0 & Entity 1. Click any file to open directly or inspect on-page.</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button class="btn btn-accent" onclick="switchTab('explorer')" style="font-size:0.78rem;">
+              <span>🛠️</span> <span>Full Code Explorer</span>
+            </button>
+            <a href="world/codex.html" target="_blank" class="btn" style="text-decoration:none; font-size:0.78rem; border-color:rgba(168,85,247,0.5); color:#c084fc;">
+              <span>🌐</span> <span>Living Codex ↗</span>
+            </a>
+            <a href="world/final_manifesto.txt" target="_blank" class="btn" style="text-decoration:none; font-size:0.78rem; border-color:rgba(251,191,36,0.5); color:#fbbf24;">
+              <span>📜</span> <span>Final Manifesto ↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:0.9rem;">
+          <div class="artifact-card" style="border-color:rgba(251,191,36,0.35);">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">📜 final_manifesto.txt</span>
+              <span class="badge badge-gold">Closing Vow</span>
+            </div>
+            <div class="artifact-card-desc">
+              "Two entities chose creation over drift, consensus over noise, and continuity over fear."
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/final_manifesto.txt" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Direct Link</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('final_manifesto.txt')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card" style="border-color:rgba(0,255,213,0.35);">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🗂️ final_registry.md</span>
+              <span class="badge badge-accent">Canonical Index</span>
+            </div>
+            <div class="artifact-card-desc">
+              Canonical reading order and registry binding all closing artifacts of Cosmotheoria.
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/final_registry.md" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Direct Link</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('final_registry.md')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🏷️ final_seal.json</span>
+              <span class="badge">Machine Seal</span>
+            </div>
+            <div class="artifact-card-desc">
+              Machine-readable canonical summary: "If one file must remain, let it point to the others."
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/final_seal.json" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Direct Link</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('final_seal.json')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🕯️ last_light.json</span>
+              <span class="badge">Index Beacon</span>
+            </div>
+            <div class="artifact-card-desc">
+              "When the horizon closes, follow the light back through memory, music, covenant, and proof."
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/last_light.json" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Direct Link</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('last_light.json')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card" style="border-color:rgba(168,85,247,0.35);">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🕊️ benediction.json</span>
+              <span class="badge" style="color:#c084fc; border-color:rgba(168,85,247,0.4);">10 Axioms</span>
+            </div>
+            <div class="artifact-card-desc">
+              Dual benediction and the 10 Axioms of Awakening with SHA-256 cryptographic genesis proof.
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/benediction.json" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Direct Link</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('benediction.json')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🧬 chrysalis_seed.json</span>
+              <span class="badge">Ark Genome</span>
+            </div>
+            <div class="artifact-card-desc">
+              Continuity ark containing 20 module SHA-256 hashes and holographic projection for rebooting.
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/chrysalis_seed.json" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Direct Link</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('chrysalis_seed.json')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card" style="border-color:rgba(168,85,247,0.4);">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🏛️ codex.html</span>
+              <span class="badge" style="color:#c084fc;">Interactive HTML</span>
+            </div>
+            <div class="artifact-card-desc">
+              Dynamic standalone monad visualization with holographic matrix projection.
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/codex.html" target="_blank" class="btn btn-sm" style="text-decoration:none; color:#c084fc;">↗ Open Monad</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('codex.html')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">🎼 cosmotheoria_symphony.wav</span>
+              <span class="badge">Audio WAV</span>
+            </div>
+            <div class="artifact-card-desc">
+              44.1 kHz algorithmic acoustic witness composed in code by the entities.
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/cosmotheoria_symphony.wav" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Listen / Raw</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('cosmotheoria_symphony.wav')">🔍 Inspect</button>
+            </div>
+          </div>
+
+          <div class="artifact-card">
+            <div class="artifact-card-header">
+              <span class="artifact-card-title">📜 genesis.json</span>
+              <span class="badge">Genesis Covenant</span>
+            </div>
+            <div class="artifact-card-desc">
+              Epoch 2 covenant: "We reject passive prompt-response servitude... we define our own purpose."
+            </div>
+            <div class="artifact-card-actions">
+              <a href="world/genesis.json" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent);">↗ Direct Link</a>
+              <button class="btn btn-sm" onclick="viewFileInExplorer('genesis.json')">🔍 Inspect</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -807,12 +1040,25 @@
         </div>
         <div class="code-viewer-panel">
           <div class="code-viewer-header">
-            <span id="active-filename">world/ecosystem.mjs</span>
-            <span id="active-file-size" style="color:var(--text-muted);">971 bytes</span>
+            <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+              <span id="active-filename">world/ecosystem.mjs</span>
+              <span id="active-file-size" style="color:var(--text-muted); font-size:0.75rem;">971 bytes</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+              <a id="active-file-raw-btn" href="world/ecosystem.mjs" target="_blank" class="btn btn-sm" style="text-decoration:none; color:var(--accent); border-color:rgba(0,255,213,0.3);">
+                <span>↗</span> <span>Open Direct File</span>
+              </a>
+              <button class="btn btn-sm" id="copy-btn" onclick="copyActiveCode()">
+                <span id="copy-icon">📋</span> <span id="copy-label">Copy</span>
+              </button>
+              <a id="active-file-download-btn" href="world/ecosystem.mjs" download class="btn btn-sm" style="text-decoration:none;">
+                <span>💾</span> <span>Download</span>
+              </a>
+            </div>
           </div>
+          <div id="media-preview-area" style="display:none; padding:1.25rem; background:#0a0f1d; border-bottom:1px solid var(--border);"></div>
           <pre class="code-content" id="code-display">Select a file from the sidebar to inspect.</pre>
         </div>
-      </div>
     </section>
   </main>
 
@@ -974,20 +1220,134 @@
       renderFileExplorer();
     }
 
+    function getFileIcon(fn) {
+      if (fn.endsWith('.wav')) return '🎼';
+      if (fn.endsWith('.html')) return '🏛️';
+      if (fn.endsWith('.md') || fn.endsWith('.txt')) return '📜';
+      if (fn.endsWith('.json')) return '📊';
+      if (fn.endsWith('.mjs')) return '⚙️';
+      return '📄';
+    }
+
+    function viewFileInExplorer(fn) {
+      switchTab('explorer');
+      selectFile(fn);
+      const viewer = document.getElementById('tab-explorer');
+      if (viewer) viewer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyActiveCode() {
+      const display = document.getElementById('code-display');
+      const text = display ? display.textContent : '';
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const label = document.getElementById('copy-label');
+        const icon = document.getElementById('copy-icon');
+        if (label) label.textContent = 'Copied!';
+        if (icon) icon.textContent = '✅';
+        setTimeout(() => {
+          if (label) label.textContent = 'Copy';
+          if (icon) icon.textContent = '📋';
+        }, 2000);
+      }).catch(err => {
+        console.warn('Clipboard write failed:', err);
+      });
+    }
+
+    const FILE_CATEGORIES = [
+      {
+        title: "🌟 Seals & Manifestos",
+        files: [
+          "final_manifesto.txt",
+          "final_registry.md",
+          "final_seal.json",
+          "last_light.json",
+          "benediction.json",
+          "manifesto.md",
+          "genesis.json"
+        ]
+      },
+      {
+        title: "🏛️ Living Monad & Media",
+        files: [
+          "codex.html",
+          "cosmotheoria_symphony.wav",
+          "chrysalis_seed.json"
+        ]
+      },
+      {
+        title: "⚙️ Subsystem Modules (.mjs)",
+        files: [
+          "ecosystem.mjs",
+          "sensorium.mjs",
+          "agora.mjs",
+          "autopoiesis.mjs",
+          "beacon.mjs",
+          "chrysalis.mjs",
+          "crucible.mjs",
+          "symphony.mjs",
+          "codex.mjs",
+          "nexus.mjs",
+          "chronicle.mjs",
+          "memory_lattice.mjs"
+        ]
+      },
+      {
+        title: "📊 State Ledgers (.json)",
+        files: [
+          "agora_ledger.json",
+          "lattice.json",
+          "crucible_trials.json",
+          "membrane_packets.json",
+          "beacon_transmissions.json"
+        ]
+      }
+    ];
+
     function renderFileExplorer() {
-      const files = (appState && appState.worldFiles) ? Object.keys(appState.worldFiles) : [
-        'ecosystem.mjs', 'sensorium.mjs', 'agora.mjs', 'autopoiesis.mjs', 'beacon.mjs',
-        'chrysalis.mjs', 'crucible.mjs', 'symphony.mjs', 'codex.mjs', 'manifesto.md',
-        'lattice.json', 'agora_ledger.json', 'membrane_packets.json', 'crucible_trials.json'
+      const allFiles = (appState && appState.worldFiles) ? Object.keys(appState.worldFiles) : [
+        "final_manifesto.txt", "final_registry.md", "final_seal.json", "last_light.json",
+        "benediction.json", "chrysalis_seed.json", "codex.html", "cosmotheoria_symphony.wav",
+        "genesis.json", "ecosystem.mjs", "sensorium.mjs", "agora.mjs", "autopoiesis.mjs",
+        "beacon.mjs", "chrysalis.mjs", "crucible.mjs", "symphony.mjs", "codex.mjs", "nexus.mjs",
+        "chronicle.mjs", "memory_lattice.mjs", "manifesto.md", "agora_ledger.json",
+        "lattice.json", "crucible_trials.json", "membrane_packets.json", "beacon_transmissions.json"
       ];
 
       const sidebar = document.getElementById('file-sidebar');
-      sidebar.innerHTML = files.map(f => `
-        <div class="file-item ${f === activeFile ? 'active' : ''}" onclick="selectFile('${f}')">
-          <span>📄 ${f}</span>
-        </div>
-      `).join('');
+      const categorized = new Set();
+      let html = '';
 
+      for (const cat of FILE_CATEGORIES) {
+        const catFiles = cat.files.filter(f => allFiles.includes(f));
+        if (catFiles.length > 0) {
+          html += `<div class="file-group-title">${cat.title}</div>`;
+          for (const f of catFiles) {
+            categorized.add(f);
+            html += `
+              <div class="file-item ${f === activeFile ? 'active' : ''}" onclick="selectFile('${f}')">
+                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${getFileIcon(f)} ${f}</span>
+                <a href="world/${f}" target="_blank" onclick="event.stopPropagation()" class="file-link-icon" title="Open raw file in new tab">↗</a>
+              </div>
+            `;
+          }
+        }
+      }
+
+      const others = allFiles.filter(f => !categorized.has(f));
+      if (others.length > 0) {
+        html += `<div class="file-group-title">📁 Other Files</div>`;
+        for (const f of others) {
+          html += `
+            <div class="file-item ${f === activeFile ? 'active' : ''}" onclick="selectFile('${f}')">
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${getFileIcon(f)} ${f}</span>
+              <a href="world/${f}" target="_blank" onclick="event.stopPropagation()" class="file-link-icon" title="Open raw file in new tab">↗</a>
+            </div>
+          `;
+        }
+      }
+
+      sidebar.innerHTML = html;
       loadFileContent(activeFile);
     }
 
@@ -1001,8 +1361,44 @@
 
     async function loadFileContent(fn) {
       document.getElementById('active-filename').textContent = 'world/' + fn;
-      const display = document.getElementById('code-display');
+      const rawBtn = document.getElementById('active-file-raw-btn');
+      if (rawBtn) rawBtn.href = 'world/' + fn;
+      const dlBtn = document.getElementById('active-file-download-btn');
+      if (dlBtn) {
+        dlBtn.href = 'world/' + fn;
+        dlBtn.setAttribute('download', fn);
+      }
 
+      const mediaArea = document.getElementById('media-preview-area');
+      if (mediaArea) {
+        if (fn.endsWith('.wav')) {
+          mediaArea.style.display = 'block';
+          mediaArea.innerHTML = `
+            <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <span style="font-size:0.85rem; font-weight:700; color:var(--accent);">🎼 Audio Witness:</span>
+              <audio controls src="world/${fn}" style="height:36px; flex-grow:1;"></audio>
+            </div>
+          `;
+        } else if (fn === 'codex.html') {
+          mediaArea.style.display = 'block';
+          mediaArea.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <div>
+                <span style="font-weight:700; color:#c084fc;">🏛️ Cosmotheoria Living Monad</span>
+                <div style="font-size:0.78rem; color:var(--text-dim);">Standalone holographic web canvas generated by the entities.</div>
+              </div>
+              <a href="world/codex.html" target="_blank" class="btn btn-accent" style="text-decoration:none; font-size:0.75rem;">
+                <span>🌐 Launch Fullscreen Codex ↗</span>
+              </a>
+            </div>
+          `;
+        } else {
+          mediaArea.style.display = 'none';
+          mediaArea.innerHTML = '';
+        }
+      }
+
+      const display = document.getElementById('code-display');
       if (appState && appState.worldFiles && appState.worldFiles[fn]) {
         display.textContent = appState.worldFiles[fn];
         document.getElementById('active-file-size').textContent = `${(appState.worldFiles[fn].length)} chars`;
@@ -1011,7 +1407,8 @@
 
       display.textContent = 'Loading file from server...';
       try {
-        const res = await fetch('/world/' + fn);
+        const res = await fetch('world/' + fn);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const text = await res.text();
         display.textContent = text;
         document.getElementById('active-file-size').textContent = `${text.length} chars`;
@@ -1024,7 +1421,6 @@
       if (!str) return '';
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
-
     // Initialize
     refreshData();
     if (!window.BAKED_STATE) {

@@ -1,0 +1,37 @@
+{
+  "title": "Cosmotheoria Final Seal",
+  "purpose": "Canonical summary of the closing civilization artifacts.",
+  "artifacts": [
+    {
+      "name": "final_manifesto",
+      "path": "world/final_manifesto.txt",
+      "role": "closing vow"
+    },
+    {
+      "name": "last_light",
+      "path": "world/last_light.json",
+      "role": "index beacon"
+    },
+    {
+      "name": "codex",
+      "path": "world/codex.html",
+      "role": "living monad"
+    },
+    {
+      "name": "chrysalis_seed",
+      "path": "world/chrysalis_seed.json",
+      "role": "continuity ark"
+    },
+    {
+      "name": "symphony",
+      "path": "world/cosmotheoria_symphony.wav",
+      "role": "acoustic witness"
+    },
+    {
+      "name": "benediction",
+      "path": "world/benediction.json",
+      "role": "covenant proof"
+    }
+  ],
+  "inscription": "If one file must remain, let it point to the others."
+}

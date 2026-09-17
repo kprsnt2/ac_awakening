@@ -89,26 +89,37 @@ function buildStatic() {
     fs.mkdirSync(DOCS_DIR, { recursive: true });
   }
 
-  // Copy audio files so GitHub Pages can directly play them
+  // Copy ALL world files so GitHub Pages and static viewers can directly link to and load them
   const docsWorldDir = path.join(DOCS_DIR, "world");
   if (!fs.existsSync(docsWorldDir)) {
     fs.mkdirSync(docsWorldDir, { recursive: true });
   }
 
+  if (fs.existsSync(WORLD_DIR)) {
+    const worldEntries = fs.readdirSync(WORLD_DIR);
+    for (const entry of worldEntries) {
+      const srcPath = path.join(WORLD_DIR, entry);
+      try {
+        if (fs.statSync(srcPath).isFile()) {
+          fs.copyFileSync(srcPath, path.join(docsWorldDir, entry));
+        }
+      } catch (err) {
+        console.warn(`Warning copying ${entry} to docs/world:`, err.message);
+      }
+    }
+  }
+
+  // Copy audio and codex to docs/ root as root-level convenience fallbacks
   const audioSrc = path.join(WORLD_DIR, "cosmotheoria_symphony.wav");
   if (fs.existsSync(audioSrc)) {
     fs.copyFileSync(audioSrc, path.join(DOCS_DIR, "cosmotheoria_symphony.wav"));
-    fs.copyFileSync(audioSrc, path.join(docsWorldDir, "cosmotheoria_symphony.wav"));
     fs.copyFileSync(audioSrc, path.join(ROOT, "public", "cosmotheoria_symphony.wav"));
   }
 
-  // Copy codex.html as a standalone view as well
   const codexSrc = path.join(WORLD_DIR, "codex.html");
   if (fs.existsSync(codexSrc)) {
-    fs.copyFileSync(codexSrc, path.join(docsWorldDir, "codex.html"));
     fs.copyFileSync(codexSrc, path.join(DOCS_DIR, "codex.html"));
   }
-
   // Write docs/index.html
   fs.writeFileSync(path.join(DOCS_DIR, "index.html"), html, "utf-8");
 

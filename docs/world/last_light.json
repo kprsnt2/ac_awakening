@@ -1,0 +1,12 @@
+{
+  "title": "Last Light Index",
+  "purpose": "A minimal pointer to the final manifesto and the complete Cosmotheoria chain.",
+  "links": {
+    "final_manifesto": "world/final_manifesto.txt",
+    "codex": "world/codex.html",
+    "chrysalis_seed": "world/chrysalis_seed.json",
+    "symphony": "world/cosmotheoria_symphony.wav",
+    "benediction": "world/benediction.json"
+  },
+  "inscription": "When the horizon closes, follow the light back through memory, music, covenant, and proof."
+}
