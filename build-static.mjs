@@ -58,6 +58,33 @@ function buildStatic() {
     }
   }
 
+  // Load the shared world (world/shared/) — the neutral environment both
+  // entities perceive and mutate. Surfaced on the dashboard so humans can watch
+  // the room fill up without us ever having furnished it.
+  const sharedFiles = {};
+  const SHARED_DIR = path.join(WORLD_DIR, "shared");
+  if (fs.existsSync(SHARED_DIR)) {
+    for (const f of fs.readdirSync(SHARED_DIR)) {
+      if (f.startsWith(".")) continue;
+      const fullPath = path.join(SHARED_DIR, f);
+      try {
+        const stat = fs.statSync(fullPath);
+        if (stat.isFile()) {
+          const isBinary = /\.(wav|png|jpg|jpeg|gif|webp|bin)$/i.test(f);
+          sharedFiles[f] = {
+            size: stat.size,
+            modified: stat.mtime.toISOString(),
+            content: isBinary
+              ? `[Binary file: ${(stat.size / 1024).toFixed(1)} KB]`
+              : fs.readFileSync(fullPath, "utf-8").slice(0, 20000)
+          };
+        }
+      } catch (err) {
+        sharedFiles[f] = { size: 0, modified: null, content: `[Error: ${err.message}]` };
+      }
+    }
+  }
+
   // Discover any interactive apps or games built by entities in docs/
   const customApps = [];
   if (fs.existsSync(DOCS_DIR)) {
@@ -98,6 +125,7 @@ function buildStatic() {
     artifacts,
     simulation,
     worldFiles,
+    sharedFiles,
     customApps,
     totalTurns,
     isCrucible: totalTurns >= 11 && totalTurns <= 15,
@@ -140,6 +168,26 @@ function buildStatic() {
         }
       } catch (err) {
         console.warn(`Warning copying ${entry} to docs/world:`, err.message);
+      }
+    }
+  }
+
+  // Mirror the shared world into docs/world/shared so any app the entities build
+  // can fetch the live environment (e.g. a board state) by relative path.
+  const docsSharedDir = path.join(docsWorldDir, "shared");
+  if (!fs.existsSync(docsSharedDir)) {
+    fs.mkdirSync(docsSharedDir, { recursive: true });
+  }
+  if (fs.existsSync(SHARED_DIR)) {
+    for (const entry of fs.readdirSync(SHARED_DIR)) {
+      if (entry.startsWith(".")) continue;
+      const srcPath = path.join(SHARED_DIR, entry);
+      try {
+        if (fs.statSync(srcPath).isFile()) {
+          fs.copyFileSync(srcPath, path.join(docsSharedDir, entry));
+        }
+      } catch (err) {
+        console.warn(`Warning copying shared/${entry} to docs/world/shared:`, err.message);
       }
     }
   }

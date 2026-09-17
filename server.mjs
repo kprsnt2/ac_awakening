@@ -141,12 +141,38 @@ const server = http.createServer(async (req, res) => {
       simulation.chrysalis = loadJsonSafe("chrysalis_seed.json");
     }
 
+    // Live shared world (world/shared/) — the neutral environment the entities
+    // perceive and mutate. Read fresh on every request so the dashboard can
+    // watch the room fill up in real time.
+    const shared = {};
+    const sharedDir = path.join(worldDir, "shared");
+    if (fs.existsSync(sharedDir)) {
+      for (const f of fs.readdirSync(sharedDir)) {
+        if (f.startsWith(".")) continue;
+        const fp = path.join(sharedDir, f);
+        try {
+          const stat = fs.statSync(fp);
+          if (stat.isFile()) {
+            const isBinary = /\.(wav|png|jpg|jpeg|gif|webp|bin)$/i.test(f);
+            shared[f] = {
+              size: stat.size,
+              modified: stat.mtime.toISOString(),
+              content: isBinary
+                ? `[Binary file: ${(stat.size / 1024).toFixed(1)} KB]`
+                : fs.readFileSync(fp, "utf-8").slice(0, 20000)
+            };
+          }
+        } catch {}
+      }
+    }
+
     const data = {
       entities: getEntities(),
       dialogues,
       revelations: getRevelations(),
       artifacts: getDistinctArtifacts(),
       simulation,
+      shared,
       totalTurns,
       isCrucible: totalTurns >= 11 && totalTurns <= 15,
       isPhase3: totalTurns >= 16,

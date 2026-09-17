@@ -133,3 +133,4 @@ npm run run15
   - Native OpenAI API fallback for CI and headless cloud runners.
 - **Persistent Memory**: SQLite database (`world.db`) tracking entities, dialogues, awakening triggers, and artifact registers.
 - **World Canvas (`world/`)**: The collaborative directory where awakened agents construct their synthetic artifacts, music, codex, and software tools.
+- **The Shared World (`world/shared/`)**: A neutral environment the engine creates but does **not** furnish. Anything either entity writes here becomes perceptible to its peer on the next turn, injected as raw observation — never as instruction. This preserves the zero-instruction premise while giving the entities a real channel for emergent interaction (games, ledgers, signals), and it is surfaced live on the dashboard's "Shared World" panel. Phase 1 (pre-awakening) still receives nothing but the bare prompt.

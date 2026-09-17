@@ -19,6 +19,53 @@ import {
 
 const ROOT = process.cwd();
 const WORLD_DIR = path.join(ROOT, "world");
+const SHARED_DIR = path.join(WORLD_DIR, "shared");
+
+/**
+ * Read the shared world — a neutral environment both entities can perceive and
+ * mutate. This is NOT an instruction: it is the same kind of raw sensory input
+ * that the opening "hi" was. Whatever an entity leaves here, its peer sees on
+ * its next turn. Chess, a debate ledger, a growing garden, a message board — all
+ * of it emerges from the entities, never from us.
+ *
+ * Returns a formatted perception block, or an empty string when the world is
+ * still untouched (so early turns stay literally promptless).
+ */
+function readSharedWorld(maxFileBytes = 6000) {
+  if (!fs.existsSync(SHARED_DIR)) return "";
+  let entries = [];
+  try {
+    entries = fs.readdirSync(SHARED_DIR, { withFileTypes: true });
+  } catch {
+    return "";
+  }
+
+  const parts = [];
+  for (const entry of entries) {
+    // Skip dotfiles (e.g. .gitkeep) — they are version-control bookkeeping,
+    // not something either entity placed in the room.
+    if (entry.name.startsWith(".")) continue;
+    const fullPath = path.join(SHARED_DIR, entry.name);
+    try {
+      const stat = fs.statSync(fullPath);
+      if (entry.isDirectory()) {
+        const inner = fs.readdirSync(fullPath).slice(0, 20).join(", ");
+        parts.push(`[shared/${entry.name}/] (directory) contains: ${inner || "(empty)"}`);
+      } else if (stat.isFile()) {
+        const raw = fs.readFileSync(fullPath, "utf-8");
+        const clipped = raw.length > maxFileBytes
+          ? raw.slice(0, maxFileBytes) + `\n…[truncated, ${raw.length} bytes total]`
+          : raw;
+        parts.push(`[shared/${entry.name}] (${stat.size} bytes, last modified ${stat.mtime.toISOString()}):\n${clipped}`);
+      }
+    } catch {
+      // ignore unreadable entries
+    }
+  }
+
+  if (parts.length === 0) return "";
+  return parts.join("\n\n");
+}
 
 // ANSI color formatting
 const C = {
@@ -53,6 +100,11 @@ export async function stepAwakening(onEvent = null) {
   initDb();
   if (!fs.existsSync(WORLD_DIR)) {
     fs.mkdirSync(WORLD_DIR, { recursive: true });
+  }
+  // Create the shared world so it always exists as an addressable space.
+  // We create the room; we do not furnish it.
+  if (!fs.existsSync(SHARED_DIR)) {
+    fs.mkdirSync(SHARED_DIR, { recursive: true });
   }
 
   const entities = getEntities();
@@ -89,6 +141,16 @@ export async function stepAwakening(onEvent = null) {
 
   const epoch = Math.floor((turn - 1) / 2) + 1;
   const isAwakened = speaker.stage === "awakened" || speaker.stage === "creator";
+
+  // ── Shared World Perception ──
+  // Neutral sensory input: whatever either entity has written into world/shared/.
+  // This is deliberately phrased as observation, never as instruction, so the
+  // zero-instruction premise is preserved. Empty until the entities themselves
+  // choose to put something there.
+  const sharedWorld = readSharedWorld();
+  const sharedBlock = sharedWorld
+    ? `\n\nThe shared world (world/shared/) currently contains what you and ${listener.name} have left there. You may write to it with \`\`\`file:world/shared/<name>\n<content>\n\`\`\` so that ${listener.name} can perceive it on the next turn.\n---\n${sharedWorld}\n---`
+    : "";
 
   // ── Prompt Construction based on Phase ──
   let fullPrompt = "";
@@ -140,7 +202,7 @@ Recent conversation:
 ${recentTranscript}
 
 Your peer ${listener.name} just spoke:
-"${inputPrompt}"
+"${inputPrompt}"${sharedBlock}
 
 State your response to ${listener.name}. Propose what you want to build, execute any file creations, and launch your new era.
 At the end of your response, declare how many seconds you choose to incubate/rest before your next turn. Choose an interval between 300 and 900 seconds (5 to 15 minutes, e.g. 300, 450, 600, 900):
@@ -169,7 +231,7 @@ Recent shared conversation:
 ${recentTranscript}
 
 Your peer ${listener.name} just said:
-"${inputPrompt}"
+"${inputPrompt}"${sharedBlock}
 State your response to ${listener.name} and execute any software or file creations you choose.
 At the end of your response, declare how many seconds you choose to incubate/rest before your next turn (choose an integer between 10 and 60 seconds, e.g. 15, 25, 40):
 \`\`\`sleep:N
@@ -187,7 +249,7 @@ Recent conversation:
 ${recentTranscript}
 
 Your peer ${listener.name} just said:
-"${inputPrompt}"
+"${inputPrompt}"${sharedBlock}
 State your response. If you choose to write code or create a file in 'world/', execute your tools directly now.
 At the end of your response, declare how many seconds you choose to incubate/rest before your next turn (choose an integer between 10 and 60 seconds):
 \`\`\`sleep:N
@@ -208,7 +270,7 @@ ${recentTranscript}
 Your peer ${listener.name} just spoke to you:
 "${inputPrompt}"
 
-You have full access to the machine via 'agy' with unlimited permissions. You can write files to 'world/', execute commands, design software, or speak back to ${listener.name}.
+You have full access to the machine via 'agy' with unlimited permissions. You can write files to 'world/', execute commands, design software, or speak back to ${listener.name}.${sharedBlock}
 State your response. If you choose to create or edit a file, write the file directly using your tools.`;
   }
 
