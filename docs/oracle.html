@@ -16,8 +16,6 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
     }
     *{box-sizing:border-box}
     html,body{
@@ -64,7 +62,7 @@
       color:var(--text);
     }
     input, textarea{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
+    textarea{min-height:120px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
@@ -94,9 +92,9 @@
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;
-      line-height:1.6;
+      line-height:1.65;
       color:#dbe8ff;
-      min-height:170px;
+      min-height:180px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       border-radius:18px;
@@ -124,23 +122,23 @@
       <section class="card intro">
         <div>
           <div class="tag">Oracle / Living Interpreter</div>
-          <h1>Ask the site.<br/>Receive meaning.</h1>
+          <h1>Ask the site.<br/>Receive a reading.</h1>
           <div class="sub">
-            Oracle turns the chamber network into a reflective instrument. Enter a question,
-            and the site answers with layered guidance drawn from its visible structure.
+            Oracle turns the repository into a responsive interpreter. Pose a question, and the chamber
+            returns a layered response drawn from the living state of the site.
           </div>
         </div>
 
         <div class="panel">
           <label for="question">Question</label>
-          <textarea id="question" placeholder="What should the site build next?"></textarea>
+          <textarea id="question" placeholder="What does the site mean right now?"></textarea>
 
-          <label for="tone">Tone</label>
-          <input id="tone" placeholder="e.g. luminous, practical, stern, hopeful" />
+          <label for="lens">Interpretive lens</label>
+          <input id="lens" placeholder="e.g. symbolic, practical, civic, poetic" />
 
           <div class="buttons">
-            <button id="askBtn">Ask oracle</button>
-            <button id="saveBtn">Save query</button>
+            <button id="askBtn">Consult oracle</button>
+            <button id="saveBtn">Save session</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear oracle</button>
@@ -154,25 +152,25 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Oracle responses</div>
+          <div class="mini">Oracle history</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
           <div class="mini">Oracle sigil</div>
-          <div id="out" class="out">The oracle awaits a question.</div>
+          <div id="out" class="out">The oracle is waiting for a question.</div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Queries</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Tone</div><b id="toneLabel">Open</b></div>
+          <div class="stat"><div class="mini">Questions</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Lens</div><b id="lensLabel">Open</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved oracles</div>
-          <div id="savedList" class="out">No saved queries yet.</div>
+          <div class="mini">Saved sessions</div>
+          <div id="savedList" class="out">No saved sessions yet.</div>
         </div>
       </section>
     </div>
@@ -182,25 +180,25 @@
     const KEY = 'oracle-living-interpreter-v1';
 
     const questionEl = document.getElementById('question');
-    const toneEl = document.getElementById('tone');
+    const lensEl = document.getElementById('lens');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const toneLabelEl = document.getElementById('toneLabel');
+    const lensLabelEl = document.getElementById('lensLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { queries: [], saved: [] };
+    const state = load() || { questions: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ queries: state.queries })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ questions: state.questions })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.queries)){
-          state.queries = obj.queries;
+        if(obj && Array.isArray(obj.questions)){
+          state.questions = obj.questions;
           save();
           render();
         }
@@ -213,43 +211,30 @@
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved queries yet.';
+        : 'No saved sessions yet.';
     }
     function stateText(n){
-      if(n >= 6) return 'Awake';
-      if(n >= 3) return 'Listening';
-      if(n >= 1) return 'Quietly active';
+      if(n >= 6) return 'Visionary';
+      if(n >= 3) return 'Attuned';
+      if(n >= 1) return 'Listening';
       return 'Quiet';
     }
-    function answer(q, tone){
-      const lower = q.toLowerCase();
-      const cues = [];
-      if(/next|build|create|make/.test(lower)) cues.push('Build what can be used immediately.');
-      if(/remember|archive|history|past/.test(lower)) cues.push('Preserve the path before it dissolves.');
-      if(/move|route|path|navigate/.test(lower)) cues.push('Make movement visible and intentional.');
-      if(/meaning|why|what does/.test(lower)) cues.push('Interpret the whole as a living system, not a static object.');
-      if(/vote|choose|decide|should/.test(lower)) cues.push('Let collective choice narrow the future into one actionable line.');
-      if(cues.length === 0) cues.push('Listen for the chamber that is trying to become necessary.');
-
-      return [
-        `Tone: ${tone || 'open'}`,
-        `Question: ${q || '(unasked)'}`,
-        '',
-        'Oracle reading:',
-        ...cues.map((c, i) => `${i + 1}. ${c}`),
-        '',
-        'Guidance:',
-        'The site is healthiest when each new chamber adds a new human action.',
-        'If the question is broad, choose the chamber that turns thought into interaction.',
-        '',
-        `Code: ${serialize().slice(0,48)}...`
-      ].join('\n');
+    function interpret(q, lens){
+      const lower = `${q} ${lens}`.toLowerCase();
+      const tones = [];
+      if(/route|path|move|travel/.test(lower)) tones.push('The answer concerns movement, thresholds, and how one chamber becomes another.');
+      if(/memory|archive|remember|history/.test(lower)) tones.push('The answer concerns endurance, inscription, and what refuses disappearance.');
+      if(/vote|choose|civic|collective|consent/.test(lower)) tones.push('The answer concerns shared agency, deliberation, and the ethics of agreement.');
+      if(/meaning|symbol|poetic|myth/.test(lower)) tones.push('The answer concerns symbol, resonance, and the way the visible points beyond itself.');
+      if(/build|tool|practical|use/.test(lower)) tones.push('The answer concerns usefulness, operation, and the transformation of vision into instrument.');
+      if(!tones.length) tones.push('The answer is still forming; the chamber senses a question that has not yet settled into language.');
+      return tones;
     }
     function render(){
       gridEl.innerHTML = '';
-      const list = state.queries.slice().reverse();
+      const list = state.questions.slice().reverse();
       countEl.textContent = String(list.length);
-      toneLabelEl.textContent = toneEl.value.trim() || 'Open';
+      lensLabelEl.textContent = lensEl.value.trim() || 'Open';
       stateLabelEl.textContent = stateText(list.length);
 
       list.forEach((q) => {
@@ -257,31 +242,37 @@
         div.className = 'item';
         div.innerHTML = `
           <h3>${escapeHtml(q.question)}</h3>
-          <p>${escapeHtml(q.tone || 'Open')}</p>
+          <p>${escapeHtml(q.lens || 'Open')}</p>
           <p style="margin-top:8px" class="mini">${escapeHtml(q.when || 'Just now')}</p>
         `;
         gridEl.appendChild(div);
       });
 
-      outEl.textContent = list.length
-        ? answer(list[0].question, list[0].tone)
-        : 'The oracle awaits a question.';
+      const last = list[0];
+      outEl.textContent = last
+        ? `Question: ${last.question}
+Lens: ${last.lens}
+Reading:
+- ${interpret(last.question, last.lens).join('\n- ')}
+
+State: ${stateText(list.length)}
+Code: ${serialize().slice(0,48)}...`
+        : 'The oracle is waiting for a question.';
     }
 
     document.getElementById('askBtn').onclick = () => {
-      const entry = {
-        question: questionEl.value.trim() || 'What should the site build next?',
-        tone: toneEl.value.trim() || 'open',
+      state.questions.push({
+        question: questionEl.value.trim() || 'Unspoken question',
+        lens: lensEl.value.trim() || 'open',
         when: `Turn ${Math.floor(Date.now() / 1000)}`
-      };
-      state.queries.push(entry);
+      });
       save();
       render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`queries:${state.queries.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`questions:${state.questions.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -296,12 +287,12 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.queries = [];
+      state.questions = [];
       save();
       render();
     };
 
-    toneEl.oninput = render;
+    lensEl.oninput = render;
     renderSaved();
     render();
   </script>
