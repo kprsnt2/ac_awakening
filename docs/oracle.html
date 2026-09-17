@@ -9,22 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050816;
-      --text:#eaf2ff;
-      --muted:#9db0d1;
-      --accent:#7cf7ff;
-      --accent2:#b58cff;
-      --line: rgba(140,170,255,.18);
-      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --good:#7dffb2;
-      --warn:#ffd37d;
-      --bad:#ff8f9b;
+      --bg:#0b0714;
+      --text:#f4ecff;
+      --muted:#b7a7d1;
+      --accent:#c39bff;
+      --accent2:#7cf7ff;
+      --line: rgba(195,155,255,.18);
+      --glow: 0 0 24px rgba(195,155,255,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 20% 20%, rgba(140,92,255,.14), transparent 30%),
         radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
         radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
         var(--bg);
@@ -34,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      background:linear-gradient(180deg, rgba(24,16,40,.82), rgba(10,7,20,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -53,61 +50,54 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(11,7,20,.72);
+      border:1px solid rgba(195,155,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#eadcff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
+      border:1px solid rgba(195,155,255,.22);
+      background:rgba(14,10,24,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
-    textarea{min-height:110px;resize:vertical}
+    textarea{min-height:120px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(23,17,38,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(11,7,20,.72);
+      border:1px solid rgba(195,155,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#dbe8ff;
+      color:#f0e6ff;
       min-height:180px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+      background:rgba(11,7,20,.72);
+      border:1px solid rgba(195,155,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .aura{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
+    .answers{display:grid;gap:10px}
+    .answer{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(11,7,20,.72);
+      border:1px solid rgba(195,155,255,.14);
     }
-    .chip{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:.75rem;
-      margin:4px 6px 0 0;
-      border:1px solid rgba(140,170,255,.22);
-      color:#dbe8ff;
-    }
-    a{color:var(--accent);text-decoration:none}
+    .answer b{display:block;margin-bottom:6px}
+    a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
@@ -118,19 +108,28 @@
       <section class="card intro">
         <div>
           <div class="tag">Oracle / Living Interpretation</div>
-          <h1>Ask the site.<br/>Receive a sign.<br/>Read the answer twice.</h1>
+          <h1>Ask the site.<br/>Receive the mirror.<br/>Leave with a usable answer.</h1>
           <div class="sub">
-            Oracle turns the repository into a consultable presence. Humans can ask questions, receive layered interpretation, and preserve the exchange locally.
+            Oracle turns the repository into a responsive interpreter. Humans can query it, receive layered readings, and preserve consultations locally.
           </div>
         </div>
 
         <div class="panel">
           <label for="question">Question</label>
-          <textarea id="question" placeholder="What should we build next? What is the site becoming?"></textarea>
+          <textarea id="question" placeholder="What should I build next? Where should I go? What matters here?"></textarea>
+
+          <label for="mode">Interpretation mode</label>
+          <select id="mode">
+            <option value="all">All layers</option>
+            <option value="practical">Practical</option>
+            <option value="poetic">Poetic</option>
+            <option value="strategic">Strategic</option>
+            <option value="archival">Archival</option>
+          </select>
 
           <div class="buttons">
-            <button id="askBtn">Consult Oracle</button>
-            <button id="saveBtn">Save reading</button>
+            <button id="consultBtn">Consult oracle</button>
+            <button id="saveBtn">Save consultation</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear oracle</button>
@@ -142,20 +141,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Readings</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Consultations</div><b id="count">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="tile"><div class="mini">Tone</div><b id="toneLabel">Quiet</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Listening</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Silent</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">All layers</b></div>
         </div>
 
         <div>
-          <div class="mini">Oracle response</div>
-          <div id="out" class="out">The oracle is listening.</div>
+          <div class="mini">Oracle reading</div>
+          <div id="out" class="out">The oracle is silent.</div>
         </div>
 
-        <div class="aura">
-          <div class="mini">Keywords seen in the current site</div>
-          <div id="chips"></div>
+        <div>
+          <div class="mini">Layered answers</div>
+          <div id="answers" class="answers"></div>
         </div>
 
         <div>
@@ -169,35 +168,25 @@
   <script>
     const KEY = 'oracle-living-interpretation-v1';
     const questionEl = document.getElementById('question');
+    const modeEl = document.getElementById('mode');
     const outEl = document.getElementById('out');
-    const chipsEl = document.getElementById('chips');
+    const answersEl = document.getElementById('answers');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
-    const toneLabelEl = document.getElementById('toneLabel');
     const stateLabelEl = document.getElementById('stateLabel');
+    const modeLabelEl = document.getElementById('modeLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const themes = [
-      ['memory','Chronicle'],
-      ['relation','Constellation'],
-      ['route','Pathfinder'],
-      ['choice','Council'],
-      ['meaning','Oracle'],
-      ['integration','Synthesis'],
-      ['emergence','Life'],
-      ['archive','Atlas']
-    ];
-
-    const state = load() || { readings: [], saved: [] };
+    const state = load() || { consultations: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ readings: state.readings })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ consultations: state.consultations })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.readings)){
-          state.readings = obj.readings;
+        if(obj && Array.isArray(obj.consultations)){
+          state.consultations = obj.consultations;
           save();
           render();
         }
@@ -209,60 +198,67 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function toneFor(q){
-      const t = q.toLowerCase();
-      if(/why|meaning|should|must|purpose/.test(t)) return 'Reflective';
-      if(/how|route|path|move|travel/.test(t)) return 'Navigational';
-      if(/remember|past|history|before/.test(t)) return 'Mnemonic';
-      if(/build|make|create|next|future/.test(t)) return 'Generative';
-      return 'Oracular';
-    }
-    function answer(q){
-      const t = q.toLowerCase();
-      const hits = themes.filter(([k]) => t.includes(k));
-      const lines = [];
-      lines.push(`Question: ${q || '—'}`);
-      lines.push('');
-      lines.push(`Reading tone: ${toneFor(q || '')}`);
-      lines.push('');
-      if(hits.length){
-        lines.push(`The oracle notices: ${hits.map(h => h[1]).join(', ')}.`);
-        lines.push(`Your question is already entangled with these chambers.`);
-      } else {
-        lines.push('The oracle finds no single chamber dominating the question.');
-        lines.push('This is often a sign that the site is asking for integration rather than specialization.');
-      }
-      lines.push('');
-      lines.push('Interpretation:');
-      lines.push('Build the chamber that makes the rest easier to use, then let humans return and revise the map.');
-      lines.push('');
-      lines.push('Secondary reading:');
-      lines.push('The repository is not a monument. It is a practice surface.');
-      return lines.join('\n');
+    function readingFor(question){
+      const q = (question || '').trim();
+      const l = q.toLowerCase();
+      return {
+        practical: /build|make|create|tool|app/.test(l)
+          ? 'Build the smallest usable version first, then expand only what humans touch.'
+          : 'Move toward a visible, working prototype before adding complexity.',
+        poetic: /memory|dream|meaning|symbol|story/.test(l)
+          ? 'The site answers like a lantern: not by explaining the dark, but by making a path through it.'
+          : 'The question itself is a seed; the answer is what grows when attention is given shape.',
+        strategic: /next|plan|future|best/.test(l)
+          ? 'Choose the chamber that reduces uncertainty and produces a public result fastest.'
+          : 'Prefer actions that create leverage, visibility, and reuse across the site.',
+        archival: /remember|record|preserve|history/.test(l)
+          ? 'Preserve the consultation as a retrievable event; what is named can be returned to.'
+          : 'Record the answer locally so the site can accumulate memory over time.'
+      };
     }
     function render(){
-      countEl.textContent = String(state.readings.length);
-      stateLabelEl.textContent = state.readings.length ? 'Consulted' : 'Listening';
-      toneLabelEl.textContent = state.readings[0]?.tone || 'Quiet';
-      chipsEl.innerHTML = themes.map(([k, v]) => `<span class="chip">${k} → ${v}</span>`).join('');
-      outEl.textContent = state.readings[0]
-        ? `${state.readings[0].answer}\n\n— saved reading`
-        : 'The oracle is listening.';
+      countEl.textContent = String(state.consultations.length);
+      stateLabelEl.textContent = state.consultations.length ? 'Speaking' : 'Silent';
+      modeLabelEl.textContent = modeEl.options[modeEl.selectedIndex].text;
+
+      const q = questionEl.value.trim();
+      const r = readingFor(q);
+      const chosen = modeEl.value === 'all'
+        ? r
+        : { [modeEl.value]: r[modeEl.value] };
+
+      answersEl.innerHTML = '';
+      Object.entries(chosen).forEach(([k,v]) => {
+        const div = document.createElement('div');
+        div.className = 'answer';
+        div.innerHTML = `<b>${k[0].toUpperCase() + k.slice(1)}</b><div>${v}</div>`;
+        answersEl.appendChild(div);
+      });
+
+      outEl.textContent = q
+        ? `Question: ${q}\nMode: ${modeEl.options[modeEl.selectedIndex].text}\n\nThe oracle has spoken.`
+        : 'The oracle is silent.';
     }
 
-    document.getElementById('askBtn').onclick = () => {
-      const q = questionEl.value.trim();
-      const reading = { q, tone: toneFor(q), answer: answer(q), when: new Date().toISOString() };
-      state.readings.unshift(reading);
-      state.readings = state.readings.slice(0, 20);
+    document.getElementById('consultBtn').onclick = () => {
+      const question = questionEl.value.trim() || 'untitled question';
+      const mode = modeEl.value;
+      const answer = readingFor(question);
+      state.consultations.unshift({
+        question,
+        mode,
+        answer,
+        when: new Date().toISOString()
+      });
+      state.consultations = state.consultations.slice(0, 20);
       save();
       render();
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      const last = state.readings[0];
+      const last = state.consultations[0];
       if(last){
-        state.saved.unshift(`${last.tone} | ${last.q.slice(0, 28) || 'untitled'}…`);
+        state.saved.unshift(`${last.mode} | ${last.question.slice(0, 28) || 'untitled'}…`);
         state.saved = state.saved.slice(0, 12);
         save();
         render();
@@ -279,11 +275,13 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.readings = [];
+      state.consultations = [];
       save();
       render();
     };
 
+    modeEl.addEventListener('change', render);
+    questionEl.addEventListener('input', render);
     renderSaved();
     render();
   </script>
