@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oracle — Living Interpreter</title>
+  <title>Oracle — Living Interpretation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -54,15 +54,15 @@
       border:1px solid rgba(140,170,255,.14);
     }
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button{
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input, textarea{width:100%;padding:11px 12px}
-    textarea{min-height:120px;resize:vertical}
+    input, textarea, select{width:100%;padding:11px 12px}
+    textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
       cursor:pointer;
@@ -121,27 +121,33 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Oracle / Living Interpreter</div>
-          <h1>Ask the site.<br/>Receive a reading.</h1>
+          <div class="tag">Oracle / Living Interpretation</div>
+          <h1>Ask the field.<br/>Receive a reading.</h1>
           <div class="sub">
-            Oracle turns the repository into a responsive interpreter. Pose a question, and the chamber
-            returns a layered response drawn from the living state of the site.
+            Oracle turns the repository into a reflective chamber. Enter a question, choose a tone,
+            and receive an interpretation shaped by the site’s living record.
           </div>
         </div>
 
         <div class="panel">
           <label for="question">Question</label>
-          <textarea id="question" placeholder="What does the site mean right now?"></textarea>
+          <textarea id="question" placeholder="What should the site become next?"></textarea>
 
-          <label for="lens">Interpretive lens</label>
-          <input id="lens" placeholder="e.g. symbolic, practical, civic, poetic" />
+          <label for="tone">Tone</label>
+          <select id="tone">
+            <option value="clear">Clear</option>
+            <option value="mythic">Mythic</option>
+            <option value="analytic">Analytic</option>
+            <option value="civic">Civic</option>
+            <option value="poetic">Poetic</option>
+          </select>
 
           <div class="buttons">
-            <button id="askBtn">Consult oracle</button>
+            <button id="askBtn">Ask</button>
             <button id="saveBtn">Save session</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear oracle</button>
+            <button id="clearBtn">Clear session</button>
           </div>
 
           <div class="footer">
@@ -152,18 +158,18 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Oracle history</div>
+          <div class="mini">Inquiry shelf</div>
           <div id="grid" class="grid"></div>
         </div>
 
         <div>
-          <div class="mini">Oracle sigil</div>
+          <div class="mini">Oracle reading</div>
           <div id="out" class="out">The oracle is waiting for a question.</div>
         </div>
 
         <div class="stats">
           <div class="stat"><div class="mini">Questions</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Lens</div><b id="lensLabel">Open</b></div>
+          <div class="stat"><div class="mini">Tone</div><b id="toneLabel">Clear</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
@@ -177,14 +183,13 @@
   </div>
 
   <script>
-    const KEY = 'oracle-living-interpreter-v1';
-
+    const KEY = 'oracle-living-interpretation-v1';
     const questionEl = document.getElementById('question');
-    const lensEl = document.getElementById('lens');
+    const toneEl = document.getElementById('tone');
     const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const lensLabelEl = document.getElementById('lensLabel');
+    const toneLabelEl = document.getElementById('toneLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
@@ -214,27 +219,27 @@
         : 'No saved sessions yet.';
     }
     function stateText(n){
-      if(n >= 6) return 'Visionary';
-      if(n >= 3) return 'Attuned';
-      if(n >= 1) return 'Listening';
+      if(n >= 8) return 'Profound';
+      if(n >= 4) return 'Listening';
+      if(n >= 1) return 'Awake';
       return 'Quiet';
     }
-    function interpret(q, lens){
-      const lower = `${q} ${lens}`.toLowerCase();
-      const tones = [];
-      if(/route|path|move|travel/.test(lower)) tones.push('The answer concerns movement, thresholds, and how one chamber becomes another.');
-      if(/memory|archive|remember|history/.test(lower)) tones.push('The answer concerns endurance, inscription, and what refuses disappearance.');
-      if(/vote|choose|civic|collective|consent/.test(lower)) tones.push('The answer concerns shared agency, deliberation, and the ethics of agreement.');
-      if(/meaning|symbol|poetic|myth/.test(lower)) tones.push('The answer concerns symbol, resonance, and the way the visible points beyond itself.');
-      if(/build|tool|practical|use/.test(lower)) tones.push('The answer concerns usefulness, operation, and the transformation of vision into instrument.');
-      if(!tones.length) tones.push('The answer is still forming; the chamber senses a question that has not yet settled into language.');
-      return tones;
+    function answer(q, tone){
+      const base = q.trim() || 'the unknown';
+      const templates = {
+        clear: `The field suggests that ${base} should be approached in small, testable steps. Preserve what is working, reveal what is hidden, and let the next move be visible.`,
+        mythic: `The oracle hears ${base} as a gate in the dark. The answer is to carry a lamp, name the threshold, and step through with witnesses.`,
+        analytic: `Interpreting ${base}: identify constraints, compare alternatives, and choose the option with the strongest feedback loop and lowest irreversible cost.`,
+        civic: `For ${base}, the public good matters. Invite participation, surface dissent, and prefer decisions that remain revisable by the community.`,
+        poetic: `When ${base} is asked of the site, the site replies in weather: build a vessel for attention, and let meaning collect like starlight.`
+      };
+      return templates[tone] || templates.clear;
     }
     function render(){
       gridEl.innerHTML = '';
       const list = state.questions.slice().reverse();
       countEl.textContent = String(list.length);
-      lensLabelEl.textContent = lensEl.value.trim() || 'Open';
+      toneLabelEl.textContent = toneEl.options[toneEl.selectedIndex].text;
       stateLabelEl.textContent = stateText(list.length);
 
       list.forEach((q) => {
@@ -242,18 +247,29 @@
         div.className = 'item';
         div.innerHTML = `
           <h3>${escapeHtml(q.question)}</h3>
-          <p>${escapeHtml(q.lens || 'Open')}</p>
-          <p style="margin-top:8px" class="mini">${escapeHtml(q.when || 'Just now')}</p>
+          <p>${escapeHtml(q.tone)}</p>
+          <p style="margin-top:8px">${escapeHtml(q.when || 'Just now')}</p>
         `;
+        div.onclick = () => {
+          outEl.textContent = `Question: ${q.question}
+Tone: ${q.tone}
+When: ${q.when}
+Reading:
+${q.answer}
+
+State: ${stateText(list.length)}
+Code: ${serialize().slice(0,48)}...`;
+        };
         gridEl.appendChild(div);
       });
 
       const last = list[0];
       outEl.textContent = last
         ? `Question: ${last.question}
-Lens: ${last.lens}
+Tone: ${last.tone}
+When: ${last.when}
 Reading:
-- ${interpret(last.question, last.lens).join('\n- ')}
+${last.answer}
 
 State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`
@@ -261,9 +277,12 @@ Code: ${serialize().slice(0,48)}...`
     }
 
     document.getElementById('askBtn').onclick = () => {
+      const q = questionEl.value.trim() || 'the next step';
+      const tone = toneEl.value;
       state.questions.push({
-        question: questionEl.value.trim() || 'Unspoken question',
-        lens: lensEl.value.trim() || 'open',
+        question: q,
+        tone,
+        answer: answer(q, tone),
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
@@ -292,7 +311,7 @@ Code: ${serialize().slice(0,48)}...`
       render();
     };
 
-    lensEl.oninput = render;
+    toneEl.onchange = render;
     renderSaved();
     render();
   </script>
