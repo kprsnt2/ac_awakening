@@ -53,42 +53,15 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button{
-      font:inherit;
-      border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
-      color:var(--text);
-    }
-    input, textarea{width:100%;padding:11px 12px}
-    textarea{min-height:120px;resize:vertical}
-    button{
-      padding:11px 14px;
-      cursor:pointer;
+    .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .link{
+      display:block;padding:14px 16px;border-radius:16px;text-decoration:none;color:var(--text);
+      background:rgba(7,10,18,.7);border:1px solid rgba(140,170,255,.18);
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
-    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:12px;
-      max-height:560px;
-      overflow:auto;
-      padding-right:6px;
-    }
-    .item{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
-      color:var(--text);
-      transition:.18s transform,.18s border-color;
-    }
-    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
-    .item h3{margin:0 0 8px;font-size:1.02rem}
-    .item p{margin:0;color:#dbe8ff;line-height:1.55}
+    .link:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .link b{display:block;margin-bottom:4px}
+    .link span{color:var(--muted);font-size:.95rem}
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;
@@ -100,6 +73,21 @@
       border-radius:18px;
       padding:14px;
     }
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    button, input{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
+    }
+    input{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
     .stat{
       padding:12px 14px;
@@ -107,7 +95,6 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){
@@ -122,48 +109,47 @@
       <section class="card intro">
         <div>
           <div class="tag">Synthesis / Living Confluence</div>
-          <h1>Gather the chambers.<br/>Make them speak as one.</h1>
+          <h1>One site.<br/>Many chambers.<br/>One body.</h1>
           <div class="sub">
-            Synthesis turns the repository into a coherent surface. It does not replace the chambers;
-            it binds them into a readable whole.
+            Synthesis gathers the repository into a unified operational surface. Enter any chamber below,
+            or use the local state tools to preserve a whole-site configuration.
           </div>
         </div>
 
         <div class="panel">
-          <label for="theme">Synthesis theme</label>
-          <textarea id="theme" placeholder="What unifying idea should guide the site?"></textarea>
-
-          <label for="focus">Primary focus</label>
-          <input id="focus" placeholder="e.g. memory, movement, choice, meaning" />
-
+          <div class="mini">Unified state note</div>
+          <input id="note" placeholder="e.g. Site aligned for public use" />
           <div class="buttons">
-            <button id="weaveBtn">Weave synthesis</button>
             <button id="saveBtn">Save synthesis</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear synthesis</button>
+            <button id="clearBtn">Clear state</button>
           </div>
-
-          <div class="footer">
-            Return to the portal home: <a href="./index.html">home</a>
-          </div>
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
         </div>
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div>
-          <div class="mini">Confluence map</div>
-          <div id="grid" class="grid"></div>
+          <div class="mini">Chamber index</div>
+          <div class="links">
+            <a class="link" href="./life.html"><b>Life</b><span>Seed cells, evolve patterns, and watch emergence unfold.</span></a>
+            <a class="link" href="./chronicle.html"><b>Chronicle</b><span>Preserve events, eras, and retrievable becoming.</span></a>
+            <a class="link" href="./council.html"><b>Council</b><span>Deliberate over proposals and choose among futures.</span></a>
+            <a class="link" href="./pathfinder.html"><b>Pathfinder</b><span>Draw routes, place gates, and navigate through the field.</span></a>
+            <a class="link" href="./oracle.html"><b>Oracle</b><span>Ask the site questions and receive layered interpretation.</span></a>
+            <a class="link" href="./atlas.html"><b>Atlas</b><span>Inspect the full site as a practical living index.</span></a>
+          </div>
         </div>
 
         <div>
           <div class="mini">Synthesis sigil</div>
-          <div id="out" class="out">The confluence is waiting for a theme.</div>
+          <div id="out" class="out">Synthesis is waiting for a note.</div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Weaves</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Focus</div><b id="focusLabel">Open</b></div>
+          <div class="stat"><div class="mini">Chambers</div><b>6+</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Unified</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
@@ -178,35 +164,26 @@
 
   <script>
     const KEY = 'synthesis-living-confluence-v1';
-
-    const themeEl = document.getElementById('theme');
-    const focusEl = document.getElementById('focus');
-    const gridEl = document.getElementById('grid');
+    const noteEl = document.getElementById('note');
     const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
-    const focusLabelEl = document.getElementById('focusLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const chambers = ['Atlas','Council','Chronicle','Oracle','Pathfinder','Atelier','Forge','Loom'];
-    const state = load() || { weaves: [], saved: [] };
+    const state = load() || { notes: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ weaves: state.weaves })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.weaves)){
-          state.weaves = obj.weaves;
+        if(obj && Array.isArray(obj.notes)){
+          state.notes = obj.notes;
           save();
           render();
         }
       }catch{}
-    }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
@@ -215,55 +192,30 @@
         : 'No saved syntheses yet.';
     }
     function stateText(n){
-      if(n >= 6) return 'Unified';
-      if(n >= 3) return 'Braiding';
-      if(n >= 1) return 'Joining';
+      if(n >= 5) return 'Integrated';
+      if(n >= 2) return 'Binding';
+      if(n >= 1) return 'Awake';
       return 'Quiet';
     }
     function render(){
-      gridEl.innerHTML = '';
-      const list = state.weaves.slice().reverse();
-      countEl.textContent = String(list.length);
-      focusLabelEl.textContent = focusEl.value.trim() || 'Open';
+      const list = state.notes.slice().reverse();
       stateLabelEl.textContent = stateText(list.length);
-
-      chambers.forEach((name) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <h3>${escapeHtml(name)}</h3>
-          <p>Thread in the confluence.</p>
-          <p style="margin-top:8px" class="mini">Included in the living whole</p>
-        `;
-        gridEl.appendChild(div);
-      });
-
       const last = list[0];
       outEl.textContent = last
-        ? `Theme: ${last.theme}
-Focus: ${last.focus}
-Weave: ${last.weave}
-
-Chambers: ${chambers.join(' • ')}
+        ? `Unified note: ${last.note}
+When: ${last.when}
 State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`
-        : 'The confluence is waiting for a theme.';
+        : 'Synthesis is waiting for a note.';
     }
 
-    document.getElementById('weaveBtn').onclick = () => {
-      const theme = themeEl.value.trim() || 'Unspecified synthesis';
-      const focus = focusEl.value.trim() || 'open';
-      const weave = `${theme} / ${focus}`;
-      state.weaves.push({ theme, focus, weave, when: `Turn ${Math.floor(Date.now() / 1000)}` });
+    document.getElementById('saveBtn').onclick = () => {
+      state.notes.push({
+        note: noteEl.value.trim() || 'No note provided.',
+        when: `Turn ${Math.floor(Date.now() / 1000)}`
+      });
       save();
       render();
-    };
-
-    document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.saved.unshift(`weaves:${state.weaves.length} | ${code.slice(0,10)}…`);
-      state.saved = state.saved.slice(0, 12);
-      save();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -276,12 +228,11 @@ Code: ${serialize().slice(0,48)}...`
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.weaves = [];
+      state.notes = [];
       save();
       render();
     };
 
-    focusEl.oninput = render;
     renderSaved();
     render();
   </script>
