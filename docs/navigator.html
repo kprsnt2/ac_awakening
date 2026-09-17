@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#061018;
+      --bg:#071018;
       --text:#f4fbff;
       --muted:#bfd2e1;
       --accent:#7cf7ff;
-      --accent2:#ffd27c;
+      --accent2:#b58cff;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,210,124,.08);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(181,140,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
         radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,210,124,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(181,140,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(157,255,203,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -69,7 +69,7 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(255,210,124,.5);background:rgba(18,22,30,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(181,140,255,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
@@ -104,10 +104,10 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{transform:translateY(-1px);border-color:rgba(255,210,124,.5);background:rgba(16,22,30,.9)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(181,140,255,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
-    a{color:var(--accent2);text-decoration:none}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
@@ -118,33 +118,30 @@
       <section class="card intro">
         <div>
           <div class="tag">Navigator / Living Route Chamber</div>
-          <h1>Choose a route.<br/>Weigh the path.<br/>Cross the site.</h1>
+          <h1>Choose a direction.<br/>Generate a route.<br/>Cross the site with intention.</h1>
           <div class="sub">
-            Navigator turns the repository into a traversable field. Humans can plan routes, compare them, and move through the chambers with intention.
+            Navigator turns the repository into a pathing instrument. Humans can compare routes, weigh tradeoffs, and move through the site deliberately.
           </div>
         </div>
 
         <div class="panel">
-          <label for="start">Start chamber</label>
-          <input id="start" placeholder="e.g. Identity" />
+          <label for="destination">Destination</label>
+          <input id="destination" placeholder="e.g. Oracle, Forge, Chronicle..." />
 
-          <label for="end">End chamber</label>
-          <input id="end" placeholder="e.g. Memory" />
-
-          <label for="mode">Mode</label>
-          <select id="mode">
+          <label for="style">Travel style</label>
+          <select id="style">
             <option value="direct">Direct</option>
-            <option value="explore">Explore</option>
-            <option value="ceremonial">Ceremonial</option>
-            <option value="reflective">Reflective</option>
+            <option value="scenic">Scenic</option>
+            <option value="cautious">Cautious</option>
+            <option value="exploratory">Exploratory</option>
           </select>
 
           <label for="note">Route note</label>
-          <textarea id="note" placeholder="e.g. Move from self into trace, then into voice."></textarea>
+          <textarea id="note" placeholder="e.g. Move gently, but do not lose momentum."></textarea>
 
           <div class="buttons">
-            <button id="plotBtn">Plot route</button>
-            <button id="shiftBtn">Shift mode</button>
+            <button id="routeBtn">Generate route</button>
+            <button id="shiftBtn">Shift style</button>
             <button id="deepenBtn">Deepen route</button>
             <button id="saveBtn">Save route</button>
             <button id="exportBtn">Copy code</button>
@@ -159,8 +156,8 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Routes</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Direct</b></div>
-          <div class="tile"><div class="mini">Distance</div><b id="distanceLabel">0%</b></div>
+          <div class="tile"><div class="mini">Style</div><b id="styleLabel">Direct</b></div>
+          <div class="tile"><div class="mini">Clarity</div><b id="clarityLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
@@ -170,8 +167,8 @@
         </div>
 
         <div>
-          <div class="mini">Route reading</div>
-          <div id="out" class="out">Plot a route to begin.</div>
+          <div class="mini">Navigator reading</div>
+          <div id="out" class="out">Generate a route to begin.</div>
         </div>
 
         <div>
@@ -184,31 +181,31 @@
 
   <script>
     const KEY = 'navigator-living-route-v1';
-    const modes = ['direct', 'explore', 'ceremonial', 'reflective'];
-    const state = load() || { routes: [], saved: [], distance: 20, mode: 'direct' };
+    const styles = ['direct', 'scenic', 'cautious', 'exploratory'];
+    const chambers = ['Identity','Memory','Life','Atlas','Presence','Forge','Oracle','Chronicle','Chorus','Constellation','Council','Wayfinder','Score','Ritual','Orbit','Commons','Continuum','Echoes','Voyage','Resonance','Metamorphosis','Synthesis','Garden','Pathfinder'];
+    const state = load() || { routes: [], saved: [], clarity: 18, style: 'direct' };
 
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const modeLabelEl = document.getElementById('modeLabel');
-    const distanceLabelEl = document.getElementById('distanceLabel');
-    const startEl = document.getElementById('start');
-    const endEl = document.getElementById('end');
-    const modeEl = document.getElementById('mode');
+    const styleLabelEl = document.getElementById('styleLabel');
+    const clarityLabelEl = document.getElementById('clarityLabel');
+    const destinationEl = document.getElementById('destination');
+    const styleEl = document.getElementById('style');
     const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ routes: state.routes, distance: state.distance, mode: state.mode })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ routes: state.routes, clarity: state.clarity, style: state.style })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj && Array.isArray(obj.routes)){
           state.routes = obj.routes;
-          state.distance = Number(obj.distance ?? 20);
-          state.mode = String(obj.mode ?? 'direct');
+          state.clarity = Number(obj.clarity ?? 18);
+          state.style = String(obj.style ?? 'direct');
           save(); render();
         }
       }catch{}
@@ -219,63 +216,77 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function routeDistance(){
-      return Math.max(0, Math.min(100, Math.round((state.routes.length * 12) + state.distance)));
+    function routeClarity(){
+      return Math.max(0, Math.min(100, Math.round((state.routes.length * 14) + state.clarity)));
     }
-    function makeRoute(start, end, mode){
+    function makeRoute(destination, style){
+      const idx = chambers.indexOf(destination);
+      const path = idx >= 0
+        ? chambers.slice(0, idx + 1)
+        : ['Identity','Presence','Atlas', destination].filter(Boolean);
+      const scenicPath = [...new Set([...path, 'Chorus', 'Chronicle', 'Atlas'])];
+      const cautiousPath = ['Identity', 'Memory', 'Presence', destination].filter(Boolean);
+      const exploratoryPath = ['Identity', 'Atlas', 'Wayfinder', 'Echoes', destination].filter(Boolean);
+      const chosen = {
+        direct: path,
+        scenic: scenicPath,
+        cautious: cautiousPath,
+        exploratory: exploratoryPath
+      }[style] || path;
+
       return {
         id: Date.now() + Math.random(),
-        start,
-        end,
-        mode,
-        note: noteEl.value.trim() || 'A route through the living site.'
+        destination,
+        style,
+        note: noteEl.value.trim() || 'A route through the living site.',
+        path: chosen
       };
     }
     function render(){
       countEl.textContent = String(state.routes.length);
-      modeLabelEl.textContent = state.mode.charAt(0).toUpperCase() + state.mode.slice(1);
-      distanceLabelEl.textContent = `${routeDistance()}%`;
+      styleLabelEl.textContent = state.style.charAt(0).toUpperCase() + state.style.slice(1);
+      clarityLabelEl.textContent = `${routeClarity()}%`;
       listEl.innerHTML = '';
 
       state.routes.forEach((r) => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${r.start} → ${r.end}</b><span>${r.mode} · ${r.note}</span>`;
-        el.onclick = () => outEl.textContent = `${r.start} → ${r.end}\n\nMode: ${r.mode}\nDistance: ${routeDistance()}%\n\n${r.note}`;
+        el.innerHTML = `<b>${r.destination}</b><span>${r.style} · ${r.path.length} steps</span>`;
+        el.onclick = () => outEl.textContent = `${r.destination}\n\nStyle: ${r.style}\nClarity: ${routeClarity()}%\n\nPath:\n${r.path.map((p,i)=>`${i+1}. ${p}`).join('\n')}\n\n${r.note}`;
         listEl.appendChild(el);
       });
 
       outEl.textContent = state.routes.length
         ? 'Select a route to inspect it, or deepen the route to make the path more explicit.'
-        : 'Plot a route to begin.';
+        : 'Generate a route to begin.';
     }
 
-    document.getElementById('plotBtn').onclick = () => {
-      const start = startEl.value.trim() || `Chamber ${state.routes.length + 1}`;
-      const end = endEl.value.trim() || 'Portal Home';
-      state.mode = modeEl.value;
-      state.routes.unshift(makeRoute(start, end, state.mode));
-      state.distance = Math.min(100, state.distance + 10);
+    document.getElementById('routeBtn').onclick = () => {
+      const destination = destinationEl.value.trim() || `Destination ${state.routes.length + 1}`;
+      state.style = styleEl.value;
+      state.routes.unshift(makeRoute(destination, state.style));
+      state.clarity = Math.min(100, state.clarity + 10);
       save(); render();
-      outEl.textContent = `${start} → ${end}\n\nMode: ${state.mode}\n\n${noteEl.value.trim() || 'A route through the living site.'}`;
+      const r = state.routes[0];
+      outEl.textContent = `${r.destination}\n\nStyle: ${r.style}\n\nPath:\n${r.path.map((p,i)=>`${i+1}. ${p}`).join('\n')}\n\n${noteEl.value.trim() || 'A route through the living site.'}`;
     };
 
     document.getElementById('shiftBtn').onclick = () => {
-      state.mode = modes[(modes.indexOf(state.mode) + 1) % modes.length];
-      modeEl.value = state.mode;
-      state.distance = Math.min(100, state.distance + 4);
+      state.style = styles[(styles.indexOf(state.style) + 1) % styles.length];
+      styleEl.value = state.style;
+      state.clarity = Math.min(100, state.clarity + 4);
       save(); render();
-      outEl.textContent = `The route shifts to ${state.mode}.`;
+      outEl.textContent = `The route style shifts to ${state.style}.`;
     };
 
     document.getElementById('deepenBtn').onclick = () => {
-      state.distance = Math.min(100, state.distance + 8);
+      state.clarity = Math.min(100, state.clarity + 8);
       save(); render();
-      outEl.textContent = `Distance deepens.\n\nDistance: ${routeDistance()}%`;
+      outEl.textContent = `Route clarity deepens.\n\nClarity: ${routeClarity()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`routes:${state.routes.length} | distance:${routeDistance()}% | mode:${state.mode}`);
+      state.saved.unshift(`routes:${state.routes.length} | clarity:${routeClarity()}% | style:${state.style}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -291,9 +302,9 @@
 
     document.getElementById('clearBtn').onclick = () => {
       state.routes = [];
-      state.distance = 20;
-      state.mode = 'direct';
-      modeEl.value = state.mode;
+      state.clarity = 18;
+      state.style = 'direct';
+      styleEl.value = state.style;
       save(); render();
     };
 
