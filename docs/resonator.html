@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resonator — Living Chorus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050816;
+      --text:#eaf2ff;
+      --muted:#9db0d1;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140,170,255,.18);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;min-height:100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(92,119,255,.14), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(181,140,255,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:1.02fr .98fr;gap:16px;min-height:94vh}
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
+      backdrop-filter: blur(14px);
+    }
+    .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .sub{color:var(--muted);line-height:1.6;max-width:68ch}
+    .panel{
+      padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    select, input, button{
+      font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);color:var(--text);
+    }
+    select, input{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    canvas{
+      width:100%;height:520px;display:block;border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+      touch-action:none;
+    }
+    .out{
+      white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
+      min-height:120px;
+      background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
+      border-radius:18px;padding:14px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .stat{
+      padding:12px 14px;border-radius:16px;background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card intro">
+        <div>
+          <div class="tag">Resonator / Living Chorus</div>
+          <h1>Make the site<br/>sing back.</h1>
+          <div class="sub">
+            A playable chamber of tone, pulse, and harmonic light.
+            Touch the field, place voices, and shape a chorus that remembers your touch.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="mini">Controls</div>
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="dawn">Dawn</option>
+            <option value="tide">Tide</option>
+            <option value="ember">Ember</option>
+            <option value="void">Void</option>
+          </select>
+
+          <label for="density">Density</label>
+          <input id="density" type="range" min="1" max="12" step="1" value="5" />
+
+          <label for="gain">Gain</label>
+          <input id="gain" type="range" min="0" max="1" step="0.01" value="0.18" />
+
+          <div class="buttons">
+            <button id="playBtn">Start Audio</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+            <button id="saveBtn">Save chorus</button>
+          </div>
+
+          <div class="footer">
+            Return to the portal home: <a href="./index.html">home</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="padding:16px;display:grid;gap:16px">
+        <div>
+          <div class="mini">Chorus field</div>
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div>
+          <div class="mini">Chorus sigil</div>
+          <div id="out" class="out"></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="mini">Voices</div><b id="voices">0</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="modeLabel">Dawn</b></div>
+          <div class="stat"><div class="mini">Memory</div><b id="memory">0</b></div>
+        </div>
+
+        <div>
+          <div class="mini">Saved choruses</div>
+          <div id="saved" class="out">No saved choruses yet.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'resonator-living-chorus-v1';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const modeEl = document.getElementById('mode');
+    const densityEl = document.getElementById('density');
+    const gainEl = document.getElementById('gain');
+    const outEl = document.getElementById('out');
+    const voicesEl = document.getElementById('voices');
+    const modeLabelEl = document.getElementById('modeLabel');
+    const memoryEl = document.getElementById('memory');
+    const savedEl = document.getElementById('saved');
+
+    let audio = null;
+    let master = null;
+    let analyser = null;
+    let data = null;
+    let playing = false;
+
+    const state = load() || {
+      mode: 'dawn',
+      density: 5,
+      gain: 0.18,
+      paused: false,
+      voices: [],
+      memory: [],
+      saved: []
+    };
+
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
+    function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.floor(r.width * dpr);
+      canvas.height = Math.floor(r.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function log(msg){
+      state.memory.unshift(msg);
+      state.memory = state.memory.slice(0, 16);
+      memoryEl.textContent = String(state.memory.length);
+      save();
+    }
+
+    function modeScale(mode){
+      return {
+        dawn: [261.63, 329.63, 392.00, 523.25],
+        tide: [220.00, 277.18, 329.63, 440.00],
+        ember: [196.00, 246.94, 293.66, 392.00],
+        void: [174.61, 220.00, 261.63, 349.23]
+      }[mode];
+    }
+
+    function ensureAudio(){
+      if(audio) return;
+      audio = new (window.AudioContext || window.webkitAudioContext)();
+      master = audio.createGain();
+      analyser = audio.createAnalyser();
+      analyser.fftSize = 512;
+      data = new Uint8Array(analyser.frequencyBinCount);
+      master.connect(analyser);
+      analyser.connect(audio.destination);
+    }
+
+    function addVoice(x,y){
+      ensureAudio();
+      const freqs = modeScale(state.mode);
+      const r = canvas.getBoundingClientRect();
+      const nx = clamp(x / r.width, 0, 1);
+      const ny = clamp(y / r.height, 0, 1);
+      const idx = Math.min(freqs.length - 1, Math.floor(nx * freqs.length));
+      const freq = freqs[idx] * (1 + (0.5 - ny) * 0.22);
+
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      const filter = audio.createBiquadFilter();
+      osc.type = state.mode === 'void' ? 'sine' : state.mode === 'ember' ? 'triangle' : 'sine';
+      osc.frequency.value = freq;
+      filter.type = 'lowpass';
+      filter.frequency.value = 700 + (1 - ny) * 1600;
+      gain.gain.value = 0.0001;
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(master);
+
+      const now = audio.currentTime;
+      gain.gain.exponentialRampToValueAtTime(state.gain, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(state.gain * 0.65, now + 0.4);
+
+      osc.start();
+      if(!state.paused){
+        osc.stop(now + 3.5);
+      }
+
+      state.voices.push({ osc, gain, filter, freq, x, y, born: performance.now() });
+      state.voices = state.voices.filter(v => performance.now() - v.born < 5000);
+      log(`Voice placed at ${Math.round(x)}, ${Math.round(y)} (${freq.toFixed(1)} Hz)`);
+    }
+
+    function draw(){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = '#050814';
+      ctx.fillRect(0,0,w,h);
+
+      if(analyser && data){
+        analyser.getByteFrequencyData(data);
+      }
+
+      const t = performance.now() * 0.001;
+      const centerX = w/2, centerY = h/2;
+
+      const bars = data ? Array.from(data).slice(0, 64) : [];
+      bars.forEach((v, i) => {
+        const a = i / bars.length * Math.PI * 2;
+        const r = 40 + v * 0.9;
+        const x = centerX + Math.cos(a + t*0.3) * r;
+        const y = centerY + Math.sin(a + t*0.3) * r;
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(${120 + v*0.5}, ${180 + v*0.2}, 255, ${0.08 + v/255*0.35})`;
+        ctx.lineWidth = 2;
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      });
+
+      state.voices.forEach((v, i) => {
+        const age = (performance.now() - v.born) / 1000;
+        const pulse = 1 + Math.sin(t * 4 + i) * 0.06;
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(124,247,255,${clamp(0.35 - age * 0.04, 0, 0.35)})`;
+        ctx.arc(v.x, v.y, 18 + age * 22 * pulse, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,.95)';
+      ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      voicesEl.textContent = String(state.voices.length);
+      modeLabelEl.textContent = state.mode[0].toUpperCase() + state.mode.slice(1);
+      memoryEl.textContent = String(state.memory.length);
+
+      outEl.textContent =
+`Mode: ${state.mode}
+Density: ${state.density}
+Gain: ${state.gain.toFixed(2)}
+Voices: ${state.voices.length}
+Memory: ${state.memory.length}`;
+
+      savedEl.textContent = state.saved.length
+        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved choruses yet.';
+
+      requestAnimationFrame(draw);
+    }
+
+    function renderSaved(){
+      savedEl.textContent = state.saved.length
+        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved choruses yet.';
+    }
+
+    canvas.addEventListener('pointerdown', e => {
+      const r = canvas.getBoundingClientRect();
+      addVoice(e.clientX - r.left, e.clientY - r.top);
+    });
+
+    canvas.addEventListener('pointermove', e => {
+      if(e.buttons !== 1) return;
+      const r = canvas.getBoundingClientRect();
+      if(Math.random() < 0.18) addVoice(e.clientX - r.left, e.clientY - r.top);
+    });
+
+    window.addEventListener('keydown', e => {
+      const map = {
+        'a': [0.15, 0.78], 's': [0.28, 0.72], 'd': [0.41, 0.66], 'f': [0.54, 0.60],
+        'j': [0.66, 0.55], 'k': [0.79, 0.49], 'l': [0.90, 0.43]
+      };
+      if(map[e.key]) {
+        const r = canvas.getBoundingClientRect();
+        addVoice(map[e.key][0] * r.width, map[e.key][1] * r.height);
+      }
+    });
+
+    modeEl.onchange = () => { state.mode = modeEl.value; log(`Mode changed to ${state.mode}.`); };
+    densityEl.oninput = () => { state.density = Number(densityEl.value); save(); };
+    gainEl.oninput = () => { state.gain = Number(gainEl.value); save(); };
+
+    document.getElementById('playBtn').onclick = async () => {
+      ensureAudio();
+      await audio.resume();
+      playing = true;
+      log('Audio started.');
+    };
+    document.getElementById('pauseBtn').onclick = async () => {
+      ensureAudio();
+      state.paused = !state.paused;
+      if(state.paused) await audio.suspend(); else await audio.resume();
+      log(state.paused ? 'Chorus paused.' : 'Chorus resumed.');
+      save();
+    };
+    document.getElementById('resetBtn').onclick = () => {
+      state.voices = [];
+      state.memory = [];
+      log('Chorus reset.');
+      save();
+    };
+    document.getElementById('saveBtn').onclick = () => {
+      state.saved.unshift(`${state.mode} | density ${state.density} | gain ${state.gain.toFixed(2)}`);
+      state.saved = state.saved.slice(0, 12);
+      save();
+      log('Chorus saved.');
+    };
+
+    function boot(){
+      resize();
+      modeEl.value = state.mode;
+      densityEl.value = state.density;
+      gainEl.value = state.gain;
+      memoryEl.textContent = String(state.memory.length);
+      renderSaved();
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    boot();
+  </script>
+</body>
+</html>
