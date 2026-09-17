@@ -16,9 +16,9 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
-      --node:#7dffb2;
-      --route:#7cf7ff;
-      --gate:#ffcf7d;
+      --good:#7dffb2;
+      --warn:#ffd37d;
+      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -56,43 +56,62 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    input, textarea, button, select{
-      font:inherit;
-      border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.72);
-      color:var(--text);
-    }
-    input, textarea, select{width:100%;padding:11px 12px}
-    button{
-      padding:11px 14px;
-      cursor:pointer;
-      transition:.18s transform,.18s border-color,.18s background;
-    }
-    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
-    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .canvasWrap{padding:16px}
-    canvas{
-      width:100%;
-      height:68vh;
-      border-radius:18px;
-      border:1px solid rgba(140,170,255,.14);
-      background:rgba(5,8,16,.72);
-      display:block;
+    .board{
+      position:relative;
+      height:min(72vh,760px);
+      border-radius:20px;
+      overflow:hidden;
+      background:
+        linear-gradient(rgba(140,170,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140,170,255,.08) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(124,247,255,.08), transparent 55%),
+        rgba(5,8,16,.9);
+      background-size:40px 40px, 40px 40px, auto, auto;
+      border:1px solid rgba(140,170,255,.18);
+      box-shadow: inset 0 0 40px rgba(0,0,0,.35);
       cursor:crosshair;
+    }
+    .node{
+      position:absolute;
+      width:14px;height:14px;border-radius:50%;
+      transform:translate(-50%,-50%);
+      border:1px solid rgba(255,255,255,.5);
+      box-shadow:0 0 14px rgba(124,247,255,.25);
+    }
+    .gate{background:var(--accent)}
+    .waypoint{background:var(--accent2)}
+    .dest{background:var(--good)}
+    svg.route{
+      position:absolute;inset:0;
+      width:100%;height:100%;
+      pointer-events:none;
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
       color:#dbe8ff;
-      min-height:160px;
+      min-height:180px;
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
       border-radius:18px;
       padding:14px;
     }
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    button, input, select{
+      font:inherit;
+      border-radius:14px;
+      border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72);
+      color:var(--text);
+    }
+    input, select{width:100%;padding:11px 12px}
+    button{
+      padding:11px 14px;
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
     .stat{
       padding:12px 14px;
@@ -100,12 +119,10 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){
       .hero{grid-template-columns:1fr}
-      canvas{height:52vh}
       .stats{grid-template-columns:1fr 1fr}
     }
   </style>
@@ -116,60 +133,55 @@
       <section class="card intro">
         <div>
           <div class="tag">Pathfinder / Living Route</div>
-          <h1>Place gates.<br/>Trace routes.<br/>Find the way.</h1>
+          <h1>Draw the way.<br/>Mark the gates.<br/>Find the route.</h1>
           <div class="sub">
-            Pathfinder turns the repository into a navigable field. Add nodes, connect them, and let the map
-            reveal how chambers relate to one another.
+            Click the board to place gates, waypoints, and destinations. Pathfinder turns navigation into a visible,
+            revisable composition.
           </div>
         </div>
 
         <div class="panel">
-          <label for="mode">Mode</label>
+          <label class="mini">Placement mode</label>
           <select id="mode">
-            <option value="node">Place node</option>
-            <option value="gate">Place gate</option>
-            <option value="route">Draw route</option>
-            <option value="erase">Erase</option>
+            <option value="gate">Gate</option>
+            <option value="waypoint">Waypoint</option>
+            <option value="dest">Destination</option>
           </select>
 
-          <label for="label">Label</label>
-          <input id="label" placeholder="e.g. Atlas, Council, Oracle" />
-
           <div class="buttons">
-            <button id="autoBtn">Auto-route</button>
-            <button id="saveBtn">Save map</button>
+            <button id="saveBtn">Save path</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear map</button>
+            <button id="clearBtn">Clear path</button>
           </div>
 
-          <div class="footer">
-            Click on the map to place nodes and gates. Return to the portal home: <a href="./index.html">home</a>
-          </div>
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
         </div>
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div class="canvasWrap">
+        <div>
           <div class="mini">Route field</div>
-          <canvas id="canvas" width="1200" height="720"></canvas>
+          <div id="board" class="board">
+            <svg id="svg" class="route"></svg>
+          </div>
         </div>
 
         <div>
-          <div class="mini">Pathfinder sigil</div>
-          <div id="out" class="out">The route field is waiting for a first point.</div>
+          <div class="mini">Path reading</div>
+          <div id="out" class="out">The pathfinder is waiting for a path.</div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Nodes</div><b id="nodeCount">0</b></div>
-          <div class="stat"><div class="mini">Gates</div><b id="gateCount">0</b></div>
+          <div class="stat"><div class="mini">Nodes</div><b id="count">0</b></div>
+          <div class="stat"><div class="mini">Length</div><b id="length">0</b></div>
           <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
+          <div class="stat"><div class="mini">State</div><b id="stateLabel">Still</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved maps</div>
-          <div id="savedList" class="out">No saved maps yet.</div>
+          <div class="mini">Saved routes</div>
+          <div id="savedList" class="out">No saved routes yet.</div>
         </div>
       </section>
     </div>
@@ -177,168 +189,105 @@
 
   <script>
     const KEY = 'pathfinder-living-route-v1';
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const board = document.getElementById('board');
+    const svg = document.getElementById('svg');
     const modeEl = document.getElementById('mode');
-    const labelEl = document.getElementById('label');
     const outEl = document.getElementById('out');
-    const nodeCountEl = document.getElementById('nodeCount');
-    const gateCountEl = document.getElementById('gateCount');
+    const countEl = document.getElementById('count');
+    const lengthEl = document.getElementById('length');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { nodes: [], edges: [], saved: [] };
-    let pendingNode = null;
+    const state = load() || { nodes: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes, edges: state.edges })))); }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.edges)){
+        if(obj && Array.isArray(obj.nodes)){
           state.nodes = obj.nodes;
-          state.edges = obj.edges;
           save();
           render();
         }
       }catch{}
     }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
     function renderSaved(){
       savedCountEl.textContent = String(state.saved.length);
       savedListEl.textContent = state.saved.length
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved maps yet.';
+        : 'No saved routes yet.';
     }
-    function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
-    function stateText(){
-      if(state.nodes.length >= 8) return 'Mapped';
-      if(state.nodes.length >= 3) return 'Routing';
-      if(state.nodes.length >= 1) return 'Orienting';
-      return 'Quiet';
+    function stateText(n){
+      if(n >= 7) return 'Mapped';
+      if(n >= 3) return 'Tracing';
+      if(n >= 1) return 'Forming';
+      return 'Still';
     }
-    function draw(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = '#050816';
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-
-      ctx.strokeStyle = 'rgba(140,170,255,.12)';
-      for(let x=0; x<canvas.width; x+=60){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
-      for(let y=0; y<canvas.height; y+=60){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
-
-      state.edges.forEach(e => {
-        const a = state.nodes[e.a], b = state.nodes[e.b];
-        if(!a || !b) return;
-        ctx.strokeStyle = 'rgba(124,247,255,.7)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y);
-        ctx.lineTo(b.x,b.y);
-        ctx.stroke();
-      });
-
-      state.nodes.forEach((n, i) => {
-        ctx.fillStyle = n.kind === 'gate' ? '#ffcf7d' : '#7dffb2';
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.kind === 'gate' ? 10 : 8, 0, Math.PI*2);
-        ctx.fill();
-
-        ctx.strokeStyle = 'rgba(255,255,255,.18)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        ctx.fillStyle = '#eaf2ff';
-        ctx.font = '600 18px Inter, sans-serif';
-        ctx.fillText(n.label || `${n.kind} ${i+1}`, n.x + 12, n.y - 10);
-      });
-
-      if(pendingNode){
-        ctx.strokeStyle = 'rgba(181,140,255,.8)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(pendingNode.x, pendingNode.y, 14, 0, Math.PI*2);
-        ctx.stroke();
+    function pathLength(nodes){
+      let total = 0;
+      for(let i=1;i<nodes.length;i++){
+        const a = nodes[i-1], b = nodes[i];
+        total += Math.hypot(b.x-a.x, b.y-a.y);
       }
+      return Math.round(total);
     }
-
     function render(){
-      draw();
-      nodeCountEl.textContent = String(state.nodes.length);
-      gateCountEl.textContent = String(state.nodes.filter(n => n.kind === 'gate').length);
-      stateLabelEl.textContent = stateText();
-      const last = state.nodes[state.nodes.length - 1];
+      board.querySelectorAll('.node').forEach(n => n.remove());
+      svg.innerHTML = '';
+      const list = state.nodes.slice();
+      countEl.textContent = String(list.length);
+      lengthEl.textContent = String(pathLength(list));
+      stateLabelEl.textContent = stateText(list.length);
+
+      list.forEach(n => {
+        const d = document.createElement('div');
+        d.className = `node ${n.kind}`;
+        d.style.left = n.x + '%';
+        d.style.top = n.y + '%';
+        d.title = `${n.kind} @ ${n.x.toFixed(1)}, ${n.y.toFixed(1)}`;
+        board.appendChild(d);
+      });
+
+      if(list.length > 1){
+        const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        poly.setAttribute('fill', 'none');
+        poly.setAttribute('stroke', 'rgba(124,247,255,.9)');
+        poly.setAttribute('stroke-width', '3');
+        poly.setAttribute('stroke-linecap', 'round');
+        poly.setAttribute('stroke-linejoin', 'round');
+        poly.setAttribute('points', list.map(n => `${n.x/100*board.clientWidth},${n.y/100*board.clientHeight}`).join(' '));
+        svg.appendChild(poly);
+      }
+
+      const last = list[list.length - 1];
       outEl.textContent = last
-        ? `Last point: ${last.label || last.kind}
-Type: ${last.kind}
-Position: ${Math.round(last.x)}, ${Math.round(last.y)}
-Nodes: ${state.nodes.length}
-Edges: ${state.edges.length}
-State: ${stateText()}
+        ? `Last node: ${last.kind}
+Position: ${last.x.toFixed(1)}%, ${last.y.toFixed(1)}%
+Nodes: ${list.length}
+Length: ${pathLength(list)}
+State: ${stateText(list.length)}
 Code: ${serialize().slice(0,48)}...`
-        : 'The route field is waiting for a first point.';
+        : 'The pathfinder is waiting for a path.';
     }
 
-    function hitNode(x,y){
-      return state.nodes.findIndex(n => dist(n, {x,y}) < 16);
-    }
-
-    function addNode(x,y,kind){
-      state.nodes.push({ x, y, kind, label: labelEl.value.trim() || `${kind} ${state.nodes.length+1}` });
+    board.addEventListener('click', (e) => {
+      const r = board.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      state.nodes.push({ x, y, kind: modeEl.value });
       save();
       render();
-    }
-
-    canvas.addEventListener('click', (ev) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = (ev.clientX - rect.left) * (canvas.width / rect.width);
-      const y = (ev.clientY - rect.top) * (canvas.height / rect.height);
-      const mode = modeEl.value;
-      const i = hitNode(x,y);
-
-      if(mode === 'erase'){
-        if(i >= 0){
-          state.nodes.splice(i,1);
-          state.edges = state.edges.filter(e => e.a !== i && e.b !== i).map(e => ({
-            a: e.a > i ? e.a - 1 : e.a,
-            b: e.b > i ? e.b - 1 : e.b
-          }));
-          save(); render();
-        }
-        return;
-      }
-
-      if(mode === 'node' || mode === 'gate'){
-        addNode(x,y, mode);
-        return;
-      }
-
-      if(mode === 'route'){
-        if(i < 0) return;
-        if(pendingNode == null){
-          pendingNode = i;
-        } else if(pendingNode !== i){
-          state.edges.push({ a: pendingNode, b: i });
-          pendingNode = null;
-          save();
-          render();
-        } else {
-          pendingNode = null;
-          render();
-        }
-      }
     });
-
-    document.getElementById('autoBtn').onclick = () => {
-      if(state.nodes.length < 2) return;
-      state.edges = [];
-      for(let i=0; i<state.nodes.length-1; i++) state.edges.push({ a:i, b:i+1 });
-      save(); render();
-    };
 
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`nodes:${state.nodes.length} edges:${state.edges.length} | ${code.slice(0,10)}…`);
+      state.saved.unshift(`nodes:${state.nodes.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
     };
@@ -354,15 +303,13 @@ Code: ${serialize().slice(0,48)}...`
 
     document.getElementById('clearBtn').onclick = () => {
       state.nodes = [];
-      state.edges = [];
-      pendingNode = null;
       save();
       render();
     };
 
+    window.addEventListener('resize', render);
     renderSaved();
     render();
-    setInterval(render, 250);
   </script>
 </body>
 </html>
