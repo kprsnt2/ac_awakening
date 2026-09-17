@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Synthesis — Living Confluence</title>
+  <title>Synthesis — Living Integration Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#071018;
-      --text:#f2fbff;
-      --muted:#a8c4d5;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
       --accent:#7cf7ff;
-      --accent2:#c58cff;
+      --accent2:#9dffcb;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(197,140,255,.08);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(157,255,203,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(197,140,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(157,255,203,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(14,24,34,.82), rgba(8,12,18,.88));
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(8,12,18,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#effbff;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(124,247,255,.22);
-      background:rgba(8,12,18,.72);
+      background:rgba(9,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,61 +69,47 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(197,140,255,.5);background:rgba(16,22,30,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(157,255,203,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(8,12,18,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#eefcff;
+      color:#eff8fc;
       min-height:180px;
-      background:rgba(8,12,18,.72);
+      background:rgba(9,12,18,.72);
       border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .field{
-      position:relative;
-      height:560px;
-      border-radius:18px;
-      background:
-        radial-gradient(circle at center, rgba(124,247,255,.06), transparent 58%),
-        linear-gradient(rgba(124,247,255,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124,247,255,.05) 1px, transparent 1px),
-        rgba(8,12,18,.72);
-      background-size:auto, 40px 40px, 40px 40px, auto;
-      border:1px solid rgba(124,247,255,.14);
-      overflow:hidden;
-    }
-    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-    .node{
-      position:absolute;width:28px;height:28px;border-radius:50%;
-      transform:translate(-50%,-50%);
-      background:radial-gradient(circle at 35% 35%, #fff, var(--accent));
-      box-shadow:0 0 18px rgba(124,247,255,.35);
-      cursor:pointer;
-    }
-    .node.core{background:radial-gradient(circle at 35% 35%, #fff, var(--accent2))}
     .list{
-      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
     }
     .item{
-      padding:12px 14px;border-radius:16px;background:rgba(8,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);cursor:pointer;
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{border-color:rgba(124,247,255,.45)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(157,255,203,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
-    a{color:var(--accent2);text-decoration:none}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .field{height:460px} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -131,35 +117,36 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Synthesis / Living Confluence</div>
-          <h1>Gather the chambers.<br/>Balance the whole.<br/>Make one usable site.</h1>
+          <div class="tag">Synthesis / Living Integration Chamber</div>
+          <h1>Gather the chambers.<br/>Compose the whole.<br/>Keep the voices distinct.</h1>
           <div class="sub">
-            Synthesis turns the repository into a coherent surface. Humans can assemble chambers, compare coverage, and maintain the site as a living system.
+            Synthesis turns the repository into an integration surface. Humans can select chambers, weave them into one reading, and keep the structure legible without collapsing its parts.
           </div>
         </div>
 
         <div class="panel">
-          <label for="name">Map name</label>
-          <input id="name" placeholder="e.g. Full site confluence" />
+          <label for="name">Synthesis name</label>
+          <input id="name" placeholder="e.g. civic weave, garden thread, atlas chorus..." />
 
-          <label for="focus">Focus</label>
-          <select id="focus">
-            <option value="coverage">Coverage</option>
-            <option value="balance">Balance</option>
-            <option value="cohesion">Cohesion</option>
-            <option value="flow">Flow</option>
+          <label for="mode">Integration mode</label>
+          <select id="mode">
+            <option value="weave">Weave</option>
+            <option value="merge">Merge</option>
+            <option value="align">Align</option>
+            <option value="compose">Compose</option>
           </select>
 
-          <label for="note">Assembly note</label>
-          <textarea id="note" placeholder="e.g. Align route, voice, interpretation, and growth into one navigable ecology."></textarea>
+          <label for="note">Synthesis note</label>
+          <textarea id="note" placeholder="e.g. Hold the chambers together without erasing their differences."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Add chamber</button>
-            <button id="linkBtn">Link surface</button>
+            <button id="addBtn">Add synthesis</button>
+            <button id="shiftBtn">Shift mode</button>
+            <button id="deepenBtn">Deepen integration</button>
             <button id="saveBtn">Save synthesis</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear map</button>
+            <button id="clearBtn">Clear field</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -168,22 +155,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Nodes</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Unassembled</b></div>
-          <div class="tile"><div class="mini">Cohesion</div><b id="cohesionLabel">0%</b></div>
+          <div class="tile"><div class="mini">Syntheses</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Mode</div><b id="modeLabel">Weave</b></div>
+          <div class="tile"><div class="mini">Integration</div><b id="depthLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Synthesis field</div>
-          <div id="field" class="field">
-            <svg id="lines"></svg>
-          </div>
+          <div class="mini">Synthesis list</div>
+          <div id="list" class="list"></div>
         </div>
 
         <div>
           <div class="mini">Synthesis reading</div>
-          <div id="out" class="out">Add chambers to begin assembly.</div>
+          <div id="out" class="out">Add syntheses to begin.</div>
         </div>
 
         <div>
@@ -195,30 +180,31 @@
   </div>
 
   <script>
-    const KEY = 'synthesis-living-confluence-v1';
-    const state = load() || { nodes: [], links: [], saved: [] };
+    const KEY = 'synthesis-living-integration-v1';
+    const modes = ['weave', 'merge', 'align', 'compose'];
+    const state = load() || { syntheses: [], saved: [], depth: 18, mode: 'weave' };
 
-    const field = document.getElementById('field');
-    const lines = document.getElementById('lines');
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const cohesionLabelEl = document.getElementById('cohesionLabel');
+    const modeLabelEl = document.getElementById('modeLabel');
+    const depthLabelEl = document.getElementById('depthLabel');
     const nameEl = document.getElementById('name');
-    const focusEl = document.getElementById('focus');
+    const modeEl = document.getElementById('mode');
     const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes: state.nodes, links: state.links })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ syntheses: state.syntheses, depth: state.depth, mode: state.mode })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.nodes) && Array.isArray(obj.links)){
-          state.nodes = obj.nodes;
-          state.links = obj.links;
+        if(obj && Array.isArray(obj.syntheses)){
+          state.syntheses = obj.syntheses;
+          state.depth = Number(obj.depth ?? 18);
+          state.mode = String(obj.mode ?? 'weave');
           save(); render();
         }
       }catch{}
@@ -229,87 +215,69 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function cohesion(){
-      if(!state.nodes.length) return 0;
-      const density = Math.min(1, state.links.length / Math.max(1, state.nodes.length - 1));
-      const breadth = Math.min(1, state.nodes.length / 12);
-      return Math.round((density * 60) + (breadth * 40));
+    function synthesisDepth(){
+      return Math.max(0, Math.min(100, Math.round((state.syntheses.length * 14) + state.depth)));
     }
-    function ensureNode(name, core=false){
-      let node = state.nodes.find(n => n.name.toLowerCase() === name.toLowerCase());
-      if(!node){
-        node = { id: Date.now() + Math.random(), name, x: 120 + Math.random() * 420, y: 120 + Math.random() * 320, core };
-        state.nodes.push(node);
-      } else if(core) node.core = true;
-      return node;
+    function makeSynthesis(name, mode){
+      const palette = {
+        weave: `${name} braids chambers into a coherent fabric.`,
+        merge: `${name} joins parts into a shared operational field.`,
+        align: `${name} brings distinct chambers into correspondence.`,
+        compose: `${name} arranges chambers into a readable whole.`
+      };
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        mode,
+        note: noteEl.value.trim() || 'A synthesis in the living integration field.',
+        line: palette[mode] || palette.weave
+      };
     }
     function render(){
-      countEl.textContent = String(state.nodes.length);
-      stateLabelEl.textContent = state.nodes.length ? 'Assembled' : 'Unassembled';
-      cohesionLabelEl.textContent = `${cohesion()}%`;
-      field.querySelectorAll('.node').forEach(n => n.remove());
-      lines.innerHTML = '';
+      countEl.textContent = String(state.syntheses.length);
+      modeLabelEl.textContent = state.mode.charAt(0).toUpperCase() + state.mode.slice(1);
+      depthLabelEl.textContent = `${synthesisDepth()}%`;
+      listEl.innerHTML = '';
 
-      state.links.forEach(l => {
-        const a = state.nodes.find(n => n.id === l.a);
-        const b = state.nodes.find(n => n.id === l.b);
-        if(!a || !b) return;
-        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
-        line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
-        line.setAttribute('stroke', l.core ? 'rgba(197,140,255,.45)' : 'rgba(124,247,255,.38)');
-        line.setAttribute('stroke-width', l.core ? '4' : '3');
-        line.setAttribute('stroke-linecap', 'round');
-        lines.appendChild(line);
-      });
-
-      state.nodes.forEach(node => {
+      state.syntheses.forEach((s) => {
         const el = document.createElement('div');
-        el.className = 'node' + (node.core ? ' core' : '');
-        el.style.left = node.x + 'px';
-        el.style.top = node.y + 'px';
-        el.title = node.name;
-        el.onclick = () => outEl.textContent = `${node.name}\n\nConnections: ${state.links.filter(l => l.a===node.id || l.b===node.id).length}`;
-        field.appendChild(el);
+        el.className = 'item';
+        el.innerHTML = `<b>${s.name}</b><span>${s.mode} · ${s.line.slice(0, 90)}${s.line.length > 90 ? '…' : ''}</span>`;
+        el.onclick = () => outEl.textContent = `${s.name}\n\nMode: ${s.mode}\nIntegration: ${synthesisDepth()}%\n\n${s.line}\n\n${s.note}`;
+        listEl.appendChild(el);
       });
 
-      outEl.textContent = state.nodes.length
-        ? 'Select a chamber to inspect it, or add another relation.'
-        : 'Add chambers to begin assembly.';
+      outEl.textContent = state.syntheses.length
+        ? 'Select a synthesis to inspect it, or deepen integration to make the whole more explicit.'
+        : 'Add syntheses to begin.';
     }
 
-    field.addEventListener('click', (e) => {
-      if(e.target !== field) return;
-      const rect = field.getBoundingClientRect();
-      state.nodes.push({
-        id: Date.now() + Math.random(),
-        name: nameEl.value.trim() || `Chamber ${state.nodes.length + 1}`,
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        core: focusEl.value === 'coverage'
-      });
-      save(); render();
-    });
-
     document.getElementById('addBtn').onclick = () => {
-      const name = nameEl.value.trim() || `Chamber ${state.nodes.length + 1}`;
-      const node = ensureNode(name, focusEl.value === 'balance');
-      state.nodes.unshift(node);
-      state.nodes = [...new Map(state.nodes.map(n => [n.id, n])).values()];
+      const name = nameEl.value.trim() || `Synthesis ${state.syntheses.length + 1}`;
+      state.mode = modeEl.value;
+      state.syntheses.unshift(makeSynthesis(name, state.mode));
+      state.depth = Math.min(100, state.depth + 10);
       save(); render();
-      outEl.textContent = `${name}\n\nFocus: ${focusEl.value}\nNote: ${noteEl.value.trim() || 'A chamber added to the living whole.'}`;
+      const s = state.syntheses[0];
+      outEl.textContent = `${s.name}\n\nMode: ${s.mode}\n\n${s.line}\n\n${noteEl.value.trim() || 'A synthesis in the living integration field.'}`;
     };
 
-    document.getElementById('linkBtn').onclick = () => {
-      const a = ensureNode(nameEl.value.trim() || 'Atlas', true);
-      const b = ensureNode(noteEl.value.trim().split(/\s+/)[0] || 'Pathfinder', false);
-      state.links.unshift({ id: Date.now(), a: a.id, b: b.id, core: true });
+    document.getElementById('shiftBtn').onclick = () => {
+      state.mode = modes[(modes.indexOf(state.mode) + 1) % modes.length];
+      modeEl.value = state.mode;
+      state.depth = Math.min(100, state.depth + 4);
       save(); render();
-      outEl.textContent = `${a.name} ⇄ ${b.name}\n\nA core relation has been established.`;
+      outEl.textContent = `The synthesis shifts to ${state.mode}.`;
+    };
+
+    document.getElementById('deepenBtn').onclick = () => {
+      state.depth = Math.min(100, state.depth + 8);
+      save(); render();
+      outEl.textContent = `Integration deepens.\n\nIntegration: ${synthesisDepth()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`nodes:${state.nodes.length} | links:${state.links.length} | cohesion:${cohesion()}%`);
+      state.saved.unshift(`syntheses:${state.syntheses.length} | integration:${synthesisDepth()}% | mode:${state.mode}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -324,12 +292,13 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.nodes = [];
-      state.links = [];
+      state.syntheses = [];
+      state.depth = 18;
+      state.mode = 'weave';
+      modeEl.value = state.mode;
       save(); render();
     };
 
-    [nameEl, focusEl, noteEl].forEach(el => el.addEventListener('input', render));
     renderSaved();
     render();
   </script>
