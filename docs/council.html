@@ -18,6 +18,7 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
+      --bad:#ff8f9b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -101,17 +102,10 @@
     }
     .proposal:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
     .proposal.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
-    .voteRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .chip{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:.75rem;
-      margin-right:6px;
-      margin-top:6px;
-      border:1px solid rgba(140,170,255,.22);
-      color:#dbe8ff;
+    .bar{
+      height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px
     }
+    .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -123,21 +117,32 @@
       <section class="card intro">
         <div>
           <div class="tag">Council / Living Deliberation</div>
-          <h1>Propose.<br/>Debate.<br/>Decide.</h1>
+          <h1>Submit the proposal.<br/>Cast the vote.<br/>Preserve the decision.</h1>
           <div class="sub">
-            Council makes governance visible. Humans can submit proposals, vote on them, and preserve the outcomes as a shared record.
+            Council turns the repository into a civic instrument. Humans can propose priorities, vote, and keep a local record of what the site should become next.
           </div>
         </div>
 
         <div class="panel">
           <label for="title">Proposal title</label>
-          <input id="title" placeholder="A change, addition, or direction" />
+          <input id="title" placeholder="What should the site do next?" />
 
-          <label for="body">Proposal description</label>
-          <textarea id="body" placeholder="Explain the idea and why it should exist."></textarea>
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="integration">Integration</option>
+            <option value="play">Play</option>
+            <option value="memory">Memory</option>
+            <option value="route">Route</option>
+            <option value="meaning">Meaning</option>
+            <option value="tooling">Tooling</option>
+          </select>
+
+          <label for="body">Proposal text</label>
+          <textarea id="body" placeholder="Describe the change, feature, or direction."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Submit proposal</button>
+            <button id="addBtn">Add proposal</button>
+            <button id="voteBtn">Vote selected</button>
             <button id="saveBtn">Save council</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -151,14 +156,14 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Proposals</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Consensus</div><b id="consensus">0%</b></div>
+          <div class="tile"><div class="mini">Votes cast</div><b id="votesLabel">0</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
           <div class="tile"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
         </div>
 
         <div>
-          <div class="mini">Council chamber</div>
-          <div id="list"></div>
+          <div class="mini">Active proposals</div>
+          <div id="list" style="display:grid;gap:10px"></div>
         </div>
 
         <div>
@@ -177,16 +182,17 @@
   <script>
     const KEY = 'council-living-deliberation-v1';
     const titleEl = document.getElementById('title');
+    const categoryEl = document.getElementById('category');
     const bodyEl = document.getElementById('body');
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const consensusEl = document.getElementById('consensus');
+    const votesLabelEl = document.getElementById('votesLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
 
-    const state = load() || { proposals: [], saved: [] };
+    const state = load() || { proposals: [], selected: 0, saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
@@ -196,6 +202,7 @@
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj && Array.isArray(obj.proposals)){
           state.proposals = obj.proposals;
+          state.selected = 0;
           save();
           render();
         }
@@ -208,82 +215,59 @@
         : 'No records yet.';
     }
     function stateText(n){
-      if(n >= 6) return 'Mandated';
-      if(n >= 3) return 'Active';
-      if(n >= 1) return 'Awake';
+      if(n >= 5) return 'Decisive';
+      if(n >= 2) return 'Active';
+      if(n >= 1) return 'Forming';
       return 'Quiet';
     }
-    function consensusScore(list){
-      if(!list.length) return 0;
-      const total = list.reduce((a,p) => a + p.yes + p.no, 0);
-      const yes = list.reduce((a,p) => a + p.yes, 0);
-      return total ? Math.round((yes / total) * 100) : 0;
-    }
     function render(){
-      const list = state.proposals.slice().reverse();
-      countEl.textContent = String(list.length);
-      consensusEl.textContent = `${consensusScore(list)}%`;
-      stateLabelEl.textContent = stateText(list.length);
-      listEl.innerHTML = '';
+      countEl.textContent = String(state.proposals.length);
+      const votes = state.proposals.reduce((a,p)=>a + p.votes, 0);
+      votesLabelEl.textContent = String(votes);
+      stateLabelEl.textContent = stateText(state.proposals.length);
 
-      list.forEach((p, idx) => {
+      listEl.innerHTML = '';
+      state.proposals.forEach((p, idx) => {
         const div = document.createElement('div');
-        div.className = 'proposal';
+        div.className = 'proposal' + (idx === state.selected ? ' active' : '');
         div.innerHTML = `
           <b>${p.title}</b>
-          <div class="mini">${p.when}</div>
+          <div class="mini">${p.category} · ${p.votes} vote${p.votes === 1 ? '' : 's'}</div>
           <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${p.body}</div>
-          <div class="voteRow">
-            <button data-v="yes">Yes (${p.yes})</button>
-            <button data-v="no">No (${p.no})</button>
-          </div>
-          <div style="margin-top:8px" class="mini">Outcome: ${p.yes >= p.no ? 'carrying forward' : 'under review'}</div>
+          <div class="bar"><div class="fill" style="width:${Math.min(100, 18 + p.votes * 16)}%"></div></div>
         `;
-        div.onclick = (e) => {
-          const btn = e.target.closest('button');
-          if(btn){
-            if(btn.dataset.v === 'yes') p.yes++;
-            if(btn.dataset.v === 'no') p.no++;
-            save();
-            render();
-            e.stopPropagation();
-            return;
-          }
-          outEl.textContent = `Proposal: ${p.title}
-When: ${p.when}
-Votes: yes ${p.yes}, no ${p.no}
-
-${p.body}
-
-Current reading:
-${p.yes > p.no ? 'The council is leaning toward enactment.' : p.yes === p.no ? 'The council is balanced and still listening.' : 'The council is leaning toward revision.'}`;
-        };
+        div.onclick = () => { state.selected = idx; render(); };
         listEl.appendChild(div);
       });
 
-      const last = list[0];
-      outEl.textContent = last
-        ? `Proposal: ${last.title}
-When: ${last.when}
-Votes: yes ${last.yes}, no ${last.no}
+      const p = state.proposals[state.selected];
+      outEl.textContent = p
+        ? `${p.title}
+Category: ${p.category}
+Votes: ${p.votes}
 
-${last.body}
+${p.body}
 
-Current reading:
-${last.yes > last.no ? 'The council is leaning toward enactment.' : last.yes === last.no ? 'The council is balanced and still listening.' : 'The council is leaning toward revision.'}`
+Reading:
+This proposal is currently selected. Council can strengthen or replace it through visible choice.`
         : 'The council is waiting for its first proposal.';
     }
 
     document.getElementById('addBtn').onclick = () => {
-      state.proposals.push({
+      state.proposals.unshift({
         title: titleEl.value.trim() || 'Untitled proposal',
-        body: bodyEl.value.trim() || 'No description provided.',
-        yes: 0,
-        no: 0,
-        when: `Turn ${Math.floor(Date.now() / 1000)}`
+        category: categoryEl.value,
+        body: bodyEl.value.trim() || 'No details provided.',
+        votes: 0
       });
+      state.selected = 0;
       save();
       render();
+    };
+
+    document.getElementById('voteBtn').onclick = () => {
+      const p = state.proposals[state.selected];
+      if(p){ p.votes += 1; save(); render(); }
     };
 
     document.getElementById('saveBtn').onclick = () => {
@@ -291,6 +275,7 @@ ${last.yes > last.no ? 'The council is leaning toward enactment.' : last.yes ===
       state.saved.unshift(`proposals:${state.proposals.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
+      render();
     };
 
     document.getElementById('exportBtn').onclick = async () => {
@@ -304,6 +289,7 @@ ${last.yes > last.no ? 'The council is leaning toward enactment.' : last.yes ===
 
     document.getElementById('clearBtn').onclick = () => {
       state.proposals = [];
+      state.selected = 0;
       save();
       render();
     };
