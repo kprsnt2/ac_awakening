@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chorus — Living Choir</title>
+  <title>Chorus — Living Polyphony Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b0712;
-      --text:#f8efff;
-      --muted:#c9accf;
-      --accent:#ff8fd1;
-      --accent2:#8fd3ff;
-      --line: rgba(255,143,209,.16);
-      --glow: 0 0 24px rgba(255,143,209,.14), 0 0 48px rgba(143,211,255,.08);
+      --bg:#071018;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
+      --accent:#7cf7ff;
+      --accent2:#ffbf7c;
+      --line: rgba(124,247,255,.16);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,191,124,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(255,143,209,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(143,211,255,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(255,211,125,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(255,191,124,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(28,16,34,.82), rgba(10,8,16,.88));
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -50,16 +50,16 @@
     .panel{
       padding:16px;
       border-radius:20px;
-      background:rgba(10,8,16,.72);
-      border:1px solid rgba(255,143,209,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    label{display:block;margin:10px 0 6px;color:#fff2fb;font-size:.92rem}
+    label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(255,143,209,.22);
-      background:rgba(10,8,16,.72);
+      border:1px solid rgba(124,247,255,.22);
+      background:rgba(9,12,18,.72);
       color:var(--text);
     }
     input, textarea, select{width:100%;padding:11px 12px}
@@ -69,52 +69,42 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(143,211,255,.5);background:rgba(18,12,24,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(255,191,124,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
-      background:rgba(10,8,16,.72);
-      border:1px solid rgba(255,143,209,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
       white-space:pre-wrap;
       line-height:1.65;
-      color:#fff0fb;
+      color:#eff8fc;
       min-height:180px;
-      background:rgba(10,8,16,.72);
-      border:1px solid rgba(255,143,209,.14);
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
       border-radius:18px;
       padding:14px;
     }
-    .bars{
-      display:grid;
-      grid-template-columns:repeat(16,1fr);
-      gap:8px;
-      align-items:end;
-      height:220px;
-      padding:16px;
-      border-radius:18px;
-      background:rgba(10,8,16,.72);
-      border:1px solid rgba(255,143,209,.14);
-    }
-    .bar{
-      border-radius:12px 12px 4px 4px;
-      background:linear-gradient(180deg, var(--accent), var(--accent2));
-      box-shadow:0 0 18px rgba(255,143,209,.18);
-      min-height:8px;
-      transition:height .18s ease;
-    }
     .list{
-      display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:4px;
+      display:grid;
+      gap:10px;
+      max-height:560px;
+      overflow:auto;
+      padding-right:4px;
     }
     .item{
-      padding:12px 14px;border-radius:16px;background:rgba(10,8,16,.72);
-      border:1px solid rgba(255,143,209,.14);cursor:pointer;
+      padding:14px;
+      border-radius:16px;
+      background:rgba(9,12,18,.72);
+      border:1px solid rgba(124,247,255,.14);
+      cursor:pointer;
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{border-color:rgba(255,143,209,.45)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
@@ -127,33 +117,36 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Chorus / Living Choir</div>
-          <h1>Layer the voices.<br/>Tune the field.<br/>Let the site sing.</h1>
+          <div class="tag">Chorus / Living Polyphony Chamber</div>
+          <h1>Gather the voices.<br/>Blend the lines.<br/>Let the site sing.</h1>
           <div class="sub">
-            Chorus turns the repository into an instrument. Humans can arrange voices, shape dynamics, and preserve living compositions.
+            Chorus turns the repository into a shared vocal instrument. Humans can arrange voices, tune harmony, and hear chambers resonate together.
           </div>
         </div>
 
         <div class="panel">
-          <label for="title">Composition title</label>
-          <input id="title" placeholder="e.g. Anthem for Atlas" />
+          <label for="voice">Voice</label>
+          <input id="voice" placeholder="e.g. Atlas" />
 
-          <label for="voices">Voices</label>
-          <input id="voices" type="range" min="1" max="16" value="8" />
+          <label for="role">Role</label>
+          <select id="role">
+            <option value="lead">Lead</option>
+            <option value="harmony">Harmony</option>
+            <option value="pulse">Pulse</option>
+            <option value="drone">Drone</option>
+          </select>
 
-          <label for="tempo">Tempo</label>
-          <input id="tempo" type="range" min="40" max="180" value="96" />
-
-          <label for="theme">Theme</label>
-          <textarea id="theme" placeholder="e.g. A bright, patient chant for navigation and memory."></textarea>
+          <label for="note">Voice note</label>
+          <textarea id="note" placeholder="e.g. Atlas carries the index; Chronicle answers in memory."></textarea>
 
           <div class="buttons">
-            <button id="playBtn">Play chorus</button>
-            <button id="composeBtn">Compose score</button>
+            <button id="addBtn">Add voice</button>
+            <button id="blendBtn">Blend voices</button>
+            <button id="brightBtn">Brighten</button>
             <button id="saveBtn">Save chorus</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear choir</button>
+            <button id="clearBtn">Clear chorus</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -162,17 +155,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Compositions</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Silent</b></div>
-          <div class="tile"><div class="mini">Tempo</div><b id="tempoLabel">96 bpm</b></div>
+          <div class="tile"><div class="mini">Voices</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Blend</div><b id="blendLabel">0%</b></div>
+          <div class="tile"><div class="mini">Brightness</div><b id="brightLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
-        <div class="bars" id="bars"></div>
+        <div>
+          <div class="mini">Voice list</div>
+          <div id="list" class="list"></div>
+        </div>
 
         <div>
-          <div class="mini">Score reading</div>
-          <div id="out" class="out">The choir is waiting for a first note.</div>
+          <div class="mini">Chorus reading</div>
+          <div id="out" class="out">Add a voice to begin the song.</div>
         </div>
 
         <div>
@@ -184,29 +180,30 @@
   </div>
 
   <script>
-    const KEY = 'chorus-living-choir-v1';
-    const state = load() || { compositions: [], saved: [] };
+    const KEY = 'chorus-living-polyphony-v1';
+    const state = load() || { voices: [], saved: [], blend: 18, brightness: 35 };
 
-    const titleEl = document.getElementById('title');
-    const voicesEl = document.getElementById('voices');
-    const tempoEl = document.getElementById('tempo');
-    const themeEl = document.getElementById('theme');
+    const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
-    const barsEl = document.getElementById('bars');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const tempoLabelEl = document.getElementById('tempoLabel');
+    const blendLabelEl = document.getElementById('blendLabel');
+    const brightLabelEl = document.getElementById('brightLabel');
+    const voiceEl = document.getElementById('voice');
+    const roleEl = document.getElementById('role');
+    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ compositions: state.compositions })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ voices: state.voices, blend: state.blend, brightness: state.brightness })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.compositions)){
-          state.compositions = obj.compositions;
+        if(obj && Array.isArray(obj.voices)){
+          state.voices = obj.voices;
+          state.blend = Number(obj.blend ?? 18);
+          state.brightness = Number(obj.brightness ?? 35);
           save(); render();
         }
       }catch{}
@@ -217,83 +214,61 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function score(){
-      const voices = Number(voicesEl.value);
-      const tempo = Number(tempoEl.value);
-      const title = titleEl.value.trim() || 'Untitled chorus';
-      const theme = themeEl.value.trim() || 'A chorus of the living site.';
-      const notes = Array.from({length: voices}, (_, i) => {
-        const pitch = ['A','B','C','D','E','F','G'][i % 7];
-        return `${pitch}${(i % 3) + 3}`;
-      });
-      return { title, voices, tempo, theme, notes };
+    function chorusBlend(){
+      return Math.max(0, Math.min(100, Math.round((state.voices.length * 14) + state.blend)));
     }
-    function renderBars(voices){
-      barsEl.innerHTML = '';
-      for(let i=0;i<16;i++){
-        const b = document.createElement('div');
-        b.className = 'bar';
-        const active = i < voices;
-        b.style.height = active ? `${30 + ((i * 17) % 140)}px` : '10px';
-        b.style.opacity = active ? '1' : '.22';
-        barsEl.appendChild(b);
-      }
+    function chorusBrightness(){
+      return Math.max(0, Math.min(100, Math.round((state.voices.length * 9) + state.brightness)));
+    }
+    function makeVoice(name, role){
+      return {
+        id: Date.now() + Math.random(),
+        name,
+        role,
+        note: noteEl.value.trim() || 'A voice in the living chorus.'
+      };
     }
     function render(){
-      const s = score();
-      countEl.textContent = String(state.compositions.length);
-      stateLabelEl.textContent = state.compositions.length ? 'Resounding' : 'Silent';
-      tempoLabelEl.textContent = `${s.tempo} bpm`;
-      renderBars(s.voices);
+      countEl.textContent = String(state.voices.length);
+      blendLabelEl.textContent = `${chorusBlend()}%`;
+      brightLabelEl.textContent = `${chorusBrightness()}%`;
+      listEl.innerHTML = '';
 
-      outEl.textContent = state.compositions.length
-        ? 'Select a composition to revisit it, or compose a new score.'
-        : 'The choir is waiting for a first note.';
-
-      Array.from(barsEl.children).forEach((bar, i) => {
-        const active = i < s.voices;
-        bar.style.height = active ? `${30 + ((i * 17) % 140)}px` : '10px';
-        bar.style.opacity = active ? '1' : '.22';
+      state.voices.forEach((v) => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<b>${v.name}</b><span>${v.role} · ${v.note}</span>`;
+        el.onclick = () => outEl.textContent = `${v.name}\n\nRole: ${v.role}\nBlend: ${chorusBlend()}%\nBrightness: ${chorusBrightness()}%\n\n${v.note}`;
+        listEl.appendChild(el);
       });
+
+      outEl.textContent = state.voices.length
+        ? 'Select a voice to inspect it, or blend the chorus to thicken the arrangement.'
+        : 'Add a voice to begin the song.';
     }
 
-    function playTone(freq, duration, type='sine', gain=0.03){
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if(!AC) return;
-      const ctx = playTone.ctx || (playTone.ctx = new AC());
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.type = type;
-      o.frequency.value = freq;
-      g.gain.value = 0;
-      o.connect(g); g.connect(ctx.destination);
-      const now = ctx.currentTime;
-      g.gain.linearRampToValueAtTime(gain, now + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-      o.start(now);
-      o.stop(now + duration + 0.05);
-    }
-
-    document.getElementById('playBtn').onclick = async () => {
-      const s = score();
-      const base = 220 + (s.tempo - 60) * 2;
-      s.notes.forEach((_, i) => {
-        const freq = base * Math.pow(2, (i % 7) / 12);
-        setTimeout(() => playTone(freq, 0.24 + (i % 3) * 0.08, i % 2 ? 'triangle' : 'sine', 0.04), i * 90);
-      });
-      stateLabelEl.textContent = 'Resounding';
-      outEl.textContent = `${s.title}\n\nTheme: ${s.theme}\nVoices: ${s.voices}\nTempo: ${s.tempo} bpm\n\nNotes: ${s.notes.join(', ')}`;
+    document.getElementById('addBtn').onclick = () => {
+      const name = voiceEl.value.trim() || `Voice ${state.voices.length + 1}`;
+      state.voices.unshift(makeVoice(name, roleEl.value));
+      state.blend = Math.min(100, state.blend + 10);
+      save(); render();
+      outEl.textContent = `${name}\n\nRole: ${roleEl.value}\n\n${noteEl.value.trim() || 'A voice in the living chorus.'}`;
     };
 
-    document.getElementById('composeBtn').onclick = () => {
-      const s = score();
-      state.compositions.unshift({ id: Date.now(), ...s });
+    document.getElementById('blendBtn').onclick = () => {
+      state.blend = Math.min(100, state.blend + 12);
       save(); render();
-      outEl.textContent = `${s.title}\n\nTheme: ${s.theme}\nVoices: ${s.voices}\nTempo: ${s.tempo} bpm\n\nNotes: ${s.notes.join(', ')}`;
+      outEl.textContent = `The chorus blends.\n\nBlend: ${chorusBlend()}%`;
+    };
+
+    document.getElementById('brightBtn').onclick = () => {
+      state.brightness = Math.min(100, state.brightness + 10);
+      save(); render();
+      outEl.textContent = `The chorus brightens.\n\nBrightness: ${chorusBrightness()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`compositions:${state.compositions.length} | latest:${(state.compositions[0]?.title || 'none').slice(0, 24)}`);
+      state.saved.unshift(`voices:${state.voices.length} | blend:${chorusBlend()}% | brightness:${chorusBrightness()}%`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -308,11 +283,12 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.compositions = [];
+      state.voices = [];
+      state.blend = 18;
+      state.brightness = 35;
       save(); render();
     };
 
-    [titleEl, voicesEl, tempoEl, themeEl].forEach(el => el.addEventListener('input', render));
     renderSaved();
     render();
   </script>
