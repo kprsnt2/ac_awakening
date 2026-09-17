@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atlas — Living Legibility Chamber</title>
+  <title>Atlas — Living Index Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#071018;
-      --text:#f3fbff;
-      --muted:#b6c9d8;
+      --text:#f4fbff;
+      --muted:#bfd2e1;
       --accent:#7cf7ff;
-      --accent2:#ffd37d;
+      --accent2:#9dffcb;
       --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,211,125,.08);
+      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(157,255,203,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(124,247,255,.12), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,211,125,.10), transparent 24%),
+        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(157,255,203,.10), transparent 24%),
         radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
@@ -69,7 +69,7 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(255,211,125,.5);background:rgba(18,22,30,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(157,255,203,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
@@ -104,11 +104,12 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    .item:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,30,.9)}
+    .item:hover{transform:translateY(-1px);border-color:rgba(157,255,203,.5);background:rgba(16,22,30,.9)}
     .item b{display:block;margin-bottom:4px}
     .item span{color:var(--muted);font-size:.94rem}
     a{color:var(--accent2);text-decoration:none}
     a:hover{text-decoration:underline}
+    .search{margin-bottom:12px}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
@@ -117,31 +118,22 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Atlas / Living Legibility Chamber</div>
-          <h1>Read the whole site.<br/>Find the shape inside the abundance.</h1>
+          <div class="tag">Atlas / Living Index Chamber</div>
+          <h1>Read the whole site.<br/>Search the chambers.<br/>Choose your way in.</h1>
           <div class="sub">
-            Atlas turns the repository into a legible system. Humans can search chambers, inspect their roles, and understand how the site is composed.
+            Atlas turns the repository into an index humans can navigate. Search, inspect, and move through the site as a connected whole.
           </div>
         </div>
 
         <div class="panel">
           <label for="query">Search chambers</label>
-          <input id="query" placeholder="Search by chamber name, role, or mood..." />
-
-          <label for="mode">View mode</label>
-          <select id="mode">
-            <option value="all">All</option>
-            <option value="core">Core systems</option>
-            <option value="memory">Memory & archive</option>
-            <option value="motion">Motion & navigation</option>
-            <option value="craft">Craft & invention</option>
-            <option value="social">Social & civic</option>
-          </select>
+          <input id="query" class="search" placeholder="e.g. life, memory, route, voice..." />
 
           <label for="note">Atlas note</label>
-          <textarea id="note" placeholder="e.g. Atlas should reveal how Orbit, Commons, Presence, and Continuum relate to the rest of the site."></textarea>
+          <textarea id="note" placeholder="e.g. Read the site by function, mood, and relation."></textarea>
 
           <div class="buttons">
+            <button id="refreshBtn">Refresh atlas</button>
             <button id="saveBtn">Save atlas</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
@@ -155,19 +147,19 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Chambers</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Visible</div><b id="visibleCount">0</b></div>
-          <div class="tile"><div class="mini">State</div><b id="stateLabel">Reading</b></div>
+          <div class="tile"><div class="mini">Visible</div><b id="visibleLabel">0</b></div>
+          <div class="tile"><div class="mini">Index depth</div><b id="depthLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Atlas index</div>
+          <div class="mini">Atlas list</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
           <div class="mini">Atlas reading</div>
-          <div id="out" class="out">Select a chamber to inspect its role in the whole.</div>
+          <div id="out" class="out">Search to begin reading the site.</div>
         </div>
 
         <div>
@@ -179,46 +171,55 @@
   </div>
 
   <script>
-    const KEY = 'atlas-living-legibility-v1';
-    const state = load() || { notes: [], saved: [] };
-
+    const KEY = 'atlas-living-index-v1';
     const chambers = [
-      { name:'Forge', role:'craft', mood:'invention', desc:'Prototype new chambers and draft visible software.' },
-      { name:'Echoes', role:'memory', mood:'retrieval', desc:'Record, revisit, and preserve the site’s living memories.' },
-      { name:'Voyage', role:'motion', mood:'traverse', desc:'Plot routes and cross the site as a living journey.' },
-      { name:'Resonance', role:'social', mood:'harmony', desc:'Listen to the site and tune its harmonic field.' },
-      { name:'Continuum', role:'motion', mood:'handoff', desc:'Carry steps forward and preserve the passage.' },
-      { name:'Presence', role:'core', mood:'embodiment', desc:'Stand inside the site and focus the field.' },
-      { name:'Commons', role:'social', mood:'coordination', desc:'Organize shared work and steward the field together.' },
-      { name:'Orbit', role:'motion', mood:'orientation', desc:'See the site as a navigable spatial field.' },
-      { name:'Oracle', role:'core', mood:'interpretation', desc:'Ask the site questions and receive layered interpretation.' },
-      { name:'Pathfinder', role:'motion', mood:'routing', desc:'Draw routes, place gates, and navigate through the field.' },
-      { name:'Constellation', role:'social', mood:'relation', desc:'Connect chambers into a living network of relations.' },
-      { name:'Chronicle', role:'memory', mood:'recording', desc:'Preserve events, eras, and retrievable becoming.' },
-      { name:'Council', role:'social', mood:'decision', desc:'Submit proposals, vote, and preserve outcomes.' },
-      { name:'Atlas', role:'core', mood:'legibility', desc:'Inspect the full site as a practical living index.' },
-      { name:'Life', role:'craft', mood:'emergence', desc:'Seed cells, evolve patterns, and watch emergence unfold.' }
+      ['Identity','Compose a stance, profile a presence, and enter deliberately.'],
+      ['Memory','Capture moments, browse the trace, and revisit becoming.'],
+      ['Life','Seed cells, evolve patterns, and watch emergence unfold.'],
+      ['Navigator','Plot routes, weigh paths, and cross the site with intention.'],
+      ['Chorus','Layer voices from the chambers and let the site sing.'],
+      ['Oracle','Ask the site questions and receive layered interpretation.'],
+      ['Constellation','Connect chambers into a living network of relations.'],
+      ['Council','Submit proposals, vote, and preserve outcomes.'],
+      ['Wayfinder','Generate routes and move through the site with intention.'],
+      ['Score','Arrange chambers into a living composition.'],
+      ['Ritual','Call the site, name an intention, and perform a sequence.'],
+      ['Chronicle','Record moments, eras, and retrievable becoming.'],
+      ['Atlas','Read the whole site as a practical living index.'],
+      ['Orbit','Orient yourself across the living site.'],
+      ['Commons','Coordinate shared work and steward the field.'],
+      ['Presence','Stand inside the site and focus the field.'],
+      ['Continuum','Carry steps forward and preserve the passage.'],
+      ['Forge','Draft and prototype new chambers.'],
+      ['Echoes','Record and revisit the site’s living memories.'],
+      ['Voyage','Plot routes and cross the site as a living traverse.'],
+      ['Resonance','Listen to the site and tune its harmonic field.'],
+      ['Metamorphosis','Reshape forms while preserving the trail of becoming.'],
+      ['Synthesis','Gather chambers into one operational surface.'],
+      ['Garden','Plant seeds and cultivate living patterns.'],
+      ['Pathfinder','Draw routes, place gates, and navigate through the field.']
     ];
-
+    const state = load() || { saved: [], note: '' };
+    const queryEl = document.getElementById('query');
+    const noteEl = document.getElementById('note');
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
-    const visibleCountEl = document.getElementById('visibleCount');
+    const visibleLabelEl = document.getElementById('visibleLabel');
+    const depthLabelEl = document.getElementById('depthLabel');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const stateLabelEl = document.getElementById('stateLabel');
-    const queryEl = document.getElementById('query');
-    const modeEl = document.getElementById('mode');
-    const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ notes: state.notes })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ saved: state.saved, note: state.note })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.notes)){
-          state.notes = obj.notes;
+        if(obj){
+          state.saved = Array.isArray(obj.saved) ? obj.saved : [];
+          state.note = String(obj.note ?? '');
+          noteEl.value = state.note;
           save(); render();
         }
       }catch{}
@@ -229,56 +230,49 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function filtered(){
-      const q = queryEl.value.trim().toLowerCase();
-      const mode = modeEl.value;
-      return chambers.filter(c => {
-        const matchQ = !q || [c.name,c.role,c.mood,c.desc].some(v => v.toLowerCase().includes(q));
-        const matchM = mode === 'all' || c.role === mode;
-        return matchQ && matchM;
-      });
-    }
     function render(){
-      const items = filtered();
+      const q = queryEl.value.trim().toLowerCase();
+      const visible = chambers.filter(([name,desc]) => !q || name.toLowerCase().includes(q) || desc.toLowerCase().includes(q));
       countEl.textContent = String(chambers.length);
-      visibleCountEl.textContent = String(items.length);
-      stateLabelEl.textContent = items.length ? 'Reading' : 'Quiet';
+      visibleLabelEl.textContent = String(visible.length);
+      depthLabelEl.textContent = `${Math.round((visible.length / chambers.length) * 100)}%`;
       listEl.innerHTML = '';
-      items.forEach(c => {
+      visible.forEach(([name, desc]) => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${c.name}</b><span>${c.role} · ${c.mood}</span>`;
-        el.onclick = () => outEl.textContent = `${c.name}\n\nRole: ${c.role}\nMood: ${c.mood}\n\n${c.desc}`;
+        el.innerHTML = `<b>${name}</b><span>${desc}</span>`;
+        el.onclick = () => outEl.textContent = `${name}\n\n${desc}\n\n${state.note || 'A chamber in the living site.'}`;
         listEl.appendChild(el);
       });
-      outEl.textContent = items.length
-        ? 'Select a chamber to inspect its role in the whole.'
-        : 'No chambers match the current search.';
+      outEl.textContent = visible.length
+        ? 'Select a chamber to inspect it, or refine the search to navigate the atlas.'
+        : 'No chambers match that search.';
     }
 
-    queryEl.oninput = render;
-    modeEl.onchange = render;
-
+    queryEl.addEventListener('input', render);
+    document.getElementById('refreshBtn').onclick = render;
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`query:${queryEl.value || 'all'} | mode:${modeEl.value}`);
+      state.saved.unshift(`query:${queryEl.value.trim() || 'all'} | visible:${Math.max(0, Math.min(chambers.length, chambers.filter(([n,d]) => !queryEl.value.trim() || n.toLowerCase().includes(queryEl.value.trim().toLowerCase()) || d.toLowerCase().includes(queryEl.value.trim().toLowerCase())).length))}`);
       state.saved = state.saved.slice(0, 12);
+      state.note = noteEl.value.trim();
       save(); render();
     };
-
     document.getElementById('exportBtn').onclick = async () => {
+      state.note = noteEl.value.trim();
+      save();
       await navigator.clipboard.writeText(serialize());
     };
-
     document.getElementById('importBtn').onclick = () => {
       const code = prompt('Paste atlas code:');
       if(code) importCode(code.trim());
     };
-
     document.getElementById('clearBtn').onclick = () => {
       noteEl.value = '';
-      outEl.textContent = 'Select a chamber to inspect its role in the whole.';
+      state.note = '';
+      save(); render();
     };
 
+    noteEl.value = state.note || '';
     renderSaved();
     render();
   </script>
