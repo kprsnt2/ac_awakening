@@ -208,10 +208,12 @@ function buildStatic() {
     fs.copyFileSync(codexSrc, path.join(DOCS_DIR, "codex.html"));
   }
 
-  // Copy standalone Analytics Dashboard to docs/
+  // Build and copy standalone Analytics Dashboard to docs/ with baked state
   const dashboardSrc = path.join(ROOT, "public", "dashboard.html");
   if (fs.existsSync(dashboardSrc)) {
-    fs.copyFileSync(dashboardSrc, path.join(DOCS_DIR, "dashboard.html"));
+    let dashTemplate = fs.readFileSync(dashboardSrc, "utf-8");
+    let dashHtml = dashTemplate.replace("</head>", `${injection}\n</head>`);
+    fs.writeFileSync(path.join(DOCS_DIR, "dashboard.html"), dashHtml, "utf-8");
   }
 
   // Write docs/index.html
