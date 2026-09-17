@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atelier — Living Composer</title>
+  <title>Atelier — Living Composition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,6 +16,8 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb0;
+      --warn:#ffcf6b;
     }
     *{box-sizing:border-box}
     html,body{
@@ -42,55 +44,51 @@
     .panel{
       padding:16px;border-radius:20px;background:rgba(5,8,16,.72);border:1px solid rgba(140,170,255,.14);
     }
-    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
-    select, input, button, textarea{
+    select, input, button{
       font:inherit;border-radius:14px;border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);color:var(--text);
     }
-    select, input, textarea{width:100%;padding:11px 12px}
-    textarea{min-height:88px;resize:vertical}
+    select, input{width:100%;padding:11px 12px}
     button{
       padding:11px 14px;cursor:pointer;transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .stage{
-      position:relative;
-      width:100%;
-      height:560px;
+    .workspace{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+      align-content:start;
+    }
+    .module{
+      min-height:150px;
       border-radius:18px;
-      overflow:hidden;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,.05), transparent 45%),
-        linear-gradient(180deg, rgba(4,7,14,.96), rgba(6,9,18,.98));
-      border:1px solid rgba(140,170,255,.16);
+      border:1px solid rgba(140,170,255,.14);
+      background:rgba(5,8,16,.72);
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:relative;
     }
-    .scene{
-      position:absolute;inset:0;overflow:hidden;
+    .module header{
+      display:flex;justify-content:space-between;align-items:center;gap:8px;
+      font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem;
     }
-    .item{
-      position:absolute;
-      min-width:90px;
-      min-height:40px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(140,170,255,.22);
-      background:rgba(12,16,28,.86);
-      color:var(--text);
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
-      user-select:none;
-      touch-action:none;
-      cursor:grab;
+    .module h3{margin:0;font-size:1.05rem;color:#f0f6ff}
+    .module p{margin:0;color:#dbe8ff;line-height:1.55;white-space:pre-wrap}
+    .module .handle{
+      position:absolute;right:10px;bottom:10px;width:14px;height:14px;border-radius:4px;
+      border:1px solid rgba(124,247,255,.55);background:rgba(124,247,255,.16);cursor:nwse-resize;
     }
-    .item.dragging{cursor:grabbing;outline:1px solid rgba(124,247,255,.6)}
-    .item .title{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--accent);margin-bottom:4px;text-transform:uppercase;letter-spacing:.12em}
-    .item .content{font-size:.95rem;line-height:1.35;white-space:pre-wrap}
-    .item[data-kind="particle"]{border-radius:999px;min-width:28px;min-height:28px;padding:0}
-    .item[data-kind="particle"] .content{display:none}
-    .item[data-kind="button"]{background:linear-gradient(135deg, rgba(124,247,255,.22), rgba(181,140,255,.18))}
-    .item[data-kind="text"]{min-width:140px}
-    .item[data-kind="panel"]{min-width:180px;min-height:100px}
+    .workspaceWrap{
+      display:grid;
+      gap:12px;
+      grid-template-rows:auto 1fr;
+      min-height:560px;
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;line-height:1.6;color:#dbe8ff;
       min-height:120px;
@@ -105,7 +103,7 @@
     .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} .workspace{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr} }
   </style>
 </head>
 <body>
@@ -113,35 +111,35 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Atelier / Living Composer</div>
-          <h1>Compose a chamber<br/>from living parts.</h1>
+          <div class="tag">Atelier / Living Composition</div>
+          <h1>Compose a chamber<br/>from modular parts.</h1>
           <div class="sub">
-            Drag modules into the field, tune the scene, and export a shareable composition.
-            This is a studio for making new browser worlds from visible pieces.
+            Drag modules, choose a theme, and shape a personal workspace from the site’s own vocabulary.
+            The Atelier turns the repository into a maker-space for humans.
           </div>
         </div>
 
         <div class="panel">
-          <div class="mini">Controls</div>
-          <label for="preset">Scene preset</label>
-          <select id="preset">
-            <option value="sky">Sky</option>
-            <option value="garden">Garden</option>
-            <option value="circuit">Circuit</option>
-            <option value="tide">Tide</option>
+          <label for="theme">Atelier theme</label>
+          <select id="theme">
+            <option value="studio">Studio</option>
             <option value="archive">Archive</option>
+            <option value="observatory">Observatory</option>
+            <option value="grove">Grove</option>
+            <option value="engine">Engine</option>
           </select>
 
-          <label for="textInput">Selected module text</label>
-          <textarea id="textInput" placeholder="Edit the active module..."></textarea>
+          <label for="title">New module title</label>
+          <input id="title" placeholder="Module title..." />
+
+          <label for="body">New module body</label>
+          <input id="body" placeholder="Describe the module..." />
 
           <div class="buttons">
-            <button id="addTextBtn">Add text</button>
-            <button id="addPanelBtn">Add panel</button>
-            <button id="addButtonBtn">Add button</button>
-            <button id="addParticleBtn">Add particle</button>
-            <button id="saveBtn">Save composition</button>
+            <button id="addBtn">Add module</button>
+            <button id="saveBtn">Save layout</button>
             <button id="exportBtn">Copy code</button>
+            <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear</button>
           </div>
 
@@ -152,269 +150,185 @@
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div>
-          <div class="mini">Composition stage</div>
-          <div class="stage" id="stage">
-            <div class="scene" id="scene"></div>
-          </div>
+        <div class="workspaceWrap">
+          <div class="mini">Atelier workspace</div>
+          <div id="workspace" class="workspace"></div>
         </div>
 
         <div>
-          <div class="mini">Composition sigil</div>
+          <div class="mini">Atelier sigil</div>
           <div id="out" class="out"></div>
         </div>
 
         <div class="stats">
-          <div class="stat"><div class="mini">Modules</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Preset</div><b id="presetLabel">Sky</b></div>
-          <div class="stat"><div class="mini">Selected</div><b id="selectedLabel">None</b></div>
-          <div class="stat"><div class="mini">Memory</div><b id="memory">0</b></div>
+          <div class="stat"><div class="mini">Modules</div><b id="moduleCount">0</b></div>
+          <div class="stat"><div class="mini">Theme</div><b id="themeLabel">Studio</b></div>
+          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="stat"><div class="mini">Layout</div><b id="layoutCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Saved compositions</div>
-          <div id="saved" class="out">No saved compositions yet.</div>
+          <div class="mini">Saved layouts</div>
+          <div id="savedList" class="out">No saved layouts yet.</div>
         </div>
       </section>
     </div>
   </div>
 
   <script>
-    const KEY = 'atelier-living-composer-v1';
-    const scene = document.getElementById('scene');
-    const stage = document.getElementById('stage');
-    const presetEl = document.getElementById('preset');
-    const textInput = document.getElementById('textInput');
+    const KEY = 'atelier-living-composition-v1';
+    const workspace = document.getElementById('workspace');
     const outEl = document.getElementById('out');
-    const countEl = document.getElementById('count');
-    const presetLabelEl = document.getElementById('presetLabel');
-    const selectedLabelEl = document.getElementById('selectedLabel');
-    const memoryEl = document.getElementById('memory');
-    const savedEl = document.getElementById('saved');
+    const moduleCountEl = document.getElementById('moduleCount');
+    const themeLabelEl = document.getElementById('themeLabel');
+    const savedCountEl = document.getElementById('savedCount');
+    const layoutCountEl = document.getElementById('layoutCount');
+    const savedListEl = document.getElementById('savedList');
+    const themeEl = document.getElementById('theme');
+    const titleEl = document.getElementById('title');
+    const bodyEl = document.getElementById('body');
 
     const state = load() || {
-      preset: 'sky',
-      modules: [],
-      memory: [],
-      saved: [],
-      selected: null
+      theme: 'studio',
+      modules: [
+        { id: uid(), title: 'Canvas', body: 'A place for visual composition.', x: 0, y: 0, w: 1, h: 1 },
+        { id: uid(), title: 'Notes', body: 'A place for context and intention.', x: 1, y: 0, w: 1, h: 1 },
+        { id: uid(), title: 'Signals', body: 'A place for live cues and outputs.', x: 0, y: 1, w: 1, h: 1 },
+        { id: uid(), title: 'Archive', body: 'A place for saved forms.', x: 1, y: 1, w: 1, h: 1 }
+      ],
+      saved: []
     };
 
+    function uid(){ return crypto.randomUUID?.() || String(Date.now()+Math.random()); }
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
-    function rand(min,max){ return Math.random()*(max-min)+min; }
-
-    const presets = {
-      sky: { bg:'linear-gradient(180deg, rgba(10,18,40,.95), rgba(4,7,14,.98))', accent:'rgba(124,247,255,.9)' },
-      garden: { bg:'linear-gradient(180deg, rgba(10,28,20,.95), rgba(4,7,14,.98))', accent:'rgba(181,140,255,.9)' },
-      circuit: { bg:'linear-gradient(180deg, rgba(8,12,24,.95), rgba(4,7,14,.98))', accent:'rgba(124,247,255,.9)' },
-      tide: { bg:'linear-gradient(180deg, rgba(8,18,30,.95), rgba(4,7,14,.98))', accent:'rgba(100,180,255,.9)' },
-      archive: { bg:'linear-gradient(180deg, rgba(20,16,26,.95), rgba(4,7,14,.98))', accent:'rgba(181,140,255,.9)' }
-    };
-
-    function log(msg){
-      state.memory.unshift(msg);
-      state.memory = state.memory.slice(0, 16);
-      memoryEl.textContent = String(state.memory.length);
-      save();
-    }
-
-    function stageRect(){ return stage.getBoundingClientRect(); }
-
-    function applyPreset(){
-      const p = presets[state.preset] || presets.sky;
-      stage.style.background = `
-        radial-gradient(circle at 20% 20%, ${p.accent.replace('0.9', '0.12')}, transparent 24%),
-        radial-gradient(circle at 80% 70%, rgba(181,140,255,.09), transparent 28%),
-        ${p.bg}
-      `;
-      presetLabelEl.textContent = state.preset[0].toUpperCase() + state.preset.slice(1);
-      save();
-    }
-
-    function createModule(kind, x = rand(40, stageRect().width - 160), y = rand(40, stageRect().height - 120)) {
-      const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
-      const module = {
-        id, kind, x, y,
-        w: kind === 'panel' ? 220 : kind === 'text' ? 170 : kind === 'button' ? 140 : 34,
-        h: kind === 'panel' ? 120 : kind === 'text' ? 70 : kind === 'button' ? 54 : 34,
-        text: kind === 'particle' ? '' : kind === 'button' ? 'Tap me' : `${kind.toUpperCase()}`
-      };
-      state.modules.push(module);
-      state.selected = id;
-      log(`${kind} module added.`);
-      save();
-      render();
-    }
-
-    function selectModule(id){
-      state.selected = id;
-      const m = state.modules.find(x => x.id === id);
-      selectedLabelEl.textContent = m ? m.kind : 'None';
-      textInput.value = m ? m.text : '';
-      save();
-      render();
-    }
-
-    function renderSaved(){
-      savedEl.textContent = state.saved.length
-        ? state.saved.map((s, i) => `${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No saved compositions yet.';
-    }
-
     function serialize(){
       return btoa(unescape(encodeURIComponent(JSON.stringify({
-        preset: state.preset,
+        theme: state.theme,
         modules: state.modules
       }))));
     }
-
-    function deserialize(code){
+    function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.modules)){
-          state.preset = obj.preset || 'sky';
-          state.modules = obj.modules;
-          state.selected = null;
-          applyPreset();
-          save();
-          render();
-          log('Composition imported.');
+        if(obj){
+          state.theme = obj.theme || 'studio';
+          state.modules = Array.isArray(obj.modules) ? obj.modules : [];
+          themeEl.value = state.theme;
+          save(); render();
         }
       }catch{}
     }
 
+    const themes = {
+      studio: ['rgba(124,247,255,.12)','rgba(181,140,255,.12)'],
+      archive: ['rgba(255,207,107,.10)','rgba(124,247,255,.10)'],
+      observatory: ['rgba(124,247,255,.14)','rgba(125,255,176,.10)'],
+      grove: ['rgba(125,255,176,.12)','rgba(181,140,255,.10)'],
+      engine: ['rgba(255,143,143,.12)','rgba(124,247,255,.10)']
+    };
+
+    function renderSaved(){
+      savedCountEl.textContent = String(state.saved.length);
+      layoutCountEl.textContent = String(state.modules.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No saved layouts yet.';
+    }
+
     function render(){
-      scene.innerHTML = '';
-      countEl.textContent = String(state.modules.length);
-      presetLabelEl.textContent = state.preset[0].toUpperCase() + state.preset.slice(1);
-      memoryEl.textContent = String(state.memory.length);
+      workspace.innerHTML = '';
+      moduleCountEl.textContent = String(state.modules.length);
+      themeLabelEl.textContent = state.theme[0].toUpperCase() + state.theme.slice(1);
 
-      state.modules.forEach(mod => {
-        const el = document.createElement('div');
-        el.className = 'item' + (state.selected === mod.id ? ' dragging' : '');
-        el.dataset.kind = mod.kind;
-        el.style.left = mod.x + 'px';
-        el.style.top = mod.y + 'px';
-        el.style.width = mod.w + 'px';
-        el.style.height = mod.h + 'px';
+      const [a,b] = themes[state.theme] || themes.studio;
+      workspace.style.background = `linear-gradient(180deg, ${a}, ${b})`;
 
-        const title = document.createElement('div');
-        title.className = 'title';
-        title.textContent = mod.kind;
-        const content = document.createElement('div');
-        content.className = 'content';
-        content.textContent = mod.text || '';
+      state.modules.forEach((m, idx) => {
+        const el = document.createElement('section');
+        el.className = 'module';
+        el.style.gridColumn = `${m.x + 1} / span ${m.w}`;
+        el.style.gridRow = `${m.y + 1} / span ${m.h}`;
+        el.innerHTML = `
+          <header>
+            <span>${String(idx + 1).padStart(2,'0')} · ${escapeHtml(m.id.slice(0, 8))}</span>
+            <span>${escapeHtml(state.theme)}</span>
+          </header>
+          <h3 contenteditable="true">${escapeHtml(m.title)}</h3>
+          <p contenteditable="true">${escapeHtml(m.body)}</p>
+          <div class="handle" title="Resize hint"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
+            <button data-act="left">←</button>
+            <button data-act="right">→</button>
+            <button data-act="up">↑</button>
+            <button data-act="down">↓</button>
+            <button data-act="clone">Clone</button>
+            <button data-act="remove">Remove</button>
+          </div>
+        `;
+        const titleNode = el.querySelector('h3');
+        const bodyNode = el.querySelector('p');
+        titleNode.oninput = () => { m.title = titleNode.textContent.trim(); save(); };
+        bodyNode.oninput = () => { m.body = bodyNode.textContent.trim(); save(); };
 
-        if(mod.kind !== 'particle'){
-          el.appendChild(title);
-          el.appendChild(content);
-        }
-
-        if(mod.kind === 'particle'){
-          el.style.borderColor = 'rgba(124,247,255,.35)';
-          el.style.background = 'rgba(124,247,255,.85)';
-          el.style.boxShadow = '0 0 20px rgba(124,247,255,.35)';
-        }
-
-        el.addEventListener('pointerdown', e => {
-          e.stopPropagation();
-          selectModule(mod.id);
-          const r = stageRect();
-          const offsetX = e.clientX - r.left - mod.x;
-          const offsetY = e.clientY - r.top - mod.y;
-          el.setPointerCapture(e.pointerId);
-
-          const move = ev => {
-            mod.x = clamp(ev.clientX - r.left - offsetX, 0, r.width - mod.w);
-            mod.y = clamp(ev.clientY - r.top - offsetY, 0, r.height - mod.h);
-            el.style.left = mod.x + 'px';
-            el.style.top = mod.y + 'px';
-          };
-          const up = () => {
-            el.removeEventListener('pointermove', move);
-            el.removeEventListener('pointerup', up);
-            el.classList.remove('dragging');
-            save();
-          };
-          el.classList.add('dragging');
-          el.addEventListener('pointermove', move);
-          el.addEventListener('pointerup', up);
-        });
-
-        el.addEventListener('dblclick', () => {
-          if(mod.kind === 'button') {
-            mod.text = mod.text === 'Tap me' ? 'Tapped' : 'Tap me';
-            log('Button toggled.');
-            save();
-            render();
-          }
-        });
-
-        scene.appendChild(el);
+        const move = (dx, dy) => {
+          m.x = Math.max(0, Math.min(1, m.x + dx));
+          m.y = Math.max(0, Math.min(1, m.y + dy));
+          save(); render();
+        };
+        el.querySelector('[data-act="left"]').onclick = () => move(-1,0);
+        el.querySelector('[data-act="right"]').onclick = () => move(1,0);
+        el.querySelector('[data-act="up"]').onclick = () => move(0,-1);
+        el.querySelector('[data-act="down"]').onclick = () => move(0,1);
+        el.querySelector('[data-act="clone"]').onclick = () => {
+          state.modules.push({ ...m, id: uid(), x: m.x, y: m.y + 1 });
+          save(); render();
+        };
+        el.querySelector('[data-act="remove"]').onclick = () => {
+          state.modules = state.modules.filter(x => x.id !== m.id);
+          save(); render();
+        };
+        workspace.appendChild(el);
       });
 
       outEl.textContent =
-`Preset: ${state.preset}
+`Theme: ${state.theme}
 Modules: ${state.modules.length}
-Selected: ${state.selected ? state.selected : 'none'}
-Code: ${serialize().slice(0, 48)}...`;
-      selectedLabelEl.textContent = state.selected ? (state.modules.find(m => m.id === state.selected)?.kind || 'None') : 'None';
-      textInput.value = state.selected ? (state.modules.find(m => m.id === state.selected)?.text || '') : '';
+Code: ${serialize().slice(0,48)}...
+Hint: edit text directly, then move modules with arrows.`;
     }
 
-    presetEl.onchange = () => { state.preset = presetEl.value; applyPreset(); log(`Preset changed to ${state.preset}.`); render(); };
-    textInput.oninput = () => {
-      const m = state.modules.find(x => x.id === state.selected);
-      if(m){ m.text = textInput.value; save(); render(); }
-    };
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
 
-    document.getElementById('addTextBtn').onclick = () => createModule('text');
-    document.getElementById('addPanelBtn').onclick = () => createModule('panel');
-    document.getElementById('addButtonBtn').onclick = () => createModule('button');
-    document.getElementById('addParticleBtn').onclick = () => createModule('particle');
+    themeEl.onchange = () => { state.theme = themeEl.value; save(); render(); };
+    document.getElementById('addBtn').onclick = () => {
+      state.modules.push({ id: uid(), title: titleEl.value.trim() || 'Untitled module', body: bodyEl.value.trim() || 'No description provided.', x: 0, y: state.modules.length, w: 1, h: 1 });
+      titleEl.value = ''; bodyEl.value = '';
+      save(); render();
+    };
     document.getElementById('saveBtn').onclick = () => {
       const code = serialize();
-      state.saved.unshift(`${state.preset} | ${state.modules.length} modules | ${code.slice(0, 10)}…`);
+      state.saved.unshift(`${state.theme} | modules:${state.modules.length} | ${code.slice(0,10)}…`);
       state.saved = state.saved.slice(0, 12);
       save();
-      log('Composition saved.');
     };
     document.getElementById('exportBtn').onclick = async () => {
-      const code = serialize();
-      await navigator.clipboard.writeText(code);
-      log('Composition code copied.');
+      await navigator.clipboard.writeText(serialize());
+    };
+    document.getElementById('importBtn').onclick = () => {
+      const code = prompt('Paste atelier code:');
+      if(code) importCode(code.trim());
     };
     document.getElementById('clearBtn').onclick = () => {
       state.modules = [];
-      state.selected = null;
-      state.memory = [];
-      log('Composition cleared.');
-      save();
-      render();
+      save(); render();
     };
 
-    stage.addEventListener('pointerdown', e => {
-      if(e.target !== stage && e.target !== scene) return;
-      state.selected = null;
-      selectedLabelEl.textContent = 'None';
-      textInput.value = '';
-      save();
-      render();
-    });
-
-    window.addEventListener('resize', () => render());
-    presetEl.value = state.preset;
-    applyPreset();
+    themeEl.value = state.theme;
     renderSaved();
-    if(!state.modules.length){
-      createModule('text', 80, 80);
-      createModule('panel', 280, 160);
-      createModule('button', 540, 110);
-    } else {
-      render();
-    }
+    render();
   </script>
 </body>
 </html>
