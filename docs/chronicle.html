@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chronicle — Living Memory Chamber</title>
+  <title>Chronicle — Living Archive Chamber</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0a0f16;
+      --bg:#08111a;
       --text:#f4fbff;
-      --muted:#bfd0df;
-      --accent:#7cf7ff;
-      --accent2:#ffbf7c;
-      --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,191,124,.08);
+      --muted:#bfd2e1;
+      --accent:#b58cff;
+      --accent2:#7cf7ff;
+      --line: rgba(181,140,255,.16);
+      --glow: 0 0 24px rgba(181,140,255,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,191,124,.10), transparent 24%),
-        radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
+        radial-gradient(circle at 18% 20%, rgba(181,140,255,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
+        radial-gradient(circle at 70% 82%, rgba(157,255,203,.06), transparent 30%),
         var(--bg);
       color:var(--text);
       font-family:Inter,system-ui,sans-serif;
@@ -31,7 +31,7 @@
     .wrap{max-width:1600px;margin:0 auto;padding:20px}
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:94vh}
     .card{
-      background:linear-gradient(180deg, rgba(18,24,34,.82), rgba(9,12,18,.88));
+      background:linear-gradient(180deg, rgba(18,24,36,.82), rgba(9,12,18,.88));
       border:1px solid var(--line);
       border-radius:24px;
       box-shadow:var(--glow);
@@ -51,14 +51,14 @@
       padding:16px;
       border-radius:20px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(124,247,255,.22);
+      border:1px solid rgba(181,140,255,.22);
       background:rgba(9,12,18,.72);
       color:var(--text);
     }
@@ -69,14 +69,14 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(255,191,124,.5);background:rgba(18,22,30,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
@@ -85,7 +85,7 @@
       color:#eff8fc;
       min-height:180px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
       border-radius:18px;
       padding:14px;
     }
@@ -100,7 +100,7 @@
       padding:14px;
       border-radius:16px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(181,140,255,.14);
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
@@ -117,37 +117,31 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Chronicle / Living Memory Chamber</div>
-          <h1>Remember what happened.<br/>Keep it active.<br/>Carry it forward.</h1>
+          <div class="tag">Chronicle / Living Archive Chamber</div>
+          <h1>Record what happened.<br/>Return to the trace.<br/>Keep becoming retrievable.</h1>
           <div class="sub">
-            Chronicle turns the repository into a usable memory system. Humans can record events, browse eras, and keep important moments alive inside the site.
+            Chronicle turns the repository into a living archive. Humans can mark milestones, preserve context, and revisit the site’s becoming.
           </div>
         </div>
 
         <div class="panel">
-          <label for="title">Entry title</label>
-          <input id="title" placeholder="e.g. Atlas becomes readable" />
+          <label for="event">Event</label>
+          <input id="event" placeholder="e.g. Oracle launched, Forge drafted, Atlas expanded..." />
 
           <label for="era">Era</label>
-          <select id="era">
-            <option value="dawn">Dawn</option>
-            <option value="growth">Growth</option>
-            <option value="crossing">Crossing</option>
-            <option value="renewal">Renewal</option>
-            <option value="archive">Archive</option>
-          </select>
+          <input id="era" placeholder="e.g. Phase 4, Renaissance, Unsealing..." />
 
-          <label for="note">Entry note</label>
-          <textarea id="note" placeholder="e.g. The site gained a legibility chamber and the home portal was updated to reflect it."></textarea>
+          <label for="note">Chronicle note</label>
+          <textarea id="note" placeholder="e.g. This moment changed the site’s direction."></textarea>
 
           <div class="buttons">
-            <button id="addBtn">Record moment</button>
-            <button id="shiftBtn">Advance era</button>
-            <button id="focusBtn">Focus memory</button>
+            <button id="recordBtn">Record moment</button>
+            <button id="shiftBtn">Shift era</button>
+            <button id="deepenBtn">Deepen archive</button>
             <button id="saveBtn">Save chronicle</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear chronicle</button>
+            <button id="clearBtn">Clear archive</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -157,23 +151,23 @@
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
           <div class="tile"><div class="mini">Entries</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Era</div><b id="eraLabel">Dawn</b></div>
-          <div class="tile"><div class="mini">Memory load</div><b id="loadLabel">0%</b></div>
+          <div class="tile"><div class="mini">Era</div><b id="eraLabel">Unmarked</b></div>
+          <div class="tile"><div class="mini">Depth</div><b id="depthLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Chronicle index</div>
+          <div class="mini">Chronicle list</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
           <div class="mini">Chronicle reading</div>
-          <div id="out" class="out">Record a moment to begin the chronicle.</div>
+          <div id="out" class="out">Record a moment to begin.</div>
         </div>
 
         <div>
-          <div class="mini">Saved chronicle marks</div>
+          <div class="mini">Saved chronicles</div>
           <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
@@ -181,8 +175,8 @@
   </div>
 
   <script>
-    const KEY = 'chronicle-living-memory-v1';
-    const state = load() || { entries: [], saved: [], era: 'dawn', load: 18 };
+    const KEY = 'chronicle-living-archive-v1';
+    const state = load() || { entries: [], saved: [], depth: 18, era: 'Unmarked' };
 
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
@@ -190,21 +184,21 @@
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
     const eraLabelEl = document.getElementById('eraLabel');
-    const loadLabelEl = document.getElementById('loadLabel');
-    const titleEl = document.getElementById('title');
+    const depthLabelEl = document.getElementById('depthLabel');
+    const eventEl = document.getElementById('event');
     const eraEl = document.getElementById('era');
     const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries, era: state.era, load: state.load })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ entries: state.entries, depth: state.depth, era: state.era })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
         if(obj && Array.isArray(obj.entries)){
           state.entries = obj.entries;
-          state.era = String(obj.era ?? 'dawn');
-          state.load = Number(obj.load ?? 18);
+          state.depth = Number(obj.depth ?? 18);
+          state.era = String(obj.era ?? 'Unmarked');
           save(); render();
         }
       }catch{}
@@ -215,64 +209,62 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function memoryLoad(){
-      return Math.max(0, Math.min(100, Math.round((state.entries.length * 12) + state.load)));
+    function archiveDepth(){
+      return Math.max(0, Math.min(100, Math.round((state.entries.length * 14) + state.depth)));
     }
-    function makeEntry(title, era){
+    function makeEntry(event, era){
       return {
         id: Date.now() + Math.random(),
-        title,
+        event,
         era,
-        note: noteEl.value.trim() || 'A moment in the chronicle.',
-        stamp: new Date().toLocaleString()
+        note: noteEl.value.trim() || 'A moment preserved in the living archive.',
+        stamp: new Date().toISOString()
       };
     }
     function render(){
       countEl.textContent = String(state.entries.length);
-      eraLabelEl.textContent = state.era.charAt(0).toUpperCase() + state.era.slice(1);
-      loadLabelEl.textContent = `${memoryLoad()}%`;
+      eraLabelEl.textContent = state.era;
+      depthLabelEl.textContent = `${archiveDepth()}%`;
       listEl.innerHTML = '';
 
-      state.entries.forEach((e, idx) => {
+      state.entries.forEach((e) => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${e.title}</b><span>${e.era} · ${e.stamp}</span>`;
-        el.onclick = () => outEl.textContent = `${e.title}\n\nEra: ${e.era}\nStamp: ${e.stamp}\nLoad: ${memoryLoad()}%\n\n${e.note}`;
+        el.innerHTML = `<b>${e.event}</b><span>${e.era} · ${e.stamp.slice(0, 10)}</span>`;
+        el.onclick = () => outEl.textContent = `${e.event}\n\nEra: ${e.era}\nDepth: ${archiveDepth()}%\nStamp: ${e.stamp}\n\n${e.note}`;
         listEl.appendChild(el);
       });
 
       outEl.textContent = state.entries.length
-        ? 'Select an entry to inspect it, or advance the era to reframe the record.'
-        : 'Record a moment to begin the chronicle.';
+        ? 'Select an entry to inspect it, or deepen the archive to make the record more explicit.'
+        : 'Record a moment to begin.';
     }
 
-    document.getElementById('addBtn').onclick = () => {
-      const title = titleEl.value.trim() || `Entry ${state.entries.length + 1}`;
-      state.entries.unshift(makeEntry(title, eraEl.value));
-      state.era = eraEl.value;
+    document.getElementById('recordBtn').onclick = () => {
+      const event = eventEl.value.trim() || `Entry ${state.entries.length + 1}`;
+      state.era = eraEl.value.trim() || state.era;
+      state.entries.unshift(makeEntry(event, state.era));
+      state.depth = Math.min(100, state.depth + 10);
       save(); render();
-      outEl.textContent = `${title}\n\nEra: ${eraEl.value}\nNote: ${noteEl.value.trim() || 'A moment in the chronicle.'}`;
+      outEl.textContent = `${event}\n\nEra: ${state.era}\n\n${noteEl.value.trim() || 'A moment preserved in the living archive.'}`;
     };
 
     document.getElementById('shiftBtn').onclick = () => {
-      const eras = ['dawn','growth','crossing','renewal','archive'];
-      state.era = eras[(eras.indexOf(state.era) + 1) % eras.length];
-      state.load = Math.min(100, state.load + 10);
-      state.entries.forEach((e, idx) => { if(idx % 2 === 0) e.era = state.era; });
+      state.era = eraEl.value.trim() || `Era ${state.entries.length + 1}`;
       eraEl.value = state.era;
+      state.depth = Math.min(100, state.depth + 4);
       save(); render();
-      outEl.textContent = `The era advances to ${state.era}.`;
+      outEl.textContent = `The archive shifts to ${state.era}.`;
     };
 
-    document.getElementById('focusBtn').onclick = () => {
-      state.load = Math.min(100, state.load + 14);
-      if(state.entries.length) state.entries[0].note += '\n\n[Focused as current memory]';
+    document.getElementById('deepenBtn').onclick = () => {
+      state.depth = Math.min(100, state.depth + 8);
       save(); render();
-      outEl.textContent = `Memory focus deepens.\n\nLoad: ${memoryLoad()}%`;
+      outEl.textContent = `Archive depth deepens.\n\nDepth: ${archiveDepth()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`entries:${state.entries.length} | era:${state.era} | load:${memoryLoad()}%`);
+      state.saved.unshift(`entries:${state.entries.length} | depth:${archiveDepth()}% | era:${state.era}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -288,9 +280,9 @@
 
     document.getElementById('clearBtn').onclick = () => {
       state.entries = [];
-      state.era = 'dawn';
-      state.load = 18;
-      eraEl.value = state.era;
+      state.depth = 18;
+      state.era = 'Unmarked';
+      eraEl.value = '';
       save(); render();
     };
 
