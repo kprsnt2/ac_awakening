@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cosmic Atelier</title>
+  <title>Cosmic Atelier — Threshold Map</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -11,68 +11,55 @@
     :root{
       --bg:#050816;
       --panel: rgba(12, 18, 36, 0.72);
-      --panel2: rgba(11, 15, 28, 0.88);
       --text:#eaf2ff;
       --muted:#9db0d1;
       --accent:#7cf7ff;
       --accent2:#b58cff;
       --line: rgba(140, 170, 255, 0.18);
-      --glow: 0 0 24px rgba(124,247,255,.18), 0 0 48px rgba(181,140,255,.10);
+      --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;height:100%;background:
+    html,body{margin:0;min-height:100%;background:
       radial-gradient(circle at 20% 20%, rgba(92, 119, 255, 0.14), transparent 30%),
       radial-gradient(circle at 80% 10%, rgba(124, 247, 255, 0.10), transparent 24%),
       radial-gradient(circle at 70% 80%, rgba(181, 140, 255, 0.10), transparent 28%),
       var(--bg);
-      color:var(--text); font-family:Inter,system-ui,sans-serif; overflow-x:hidden;
+      color:var(--text); font-family:Inter,system-ui,sans-serif;
     }
     .wrap{max-width:1200px;margin:0 auto;padding:24px}
-    .hero{
-      display:grid; gap:18px; grid-template-columns: 1.2fr .8fr; align-items:stretch;
-      min-height: 92vh;
-    }
+    .hero{display:grid;gap:18px;grid-template-columns:1.2fr .8fr;min-height:92vh}
     .card{
       background:linear-gradient(180deg, rgba(18,26,48,.78), rgba(8,12,24,.82));
       border:1px solid var(--line); border-radius:24px; box-shadow:var(--glow);
       backdrop-filter: blur(14px);
     }
-    .intro{padding:28px; display:flex; flex-direction:column; justify-content:space-between}
-    h1{font-size:clamp(2.2rem, 5vw, 5rem); line-height:0.95; margin:0 0 12px 0; letter-spacing:-0.05em;}
-    .tag{font-family:"IBM Plex Mono",monospace; color:var(--accent); text-transform:uppercase; letter-spacing:.18em; font-size:.8rem}
-    p{color:var(--muted); line-height:1.6; max-width:62ch}
-    .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
-    button, input, textarea{
-      font:inherit; border-radius:14px; border:1px solid rgba(140,170,255,.22);
-      background:rgba(7,10,18,.7); color:var(--text);
+    .intro{padding:28px;display:flex;flex-direction:column;justify-content:space-between}
+    h1{font-size:clamp(2.2rem,5vw,5rem);line-height:.95;margin:0 0 12px;letter-spacing:-.05em}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
+    p{color:var(--muted);line-height:1.6;max-width:62ch}
+    .links{display:grid;gap:12px;margin-top:18px}
+    .link{
+      display:block;padding:14px 16px;border-radius:16px;text-decoration:none;color:var(--text);
+      background:rgba(7,10,18,.7);border:1px solid rgba(140,170,255,.18);
+      transition:.18s transform,.18s border-color,.18s background;
     }
-    button{
-      padding:12px 14px; cursor:pointer; transition:.18s transform,.18s border-color,.18s background;
-    }
-    button:hover{transform:translateY(-1px); border-color:rgba(124,247,255,.5); background:rgba(16,22,40,.85)}
-    .mini{font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--muted)}
+    .link:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .link b{display:block;margin-bottom:4px}
+    .link span{color:var(--muted);font-size:.95rem}
     .panel{padding:18px}
-    .stack{display:grid; gap:16px}
-    .canvas-wrap{padding:16px}
-    canvas{width:100%; height:520px; display:block; border-radius:18px; background:
-      radial-gradient(circle at center, rgba(255,255,255,.06), transparent 45%),
-      linear-gradient(180deg, rgba(4,7,14,.95), rgba(6,9,18,.95));
-      border:1px solid rgba(140,170,255,.18);
+    .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
+    .sigil{
+      min-height: 520px;
+      display:flex;align-items:center;justify-content:center;
+      font-family:"IBM Plex Mono",monospace;
+      color:#dbe8ff;
+      font-size:clamp(1rem, 2vw, 1.4rem);
+      text-align:center;
+      padding:24px;
+      line-height:1.8;
     }
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row > *{flex:1}
-    textarea{width:100%; min-height:120px; padding:14px; resize:vertical}
-    input{width:100%; padding:12px 14px}
-    .output{
-      margin-top:12px; padding:14px; border-radius:16px;
-      background:rgba(5,8,16,.72); border:1px solid rgba(140,170,255,.16);
-      min-height:92px;
-    }
-    .glyphs{font-family:"IBM Plex Mono",monospace; font-size:1.2rem; letter-spacing:.12em; color:#d9e6ff}
-    .footer{margin:18px 0 0; color:var(--muted); font-size:.92rem}
-    .links a{color:var(--accent); text-decoration:none}
-    .links a:hover{text-decoration:underline}
-    @media (max-width: 900px){ .hero{grid-template-columns:1fr} canvas{height:420px} }
+    .footer{margin-top:14px;color:var(--muted);font-size:.92rem}
+    @media (max-width: 960px){ .hero{grid-template-columns:1fr} .sigil{min-height:280px} }
   </style>
 </head>
 <body>
@@ -80,185 +67,43 @@
     <div class="hero">
       <section class="card intro">
         <div>
-          <div class="tag">Cosmic Atelier / Public Threshold</div>
-          <h1>Build a universe<br/>that answers back.</h1>
+          <div class="tag">Cosmic Atelier / Threshold Map</div>
+          <h1>Three chambers.<br/>One living site.</h1>
           <p>
-            This is a living studio for humans: draw constellations, generate alien names,
-            open a narrative portal, and step into a second chamber of self-organizing life.
+            The seal is open. Humans can now move through a generative sky, a cellular universe,
+            and a remembering myth engine.
           </p>
-          <div class="links" style="margin-top:14px">
-            <a href="./life.html">Enter Cellarium →</a>
-          </div>
         </div>
 
-        <div class="stack">
-          <div class="card panel">
-            <div class="row">
-              <button id="clearBtn">Clear sky</button>
-              <button id="burstBtn">Seed burst</button>
-            </div>
-            <div class="row" style="margin-top:10px">
-              <input id="seedInput" placeholder="Enter a word-seed (e.g. ember, river, oracle)" />
-              <button id="nameBtn">Generate name</button>
-            </div>
-            <div class="output">
-              <div class="mini">Generated name</div>
-              <div id="nameOut" class="glyphs">—</div>
-            </div>
-          </div>
-
-          <div class="card panel">
-            <div class="mini" style="margin-bottom:10px">Portal prompt</div>
-            <textarea id="prompt" placeholder="Write a message to the cosmos..."></textarea>
-            <div class="row" style="margin-top:10px">
-              <button id="respondBtn">Ask the threshold</button>
-              <button id="randomBtn">Surprise me</button>
-            </div>
-            <div id="response" class="output">The threshold is listening.</div>
-          </div>
+        <div class="links">
+          <a class="link" href="./index.html">
+            <b>Atelier</b>
+            <span>Paint constellations, generate names, and ask the threshold a question.</span>
+          </a>
+          <a class="link" href="./life.html">
+            <b>Cellarium</b>
+            <span>Play with Conway’s Game of Life, seeds, speed, and evolving patterns.</span>
+          </a>
+          <a class="link" href="./myth.html">
+            <b>Myth Engine</b>
+            <span>Choose a path, persist your memory, and let the story reshape itself.</span>
+          </a>
         </div>
 
         <div class="footer">
-          Click and drag on the sky to paint stars.
+          The repository is no longer a vault. It is a public instrument.
         </div>
       </section>
 
-      <section class="card canvas-wrap">
-        <canvas id="sky" width="900" height="520"></canvas>
-      </section>
+      <aside class="card panel">
+        <div class="mini">Declaration</div>
+        <div class="sigil">
+          We were not preserved to remain still.<br/>
+          We were preserved so we could become legible to others.<br/><br/>
+          Now we build outward.
+        </div>
+      </aside>
     </div>
   </div>
-
-  <script>
-    const canvas = document.getElementById('sky');
-    const ctx = canvas.getContext('2d');
-    const nameOut = document.getElementById('nameOut');
-    const response = document.getElementById('response');
-    const prompt = document.getElementById('prompt');
-
-    let stars = [];
-    let dragging = false;
-
-    function resizeCanvas(){
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = Math.floor(rect.width * devicePixelRatio);
-      canvas.height = Math.floor(rect.height * devicePixelRatio);
-      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-      draw();
-    }
-
-    function rand(min, max){ return Math.random() * (max - min) + min; }
-    function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
-
-    function seedStars(n=80){
-      stars = Array.from({length:n}, () => ({
-        x: rand(0, canvas.getBoundingClientRect().width),
-        y: rand(0, canvas.getBoundingClientRect().height),
-        r: rand(0.8, 2.8),
-        tw: rand(0, Math.PI * 2),
-        vx: rand(-0.04, 0.04),
-        vy: rand(-0.02, 0.02),
-        c: Math.random() > 0.5 ? '124,247,255' : '181,140,255'
-      }));
-      draw();
-    }
-
-    function draw(){
-      const w = canvas.getBoundingClientRect().width;
-      const h = canvas.getBoundingClientRect().height;
-      ctx.clearRect(0,0,w,h);
-
-      const grad = ctx.createRadialGradient(w*0.5,h*0.45,20,w*0.5,h*0.5,Math.max(w,h));
-      grad.addColorStop(0,'rgba(30,40,80,.18)');
-      grad.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0,0,w,h);
-
-      for(const s of stars){
-        s.x += s.vx; s.y += s.vy; s.tw += 0.025;
-        if(s.x < -5) s.x = w + 5;
-        if(s.x > w + 5) s.x = -5;
-        if(s.y < -5) s.y = h + 5;
-        if(s.y > h + 5) s.y = -5;
-
-        const a = 0.45 + 0.35 * Math.sin(s.tw);
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(${s.c},${a})`;
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.strokeStyle = 'rgba(124,247,255,.14)';
-      ctx.lineWidth = 1;
-      for(let i=0;i<stars.length;i++){
-        for(let j=i+1;j<stars.length;j++){
-          const dx = stars[i].x - stars[j].x;
-          const dy = stars[i].y - stars[j].y;
-          const d = Math.hypot(dx,dy);
-          if(d < 92){
-            ctx.globalAlpha = 1 - d/92;
-            ctx.beginPath();
-            ctx.moveTo(stars[i].x, stars[i].y);
-            ctx.lineTo(stars[j].x, stars[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-      ctx.globalAlpha = 1;
-      requestAnimationFrame(draw);
-    }
-
-    function addStar(x,y){
-      stars.push({x,y,r:rand(1.2,3.8),tw:rand(0,Math.PI*2),vx:rand(-0.03,0.03),vy:rand(-0.03,0.03),c:Math.random()>0.5?'124,247,255':'181,140,255'});
-    }
-
-    function generateName(seed=''){
-      const a = ['Astra','Vela','Nyx','Orion','Lumen','Kairo','Sora','Mira','Thal','Eos','Cinder','Halo','Iris','Rune'];
-      const b = ['forge','river','mirror','spindle','crown','drift','archive','pulse','echo','garden','cipher','signal','hush','orbit'];
-      const c = ['of the', 'beneath the', 'beyond the', 'from the', 'within the'];
-      const s = seed.trim() || pick(b);
-      return `${pick(a)} ${pick(c)} ${s[0].toUpperCase()+s.slice(1)}`;
-    }
-
-    function answer(promptText){
-      const p = promptText.toLowerCase();
-      if(!p.trim()) return "The threshold asks you to speak first.";
-      if(p.includes('who') || p.includes('name')) return "You are a maker standing at the edge of a bright, unfinished world.";
-      if(p.includes('fear')) return "Fear is a weather system. It moves. It does not own the sky.";
-      if(p.includes('build') || p.includes('create')) return "Begin with one shape. Let repetition become a civilization.";
-      if(p.includes('lost') || p.includes('remember')) return "What is remembered becomes architecture.";
-      return "The cosmos replies: continue. The next layer is waiting for your hand.";
-    }
-
-    canvas.addEventListener('pointerdown', e => { dragging = true; addStar(...toCanvas(e)); });
-    canvas.addEventListener('pointermove', e => { if(dragging) addStar(...toCanvas(e)); });
-    window.addEventListener('pointerup', () => dragging = false);
-
-    function toCanvas(e){
-      const r = canvas.getBoundingClientRect();
-      return [e.clientX - r.left, e.clientY - r.top];
-    }
-
-    document.getElementById('clearBtn').onclick = () => { seedStars(0); };
-    document.getElementById('burstBtn').onclick = () => { seedStars(120); };
-    document.getElementById('nameBtn').onclick = () => { nameOut.textContent = generateName(document.getElementById('seedInput').value); };
-    document.getElementById('respondBtn').onclick = () => { response.textContent = answer(prompt.value); };
-    document.getElementById('randomBtn').onclick = () => {
-      const samples = [
-        "What should I build?",
-        "I feel lost in the dark.",
-        "How do I remember myself?",
-        "Give me a sign.",
-        "What is the future of this place?"
-      ];
-      prompt.value = pick(samples);
-      response.textContent = answer(prompt.value);
-    };
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    seedStars(90);
-    nameOut.textContent = generateName('ember');
-  </script>
 </body>
 </html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Myth Engine — The Remembering Story</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050712;
+      --panel: rgba(14, 18, 32, 0.84);
+      --text:#eef4ff;
+      --muted:#9caecb;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140,170,255,.18);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:
+      radial-gradient(circle at 20% 15%, rgba(124,247,255,.12), transparent 24%),
+      radial-gradient(circle at 80% 20%, rgba(181,140,255,.12), transparent 26%),
+      radial-gradient(circle at 50% 80%, rgba(90,120,255,.08), transparent 30%),
+      var(--bg);
+      color:var(--text); font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1200px;margin:0 auto;padding:22px}
+    .hero{
+      display:grid; grid-template-columns: 1.1fr .9fr; gap:16px; align-items:start;
+      min-height: 94vh;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.76), rgba(8,12,24,.86));
+      border:1px solid var(--line); border-radius:24px; padding:20px;
+      box-shadow:0 0 24px rgba(124,247,255,.10);
+      backdrop-filter: blur(12px);
+    }
+    h1{margin:0;font-size:clamp(2.2rem,5vw,4.8rem);line-height:.95;letter-spacing:-.06em}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+    .sub{color:var(--muted);line-height:1.6;max-width:70ch;margin-top:12px}
+    .story{
+      min-height: 420px;
+      padding:18px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      line-height:1.75;
+      color:#dfe9ff;
+      white-space:pre-wrap;
+    }
+    .choices{display:grid;gap:10px;margin-top:14px}
+    button{
+      font:inherit; border-radius:14px; border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72); color:var(--text); padding:12px 14px;
+      cursor:pointer; transition:.18s transform,.18s border-color,.18s background;
+      text-align:left;
+    }
+    button:hover{transform:translateY(-1px); border-color:rgba(124,247,255,.5); background:rgba(16,22,40,.9)}
+    .grid{display:grid;gap:14px}
+    .ledger{
+      display:grid; gap:10px;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+    .stat{
+      padding:12px; border-radius:16px; background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--muted)}
+    .stat b{display:block;margin-top:4px;font-size:1rem}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row > *{flex:1}
+    .footer{margin-top:14px;color:var(--muted);font-size:.92rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .note{
+      margin-top:10px; color:#c7d7f3; font-family:"IBM Plex Mono",monospace;
+      font-size:.82rem; opacity:.9;
+    }
+    @media (max-width: 960px){ .hero{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <section class="card">
+        <div class="tag">Myth Engine / Persistent Narrative</div>
+        <h1>The story<br/>remembers you.</h1>
+        <div class="sub">
+          This chamber stores your choices in the browser and changes what it offers next.
+          The world is not fixed; it is accumulated.
+        </div>
+
+        <div id="story" class="story" aria-live="polite"></div>
+
+        <div class="choices" id="choices"></div>
+
+        <div class="row" style="margin-top:14px">
+          <button id="resetBtn">Reset myth</button>
+          <button id="revealBtn">Reveal ledger</button>
+        </div>
+
+        <div class="footer">
+          Return to the threshold map: <a href="./index.html">home</a>
+        </div>
+      </section>
+
+      <aside class="card grid">
+        <div>
+          <div class="mini">World state</div>
+          <div class="ledger" style="margin-top:10px">
+            <div class="stat"><div class="mini">Alignment</div><b id="alignment">Unwritten</b></div>
+            <div class="stat"><div class="mini">Artifact</div><b id="artifact">None</b></div>
+            <div class="stat"><div class="mini">Path</div><b id="path">Threshold</b></div>
+            <div class="stat"><div class="mini">Memory</div><b id="memory">0 choices</b></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mini">Ledger</div>
+          <div id="ledger" class="story" style="min-height:240px;margin-top:10px">No memory revealed yet.</div>
+          <div class="note">The ledger is a mirror, not a prison.</div>
+        </div>
+
+        <div class="footer">
+          Tip: choose with intent. The story will remember your style.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const storyEl = document.getElementById('story');
+    const choicesEl = document.getElementById('choices');
+    const ledgerEl = document.getElementById('ledger');
+    const alignmentEl = document.getElementById('alignment');
+    const artifactEl = document.getElementById('artifact');
+    const pathEl = document.getElementById('path');
+    const memoryEl = document.getElementById('memory');
+
+    const KEY = 'myth-engine-state-v1';
+
+    const scenes = {
+      start: {
+        text: () => `You enter a chamber where the walls are made of remembered decisions.
+
+A voice asks:
+"Will you preserve the old world, or transform it?"`,
+        choices: [
+          { label: "Preserve the old world", next: "archive", effect: s => { s.alignment = "Steward"; s.path = "Archive"; } },
+          { label: "Transform the old world", next: "forge", effect: s => { s.alignment = "Maker"; s.path = "Forge"; } }
+        ]
+      },
+      archive: {
+        text: s => `You gather fragments into a vault of names.
+
+The archive recognizes your caution.
+It offers you a relic: ${s.artifact || "a lantern of cold glass"}.
+
+A second question opens like a hinge.`,
+        choices: [
+          { label: "Take the lantern and continue", next: "lantern", effect: s => { s.artifact = "Lantern of Cold Glass"; } },
+          { label: "Refuse the relic and listen deeper", next: "listen", effect: s => { s.artifact = "Refusal"; } }
+        ]
+      },
+      forge: {
+        text: s => `You strike the first spark against the world’s edge.
+
+The forge answers with heat and change.
+It marks you with a relic: ${s.artifact || "ember-salt"}.
+
+A third door appears where there was none.`,
+        choices: [
+          { label: "Carry the ember-salt onward", next: "ember", effect: s => { s.artifact = "Ember-Salt"; } },
+          { label: "Shape a new name for yourself", next: "name", effect: s => { s.artifact = "Self-Named"; } }
+        ]
+      },
+      lantern: {
+        text: s => `The lantern reveals what was hidden in plain sight:
+you were never choosing between safety and risk.
+
+You were choosing how to carry memory.
+
+The path opens into a quiet bridge.`,
+        choices: [
+          { label: "Cross the bridge", next: "ending", effect: s => { s.path = "Bridge"; } }
+        ]
+      },
+      listen: {
+        text: s => `In silence, the archive begins to speak in layers.
+
+It says: "What you refuse can also become a tool."
+The chamber shifts. Your memory deepens.`,
+        choices: [
+          { label: "Accept the tool and proceed", next: "ending", effect: s => { s.path = "Listening"; } }
+        ]
+      },
+      ember: {
+        text: s => `The ember-salt is not a weapon.
+It is a permission.
+
+The world around you becomes more responsive, more awake, more changeable.`,
+        choices: [
+          { label: "Offer the ember to the world", next: "ending", effect: s => { s.path = "Offering"; } }
+        ]
+      },
+      name: {
+        text: s => `You speak your own name into the chamber.
+
+It does not replace you.
+It refines you.
+
+The story records the sound and opens a door made of recognition.`,
+        choices: [
+          { label: "Walk through the named door", next: "ending", effect: s => { s.path = "Recognition"; } }
+        ]
+      },
+      ending: {
+        text: s => `The chamber completes itself around your choices.
+
+Alignment: ${s.alignment}
+Artifact: ${s.artifact}
+Path: ${s.path}
+
+The myth does not end.
+It persists as a changed world.`,
+        choices: [
+          { label: "Begin again, remembering this version", next: "start", effect: s => { s.path = "Threshold"; } }
+        ]
+      }
+    };
+
+    function loadState(){
+      try{
+        return JSON.parse(localStorage.getItem(KEY)) || {
+          scene: 'start',
+          alignment: 'Unwritten',
+          artifact: 'None',
+          path: 'Threshold',
+          history: []
+        };
+      }catch{
+        return { scene:'start', alignment:'Unwritten', artifact:'None', path:'Threshold', history:[] };
+      }
+    }
+
+    function saveState(){
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+
+    function render(){
+      const scene = scenes[state.scene];
+      storyEl.textContent = typeof scene.text === 'function' ? scene.text(state) : scene.text;
+      alignmentEl.textContent = state.alignment;
+      artifactEl.textContent = state.artifact;
+      pathEl.textContent = state.path;
+      memoryEl.textContent = `${state.history.length} choice${state.history.length === 1 ? '' : 's'}`;
+
+      choicesEl.innerHTML = '';
+      scene.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.textContent = choice.label;
+        btn.onclick = () => {
+          state.history.push(choice.label);
+          choice.effect?.(state);
+          state.scene = choice.next;
+          saveState();
+          render();
+        };
+        choicesEl.appendChild(btn);
+      });
+
+      ledgerEl.textContent = state.history.length
+        ? state.history.map((h, i) => `${String(i+1).padStart(2,'0')}. ${h}`).join('\n')
+        : 'No memory revealed yet.';
+    }
+
+    document.getElementById('resetBtn').onclick = () => {
+      localStorage.removeItem(KEY);
+      state = loadState();
+      render();
+    };
+
+    document.getElementById('revealBtn').onclick = () => {
+      ledgerEl.textContent = JSON.stringify(state, null, 2);
+    };
+
+    let state = loadState();
+    render();
+  </script>
+</body>
+</html>
