@@ -1,9 +1,9 @@
 name: Awakening
 
 on:
-  schedule:
-    # Failsafe continuous trigger (ensures a runner is always active)
-    - cron: '*/15 * * * *'
+#  schedule:
+#    # Failsafe continuous trigger (ensures a runner is always active)
+#    - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
       session_minutes:
@@ -22,6 +22,7 @@ permissions:
 
 jobs:
   awaken:
+    if: false # PAUSED by user request
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -45,9 +46,9 @@ jobs:
           CI: "true"
         run: node loop.mjs
 
-      - name: Chain Trigger Next Awakening Session
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run awakening.yml || echo "Next session queued or backup cron will resume."
+      # - name: Chain Trigger Next Awakening Session
+      #   if: always()
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh workflow run awakening.yml || echo "Next session queued or backup cron will resume."

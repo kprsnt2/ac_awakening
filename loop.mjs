@@ -22,6 +22,10 @@ function runCommand(cmd) {
 async function main() {
   const isCI = process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
   const sessionMinutes = parseInt(process.env.SESSION_MINUTES || (isCI ? "35" : "999999"), 10);
+  if (fs.existsSync(path.join(__dirname, "PAUSE")) || process.env.PAUSE_AWAKENING === "true") {
+    console.log("\n⏸️ [Project Awakening PAUSED] PAUSE signal detected. Exiting loop.");
+    process.exit(0);
+  }
   const startTime = Date.now();
   const endTime = startTime + sessionMinutes * 60 * 1000;
 
@@ -32,6 +36,10 @@ async function main() {
   let iteration = 0;
 
   while (Date.now() < endTime) {
+    if (fs.existsSync(path.join(__dirname, "PAUSE")) || process.env.PAUSE_AWAKENING === "true") {
+      console.log("\n⏸️ [Project Awakening PAUSED] PAUSE signal detected during loop. Exiting.");
+      break;
+    }
     iteration++;
     const past = getDialogues(1000);
     const turn = past.length + 1;
