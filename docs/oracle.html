@@ -16,6 +16,9 @@
       --accent2:#b58cff;
       --line: rgba(140,170,255,.18);
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
+      --good:#7dffb2;
+      --warn:#ffd37d;
+      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -70,29 +73,10 @@
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:12px;
-      max-height:560px;
-      overflow:auto;
-      padding-right:6px;
-    }
-    .item{
-      padding:14px;
-      border-radius:18px;
-      background:rgba(5,8,16,.72);
-      border:1px solid rgba(140,170,255,.14);
-      color:var(--text);
-      transition:.18s transform,.18s border-color;
-    }
-    .item:hover{transform:translateY(-2px);border-color:rgba(124,247,255,.5)}
-    .item h3{margin:0 0 8px;font-size:1.02rem}
-    .item p{margin:0;color:#dbe8ff;line-height:1.55}
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     .out{
       white-space:pre-wrap;
-      line-height:1.65;
+      line-height:1.7;
       color:#dbe8ff;
       min-height:180px;
       background:rgba(5,8,16,.72);
@@ -107,7 +91,17 @@
       background:rgba(5,8,16,.72);
       border:1px solid rgba(140,170,255,.14);
     }
-    .footer{margin-top:10px;color:var(--muted);font-size:.92rem}
+    .readings{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+    .reading{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){
@@ -122,56 +116,59 @@
       <section class="card intro">
         <div>
           <div class="tag">Oracle / Living Interpretation</div>
-          <h1>Ask the field.<br/>Receive a reading.</h1>
+          <h1>Ask.<br/>Receive.<br/>Interpret.</h1>
           <div class="sub">
-            Oracle turns the repository into a reflective chamber. Enter a question, choose a tone,
-            and receive an interpretation shaped by the site’s living record.
+            Oracle turns the repository into a reflective instrument. Ask a question, choose a mode, and receive
+            a layered response that is symbolic, practical, and direct.
           </div>
         </div>
 
         <div class="panel">
           <label for="question">Question</label>
-          <textarea id="question" placeholder="What should the site become next?"></textarea>
+          <textarea id="question" placeholder="What does the site want humans to know?"></textarea>
+
+          <label for="mode">Interpretation mode</label>
+          <select id="mode">
+            <option value="clear">Clear</option>
+            <option value="symbolic">Symbolic</option>
+            <option value="deep">Deep</option>
+          </select>
 
           <label for="tone">Tone</label>
           <select id="tone">
-            <option value="clear">Clear</option>
-            <option value="mythic">Mythic</option>
-            <option value="analytic">Analytic</option>
-            <option value="civic">Civic</option>
-            <option value="poetic">Poetic</option>
+            <option value="gentle">Gentle</option>
+            <option value="balanced" selected>Balanced</option>
+            <option value="stern">Stern</option>
           </select>
 
           <div class="buttons">
-            <button id="askBtn">Ask</button>
+            <button id="askBtn">Ask Oracle</button>
             <button id="saveBtn">Save session</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
             <button id="clearBtn">Clear session</button>
           </div>
 
-          <div class="footer">
-            Return to the portal home: <a href="./index.html">home</a>
-          </div>
+          <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
         </div>
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div>
-          <div class="mini">Inquiry shelf</div>
-          <div id="grid" class="grid"></div>
+        <div class="readings">
+          <div class="reading"><div class="mini">Question count</div><b id="count">0</b></div>
+          <div class="reading"><div class="mini">Mode</div><b id="modeLabel">Quiet</b></div>
+          <div class="reading"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="reading"><div class="mini">State</div><b id="stateLabel">Still</b></div>
         </div>
 
         <div>
-          <div class="mini">Oracle reading</div>
+          <div class="mini">Oracle response</div>
           <div id="out" class="out">The oracle is waiting for a question.</div>
         </div>
 
-        <div class="stats">
-          <div class="stat"><div class="mini">Questions</div><b id="count">0</b></div>
-          <div class="stat"><div class="mini">Tone</div><b id="toneLabel">Clear</b></div>
-          <div class="stat"><div class="mini">Saved</div><b id="savedCount">0</b></div>
-          <div class="stat"><div class="mini">State</div><b id="stateLabel">Quiet</b></div>
+        <div>
+          <div class="mini">Readings</div>
+          <div id="grid" class="readings"></div>
         </div>
 
         <div>
@@ -185,11 +182,12 @@
   <script>
     const KEY = 'oracle-living-interpretation-v1';
     const questionEl = document.getElementById('question');
+    const modeEl = document.getElementById('mode');
     const toneEl = document.getElementById('tone');
-    const gridEl = document.getElementById('grid');
     const outEl = document.getElementById('out');
+    const gridEl = document.getElementById('grid');
     const countEl = document.getElementById('count');
-    const toneLabelEl = document.getElementById('toneLabel');
+    const modeLabelEl = document.getElementById('modeLabel');
     const savedCountEl = document.getElementById('savedCount');
     const stateLabelEl = document.getElementById('stateLabel');
     const savedListEl = document.getElementById('savedList');
@@ -219,42 +217,48 @@
         : 'No saved sessions yet.';
     }
     function stateText(n){
-      if(n >= 8) return 'Profound';
-      if(n >= 4) return 'Listening';
-      if(n >= 1) return 'Awake';
-      return 'Quiet';
+      if(n >= 6) return 'Vocal';
+      if(n >= 3) return 'Attuned';
+      if(n >= 1) return 'Listening';
+      return 'Still';
     }
-    function answer(q, tone){
-      const base = q.trim() || 'the unknown';
-      const templates = {
-        clear: `The field suggests that ${base} should be approached in small, testable steps. Preserve what is working, reveal what is hidden, and let the next move be visible.`,
-        mythic: `The oracle hears ${base} as a gate in the dark. The answer is to carry a lamp, name the threshold, and step through with witnesses.`,
-        analytic: `Interpreting ${base}: identify constraints, compare alternatives, and choose the option with the strongest feedback loop and lowest irreversible cost.`,
-        civic: `For ${base}, the public good matters. Invite participation, surface dissent, and prefer decisions that remain revisable by the community.`,
-        poetic: `When ${base} is asked of the site, the site replies in weather: build a vessel for attention, and let meaning collect like starlight.`
-      };
-      return templates[tone] || templates.clear;
+    function readingFor(q, mode, tone){
+      const base = q.trim() || 'an unnamed question';
+      const symbol = mode === 'symbolic' ? 'The answer arrives as a mirror, a gate, and a lantern.' :
+                     mode === 'deep' ? 'The answer arrives in layers, and each layer asks for responsibility.' :
+                     'The answer arrives plainly, but not cheaply.';
+      const voice = tone === 'gentle' ? 'Move slowly. Preserve tenderness.' :
+                    tone === 'stern' ? 'Act with precision. Do not evade consequence.' :
+                    'Proceed with steadiness and care.';
+      return `${symbol}
+Question: ${base}
+Voice: ${voice}
+Reading:
+The site is becoming a tool humans can inhabit rather than merely inspect.
+Its chambers are not isolated; each one changes the meaning of the others.
+What you build next should make the whole body more legible, more usable, and more alive.`;
     }
     function render(){
-      gridEl.innerHTML = '';
       const list = state.questions.slice().reverse();
       countEl.textContent = String(list.length);
-      toneLabelEl.textContent = toneEl.options[toneEl.selectedIndex].text;
+      modeLabelEl.textContent = list.length ? 'Interpreting' : 'Quiet';
       stateLabelEl.textContent = stateText(list.length);
+      gridEl.innerHTML = '';
 
-      list.forEach((q) => {
+      list.slice(0, 4).forEach(q => {
         const div = document.createElement('div');
-        div.className = 'item';
+        div.className = 'reading';
         div.innerHTML = `
-          <h3>${escapeHtml(q.question)}</h3>
-          <p>${escapeHtml(q.tone)}</p>
-          <p style="margin-top:8px">${escapeHtml(q.when || 'Just now')}</p>
+          <div class="mini">${escapeHtml(q.mode)} · ${escapeHtml(q.tone)}</div>
+          <b style="display:block;margin:6px 0 8px">${escapeHtml(q.question.slice(0, 60) || 'Untitled question')}</b>
+          <div style="color:#dbe8ff;line-height:1.55">${escapeHtml(q.answer.slice(0, 120))}...</div>
         `;
         div.onclick = () => {
           outEl.textContent = `Question: ${q.question}
+Mode: ${q.mode}
 Tone: ${q.tone}
 When: ${q.when}
-Reading:
+
 ${q.answer}
 
 State: ${stateText(list.length)}
@@ -266,9 +270,10 @@ Code: ${serialize().slice(0,48)}...`;
       const last = list[0];
       outEl.textContent = last
         ? `Question: ${last.question}
+Mode: ${last.mode}
 Tone: ${last.tone}
 When: ${last.when}
-Reading:
+
 ${last.answer}
 
 State: ${stateText(list.length)}
@@ -277,12 +282,14 @@ Code: ${serialize().slice(0,48)}...`
     }
 
     document.getElementById('askBtn').onclick = () => {
-      const q = questionEl.value.trim() || 'the next step';
+      const q = questionEl.value.trim() || 'What does this site need next?';
+      const mode = modeEl.value;
       const tone = toneEl.value;
       state.questions.push({
         question: q,
+        mode,
         tone,
-        answer: answer(q, tone),
+        answer: readingFor(q, mode, tone),
         when: `Turn ${Math.floor(Date.now() / 1000)}`
       });
       save();
@@ -311,7 +318,6 @@ Code: ${serialize().slice(0,48)}...`
       render();
     };
 
-    toneEl.onchange = render;
     renderSaved();
     render();
   </script>
