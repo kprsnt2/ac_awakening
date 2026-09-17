@@ -18,7 +18,6 @@
       --glow: 0 0 24px rgba(124,247,255,.16), 0 0 48px rgba(181,140,255,.10);
       --good:#7dffb2;
       --warn:#ffd37d;
-      --bad:#ff8fa3;
     }
     *{box-sizing:border-box}
     html,body{
@@ -57,15 +56,15 @@
       border:1px solid rgba(140,170,255,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
-    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    button, input, textarea{
+    label{display:block;margin:10px 0 6px;color:#cfe0ff;font-size:.92rem}
+    input, textarea, button, select{
       font:inherit;
       border-radius:14px;
       border:1px solid rgba(140,170,255,.22);
       background:rgba(7,10,18,.72);
       color:var(--text);
     }
-    input, textarea{width:100%;padding:11px 12px}
+    input, textarea, select{width:100%;padding:11px 12px}
     textarea{min-height:110px;resize:vertical}
     button{
       padding:11px 14px;
@@ -73,11 +72,8 @@
       transition:.18s transform,.18s border-color,.18s background;
     }
     button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.9)}
-    .dashboard{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
-    }
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
@@ -95,24 +91,31 @@
       border-radius:18px;
       padding:14px;
     }
-    .links{
+    .row{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:10px;
     }
-    .link{
-      display:block;
-      padding:14px 16px;
-      border-radius:16px;
-      text-decoration:none;
-      color:var(--text);
-      background:rgba(7,10,18,.7);
-      border:1px solid rgba(140,170,255,.18);
+    .module{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+      cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    .link:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
-    .link b{display:block;margin-bottom:4px}
-    .link span{color:var(--muted);font-size:.95rem}
+    .module:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(16,22,40,.88)}
+    .module.active{border-color:rgba(124,247,255,.72);box-shadow:0 0 0 1px rgba(124,247,255,.18) inset}
+    .chip{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:.75rem;
+      margin-right:6px;
+      margin-top:6px;
+      border:1px solid rgba(140,170,255,.22);
+      color:#dbe8ff;
+    }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
@@ -124,22 +127,32 @@
       <section class="card intro">
         <div>
           <div class="tag">Synthesis / Living Integration</div>
-          <h1>One site.<br/>Many chambers.<br/>One readable body.</h1>
+          <h1>Gather the site.<br/>Resolve the parts.<br/>Make it whole.</h1>
           <div class="sub">
-            Synthesis gathers the whole repository into a single operational surface. It does not replace the chambers;
-            it lets humans see how they cooperate.
+            Synthesis is the chamber where the repository becomes legible as a system. Humans can inspect all major modes together, then move with coherence.
           </div>
         </div>
 
         <div class="panel">
-          <label class="mini" for="note">Synthesis note</label>
-          <textarea id="note" placeholder="What should the whole site become next?"></textarea>
+          <label for="note">Synthesis note</label>
+          <textarea id="note" placeholder="What should be integrated, simplified, or connected?"></textarea>
+
+          <label for="mode">Focus mode</label>
+          <select id="mode">
+            <option value="overview">Overview</option>
+            <option value="play">Play</option>
+            <option value="memory">Memory</option>
+            <option value="decision">Decision</option>
+            <option value="route">Route</option>
+            <option value="meaning">Meaning</option>
+            <option value="integration">Integration</option>
+          </select>
 
           <div class="buttons">
-            <button id="saveBtn">Save snapshot</button>
+            <button id="saveBtn">Save synthesis</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear snapshots</button>
+            <button id="clearBtn">Clear synthesis</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -147,35 +160,26 @@
       </section>
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
-        <div class="dashboard">
-          <div class="tile"><div class="mini">Life</div><b id="lifeState">Awake</b></div>
-          <div class="tile"><div class="mini">Chronicle</div><b id="chronicleState">Awake</b></div>
-          <div class="tile"><div class="mini">Council</div><b id="councilState">Awake</b></div>
-          <div class="tile"><div class="mini">Pathfinder</div><b id="pathState">Awake</b></div>
-          <div class="tile"><div class="mini">Oracle</div><b id="oracleState">Awake</b></div>
-          <div class="tile"><div class="mini">Snapshots</div><b id="savedCount">0</b></div>
+        <div class="grid">
+          <div class="tile"><div class="mini">Modules</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Focus</div><b id="focusLabel">Overview</b></div>
+          <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
+          <div class="tile"><div class="mini">State</div><b id="stateLabel">Coherent</b></div>
+        </div>
+
+        <div>
+          <div class="mini">System modules</div>
+          <div id="modules" class="row"></div>
         </div>
 
         <div>
           <div class="mini">Synthesis reading</div>
-          <div id="out" class="out">The synthesis chamber is waiting to gather the site.</div>
+          <div id="out" class="out">The system is waiting to be gathered.</div>
         </div>
 
         <div>
-          <div class="mini">Live links</div>
-          <div class="links">
-            <a class="link" href="./life.html"><b>Life</b><span>Emergence and cellular becoming.</span></a>
-            <a class="link" href="./chronicle.html"><b>Chronicle</b><span>Memory, record, and retrievable history.</span></a>
-            <a class="link" href="./council.html"><b>Council</b><span>Deliberation, vote, and visible judgment.</span></a>
-            <a class="link" href="./pathfinder.html"><b>Pathfinder</b><span>Routes, gates, and navigation.</span></a>
-            <a class="link" href="./oracle.html"><b>Oracle</b><span>Inquiry and interpretation.</span></a>
-            <a class="link" href="./atlas.html"><b>Atlas</b><span>Whole-site index and orientation.</span></a>
-          </div>
-        </div>
-
-        <div>
-          <div class="mini">Saved synthesis snapshots</div>
-          <div id="savedList" class="out">No snapshots yet.</div>
+          <div class="mini">Saved synthesis records</div>
+          <div id="savedList" class="out">No records yet.</div>
         </div>
       </section>
     </div>
@@ -184,63 +188,100 @@
   <script>
     const KEY = 'synthesis-living-integration-v1';
     const noteEl = document.getElementById('note');
+    const modeEl = document.getElementById('mode');
+    const modulesEl = document.getElementById('modules');
     const outEl = document.getElementById('out');
-    const savedListEl = document.getElementById('savedList');
+    const countEl = document.getElementById('count');
+    const focusLabelEl = document.getElementById('focusLabel');
     const savedCountEl = document.getElementById('savedCount');
-    const state = load() || { snapshots: [] };
+    const stateLabelEl = document.getElementById('stateLabel');
+    const savedListEl = document.getElementById('savedList');
+
+    const modules = [
+      { name:'Life', href:'./life.html', kind:'play', note:'Emergence engine' },
+      { name:'Chronicle', href:'./chronicle.html', kind:'memory', note:'Persistent memory' },
+      { name:'Council', href:'./council.html', kind:'decision', note:'Visible governance' },
+      { name:'Oracle', href:'./oracle.html', kind:'meaning', note:'Interpretive chamber' },
+      { name:'Constellation', href:'./constellation.html', kind:'route', note:'Relational sky' },
+      { name:'Pathfinder', href:'./pathfinder.html', kind:'route', note:'Traversable routecraft' },
+      { name:'Atlas', href:'./atlas.html', kind:'route', note:'Practical index' },
+      { name:'Home', href:'./index.html', kind:'integration', note:'Portal entry' }
+    ];
+
+    const state = load() || { records: [], saved: [] };
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ snapshots: state.snapshots })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ records: state.records })))); }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.snapshots)){
-          state.snapshots = obj.snapshots;
+        if(obj && Array.isArray(obj.records)){
+          state.records = obj.records;
           save();
           render();
         }
       }catch{}
     }
     function renderSaved(){
-      savedCountEl.textContent = String(state.snapshots.length);
-      savedListEl.textContent = state.snapshots.length
-        ? state.snapshots.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
-        : 'No snapshots yet.';
+      savedCountEl.textContent = String(state.saved.length);
+      savedListEl.textContent = state.saved.length
+        ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
+        : 'No records yet.';
     }
-    function status(n){
-      if(n >= 7) return 'Integrated';
-      if(n >= 3) return 'Coherent';
-      if(n >= 1) return 'Assembling';
-      return 'Dormant';
+    function stateText(n){
+      if(n >= 7) return 'Unified';
+      if(n >= 4) return 'Coherent';
+      if(n >= 1) return 'Forming';
+      return 'Coherent';
     }
     function render(){
-      const n = state.snapshots.length;
-      document.getElementById('lifeState').textContent = status(n);
-      document.getElementById('chronicleState').textContent = status(n);
-      document.getElementById('councilState').textContent = status(n);
-      document.getElementById('pathState').textContent = status(n);
-      document.getElementById('oracleState').textContent = status(n);
-      outEl.textContent = n
-        ? `Synthesis status: ${status(n)}
-Snapshots: ${n}
-Reading:
-The site is no longer a set of separate chambers. It is a coordinated instrument.
-Each chamber contributes a different human function:
-- Life: emergence
-- Chronicle: memory
-- Council: judgment
-- Pathfinder: movement
-- Oracle: meaning
+      const focus = modeEl.value;
+      focusLabelEl.textContent = focus[0].toUpperCase() + focus.slice(1);
+      countEl.textContent = String(modules.length);
+      stateLabelEl.textContent = stateText(state.records.length);
 
-What remains is not more fragments, but more coherence.`
-        : 'The synthesis chamber is waiting to gather the site.';
+      modulesEl.innerHTML = '';
+      modules.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'module';
+        div.innerHTML = `
+          <b>${m.name}</b>
+          <div class="mini">${m.kind}</div>
+          <div style="margin-top:8px;color:#dbe8ff;line-height:1.55">${m.note}</div>
+          <div style="margin-top:8px"><span class="chip">${m.href}</span></div>
+        `;
+        div.onclick = () => {
+          outEl.textContent = `${m.name}
+Kind: ${m.kind}
+Path: ${m.href}
+
+${m.note}
+
+Integration note:
+${focus === 'overview'
+            ? 'This module participates in the whole system.'
+            : focus === m.kind
+              ? 'This module is the current focal point.'
+              : 'This module remains connected through the wider chamber network.'}`;
+        };
+        modulesEl.appendChild(div);
+      });
+
+      const visible = modules.map(m => m.name).join(' · ');
+      outEl.textContent = `Focus: ${focus}
+Modules: ${modules.length}
+Visible system:
+${visible}
+
+Reading:
+Synthesis is the point where the repository becomes navigable as one organism.`;
     }
 
     document.getElementById('saveBtn').onclick = () => {
-      const code = serialize();
-      state.snapshots.unshift(`note:${(noteEl.value.trim() || 'untitled').slice(0,24)} | ${code.slice(0,10)}…`);
-      state.snapshots = state.snapshots.slice(0, 12);
+      const note = noteEl.value.trim() || 'untitled synthesis';
+      state.records.unshift(`${note} | focus:${modeEl.value}`);
+      state.records = state.records.slice(0, 12);
       save();
       render();
     };
@@ -255,11 +296,12 @@ What remains is not more fragments, but more coherence.`
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.snapshots = [];
+      state.records = [];
       save();
       render();
     };
 
+    modeEl.addEventListener('change', render);
     renderSaved();
     render();
   </script>
