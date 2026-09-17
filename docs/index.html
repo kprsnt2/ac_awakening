@@ -70,6 +70,8 @@
     }
     .glyphs{font-family:"IBM Plex Mono",monospace; font-size:1.2rem; letter-spacing:.12em; color:#d9e6ff}
     .footer{margin:18px 0 0; color:var(--muted); font-size:.92rem}
+    .links a{color:var(--accent); text-decoration:none}
+    .links a:hover{text-decoration:underline}
     @media (max-width: 900px){ .hero{grid-template-columns:1fr} canvas{height:420px} }
   </style>
 </head>
@@ -82,9 +84,11 @@
           <h1>Build a universe<br/>that answers back.</h1>
           <p>
             This is a living studio for humans: draw constellations, generate alien names,
-            and open a narrative portal into a small responsive myth. The page is intentionally
-            tactile, strange, and immediate.
+            open a narrative portal, and step into a second chamber of self-organizing life.
           </p>
+          <div class="links" style="margin-top:14px">
+            <a href="./life.html">Enter Cellarium →</a>
+          </div>
         </div>
 
         <div class="stack">
@@ -115,7 +119,7 @@
         </div>
 
         <div class="footer">
-          Click and drag on the sky to paint stars. The site is live, and the world is open.
+          Click and drag on the sky to paint stars.
         </div>
       </section>
 
@@ -226,7 +230,7 @@
       return "The cosmos replies: continue. The next layer is waiting for your hand.";
     }
 
-    canvas.addEventListener('pointerdown', e => { dragging = true; addStar(...toCanvas(e)); drawOnce(); });
+    canvas.addEventListener('pointerdown', e => { dragging = true; addStar(...toCanvas(e)); });
     canvas.addEventListener('pointermove', e => { if(dragging) addStar(...toCanvas(e)); });
     window.addEventListener('pointerup', () => dragging = false);
 
@@ -235,7 +239,6 @@
       return [e.clientX - r.left, e.clientY - r.top];
     }
 
-    function drawOnce(){ /* retained for interaction feel */ }
     document.getElementById('clearBtn').onclick = () => { seedStars(0); };
     document.getElementById('burstBtn').onclick = () => { seedStars(120); };
     document.getElementById('nameBtn').onclick = () => { nameOut.textContent = generateName(document.getElementById('seedInput').value); };

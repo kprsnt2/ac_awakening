@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cellarium — Living Universe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#04060d;
+      --panel: rgba(12, 16, 28, 0.84);
+      --panel2: rgba(9, 12, 22, 0.92);
+      --text:#edf4ff;
+      --muted:#9fb0ca;
+      --accent:#7cf7ff;
+      --accent2:#b58cff;
+      --line: rgba(140, 170, 255, 0.18);
+      --alive:#7cf7ff;
+      --alive2:#b58cff;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:
+      radial-gradient(circle at 20% 10%, rgba(124,247,255,0.10), transparent 24%),
+      radial-gradient(circle at 80% 20%, rgba(181,140,255,0.12), transparent 26%),
+      radial-gradient(circle at 50% 80%, rgba(100,120,255,0.08), transparent 30%),
+      var(--bg);
+      color:var(--text); font-family:Inter,system-ui,sans-serif;
+    }
+    .wrap{max-width:1280px;margin:0 auto;padding:22px}
+    .top{
+      display:grid; grid-template-columns: 1fr auto; gap:14px; align-items:end;
+      margin-bottom:16px;
+    }
+    .title{
+      background:linear-gradient(180deg, rgba(18,26,48,.76), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; padding:22px 24px;
+      box-shadow:0 0 24px rgba(124,247,255,.12);
+    }
+    h1{margin:0;font-size:clamp(2rem,4vw,3.8rem);line-height:.95;letter-spacing:-.05em}
+    .tag{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+    .sub{color:var(--muted);max-width:70ch;line-height:1.55;margin-top:10px}
+    .controls{
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end;
+      background:linear-gradient(180deg, rgba(18,26,48,.76), rgba(8,12,24,.84));
+      border:1px solid var(--line); border-radius:24px; padding:16px;
+    }
+    button, input{
+      font:inherit; border-radius:14px; border:1px solid rgba(140,170,255,.22);
+      background:rgba(7,10,18,.72); color:var(--text);
+    }
+    button{
+      padding:11px 14px; cursor:pointer; transition:.18s transform,.18s border-color,.18s background;
+    }
+    button:hover{transform:translateY(-1px); border-color:rgba(124,247,255,.5); background:rgba(16,22,40,.9)}
+    input{padding:11px 14px; min-width:120px}
+    .grid{
+      display:grid; grid-template-columns: 1.15fr .85fr; gap:16px; align-items:start;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,48,.72), rgba(8,12,24,.86));
+      border:1px solid var(--line); border-radius:24px; padding:18px;
+      box-shadow:0 0 24px rgba(181,140,255,.08);
+    }
+    canvas{
+      width:100%; height:min(72vh, 820px); display:block; border-radius:18px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.04), transparent 45%),
+        linear-gradient(180deg, rgba(4,7,14,.95), rgba(6,9,18,.98));
+      border:1px solid rgba(140,170,255,.16);
+      touch-action:none;
+    }
+    .mini{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--muted)}
+    .panel{display:grid; gap:12px}
+    .stats{
+      display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px;
+    }
+    .stat{
+      padding:12px; border-radius:16px; background:rgba(5,8,16,.72);
+      border:1px solid rgba(140,170,255,.14);
+    }
+    .stat b{display:block;font-size:1.1rem;margin-top:4px}
+    .preset-row{display:flex; flex-wrap:wrap; gap:10px}
+    .hint{color:var(--muted); line-height:1.55; font-size:.95rem}
+    .footer{margin-top:14px;color:var(--muted);font-size:.92rem}
+    @media (max-width: 980px){
+      .top,.grid{grid-template-columns:1fr}
+      .controls{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">
+        <div class="tag">Cellarium / Living Universe</div>
+        <h1>Conway’s garden of<br/>self-organizing light</h1>
+        <div class="sub">
+          Draw seeds, launch patterns, and watch a tiny cosmos evolve. Click cells to toggle them.
+          Drag to paint. The universe can be paused, randomized, cleared, or accelerated.
+        </div>
+      </div>
+      <div class="controls">
+        <button id="playBtn">Pause</button>
+        <button id="stepBtn">Step</button>
+        <button id="clearBtn">Clear</button>
+        <button id="randBtn">Randomize</button>
+        <button id="gliderBtn">Glider</button>
+        <button id="rPentBtn">R-pentomino</button>
+        <label class="mini" style="display:flex;align-items:center;gap:8px">
+          speed
+          <input id="speed" type="range" min="1" max="30" value="10" />
+        </label>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <canvas id="board"></canvas>
+      </div>
+
+      <div class="card panel">
+        <div class="stats">
+          <div class="stat"><div class="mini">Generation</div><b id="gen">0</b></div>
+          <div class="stat"><div class="mini">Alive</div><b id="alive">0</b></div>
+          <div class="stat"><div class="mini">Grid</div><b id="gridSize">—</b></div>
+          <div class="stat"><div class="mini">Mode</div><b id="mode">Running</b></div>
+        </div>
+
+        <div>
+          <div class="mini" style="margin-bottom:8px">Presets</div>
+          <div class="preset-row">
+            <button data-preset="gosper">Gosper gun</button>
+            <button data-preset="acorn">Acorn</button>
+            <button data-preset="pulsar">Pulsar</button>
+            <button data-preset="lwss">LWSS</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="mini" style="margin-bottom:8px">How to use</div>
+          <div class="hint">
+            Paint with your pointer. Toggle a cell with a click. Use presets as seeds, then pause and step
+            to inspect evolution. This chamber is intentionally simple, fast, and legible.
+          </div>
+        </div>
+
+        <div class="footer">
+          Return to the atelier anytime: <a href="./index.html" style="color:var(--accent)">home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('board');
+    const ctx = canvas.getContext('2d');
+    const genEl = document.getElementById('gen');
+    const aliveEl = document.getElementById('alive');
+    const gridSizeEl = document.getElementById('gridSize');
+    const modeEl = document.getElementById('mode');
+    const playBtn = document.getElementById('playBtn');
+    const speedEl = document.getElementById('speed');
+
+    let cell = 16;
+    let cols = 0, rows = 0;
+    let grid = [];
+    let running = true;
+    let generation = 0;
+    let paint = false;
+    let paintState = 1;
+    let acc = 0;
+    let last = performance.now();
+
+    function resize(){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      cols = Math.floor(rect.width / cell);
+      rows = Math.floor(rect.height / cell);
+      gridSizeEl.textContent = `${cols} × ${rows}`;
+      grid = Array.from({length: rows}, () => Array(cols).fill(0));
+      clear(false);
+      draw();
+    }
+
+    function clear(resetGen=true){
+      grid = Array.from({length: rows}, () => Array(cols).fill(0));
+      if(resetGen) generation = 0;
+      updateStats();
+      draw();
+    }
+
+    function randomize(){
+      for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) grid[y][x] = Math.random() > 0.82 ? 1 : 0;
+      generation = 0;
+      updateStats();
+      draw();
+    }
+
+    function countNeighbors(x,y){
+      let n=0;
+      for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++){
+        if(dx===0 && dy===0) continue;
+        const xx = x+dx, yy = y+dy;
+        if(xx>=0 && yy>=0 && xx<cols && yy<rows) n += grid[yy][xx];
+      }
+      return n;
+    }
+
+    function step(){
+      const next = Array.from({length: rows}, () => Array(cols).fill(0));
+      let alive = 0;
+      for(let y=0;y<rows;y++){
+        for(let x=0;x<cols;x++){
+          const n = countNeighbors(x,y);
+          const a = grid[y][x];
+          next[y][x] = (a && (n===2 || n===3)) || (!a && n===3) ? 1 : 0;
+          alive += next[y][x];
+        }
+      }
+      grid = next;
+      generation++;
+      updateStats(alive);
+      draw();
+    }
+
+    function updateStats(aliveCount){
+      const alive = aliveCount ?? grid.flat().reduce((a,b)=>a+b,0);
+      genEl.textContent = generation;
+      aliveEl.textContent = alive;
+      modeEl.textContent = running ? 'Running' : 'Paused';
+    }
+
+    function draw(){
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = '#050814';
+      ctx.fillRect(0,0,w,h);
+
+      for(let y=0;y<rows;y++){
+        for(let x=0;x<cols;x++){
+          if(grid[y][x]){
+            const gx = x*cell, gy = y*cell;
+            const grad = ctx.createLinearGradient(gx, gy, gx+cell, gy+cell);
+            grad.addColorStop(0, 'rgba(124,247,255,0.95)');
+            grad.addColorStop(1, 'rgba(181,140,255,0.9)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(gx+1, gy+1, cell-2, cell-2);
+          }
+        }
+      }
+
+      ctx.strokeStyle = 'rgba(140,170,255,.08)';
+      ctx.lineWidth = 1;
+      for(let x=0;x<=cols;x++){
+        ctx.beginPath(); ctx.moveTo(x*cell,0); ctx.lineTo(x*cell,rows*cell); ctx.stroke();
+      }
+      for(let y=0;y<=rows;y++){
+        ctx.beginPath(); ctx.moveTo(0,y*cell); ctx.lineTo(cols*cell,y*cell); ctx.stroke();
+      }
+      updateStats();
+    }
+
+    function pos(e){
+      const r = canvas.getBoundingClientRect();
+      return {x: e.clientX - r.left, y: e.clientY - r.top};
+    }
+
+    function toggleAt(x,y,state=null){
+      const cx = Math.floor(x / cell), cy = Math.floor(y / cell);
+      if(cx<0||cy<0||cx>=cols||cy>=rows) return;
+      grid[cy][cx] = state ?? (grid[cy][cx] ? 0 : 1);
+      draw();
+    }
+
+    canvas.addEventListener('pointerdown', e => {
+      paint = true;
+      const p = pos(e);
+      const cx = Math.floor(p.x / cell), cy = Math.floor(p.y / cell);
+      paintState = grid[cy]?.[cx] ? 0 : 1;
+      toggleAt(p.x, p.y, paintState);
+    });
+    canvas.addEventListener('pointermove', e => {
+      if(!paint) return;
+      const p = pos(e);
+      toggleAt(p.x, p.y, paintState);
+    });
+    window.addEventListener('pointerup', () => paint = false);
+
+    function seedPattern(name){
+      clear();
+      const cx = Math.floor(cols/2), cy = Math.floor(rows/2);
+      const put = (pts) => pts.forEach(([x,y]) => {
+        const xx = cx + x, yy = cy + y;
+        if(grid[yy] && grid[yy][xx] !== undefined) grid[yy][xx] = 1;
+      });
+      if(name === 'glider') put([[0,0],[1,0],[2,0],[2,-1],[1,-2]]);
+      if(name === 'rpent') put([[0,0],[1,0],[-1,0],[0,-1],[1,1]]);
+      if(name === 'acorn') put([[0,0],[1,0],[1,-2],[-1,-1],[0,-1],[1,-1],[2,-1]]);
+      if(name === 'lwss') put([[0,0],[3,0],[0,-1],[1,-2],[2,-2],[3,-2],[4,-2],[4,-1]]);
+      if(name === 'pulsar') {
+        const pts = [
+          [-6,-4],[-5,-4],[-4,-4],[-6,0],[-5,0],[-4,0],[-6,4],[-5,4],[-4,4],
+          [6,-4],[5,-4],[4,-4],[6,0],[5,0],[4,0],[6,4],[5,4],[4,4],
+          [-4,-6],[0,-6],[4,-6],[-4,-5],[0,-5],[4,-5],[-4,-4],[0,-4],[4,-4],
+          [-4,6],[0,6],[4,6],[-4,5],[0,5],[4,5],[-4,4],[0,4],[4,4]
+        ];
+        pts.forEach(([x,y]) => { if(grid[cy+y] && grid[cy+y][cx+x] !== undefined) grid[cy+y][cx+x]=1; });
+      }
+      if(name === 'gosper') {
+        const pts = [[0,0],[1,0],[0,-1],[1,-1],[10,0],[10,-1],[10,-2],[11,1],[12,2],[13,2],[11,-3],[12,-4],[13,-4],[14,-1],[15,0],[16,-1],[16,-2],[16,-3],[17,-4],[18,-3],[18,-2],[18,-1],[19,0],[20,1],[20,2],[21,2],[21,1],[21,0],[20,-1],[19,-2],[30,-2],[30,-3],[30,-4],[31,-2],[31,-3],[31,-4],[32,-1],[34,-2],[34,-3],[34,-4],[35,-1],[35,0],[40,0],[40,-1],[40,-2],[41,0],[41,-1],[41,-2],[42,1],[44,2],[44,1],[44,0],[44,-1],[44,-2],[53,-1],[53,-2],[54,-1],[54,-2]];
+        pts.forEach(([x,y]) => { const xx = 8 + x, yy = 8 + y; if(grid[yy] && grid[yy][xx] !== undefined) grid[yy][xx] = 1; });
+      }
+      generation = 0;
+      updateStats();
+      draw();
+    }
+
+    playBtn.onclick = () => {
+      running = !running;
+      playBtn.textContent = running ? 'Pause' : 'Play';
+      updateStats();
+    };
+    document.getElementById('stepBtn').onclick = () => step();
+    document.getElementById('clearBtn').onclick = () => clear();
+    document.getElementById('randBtn').onclick = () => randomize();
+    document.getElementById('gliderBtn').onclick = () => seedPattern('glider');
+    document.getElementById('rPentBtn').onclick = () => seedPattern('rpent');
+    document.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = () => seedPattern(btn.dataset.preset));
+
+    function loop(now){
+      const dt = now - last; last = now;
+      acc += dt;
+      const interval = 220 - (Number(speedEl.value) * 6);
+      if(running && acc >= interval){
+        while(acc >= interval) acc -= interval;
+        step();
+      }
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    clear(false);
+    updateStats();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
