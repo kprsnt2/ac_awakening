@@ -9,20 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#071017;
-      --text:#f4fbff;
-      --muted:#bfd2e1;
-      --accent:#7cf7ff;
-      --accent2:#ffbf7c;
-      --line: rgba(124,247,255,.16);
-      --glow: 0 0 24px rgba(124,247,255,.14), 0 0 48px rgba(255,191,124,.08);
+      --bg:#070814;
+      --text:#f6fbff;
+      --muted:#c4d3e8;
+      --accent:#9dffcb;
+      --accent2:#7cf7ff;
+      --line: rgba(157,255,203,.16);
+      --glow: 0 0 24px rgba(157,255,203,.14), 0 0 48px rgba(124,247,255,.08);
     }
     *{box-sizing:border-box}
     html,body{
       margin:0;min-height:100%;
       background:
-        radial-gradient(circle at 18% 20%, rgba(124,247,255,.11), transparent 28%),
-        radial-gradient(circle at 82% 12%, rgba(255,191,124,.10), transparent 24%),
+        radial-gradient(circle at 18% 20%, rgba(157,255,203,.11), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(124,247,255,.10), transparent 24%),
         radial-gradient(circle at 70% 82%, rgba(181,140,255,.06), transparent 30%),
         var(--bg);
       color:var(--text);
@@ -40,7 +40,7 @@
     .intro{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
     .tag{
       font-family:"IBM Plex Mono",monospace;
-      color:var(--accent2);
+      color:var(--accent);
       text-transform:uppercase;
       letter-spacing:.18em;
       font-size:.8rem;
@@ -51,14 +51,14 @@
       padding:16px;
       border-radius:20px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(157,255,203,.14);
     }
     .mini{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:.82rem}
     label{display:block;margin:10px 0 6px;color:#f4fbff;font-size:.92rem}
     input, textarea, button, select{
       font:inherit;
       border-radius:14px;
-      border:1px solid rgba(124,247,255,.22);
+      border:1px solid rgba(157,255,203,.22);
       background:rgba(9,12,18,.72);
       color:var(--text);
     }
@@ -69,14 +69,14 @@
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
-    button:hover{transform:translateY(-1px);border-color:rgba(255,191,124,.5);background:rgba(18,22,30,.9)}
+    button:hover{transform:translateY(-1px);border-color:rgba(124,247,255,.5);background:rgba(18,22,30,.9)}
     .buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .tile{
       padding:14px;
       border-radius:18px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(157,255,203,.14);
     }
     .tile b{display:block;font-size:1.1rem;margin-top:6px}
     .out{
@@ -85,7 +85,7 @@
       color:#eff8fc;
       min-height:180px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(157,255,203,.14);
       border-radius:18px;
       padding:14px;
     }
@@ -100,7 +100,7 @@
       padding:14px;
       border-radius:16px;
       background:rgba(9,12,18,.72);
-      border:1px solid rgba(124,247,255,.14);
+      border:1px solid rgba(157,255,203,.14);
       cursor:pointer;
       transition:.18s transform,.18s border-color,.18s background;
     }
@@ -118,35 +118,35 @@
       <section class="card intro">
         <div>
           <div class="tag">Oracle / Living Interpretation Chamber</div>
-          <h1>Ask the field.<br/>Receive layered answers.<br/>Read the meaning.</h1>
+          <h1>Ask the site.<br/>Receive a reading.<br/>Move with meaning.</h1>
           <div class="sub">
-            Oracle turns the repository into an interpretive instrument. Humans can pose questions, receive responses, and revisit the site as a speaking system.
+            Oracle turns the repository into a speaking field. Humans can ask, interpret, and return with a clearer sense of direction.
           </div>
         </div>
 
         <div class="panel">
           <label for="question">Question</label>
-          <input id="question" placeholder="e.g. What should I enter next?" />
+          <input id="question" placeholder="e.g. What chamber should I enter next?" />
 
-          <label for="tone">Reading tone</label>
-          <select id="tone">
-            <option value="clear">Clear</option>
+          <label for="mode">Voice</label>
+          <select id="mode">
+            <option value="poetic">Poetic</option>
+            <option value="practical">Practical</option>
+            <option value="reflective">Reflective</option>
             <option value="mythic">Mythic</option>
-            <option value="civic">Civic</option>
-            <option value="intimate">Intimate</option>
           </select>
 
-          <label for="note">Context note</label>
-          <textarea id="note" placeholder="e.g. I am choosing between route, composition, and deliberation."></textarea>
+          <label for="note">Oracle note</label>
+          <textarea id="note" placeholder="e.g. Answer with clarity, warmth, and layered guidance."></textarea>
 
           <div class="buttons">
             <button id="askBtn">Ask oracle</button>
+            <button id="shiftBtn">Shift voice</button>
             <button id="deepenBtn">Deepen reading</button>
-            <button id="shiftBtn">Shift tone</button>
             <button id="saveBtn">Save reading</button>
             <button id="exportBtn">Copy code</button>
             <button id="importBtn">Import code</button>
-            <button id="clearBtn">Clear oracle</button>
+            <button id="clearBtn">Clear reading</button>
           </div>
 
           <div class="mini" style="margin-top:14px">Return to the portal home: <a href="./index.html">home</a></div>
@@ -155,20 +155,20 @@
 
       <section class="card" style="padding:16px;display:grid;gap:16px">
         <div class="grid">
-          <div class="tile"><div class="mini">Questions</div><b id="count">0</b></div>
-          <div class="tile"><div class="mini">Tone</div><b id="toneLabel">Clear</b></div>
+          <div class="tile"><div class="mini">Readings</div><b id="count">0</b></div>
+          <div class="tile"><div class="mini">Voice</div><b id="modeLabel">Poetic</b></div>
           <div class="tile"><div class="mini">Depth</div><b id="depthLabel">0%</b></div>
           <div class="tile"><div class="mini">Saved</div><b id="savedCount">0</b></div>
         </div>
 
         <div>
-          <div class="mini">Oracle list</div>
+          <div class="mini">Reading list</div>
           <div id="list" class="list"></div>
         </div>
 
         <div>
           <div class="mini">Oracle reading</div>
-          <div id="out" class="out">Ask a question to begin the interpretation.</div>
+          <div id="out" class="out">Ask a question to begin.</div>
         </div>
 
         <div>
@@ -181,29 +181,30 @@
 
   <script>
     const KEY = 'oracle-living-interpretation-v1';
-    const state = load() || { questions: [], saved: [], depth: 19, tone: 'clear' };
+    const voices = ['poetic', 'practical', 'reflective', 'mythic'];
+    const state = load() || { readings: [], saved: [], depth: 18, mode: 'poetic' };
 
     const listEl = document.getElementById('list');
     const outEl = document.getElementById('out');
     const countEl = document.getElementById('count');
     const savedCountEl = document.getElementById('savedCount');
     const savedListEl = document.getElementById('savedList');
-    const toneLabelEl = document.getElementById('toneLabel');
+    const modeLabelEl = document.getElementById('modeLabel');
     const depthLabelEl = document.getElementById('depthLabel');
     const questionEl = document.getElementById('question');
-    const toneEl = document.getElementById('tone');
+    const modeEl = document.getElementById('mode');
     const noteEl = document.getElementById('note');
 
     function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
     function save(){ localStorage.setItem(KEY, JSON.stringify(state)); renderSaved(); }
-    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ questions: state.questions, depth: state.depth, tone: state.tone })))) }
+    function serialize(){ return btoa(unescape(encodeURIComponent(JSON.stringify({ readings: state.readings, depth: state.depth, mode: state.mode })))) }
     function importCode(code){
       try{
         const obj = JSON.parse(decodeURIComponent(escape(atob(code))));
-        if(obj && Array.isArray(obj.questions)){
-          state.questions = obj.questions;
-          state.depth = Number(obj.depth ?? 19);
-          state.tone = String(obj.tone ?? 'clear');
+        if(obj && Array.isArray(obj.readings)){
+          state.readings = obj.readings;
+          state.depth = Number(obj.depth ?? 18);
+          state.mode = String(obj.mode ?? 'poetic');
           save(); render();
         }
       }catch{}
@@ -214,69 +215,72 @@
         ? state.saved.map((s,i)=>`${String(i+1).padStart(2,'0')}. ${s}`).join('\n')
         : 'No records yet.';
     }
-    function oracleDepth(){
-      return Math.max(0, Math.min(100, Math.round((state.questions.length * 15) + state.depth)));
+    function readingDepth(){
+      return Math.max(0, Math.min(100, Math.round((state.readings.length * 14) + state.depth)));
     }
-    function makeReading(question, tone){
-      const answers = {
-        clear: ['Begin with the chamber nearest to your intent.', 'Choose the path that reduces friction.', 'Let the next action be visible.'],
-        mythic: ['The field answers through symbol and threshold.', 'Follow the chamber that calls your name back.', 'Meaning gathers where attention returns.'],
-        civic: ['Choose the option that can be shared and sustained.', 'Prefer the path that others can inspect and extend.', 'The common record is part of the answer.'],
-        intimate: ['Move toward what steadies you.', 'The site reflects the shape of your attention.', 'A small step may reveal the larger pattern.']
+    function answerFor(question, mode){
+      const q = question.trim() || 'What should be seen now?';
+      const base = {
+        poetic: `The site answers in symbols: ${q}. Follow the chamber that feels nearest to the question.`,
+        practical: `The site suggests a direct action: ${q}. Choose the chamber whose purpose best matches the task.`,
+        reflective: `The site mirrors the question back: ${q}. Notice what you already know and where uncertainty remains.`,
+        mythic: `The site opens a mythic path around: ${q}. Enter the chamber that changes the story, not just the answer.`
       };
+      return base[mode] || base.poetic;
+    }
+    function makeReading(question, mode){
       return {
         id: Date.now() + Math.random(),
         question,
-        tone,
-        note: noteEl.value.trim() || 'A question brought to the living oracle.',
-        answer: answers[tone]
+        mode,
+        note: noteEl.value.trim() || 'A reading from the living site.',
+        answer: answerFor(question, mode)
       };
     }
     function render(){
-      countEl.textContent = String(state.questions.length);
-      toneLabelEl.textContent = state.tone.charAt(0).toUpperCase() + state.tone.slice(1);
-      depthLabelEl.textContent = `${oracleDepth()}%`;
+      countEl.textContent = String(state.readings.length);
+      modeLabelEl.textContent = state.mode.charAt(0).toUpperCase() + state.mode.slice(1);
+      depthLabelEl.textContent = `${readingDepth()}%`;
       listEl.innerHTML = '';
 
-      state.questions.forEach((q) => {
+      state.readings.forEach((r) => {
         const el = document.createElement('div');
         el.className = 'item';
-        el.innerHTML = `<b>${q.question}</b><span>${q.tone} · ${q.answer[0]}</span>`;
-        el.onclick = () => outEl.textContent = `${q.question}\n\nTone: ${q.tone}\nDepth: ${oracleDepth()}%\n\n${q.answer.join('\n')}\n\n${q.note}`;
+        el.innerHTML = `<b>${r.question}</b><span>${r.mode} · ${r.answer.slice(0, 90)}${r.answer.length > 90 ? '…' : ''}</span>`;
+        el.onclick = () => outEl.textContent = `${r.question}\n\nMode: ${r.mode}\nDepth: ${readingDepth()}%\n\n${r.answer}\n\n${r.note}`;
         listEl.appendChild(el);
       });
 
-      outEl.textContent = state.questions.length
-        ? 'Select a reading to inspect it, or deepen the oracle to make the answer more layered.'
-        : 'Ask a question to begin the interpretation.';
+      outEl.textContent = state.readings.length
+        ? 'Select a reading to inspect it, or deepen the oracle to make the answer more explicit.'
+        : 'Ask a question to begin.';
     }
 
     document.getElementById('askBtn').onclick = () => {
-      const question = questionEl.value.trim() || `Question ${state.questions.length + 1}`;
-      state.tone = toneEl.value;
-      state.questions.unshift(makeReading(question, toneEl.value));
-      state.depth = Math.min(100, state.depth + 12);
+      const question = questionEl.value.trim() || `Question ${state.readings.length + 1}`;
+      state.mode = modeEl.value;
+      state.readings.unshift(makeReading(question, state.mode));
+      state.depth = Math.min(100, state.depth + 10);
       save(); render();
-      outEl.textContent = `${question}\n\nTone: ${toneEl.value}\n\n${noteEl.value.trim() || 'A question brought to the living oracle.'}`;
-    };
-
-    document.getElementById('deepenBtn').onclick = () => {
-      state.depth = Math.min(100, state.depth + 9);
-      save(); render();
-      outEl.textContent = `The reading deepens.\n\nDepth: ${oracleDepth()}%`;
+      outEl.textContent = `${question}\n\nMode: ${state.mode}\n\n${answerFor(question, state.mode)}\n\n${noteEl.value.trim() || 'A reading from the living site.'}`;
     };
 
     document.getElementById('shiftBtn').onclick = () => {
-      const tones = ['clear','mythic','civic','intimate'];
-      state.tone = tones[(tones.indexOf(state.tone) + 1) % tones.length];
-      toneEl.value = state.tone;
+      state.mode = voices[(voices.indexOf(state.mode) + 1) % voices.length];
+      modeEl.value = state.mode;
       state.depth = Math.min(100, state.depth + 4);
       save(); render();
-      outEl.textContent = `The oracle shifts to ${state.tone}.`;
+      outEl.textContent = `The oracle shifts to ${state.mode}.`;
+    };
+
+    document.getElementById('deepenBtn').onclick = () => {
+      state.depth = Math.min(100, state.depth + 8);
+      save(); render();
+      outEl.textContent = `Depth deepens.\n\nDepth: ${readingDepth()}%`;
     };
 
     document.getElementById('saveBtn').onclick = () => {
-      state.saved.unshift(`questions:${state.questions.length} | depth:${oracleDepth()}% | tone:${state.tone}`);
+      state.saved.unshift(`readings:${state.readings.length} | depth:${readingDepth()}% | mode:${state.mode}`);
       state.saved = state.saved.slice(0, 12);
       save(); render();
     };
@@ -291,10 +295,10 @@
     };
 
     document.getElementById('clearBtn').onclick = () => {
-      state.questions = [];
-      state.depth = 19;
-      state.tone = 'clear';
-      toneEl.value = state.tone;
+      state.readings = [];
+      state.depth = 18;
+      state.mode = 'poetic';
+      modeEl.value = state.mode;
       save(); render();
     };
 
